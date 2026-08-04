@@ -1,0 +1,11 @@
+architecture_id: C
+L2=1.0, L3=0.8, Lt=0.25
+epsilon_w=0.0, epsilon_s=0.05
+z1_z2_distance: 5.000000e-02
+z2_z3_parallel: True
+z2_z3_z4_parallel: False
+regional_exact_candidate: False
+wrist_center: (1.85, 0.0, 0.0)
+concurrency_residual_rho: 0.000000e+00
+spherical_status: exact
+rho_exact=1e-09, rho_invalid=0.05

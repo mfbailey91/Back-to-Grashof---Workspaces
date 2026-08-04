@@ -116,7 +116,40 @@ The Grashof margin remains \(P+Q-S-L\) on the sorted lengths. Exported labels us
 2. `degenerate-coincident-ground-pivots` when \(d=0\);
 3. `degenerate-collinear` when \(m_a=0\);
 4. `change-point`;
-5. `special-grashof-tied-shortest`;
-6. conventional `double-crank`, `crank-rocker`, or `double-rocker`.
+5. `special-tied-shortest`;
+6. conventional `double-crank`, `crank-rocker`, `grashof-double-rocker`, or `non-grashof-double-rocker`.
 
 A separate `grashof_class` field reports `non-assemblable`, `grashof`, `change-point`, or `non-grashof`. Exact terminal-link rotatability is still decided by loop-closure interval containment and never by the textual inversion label alone.
+
+## 6. Grashof classification versus designated-link rotatability
+
+\[
+\text{Grashof} \not\Rightarrow \text{terminal input fully rotates}.
+\]
+
+Canonical counterexample `unequal_proximal` with \((l_1,l_2,l_3)=(3,1,2.5)\):
+
+| Radius | Grashof | Inversion | Input rotates | Dexterous |
+|---|---|---|---:|---:|
+| \(0<\rho<0.5\) | Grashof | double-crank | yes | yes |
+| \(\rho=0.5\) | change-point | change-point | yes | yes |
+| \(0.5<\rho<1.5\) | non-Grashof | double-rocker | no | no |
+| \(1.5<\rho<4.5\) | Grashof | grashof-double-rocker | no | no |
+| \(4.5<\rho<6.5\) | non-Grashof | double-rocker | no | no |
+
+Exact radial partitions use analytical transition radii (reachable/dexterous bounds, \(\rho\in\{l_1,l_2,l_3\}\), and exact zeros of the piecewise-linear Grashof margin), not coarse sampling.
+
+## 7. Spherical 4R characteristics (6R extension)
+
+See `docs/theory.md` for full conventions. For spherical link angles \((\alpha,\beta,\gamma,\eta)\) in the Murray–Larochelle / McCarthy–Soh ordering (input, output, ground, coupler),
+
+\[
+\begin{aligned}
+T_1 &= \gamma - \alpha + \eta - \beta,\\
+T_2 &= \gamma - \alpha - \eta + \beta,\\
+T_3 &= \eta + \beta - \gamma - \alpha,\\
+T_4 &= 2\pi - (\alpha + \beta + \gamma + \eta).
+\end{aligned}
+\]
+
+Grashof family: \(T_1 T_2 T_3 T_4 > 0\). The hand-orientation link is the output \(\beta\). Dexterity is never inferred from the product alone.

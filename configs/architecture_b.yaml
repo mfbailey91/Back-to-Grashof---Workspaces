@@ -1,0 +1,9 @@
+architecture_id: B
+name: exact_regional_offset_wrist
+L2: 1.0
+L3: 0.8
+Lt: 0.25
+epsilon_w: 0.0
+epsilon_s: 0.0
+epsilon_w_sweep: [0.0, 0.025, 0.05, 0.10, 0.20]
+notes: Parallel z2||z3||z4 with parameterized wrist concurrency residual.
