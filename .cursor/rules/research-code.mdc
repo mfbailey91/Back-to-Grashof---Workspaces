@@ -1,0 +1,21 @@
+---
+description: Guardrails for analytical robotics research code
+alwaysApply: true
+---
+
+# Research-code rules
+
+1. Treat equations in `docs/MATH_NOTES.md` as the current source of mathematical truth.
+2. Do not replace an analytical predicate with a sampled approximation.
+3. Every new equation requires:
+   - a named implementation;
+   - at least one interior test;
+   - at least one exterior test;
+   - at least one equality or boundary test.
+4. Keep conventional Grashof classification separate from link-specific full-rotation tests.
+5. State coordinate, link-order, and joint-angle conventions in docstrings.
+6. Do not add joint limits, collision, dynamics, or capability metrics to Sprint 01.
+7. Before refactoring a mathematical function, add regression tests that lock its behavior.
+8. Prefer small pure functions and immutable dataclasses.
+9. Any generated plot must be reproducible from a committed script or CLI command.
+10. When uncertain about a mechanism theorem, mark the code path as unverified and add a research note instead of inventing a generalization.
