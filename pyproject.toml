@@ -4,12 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "grashof-workspace"
-version = "0.1.0"
+version = "0.2.0"
 description = "Analytical planar 3R workspace characterization using an equivalent four-bar mechanism"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "numpy>=1.26",
   "matplotlib>=3.8",
 ]
 
@@ -28,13 +27,20 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q"
+addopts = "-q -m 'not stress'"
+markers = [
+  "stress: larger randomized property suite (not required on every commit)",
+]
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.12"
 strict = true
 packages = ["grashof_workspace"]
+
+[[tool.mypy.overrides]]
+module = ["matplotlib.*"]
+ignore_missing_imports = true

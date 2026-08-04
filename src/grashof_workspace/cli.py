@@ -47,7 +47,11 @@ def main() -> None:
             f"missing required link lengths for single-figure mode: {', '.join(missing)}"
         )
 
-    robot = Planar3R(args.l1, args.l2, args.l3)
+    try:
+        robot = Planar3R(args.l1, args.l2, args.l3)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+
     output = plot_workspace(robot, args.output)
 
     print(f"reachable radial interval: {robot.reachable_radial_interval()}")
