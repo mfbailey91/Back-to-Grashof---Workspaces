@@ -8,3 +8,6 @@ dist/
 build/
 *.egg-info/
 outputs/
+
+# Third-party robot-description snapshots
+third_party/robot_corpus/
