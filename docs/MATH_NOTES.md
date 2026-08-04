@@ -95,3 +95,28 @@ After intersecting these branches with \([0,r_o]\), the dexterous workspace may 
 - a degenerate boundary circle at equality.
 
 The implementation preserves degenerate intervals because they identify change-point geometries that may matter to the analytical classification.
+
+Structured topology reports finite components (`disk`, `annulus`, `disk_and_annulus`, or empty) separately from degenerate components (`origin_point`, `boundary_circle`).
+
+## 5. Four-bar assemblability and classification
+
+For ordered lengths \(L=(d,a,b,c)\), the assembly margin is
+
+\[
+m_a=\sum_i L_i-2L_{\max}.
+\]
+
+- \(m_a>0\): assemblable with a finite configuration range;
+- \(m_a=0\): degenerate collinear assembly;
+- \(m_a<0\): non-assemblable.
+
+The Grashof margin remains \(P+Q-S-L\) on the sorted lengths. Exported labels use the precedence
+
+1. `non-assemblable`;
+2. `degenerate-coincident-ground-pivots` when \(d=0\);
+3. `degenerate-collinear` when \(m_a=0\);
+4. `change-point`;
+5. `special-grashof-tied-shortest`;
+6. conventional `double-crank`, `crank-rocker`, or `double-rocker`.
+
+A separate `grashof_class` field reports `non-assemblable`, `grashof`, `change-point`, or `non-grashof`. Exact terminal-link rotatability is still decided by loop-closure interval containment and never by the textual inversion label alone.

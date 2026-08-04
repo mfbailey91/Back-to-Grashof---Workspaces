@@ -24,9 +24,11 @@ Included:
 - analytical reachable workspace
 - analytical dexterous workspace
 - equivalent four-bar construction
+- assemblability and degenerate-loop classification
 - Grashof classification and exact input-rotation test
+- radial mechanism-state atlas
 - sampled validation of the analytical result
-- reproducible plots and tests
+- reproducible plots, tests, and CI
 
 Explicitly deferred:
 
@@ -42,25 +44,34 @@ Explicitly deferred:
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"
+pip install -e ".[dev]" --config-settings editable_mode=strict
 pytest
+ruff check .
+mypy src
 grashof-workspace --l1 2.0 --l2 2.0 --l3 1.0 --output workspace.png
 grashof-workspace --atlas --output-dir outputs/atlas
 ```
 
-Validation uses exact interval containment as the workspace definition. Independent orientation sampling must report coverage `1.0` at dexterous radii (analytic tolerance `1e-12`). Atlas rows that disagree are marked `fail@rho=...` rather than silently accepted.
+Validation uses exact interval containment as the workspace definition. Independent orientation sampling must report coverage `1.0` at dexterous radii (analytic tolerance `1e-12`) and always includes the wrist-distance extrema \(\phi=0,\pi\). Atlas generation writes:
+
+- `atlas.csv` — link-ratio topology summary
+- `radial_mechanism_states.csv` — per-radius assemblability / Grashof / inversion / rotatability / dexterity
+- Cartesian and radial-state figures under `figures/`
+
+Generic Grashof membership alone is not treated as dexterity; the radial plot and CSV expose that distinction explicitly.
 
 ## Repository map
 
 ```text
 src/grashof_workspace/
   fourbar.py       Equivalent closed-loop model and Grashof tests
-  planar3r.py      Analytical 3R workspace model
+  planar3r.py      Analytical 3R workspace and radial mechanism state
   atlas.py         Link-ratio CSV atlas and experiment figures
-  plotting.py      Reproducible workspace plots
+  plotting.py      Cartesian and radial-state plots
   cli.py           Command-line entry point
-tests/             Mathematical regression tests
-docs/              Charter, equations, decisions, roadmap, and sprint plan
+tests/             Mathematical regression and property tests
+docs/              Charter, equations, decisions, roadmap, and sprint plans
+.github/workflows/ Continuous integration
 .cursor/rules/     Guardrails for Cursor-assisted development
 ```
 

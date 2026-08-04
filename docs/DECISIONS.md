@@ -20,12 +20,18 @@
 
 ## ADR-004 — No robotics framework dependency in the MVP
 
-**Decision:** Use NumPy and Matplotlib only.
+**Decision:** Use Matplotlib only for visualization. The analytical kernel is pure Python.
 
-**Reason:** The initial mathematics is small enough to inspect directly. URDF parsing, symbolic packages, and general robot libraries can be added after the core result is stable.
+**Reason:** The initial mathematics is small enough to inspect directly. URDF parsing, symbolic packages, NumPy, and general robot libraries can be added after the core result is stable.
 
 ## ADR-005 — Capability fields begin only after workspace validation
 
-**Decision:** Do not build task decomposition or capability scoring into Sprint 1.
+**Decision:** Do not build task decomposition or capability scoring into Sprint 1–2.
 
 **Reason:** The first research claim is the workspace boundary. Capability fields should be layered on a trusted geometric kernel rather than developed simultaneously.
+
+## ADR-006 — Classification precedence and radial mechanism state
+
+**Decision:** Classify equivalent four-bars with assemblability and degeneracy before conventional Grashof inversion names, and expose a single `RadialMechanismState` record for atlas CSV and radial plots.
+
+**Reason:** Non-assemblable and coincident-ground loops must not inherit misleading mechanism labels, and the Grashof-to-dexterity relationship must be inspectable from one API.

@@ -5,6 +5,8 @@ import pytest
 from grashof_workspace.planar3r import (
     FULL_COVERAGE,
     Planar3R,
+    WorkspaceTopology,
+    classify_workspace_topology,
     dexterous_topology,
 )
 
@@ -14,6 +16,7 @@ def test_equal_first_links_produce_single_dexterous_disk() -> None:
     assert robot.reachable_radial_interval() == (0.0, 5.0)
     assert robot.dexterous_radial_intervals() == ((0.0, 3.0),)
     assert robot.dexterous_topology() == "disk"
+    assert robot.workspace_topology() == WorkspaceTopology(("disk",), ())
 
 
 def test_unequal_first_links_can_produce_inner_dexterous_island() -> None:
@@ -34,22 +37,69 @@ def test_no_dexterous_workspace_when_terminal_link_is_too_long() -> None:
     robot = Planar3R(1.0, 1.0, 3.0)
     assert robot.dexterous_radial_intervals() == ()
     assert robot.dexterous_topology() == "empty"
+    assert robot.workspace_topology() == WorkspaceTopology(("empty",), ())
 
 
-def test_boundary_case_preserves_degenerate_outer_circle() -> None:
+def test_boundary_case_preserves_disk_and_boundary_circle() -> None:
     robot = Planar3R(3.0, 2.0, 2.0)
     assert robot.dexterous_radial_intervals() == ((0.0, 1.0), (3.0, 3.0))
-    assert robot.dexterous_topology() == "degenerate"
+    topology = robot.workspace_topology()
+    assert topology == WorkspaceTopology(("disk",), ("boundary_circle",))
+    assert topology.summary() == "disk+boundary_circle"
     assert robot.is_dexterous_radius(3.0)
     assert not robot.is_dexterous_radius(2.0)
 
 
 def test_annular_dexterous_component() -> None:
-    # Outer branch only: rho in [l3 + |l1-l2|, l1+l2-l3]
     robot = Planar3R(3.0, 2.0, 0.5)
     intervals = robot.dexterous_radial_intervals()
     assert intervals == ((1.5, 4.5),)
     assert dexterous_topology(intervals) == "annulus"
+
+
+def test_origin_can_be_dexterous_with_coincident_ground_label() -> None:
+    robot = Planar3R(2.0, 2.0, 1.0)
+    state = robot.mechanism_state(0.0)
+    assert state.dexterous
+    assert state.inversion_type == "degenerate-coincident-ground-pivots"
+    assert state.input_can_fully_rotate == state.dexterous
+
+
+def test_structured_topology_acceptance_cases() -> None:
+    assert classify_workspace_topology(()) == WorkspaceTopology(("empty",), ())
+    assert classify_workspace_topology(((0.0, 1.0),)) == WorkspaceTopology(
+        ("disk",), ()
+    )
+    assert classify_workspace_topology(((1.0, 2.0),)) == WorkspaceTopology(
+        ("annulus",), ()
+    )
+    assert classify_workspace_topology(((0.0, 0.5), (2.0, 3.0))) == WorkspaceTopology(
+        ("disk_and_annulus",), ()
+    )
+    assert classify_workspace_topology(((0.0, 0.0),)) == WorkspaceTopology(
+        (), ("origin_point",)
+    )
+    assert classify_workspace_topology(((3.0, 3.0),)) == WorkspaceTopology(
+        (), ("boundary_circle",)
+    )
+    assert classify_workspace_topology(((0.0, 1.0), (3.0, 3.0))) == WorkspaceTopology(
+        ("disk",), ("boundary_circle",)
+    )
+    assert classify_workspace_topology(((1.0, 2.0), (4.0, 4.0))) == WorkspaceTopology(
+        ("annulus",), ("boundary_circle",)
+    )
+
+
+def test_mechanism_state_invariant_and_unreachable_radii() -> None:
+    robot = Planar3R(2.0, 2.0, 1.0)
+    for rho in (0.0, 1.5, 3.0, 4.0, 6.0):
+        state = robot.mechanism_state(rho)
+        assert state.input_can_fully_rotate == state.dexterous
+        assert state.rho_bar == pytest.approx(rho / robot.l1)
+    outside = robot.mechanism_state(6.0)
+    assert not outside.reachable
+    assert not outside.assemblable
+    assert outside.inversion_type == "non-assemblable"
 
 
 def test_analytical_result_matches_orientation_sampling() -> None:

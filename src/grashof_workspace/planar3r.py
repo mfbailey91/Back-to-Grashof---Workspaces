@@ -41,35 +41,83 @@ def _merge_intervals(
     return tuple((max(0.0, a), max(0.0, b)) for a, b in merged)
 
 
+@dataclass(frozen=True, slots=True)
+class WorkspaceTopology:
+    """Structured dexterous topology separating finite and zero-width sets."""
+
+    finite_components: tuple[str, ...]
+    degenerate_components: tuple[str, ...]
+
+    def summary(self) -> str:
+        parts = list(self.finite_components) + list(self.degenerate_components)
+        if not parts:
+            return "empty"
+        if self.finite_components == ("empty",) and not self.degenerate_components:
+            return "empty"
+        filtered = [part for part in parts if part != "empty"]
+        return "+".join(filtered) if filtered else "empty"
+
+
+@dataclass(frozen=True, slots=True)
+class RadialMechanismState:
+    """Mechanism and workspace state at a single Cartesian radius."""
+
+    rho: float
+    rho_bar: float
+    reachable: bool
+    assemblable: bool
+    assembly_margin: float
+    grashof_margin: float
+    grashof_class: str
+    inversion_type: str
+    input_can_fully_rotate: bool
+    dexterous: bool
+
+
+def classify_workspace_topology(
+    intervals: tuple[RadialInterval, ...], *, tol: float = DEFAULT_TOL
+) -> WorkspaceTopology:
+    """Classify finite-area and degenerate dexterous radial components."""
+    if not intervals:
+        return WorkspaceTopology(("empty",), ())
+
+    finite: list[RadialInterval] = []
+    degenerate: list[str] = []
+    for inner, outer in intervals:
+        if outer - inner <= tol:
+            if inner <= tol:
+                degenerate.append("origin_point")
+            else:
+                degenerate.append("boundary_circle")
+        else:
+            finite.append((inner, outer))
+
+    if not finite and not degenerate:
+        return WorkspaceTopology(("empty",), ())
+
+    finite_label: tuple[str, ...]
+    if not finite:
+        finite_label = ()
+    elif len(finite) == 1:
+        inner, _outer = finite[0]
+        finite_label = ("disk",) if inner <= tol else ("annulus",)
+    elif (
+        len(finite) == 2
+        and finite[0][0] <= tol
+        and finite[1][0] > tol
+    ):
+        finite_label = ("disk_and_annulus",)
+    else:
+        finite_label = ("special",)
+
+    return WorkspaceTopology(finite_label, tuple(degenerate))
+
+
 def dexterous_topology(
     intervals: tuple[RadialInterval, ...], *, tol: float = DEFAULT_TOL
 ) -> str:
-    """Classify dexterous radial components into a stable topology label.
-
-    Labels follow ``docs/MATH_NOTES.md`` §4:
-    ``empty``, ``disk``, ``annulus``, ``disk_and_annulus``, ``degenerate``.
-    Zero-width (change-point) circles are preserved and reported as
-    ``degenerate`` whenever present.
-    """
-    if not intervals:
-        return "empty"
-
-    has_degenerate = any(outer - inner <= tol for inner, outer in intervals)
-    if has_degenerate:
-        return "degenerate"
-
-    if len(intervals) == 1:
-        inner, _outer = intervals[0]
-        return "disk" if inner <= tol else "annulus"
-
-    if (
-        len(intervals) == 2
-        and intervals[0][0] <= tol
-        and intervals[1][0] > tol
-    ):
-        return "disk_and_annulus"
-
-    return "special"
+    """Human-readable topology summary for CLI and CSV compatibility."""
+    return classify_workspace_topology(intervals, tol=tol).summary()
 
 
 @dataclass(frozen=True, slots=True)
@@ -100,6 +148,12 @@ class Planar3R:
         total = sum(lengths)
         inner = max(0.0, longest - (total - longest))
         return (inner, total)
+
+    def is_reachable_radius(self, rho: float, *, tol: float = DEFAULT_TOL) -> bool:
+        if rho < 0.0:
+            raise ValueError("rho must be nonnegative")
+        inner, outer = self.reachable_radial_interval()
+        return inner - tol <= rho <= outer + tol
 
     def wrist_distance_bounds(self, rho: float) -> RadialInterval:
         """Base-to-wrist distance over every desired terminal orientation."""
@@ -162,9 +216,37 @@ class Planar3R:
 
         return _merge_intervals(candidates, tol=tol)
 
+    def workspace_topology(self, *, tol: float = DEFAULT_TOL) -> WorkspaceTopology:
+        """Structured topology of the closed-form dexterous radial set."""
+        return classify_workspace_topology(
+            self.dexterous_radial_intervals(tol=tol), tol=tol
+        )
+
     def dexterous_topology(self, *, tol: float = DEFAULT_TOL) -> str:
-        """Topology label for the closed-form dexterous radial set."""
-        return dexterous_topology(self.dexterous_radial_intervals(tol=tol), tol=tol)
+        """Topology summary string for the closed-form dexterous radial set."""
+        return self.workspace_topology(tol=tol).summary()
+
+    def mechanism_state(
+        self, rho: float, *, tol: float = DEFAULT_TOL
+    ) -> RadialMechanismState:
+        """Evaluate assemblability, Grashof state, rotatability, and dexterity."""
+        if rho < 0.0:
+            raise ValueError("rho must be nonnegative")
+        linkage = self.fourbar_at_radius(rho)
+        rotatable = linkage.input_can_fully_rotate(tol=tol)
+        dexterous = self.is_dexterous_radius(rho, tol=tol)
+        return RadialMechanismState(
+            rho=rho,
+            rho_bar=rho / self.l1,
+            reachable=self.is_reachable_radius(rho, tol=tol),
+            assemblable=linkage.is_assemblable(tol=tol),
+            assembly_margin=linkage.assembly_margin,
+            grashof_margin=linkage.grashof_margin,
+            grashof_class=linkage.grashof_class(tol=tol),
+            inversion_type=linkage.inversion_type(tol=tol),
+            input_can_fully_rotate=rotatable,
+            dexterous=dexterous,
+        )
 
     def sampled_orientation_coverage(
         self,
@@ -178,20 +260,27 @@ class Planar3R:
 
         This is a validation helper, not the primary workspace definition.
         A dexterous interior point must return ``FULL_COVERAGE`` (1.0).
+
+        The sample set always includes the wrist-distance extrema ``phi=0`` and
+        ``phi=pi`` in addition to a uniform grid.
         """
         if samples < 4:
             raise ValueError("samples must be at least 4")
 
         lower = self.two_link_inner_radius
         upper = self.two_link_outer_radius
-        reachable = 0
 
-        for index in range(samples):
-            phi = 2.0 * pi * index / samples
+        angles = [2.0 * pi * index / samples for index in range(samples)]
+        for required in (0.0, pi):
+            if not any(abs(angle - required) <= tol for angle in angles):
+                angles.append(required)
+
+        reachable = 0
+        for phi in angles:
             wrist_x = x - self.l3 * cos(phi)
             wrist_y = y - self.l3 * sin(phi)
             distance = hypot(wrist_x, wrist_y)
             if lower - tol <= distance <= upper + tol:
                 reachable += 1
 
-        return reachable / samples
+        return reachable / len(angles)

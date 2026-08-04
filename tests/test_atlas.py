@@ -22,13 +22,20 @@ def test_generate_atlas_writes_csv_and_figures(tmp_path: Path) -> None:
     text = csv_path.read_text(encoding="utf-8")
     assert "lambda2,lambda3,topology" in text
     assert "equal_proximal" in text
+    assert "disk+boundary_circle" in text or "disk" in text
     assert (tmp_path / "figures" / "equal_proximal.png").is_file()
     assert (tmp_path / "figures" / "boundary_degenerate.png").is_file()
+    assert (tmp_path / "figures" / "disk_and_annulus_radial_state.png").is_file()
+    state_csv = tmp_path / "radial_mechanism_states.csv"
+    assert state_csv.is_file()
+    state_text = state_csv.read_text(encoding="utf-8")
+    assert "grashof_class" in state_text
+    assert "input_can_fully_rotate" in state_text
+    assert "dexterous" in state_text
 
 
 def test_named_boundary_family_matches_absolute_lengths() -> None:
-    # Atlas rows are normalized by l1; absolute (3,2,2) shares ratios (2/3, 2/3).
     absolute = Planar3R(3.0, 2.0, 2.0)
     row = build_atlas_row(2.0 / 3.0, 2.0 / 3.0, family="boundary_degenerate")
-    assert row.topology == absolute.dexterous_topology() == "degenerate"
+    assert row.topology == absolute.dexterous_topology() == "disk+boundary_circle"
     assert row.sampled_validation == "pass"
