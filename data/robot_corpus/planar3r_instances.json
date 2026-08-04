@@ -1,0 +1,52 @@
+{
+  "instances": [
+    {
+      "id": "symmetric_disk",
+      "name": "Symmetric proximal links / dexterous disk",
+      "l1": 2.0,
+      "l2": 2.0,
+      "l3": 1.0,
+      "expected_topology": "disk"
+    },
+    {
+      "id": "split_disk_annulus",
+      "name": "Split disk and annulus",
+      "l1": 3.0,
+      "l2": 2.0,
+      "l3": 1.5,
+      "expected_topology": "disk_and_annulus"
+    },
+    {
+      "id": "inner_island",
+      "name": "Unequal proximal links / inner island",
+      "l1": 3.0,
+      "l2": 1.0,
+      "l3": 2.5,
+      "expected_topology": "inner_disk"
+    },
+    {
+      "id": "terminal_heavy_empty",
+      "name": "Terminal-heavy / empty dexterous workspace",
+      "l1": 1.0,
+      "l2": 1.0,
+      "l3": 3.0,
+      "expected_topology": "empty"
+    },
+    {
+      "id": "change_point_boundary",
+      "name": "Change-point boundary case",
+      "l1": 3.0,
+      "l2": 2.0,
+      "l3": 2.0,
+      "expected_topology": "disk_and_boundary_circle"
+    },
+    {
+      "id": "lesson_ratio",
+      "name": "Project-authored copy of lesson link ratios",
+      "l1": 0.5,
+      "l2": 0.5,
+      "l3": 0.18,
+      "expected_topology": "disk"
+    }
+  ]
+}
