@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}}</title>
+  <link rel="stylesheet" href="assets/dashboard.css" />
+</head>
+<body>
+  <nav class="topnav">
+    <a class="active" href="index.html">Sprint 0</a>
+    <a href="../sprint01_dashboard/index.html">Sprint 1</a>
+    <a href="../sprint02_dashboard/index.html">Sprint 2</a>
+    <a href="../sprint03_dashboard/index.html">Sprint 3</a>
+    <a href="../index.html">Overview</a>
+  </nav>
+  <div class="shell">
+    <header class="hero">
+      <span class="brand">Back to Grashof · sixr_grashof</span>
+      <h1>Sprint 0 — Spherical classification</h1>
+      <p class="lead">
+        Lock the virtual spherical four-bar convention, evaluate
+        T₁…T₄, and classify all 16 McCarthy–Soh types before any IK sampling.
+      </p>
+      <p class="warning">
+        Grashof product T₁T₂T₃T₄ &gt; 0 is not dexterity. Under the output-hand
+        convention, only types {2, 3, 10, 11} are dexterity <em>candidates</em> (hypothesis).
+      </p>
+    </header>
+
+    <section>
+      <h2>Gate 1 worked closure</h2>
+      <p class="section-lead">
+        One Architecture A fiber → one spherical four-bar → one verified T-classification
+        with an explicit hand-link crank/rocker label.
+      </p>
+      <div id="worked-stats" class="stat-row"></div>
+      <div class="grid-2">
+        <figure class="panel">
+          <img src="figures/arch_a_worked_spherical_closure.png" alt="Architecture A worked spherical closure" />
+          <figcaption>Type 1 crank-rocker · hand β is a rocker · not a dexterity candidate</figcaption>
+        </figure>
+        <figure class="panel">
+          <img src="figures/mccarthy_soh_type_table.png" alt="McCarthy-Soh type table" />
+          <figcaption>Sign patterns for types 1–16 with T₄&lt;0 correspondence</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>T₁–T₄ fixture gallery</h2>
+      <p class="section-lead">★ marks hypothesis hand-crank types. Interior / exterior / wrap-around fixtures included.</p>
+      <figure class="panel">
+        <img src="figures/mccarthy_soh_T_gallery.png" alt="T1-T4 gallery for 16 fixtures" />
+      </figure>
+    </section>
+
+    <section>
+      <h2>Type inspector</h2>
+      <p class="section-lead">Filter the machine-readable 16-type table. Candidates stay highlighted.</p>
+      <div class="controls">
+        <label for="type-filter">Show</label>
+        <select id="type-filter">
+          <option value="all">All 16 types</option>
+          <option value="candidates">Hypothesis candidates only</option>
+          <option value="plain">T₄ &gt; 0 (types 1–8)</option>
+          <option value="wrap">T₄ &lt; 0 wrap-around (types 9–16)</option>
+        </select>
+      </div>
+      <div id="type-table" class="panel"></div>
+    </section>
+
+    <section>
+      <h2>Spherical four-bar poses</h2>
+      <p class="section-lead">Representative fixtures for basic motion classes plus wrap-around rocker-crank (type 10).</p>
+      <div class="gallery">
+        <figure class="panel">
+          <img src="figures/spherical_fourbar_type1.png" alt="Type 1" />
+          <figcaption>Type 1 · crank-rocker</figcaption>
+        </figure>
+        <figure class="panel">
+          <img src="figures/spherical_fourbar_type2.png" alt="Type 2" />
+          <figcaption>Type 2 · rocker-crank ★</figcaption>
+        </figure>
+        <figure class="panel">
+          <img src="figures/spherical_fourbar_type3.png" alt="Type 3" />
+          <figcaption>Type 3 · double-crank ★</figcaption>
+        </figure>
+        <figure class="panel">
+          <img src="figures/spherical_fourbar_type4.png" alt="Type 4" />
+          <figcaption>Type 4 · Grashof double-rocker</figcaption>
+        </figure>
+        <figure class="panel">
+          <img src="figures/spherical_fourbar_type10.png" alt="Type 10" />
+          <figcaption>Type 10 · wrap rocker-crank ★</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Fixture numerics</h2>
+      <div id="fixture-table" class="panel"></div>
+    </section>
+  </div>
+
+  <!--DASHBOARD_DATA-->
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>

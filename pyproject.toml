@@ -28,7 +28,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 grashof_workspace = ["dashboard_assets/*"]
-sixr_grashof = ["data/*.json"]
+sixr_grashof = ["data/*.json", "dashboard_assets/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

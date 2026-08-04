@@ -100,10 +100,16 @@ def generate_sprint1(out: Path = OUT1) -> list[Path]:
 def main() -> None:
     p0 = generate_sprint0()
     p1 = generate_sprint1()
+    from sixr_grashof.dashboard import generate_dashboards
+
+    dash = generate_dashboards(results_root=ROOT / "results")
     print(f"Sprint 0: {len(p0)} figures under {OUT0}")
     print(f"Sprint 1: {len(p1)} figures under {OUT1}")
     for p in p0 + p1:
         print(f"  {p.relative_to(ROOT)}")
+    print("Dashboards:")
+    for key, path in dash.items():
+        print(f"  {key}: {path.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

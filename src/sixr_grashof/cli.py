@@ -16,9 +16,20 @@ from sixr_grashof.visualization import format_geometry_report, plot_robot_axes
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        description="Synthetic 6R axis geometry reports and visualizations (Sprint 1)."
+        description="Synthetic 6R axis geometry reports, visualizations, and dashboards."
     )
-    p.add_argument("--architecture", choices=["A", "B", "C"], required=True)
+    p.add_argument(
+        "--dashboard",
+        action="store_true",
+        help="Generate Sprint 0–3 static HTML dashboards under results/",
+    )
+    p.add_argument(
+        "--results-dir",
+        type=Path,
+        default=Path("results"),
+        help="Results root for --dashboard (default: results/)",
+    )
+    p.add_argument("--architecture", choices=["A", "B", "C"], default=None)
     p.add_argument("--L2", type=float, default=1.0)
     p.add_argument("--L3", type=float, default=0.8)
     p.add_argument("--Lt", type=float, default=0.25)
@@ -50,6 +61,15 @@ def _make_arch(args: argparse.Namespace):  # type: ignore[no-untyped-def]
 
 def main(argv: list[str] | None = None) -> None:
     args = build_parser().parse_args(argv)
+    if args.dashboard:
+        from sixr_grashof.dashboard import generate_dashboards
+
+        paths = generate_dashboards(results_root=args.results_dir)
+        for key, path in paths.items():
+            print(f"{key}: {path}")
+        return
+    if args.architecture is None:
+        raise SystemExit("Provide --architecture A|B|C, or use --dashboard")
     arch = _make_arch(args)
     q = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
     fk = arch.forward(q)

@@ -153,3 +153,12 @@ T_4 &= 2\pi - (\alpha + \beta + \gamma + \eta).
 \]
 
 Grashof family: \(T_1 T_2 T_3 T_4 > 0\). The hand-orientation link is the output \(\beta\). Dexterity is never inferred from the product alone.
+
+## 8. Regional and spherical reductions (6R Sprints 2–3)
+
+See `docs/spherical_reduction.md` for Architecture A conventions:
+
+- base-azimuth quotient about \(\hat a_1\);
+- regional reachability \(|L_2-L_3|\le\rho_w\le L_2+L_3\) and planar virtual four-bar \((\rho_p,L_t,L_3,L_2)\);
+- spherical virtual four-bar angles from meridional normal and wrist axes \((n,a_4,a_5,a_6)\) with \(\beta=\angle(a_5,a_6)\) as the hand-orientation link;
+- invalid concurrency residuals must not emit spherical angles.

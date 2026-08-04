@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 2 — Reductions</title>
+  <link rel="stylesheet" href="assets/dashboard.css" />
+</head>
+<body>
+  <nav class="topnav">
+    <a href="../sprint00_dashboard/index.html">Sprint 0</a>
+    <a href="../sprint01_dashboard/index.html">Sprint 1</a>
+    <a class="active" href="index.html">Sprint 2</a>
+    <a href="../sprint03_dashboard/index.html">Sprint 3</a>
+    <a href="../index.html">Overview</a>
+  </nav>
+  <div class="shell">
+    <header class="hero">
+      <span class="brand">Back to Grashof · sixr_grashof</span>
+      <h1>Sprint 2 — Reductions</h1>
+      <p class="lead">
+        Regional planar four-bar at wrist radius ρ_w and spherical virtual four-bar
+        at a fixed tool pose. Architecture A is the exact positive control; B/C are
+        residual-gated.
+      </p>
+      <p class="warning">
+        Invalid reductions withhold angles — never invent spherical link lengths.
+        Product test is still not dexterity.
+      </p>
+    </header>
+
+    <section>
+      <h2>Reduction inspector</h2>
+      <p class="section-lead">Live Architecture A/B/C reduction records at the home pose.</p>
+      <div id="reduction-stats" class="stat-row"></div>
+      <div id="reduction-table" class="panel"></div>
+    </section>
+
+    <section>
+      <h2>Robot ↔ virtual planar</h2>
+      <p class="section-lead">Physical 6R beside the regional planar four-bar (ground = ρ_p).</p>
+      <figure class="panel">
+        <img src="figures/regional_planar_reduction.png" alt="Regional planar reduction" />
+      </figure>
+    </section>
+
+    <section>
+      <h2>Robot ↔ virtual spherical</h2>
+      <p class="section-lead">Physical 6R beside the Architecture A spherical four-bar (hand = β).</p>
+      <figure class="panel">
+        <img src="figures/spherical_orientation_reduction.png" alt="Spherical orientation reduction" />
+      </figure>
+    </section>
+
+    <section>
+      <h2>Exact A vs offset B</h2>
+      <p class="section-lead">Status badge and ρ_C; invalid cases withhold angles.</p>
+      <figure class="panel">
+        <img src="figures/exact_A_vs_offset_B.png" alt="Exact A versus offset B" />
+      </figure>
+    </section>
+  </div>
+
+  <script id="dashboard-data" type="application/json">
+{
+  "sprint": 2,
+  "title": "Sprint 2 \u2014 Reductions",
+  "reductions": [
+    {
+      "architecture_id": "A",
+      "regional_status": "exact",
+      "spherical_status": "exact",
+      "concurrency_residual": 0.0,
+      "rho_w": 1.8,
+      "spherical_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "linkage_type": 11,
+      "notes": "Architecture A axis-sphere construction (docs/spherical_reduction.md)"
+    },
+    {
+      "architecture_id": "B0",
+      "regional_status": "exact",
+      "spherical_status": "exact",
+      "concurrency_residual": 0.0,
+      "rho_w": 1.8,
+      "spherical_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "linkage_type": 11,
+      "notes": "Architecture A axis-sphere construction (docs/spherical_reduction.md)"
+    },
+    {
+      "architecture_id": "B0.2",
+      "regional_status": "approximate",
+      "spherical_status": "invalid",
+      "concurrency_residual": 0.10000000000000009,
+      "rho_w": 1.8,
+      "spherical_angles": null,
+      "linkage_type": null,
+      "notes": "invalid concurrency residual; spherical angles withheld"
+    },
+    {
+      "architecture_id": "C0",
+      "regional_status": "exact",
+      "spherical_status": "exact",
+      "concurrency_residual": 0.0,
+      "rho_w": 1.8,
+      "spherical_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "linkage_type": 11,
+      "notes": "Architecture A axis-sphere construction (docs/spherical_reduction.md)"
+    },
+    {
+      "architecture_id": "C0.2",
+      "regional_status": "approximate",
+      "spherical_status": "exact",
+      "concurrency_residual": 0.0,
+      "rho_w": 2.0,
+      "spherical_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "linkage_type": 11,
+      "notes": "Architecture A axis-sphere construction (docs/spherical_reduction.md)"
+    }
+  ],
+  "figures": {
+    "regional": "figures/regional_planar_reduction.png",
+    "spherical": "figures/spherical_orientation_reduction.png",
+    "exact_vs_offset": "figures/exact_A_vs_offset_B.png"
+  }
+}
+</script>
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>

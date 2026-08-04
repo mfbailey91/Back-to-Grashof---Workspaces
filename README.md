@@ -121,4 +121,14 @@ python scripts/generate_sprint01_visualizations.py
 
 Figures land in `results/sprint00_classification/` (McCarthy–Soh types, spherical four-bars) and `results/sprint01_geometry/` (architectures A/B/C, residual sweeps).
 
+Static HTML dashboards (no server):
+
+```bash
+python scripts/generate_sprint01_visualizations.py
+# or: sixr-grashof --dashboard
+open results/index.html
+open results/sprint00_dashboard/index.html
+open results/sprint01_dashboard/index.html
+```
+
 Hand-orientation link is the virtual output \(\beta\). Types `{2,3,10,11}` are documented as a dexterity **hypothesis**, never as an encoded truth.
