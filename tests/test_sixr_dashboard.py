@@ -1,7 +1,8 @@
-"""Tests for Sprint 0–5 static HTML dashboards."""
+"""Tests for Sprint 0–6 static HTML dashboards."""
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from sixr_grashof.dashboard import (
@@ -12,6 +13,7 @@ from sixr_grashof.dashboard import (
     write_sprint3_dashboard,
     write_sprint4_dashboard,
     write_sprint5_dashboard,
+    write_sprint6_dashboard,
 )
 
 
@@ -26,6 +28,7 @@ def test_dashboards_write_from_existing_figures(tmp_path: Path) -> None:
     assert fig0.is_dir() and fig1.is_dir()
     assert fig2.is_dir() and fig3.is_dir()
     assert fig4.is_dir() and fig5.is_dir()
+    assert (fig5 / "experiment_summary.json").is_file()
 
     out = tmp_path / "results"
     paths = generate_dashboards(
@@ -43,6 +46,7 @@ def test_dashboards_write_from_existing_figures(tmp_path: Path) -> None:
     assert paths["sprint3"].is_file()
     assert paths["sprint4"].is_file()
     assert paths["sprint5"].is_file()
+    assert paths["sprint6"].is_file()
     assert paths["overview"].is_file()
 
     html4 = paths["sprint4"].read_text(encoding="utf-8")
@@ -55,9 +59,31 @@ def test_dashboards_write_from_existing_figures(tmp_path: Path) -> None:
     assert "confusion_heatmap.png" in html5
     assert "dexterity" in html5.lower() or "hypothesis" in html5.lower()
 
+    html6 = paths["sprint6"].read_text(encoding="utf-8")
+    assert "Sprint 6" in html6
+    assert 'id="dashboard-data"' in html6
+    assert 'id="state-picker"' in html6
+    assert 'id="eps-w-slider"' in html6
+    assert 'id="eps-s-slider"' in html6
+    assert "prediction_outcome" in html6
+    assert "concurrency_residual" in html6
+
+    payload = json.loads((out / "sprint06_dashboard" / "dashboard.json").read_text(encoding="utf-8"))
+    assert payload["sprint"] == 6
+    assert len(payload["records"]) >= 1
+    assert "record_id" in payload["records"][0]
+    assert "arm_figure" in payload["records"][0]
+    assert (out / "sprint06_dashboard" / "figures" / "residual_vs_error.png").is_file()
+    assert (out / "sprint06_dashboard" / "figures" / "orientation_sample_cloud.png").is_file()
+
+    js = (out / "sprint06_dashboard" / "assets" / "dashboard.js").read_text(encoding="utf-8")
+    assert "renderSprint6" in js
+    assert "eps-w-slider" in js
+
     overview = paths["overview"].read_text(encoding="utf-8")
     assert "sprint04_dashboard" in overview
     assert "sprint05_dashboard" in overview
+    assert "sprint06_dashboard" in overview
 
 
 def test_individual_writers(tmp_path: Path) -> None:
@@ -68,4 +94,11 @@ def test_individual_writers(tmp_path: Path) -> None:
     i3 = write_sprint3_dashboard(tmp_path / "s3", figures_src=root / "sprint03_prediction")
     i4 = write_sprint4_dashboard(tmp_path / "s4", figures_src=root / "sprint04_orientation")
     i5 = write_sprint5_dashboard(tmp_path / "s5", figures_src=root / "sprint05_experiments")
-    assert all(p.is_file() for p in (i0, i1, i2, i3, i4, i5))
+    i6 = write_sprint6_dashboard(
+        tmp_path / "s6",
+        experiments_src=root / "sprint05_experiments",
+        geometry_src=root / "sprint01_geometry",
+        reduction_src=root / "sprint02_reduction",
+        orientation_src=root / "sprint04_orientation",
+    )
+    assert all(p.is_file() for p in (i0, i1, i2, i3, i4, i5, i6))

@@ -125,10 +125,14 @@ Static HTML dashboards (no server):
 
 ```bash
 python scripts/generate_sprint01_visualizations.py
+python scripts/generate_sprint06_dashboard.py
 # or: sixr-grashof --dashboard
 open results/index.html
 open results/sprint00_dashboard/index.html
-open results/sprint01_dashboard/index.html
+open results/sprint06_dashboard/index.html
 ```
+
+Interpretation of Gates 1–5 and inspector limitations: `docs/sprint06_interpretation.md`.
+Sprint 5 densified experiment write-up: `docs/sprint05_results_summary.md`.
 
 Hand-orientation link is the virtual output \(\beta\). Types `{2,3,10,11}` are documented as a dexterity **hypothesis**, never as an encoded truth.

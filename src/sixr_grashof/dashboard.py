@@ -1,4 +1,4 @@
-"""Static HTML dashboards for 6R Sprints 0–3."""
+"""Static HTML dashboards for 6R Sprints 0–6."""
 
 from __future__ import annotations
 
@@ -581,8 +581,146 @@ def write_sprint5_dashboard(
     return index
 
 
+def _closest_arm_figure(architecture_id: str, epsilon_w: float, epsilon_s: float) -> str:
+    """Pick a pre-rendered Sprint 1 arm figure for the inspector panel."""
+    if architecture_id == "B":
+        choices = (
+            (0.0, "figures/arch_B_ew0_es0.png"),
+            (0.05, "figures/arch_B_ew0.05_es0.png"),
+            (0.2, "figures/arch_B_ew0.2_es0.png"),
+        )
+        best = min(choices, key=lambda c: abs(c[0] - float(epsilon_w)))
+        return best[1]
+    if architecture_id == "C":
+        choices = (
+            (0.0, "figures/arch_C_ew0_es0.png"),
+            (0.05, "figures/arch_C_ew0_es0.05.png"),
+            (0.2, "figures/arch_C_ew0_es0.2.png"),
+        )
+        best = min(choices, key=lambda c: abs(c[0] - float(epsilon_s)))
+        return best[1]
+    return "figures/arch_A_ew0_es0.png"
+
+
+def _sprint6_payload(experiments_dir: Path) -> dict[str, Any]:
+    summary_path = Path(experiments_dir) / "experiment_summary.json"
+    if summary_path.is_file():
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    else:
+        from sixr_grashof.experiments.offset_sweep import run_architecture_experiments
+
+        summary = run_architecture_experiments(
+            orientation_count=24, n_a_positions=2, n_ik_starts=3, seed=0, include_a_grid=False
+        ).to_dict()
+    records_out: list[dict[str, Any]] = []
+    for i, row in enumerate(summary.get("records", [])):
+        if not isinstance(row, dict):
+            continue
+        op = row.get("offset_parameters") or {}
+        arch = str(row.get("architecture_id", "?"))
+        record = dict(row)
+        record["record_id"] = f"{arch}-{i:02d}"
+        record["arm_figure"] = _closest_arm_figure(
+            arch, float(op.get("epsilon_w", 0.0)), float(op.get("epsilon_s", 0.0))
+        )
+        records_out.append(record)
+    return {
+        "sprint": 6,
+        "title": "Sprint 6 — State inspector",
+        "epsilon_grid": [0.0, 0.025, 0.05, 0.1, 0.2],
+        "gates": {
+            "gate3_crank_precision": summary.get("gate3_crank_precision"),
+            "gate3_crank_recall": summary.get("gate3_crank_recall"),
+            "gate4_residual_error_correlation": summary.get("gate4_residual_error_correlation"),
+            "gate5_c_orientation_stable": summary.get("gate5_c_orientation_stable"),
+        },
+        "outcome_counts": summary.get("outcome_counts", {}),
+        "records": records_out,
+        "figures": {
+            "arm_a": "figures/arch_A_ew0_es0.png",
+            "planar": "figures/regional_planar_reduction.png",
+            "spherical": "figures/spherical_orientation_reduction.png",
+            "cloud": "figures/orientation_sample_cloud.png",
+            "connectivity": "figures/connectivity_components.png",
+            "residual": "figures/residual_vs_error.png",
+            "sweeps": "figures/offset_sweeps.png",
+        },
+    }
+
+
+def write_sprint6_dashboard(
+    output_dir: Path,
+    *,
+    experiments_src: Path,
+    geometry_src: Path,
+    reduction_src: Path,
+    orientation_src: Path,
+) -> Path:
+    """Write Sprint 6 interactive inspector; return index path."""
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    experiments_src = Path(experiments_src)
+    if not (experiments_src / "experiment_summary.json").is_file() and not (
+        experiments_src / "experiment_records.json"
+    ).is_file():
+        raise FileNotFoundError(
+            f"Sprint 6 requires Sprint 5 experiment records under {experiments_src}"
+        )
+    _copy_assets(output_dir / "assets")
+    fig_dest = output_dir / "figures"
+    _copy_figures(
+        geometry_src,
+        fig_dest,
+        [
+            "arch_A_ew0_es0.png",
+            "arch_B_ew0_es0.png",
+            "arch_B_ew0.05_es0.png",
+            "arch_B_ew0.2_es0.png",
+            "arch_C_ew0_es0.png",
+            "arch_C_ew0_es0.05.png",
+            "arch_C_ew0_es0.2.png",
+        ],
+    )
+    _copy_figures(
+        reduction_src,
+        fig_dest,
+        [
+            "regional_planar_reduction.png",
+            "spherical_orientation_reduction.png",
+        ],
+    )
+    _copy_figures(
+        orientation_src,
+        fig_dest,
+        [
+            "orientation_sample_cloud.png",
+            "connectivity_components.png",
+        ],
+    )
+    _copy_figures(
+        experiments_src,
+        fig_dest,
+        [
+            "residual_vs_error.png",
+            "offset_sweeps.png",
+        ],
+    )
+    data = _sprint6_payload(experiments_src)
+    if not data["records"]:
+        raise ValueError("Sprint 6 dashboard requires at least one experiment record")
+    (output_dir / "dashboard.json").write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    html = _render(
+        _asset_text("sprint6.template.html"),
+        title=str(data["title"]),
+        data=data,
+    )
+    index = output_dir / "index.html"
+    index.write_text(html, encoding="utf-8")
+    return index
+
+
 def write_overview_index(output_dir: Path) -> Path:
-    """Write a top-level index linking Sprint 0–5 dashboards."""
+    """Write a top-level index linking Sprint 0–6 dashboards."""
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     html = _asset_text("overview.template.html")
@@ -600,8 +738,9 @@ def generate_dashboards(
     figures3: Path | None = None,
     figures4: Path | None = None,
     figures5: Path | None = None,
+    figures6_experiments: Path | None = None,
 ) -> dict[str, Path]:
-    """Build Sprint 0–5 dashboards under ``results_root`` when figure dirs exist."""
+    """Build Sprint 0–6 dashboards under ``results_root`` when figure dirs exist."""
     results_root = Path(results_root)
     fig0 = Path(figures0) if figures0 else results_root / "sprint00_classification"
     fig1 = Path(figures1) if figures1 else results_root / "sprint01_geometry"
@@ -609,6 +748,7 @@ def generate_dashboards(
     fig3 = Path(figures3) if figures3 else results_root / "sprint03_prediction"
     fig4 = Path(figures4) if figures4 else results_root / "sprint04_orientation"
     fig5 = Path(figures5) if figures5 else results_root / "sprint05_experiments"
+    fig6 = Path(figures6_experiments) if figures6_experiments else fig5
     out: dict[str, Path] = {}
     if fig0.is_dir():
         out["sprint0"] = write_sprint0_dashboard(results_root / "sprint00_dashboard", figures_src=fig0)
@@ -622,5 +762,19 @@ def generate_dashboards(
         out["sprint4"] = write_sprint4_dashboard(results_root / "sprint04_dashboard", figures_src=fig4)
     if fig5.is_dir():
         out["sprint5"] = write_sprint5_dashboard(results_root / "sprint05_dashboard", figures_src=fig5)
+    if (
+        fig6.is_dir()
+        and fig1.is_dir()
+        and fig2.is_dir()
+        and fig4.is_dir()
+        and (fig6 / "experiment_summary.json").is_file()
+    ):
+        out["sprint6"] = write_sprint6_dashboard(
+            results_root / "sprint06_dashboard",
+            experiments_src=fig6,
+            geometry_src=fig1,
+            reduction_src=fig2,
+            orientation_src=fig4,
+        )
     out["overview"] = write_overview_index(results_root)
     return out

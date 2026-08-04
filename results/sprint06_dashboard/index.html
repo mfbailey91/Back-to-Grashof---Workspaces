@@ -1,11 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 6 — State inspector</title>
+  <link rel="stylesheet" href="assets/dashboard.css" />
+</head>
+<body>
+  <nav class="topnav">
+    <a href="../sprint00_dashboard/index.html">Sprint 0</a>
+    <a href="../sprint01_dashboard/index.html">Sprint 1</a>
+    <a href="../sprint02_dashboard/index.html">Sprint 2</a>
+    <a href="../sprint03_dashboard/index.html">Sprint 3</a>
+    <a href="../sprint04_dashboard/index.html">Sprint 4</a>
+    <a href="../sprint05_dashboard/index.html">Sprint 5</a>
+    <a class="active" href="index.html">Sprint 6</a>
+    <a href="../index.html">Overview</a>
+  </nav>
+  <div class="shell">
+    <header class="hero">
+      <span class="brand">Back to Grashof · sixr_grashof</span>
+      <h1>Sprint 6 — State inspector</h1>
+      <p class="lead">
+        Browse precomputed Architecture A/B/C experiment records. εw / εs controls
+        filter saved B/C rows only — no live IK in the browser.
+      </p>
+      <p class="warning">
+        Product ≠ dexterity. Exact / approximate / invalid and regional-unreachable
+        strata stay labeled. See docs/sprint06_interpretation.md.
+      </p>
+    </header>
+
+    <section>
+      <h2>State selection</h2>
+      <div class="controls inspector-controls">
+        <label for="state-picker">Record</label>
+        <select id="state-picker"></select>
+        <label for="eps-w-slider">εw <span id="eps-w-value" class="mono">0</span></label>
+        <input id="eps-w-slider" type="range" min="0" max="4" step="1" value="0" />
+        <label for="eps-s-slider">εs <span id="eps-s-value" class="mono">0</span></label>
+        <input id="eps-s-slider" type="range" min="0" max="4" step="1" value="0" />
+        <span id="filter-hint" class="note"></span>
+      </div>
+      <div id="outcome-badges" class="stat-row"></div>
+    </section>
+
+    <section>
+      <h2>Inspector panels</h2>
+      <div class="grid-2">
+        <article class="panel">
+          <h3>1 · Arm + axes</h3>
+          <figure>
+            <img id="view-arm" src="" alt="Arm axes for selected architecture" />
+            <figcaption id="view-arm-caption"></figcaption>
+          </figure>
+        </article>
+        <article class="panel">
+          <h3>2 · Position / IK branch</h3>
+          <div id="view-position"></div>
+        </article>
+        <article class="panel">
+          <h3>3 · Virtual planar 4R</h3>
+          <figure>
+            <img id="view-planar" src="figures/regional_planar_reduction.png" alt="Regional planar reduction" />
+          </figure>
+        </article>
+        <article class="panel">
+          <h3>4 · Virtual spherical 4R</h3>
+          <figure>
+            <img id="view-spherical" src="figures/spherical_orientation_reduction.png" alt="Spherical orientation reduction" />
+          </figure>
+        </article>
+        <article class="panel">
+          <h3>5 · Tᵢ, signs, type, hand role</h3>
+          <div id="view-ti"></div>
+        </article>
+        <article class="panel">
+          <h3>6 · Prediction vs ground truth</h3>
+          <div id="view-prediction"></div>
+        </article>
+        <article class="panel">
+          <h3>7 · Orientation cloud</h3>
+          <figure>
+            <img id="view-cloud" src="figures/orientation_sample_cloud.png" alt="Orientation sample cloud" />
+            <figcaption>Sprint 4 reference cloud (Architecture A Gate-2 fixture)</figcaption>
+          </figure>
+        </article>
+        <article class="panel">
+          <h3>8 · Connectivity</h3>
+          <figure>
+            <img id="view-connectivity" src="figures/connectivity_components.png" alt="Connectivity components" />
+            <figcaption id="view-connectivity-caption"></figcaption>
+          </figure>
+        </article>
+        <article class="panel">
+          <h3>9 · Reduction status</h3>
+          <div id="view-status"></div>
+        </article>
+        <article class="panel">
+          <h3>10 · Coverage / components</h3>
+          <div id="view-coverage"></div>
+        </article>
+        <article class="panel">
+          <h3>11 · Residual vs error (B/C context)</h3>
+          <figure>
+            <img src="figures/residual_vs_error.png" alt="Residual vs error" />
+          </figure>
+        </article>
+        <article class="panel">
+          <h3>12 · Offset sweeps</h3>
+          <figure>
+            <img src="figures/offset_sweeps.png" alt="Offset sweeps" />
+          </figure>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Gates snapshot</h2>
+      <div id="gate-stats" class="stat-row"></div>
+      <p class="section-lead">
+        Full write-up: <span class="mono">docs/sprint06_interpretation.md</span>
+      </p>
+    </section>
+  </div>
+  <script id="dashboard-data" type="application/json">
 {
-  "sprint": 5,
-  "title": "Sprint 5 \u2014 Controlled architecture experiments",
+  "sprint": 6,
+  "title": "Sprint 6 \u2014 State inspector",
+  "epsilon_grid": [
+    0.0,
+    0.025,
+    0.05,
+    0.1,
+    0.2
+  ],
   "gates": {
     "gate3_crank_precision": 0.0,
     "gate3_crank_recall": null,
     "gate4_residual_error_correlation": null,
     "gate5_c_orientation_stable": true
+  },
+  "outcome_counts": {
+    "false_positive": 18,
+    "invalid_reduction": 2,
+    "regional_unreachable": 4
   },
   "records": [
     {
@@ -72,7 +211,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5133928571428571
-      }
+      },
+      "record_id": "A-00",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -138,7 +279,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5263157894736842
-      }
+      },
+      "record_id": "A-01",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -204,7 +347,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5291666666666667
-      }
+      },
+      "record_id": "A-02",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -270,7 +415,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5663265306122449
-      }
+      },
+      "record_id": "A-03",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -336,7 +483,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.535
-      }
+      },
+      "record_id": "A-04",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -402,7 +551,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.48046875
-      }
+      },
+      "record_id": "A-05",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -468,7 +619,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5203619909502263
-      }
+      },
+      "record_id": "A-06",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -534,7 +687,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.48328267477203646
-      }
+      },
+      "record_id": "A-07",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -600,7 +755,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.447265625
-      }
+      },
+      "record_id": "A-08",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -666,7 +823,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5133928571428571
-      }
+      },
+      "record_id": "A-09",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -732,7 +891,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.4909090909090909
-      }
+      },
+      "record_id": "A-10",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -798,7 +959,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.43359375
-      }
+      },
+      "record_id": "A-11",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -864,7 +1027,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5137614678899083
-      }
+      },
+      "record_id": "A-12",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "A",
@@ -930,7 +1095,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.4066265060240964
-      }
+      },
+      "record_id": "A-13",
+      "arm_figure": "figures/arch_A_ew0_es0.png"
     },
     {
       "architecture_id": "B",
@@ -996,7 +1163,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5535714285714286
-      }
+      },
+      "record_id": "B-14",
+      "arm_figure": "figures/arch_B_ew0_es0.png"
     },
     {
       "architecture_id": "B",
@@ -1062,7 +1231,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.48205128205128206
-      }
+      },
+      "record_id": "B-15",
+      "arm_figure": "figures/arch_B_ew0_es0.png"
     },
     {
       "architecture_id": "B",
@@ -1128,7 +1299,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.52
-      }
+      },
+      "record_id": "B-16",
+      "arm_figure": "figures/arch_B_ew0.05_es0.png"
     },
     {
       "architecture_id": "B",
@@ -1184,7 +1357,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.49206349206349204
-      }
+      },
+      "record_id": "B-17",
+      "arm_figure": "figures/arch_B_ew0.05_es0.png"
     },
     {
       "architecture_id": "B",
@@ -1240,7 +1415,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.71875
-      }
+      },
+      "record_id": "B-18",
+      "arm_figure": "figures/arch_B_ew0.2_es0.png"
     },
     {
       "architecture_id": "C",
@@ -1306,7 +1483,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5133928571428571
-      }
+      },
+      "record_id": "C-19",
+      "arm_figure": "figures/arch_C_ew0_es0.png"
     },
     {
       "architecture_id": "C",
@@ -1372,7 +1551,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.517948717948718
-      }
+      },
+      "record_id": "C-20",
+      "arm_figure": "figures/arch_C_ew0_es0.png"
     },
     {
       "architecture_id": "C",
@@ -1438,7 +1619,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.4685714285714286
-      }
+      },
+      "record_id": "C-21",
+      "arm_figure": "figures/arch_C_ew0_es0.05.png"
     },
     {
       "architecture_id": "C",
@@ -1504,7 +1687,9 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.5873015873015873
-      }
+      },
+      "record_id": "C-22",
+      "arm_figure": "figures/arch_C_ew0_es0.05.png"
     },
     {
       "architecture_id": "C",
@@ -1570,24 +1755,22 @@
       "notes": "Sprint 5 analytical+numerical comparison",
       "extras": {
         "eligible_solve_rate": 0.71875
-      }
-    }
-  ],
-  "confusion": [
-    {
-      "linkage_type": 11,
-      "n_states": 18,
-      "mean_coverage": 0.2722439236111111,
-      "frac_numerical_dexterous": 0.0,
-      "false_positives": 18,
-      "false_negatives": 0,
-      "agreements": 0
+      },
+      "record_id": "C-23",
+      "arm_figure": "figures/arch_C_ew0_es0.2.png"
     }
   ],
   "figures": {
-    "confusion": "figures/confusion_heatmap.png",
+    "arm_a": "figures/arch_A_ew0_es0.png",
+    "planar": "figures/regional_planar_reduction.png",
+    "spherical": "figures/spherical_orientation_reduction.png",
+    "cloud": "figures/orientation_sample_cloud.png",
+    "connectivity": "figures/connectivity_components.png",
     "residual": "figures/residual_vs_error.png",
-    "sweeps": "figures/offset_sweeps.png",
-    "agreement": "figures/agreement_map.png"
+    "sweeps": "figures/offset_sweeps.png"
   }
 }
+</script>
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>

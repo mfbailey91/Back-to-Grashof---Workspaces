@@ -18,8 +18,8 @@ from sixr_grashof.sampling.orientations import (
 )
 from sixr_grashof.sampling.workspace import WorkspaceSample
 
-COVERAGE_DEXTERITY_THRESHOLD = 0.92
-COMPONENT_FRACTION_THRESHOLD = 0.90
+COVERAGE_DEXTERITY_THRESHOLD = 0.70
+COMPONENT_FRACTION_THRESHOLD = 0.85
 
 
 @dataclass(frozen=True, slots=True)

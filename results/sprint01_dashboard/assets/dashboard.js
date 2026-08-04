@@ -366,10 +366,193 @@
     }
   }
 
+  function renderSprint6() {
+    const picker = document.getElementById("state-picker");
+    const epsW = document.getElementById("eps-w-slider");
+    const epsS = document.getElementById("eps-s-slider");
+    const epsWVal = document.getElementById("eps-w-value");
+    const epsSVal = document.getElementById("eps-s-value");
+    const hint = document.getElementById("filter-hint");
+    const records = data.records || [];
+    const epsGrid = data.epsilon_grid || [0, 0.025, 0.05, 0.1, 0.2];
+    if (!picker || !records.length) return;
+
+    function epsAt(slider) {
+      const idx = Number(slider && slider.value) || 0;
+      return epsGrid[Math.min(Math.max(idx, 0), epsGrid.length - 1)];
+    }
+
+    function near(a, b, tol = 1e-9) {
+      return Math.abs(Number(a) - Number(b)) <= tol;
+    }
+
+    function filtered() {
+      const ew = epsAt(epsW);
+      const es = epsAt(epsS);
+      return records.filter((r) => {
+        const op = r.offset_parameters || {};
+        if (r.architecture_id === "B") return near(op.epsilon_w, ew);
+        if (r.architecture_id === "C") return near(op.epsilon_s, es);
+        return true;
+      });
+    }
+
+    function paintPicker() {
+      const rows = filtered();
+      const prev = picker.value;
+      picker.innerHTML = rows
+        .map(
+          (r) =>
+            `<option value="${r.record_id}">${r.record_id} · ${r.architecture_id} · ${r.prediction_outcome}</option>`
+        )
+        .join("");
+      if (hint) {
+        hint.textContent = `${rows.length} / ${records.length} records visible (A always; B by εw; C by εs)`;
+      }
+      if ([...picker.options].some((o) => o.value === prev)) {
+        picker.value = prev;
+      } else if (picker.options.length) {
+        picker.selectedIndex = 0;
+      }
+      paintState();
+    }
+
+    function recordById(id) {
+      return records.find((r) => r.record_id === id) || filtered()[0] || records[0];
+    }
+
+    function paintState() {
+      const r = recordById(picker.value);
+      if (!r) return;
+      const op = r.offset_parameters || {};
+
+      const badges = document.getElementById("outcome-badges");
+      if (badges) {
+        badges.innerHTML = `
+          <div class="stat"><div class="k">Outcome</div><div class="v">${r.prediction_outcome}</div></div>
+          <div class="stat"><div class="k">Regional</div><div class="v">${badgeStatus(r.regional_reduction_status)}</div></div>
+          <div class="stat"><div class="k">Spherical</div><div class="v">${badgeStatus(r.spherical_reduction_status)}</div></div>
+          <div class="stat"><div class="k">ρ_C</div><div class="v mono">${fmt(r.concurrency_residual, 6)}</div></div>
+        `;
+      }
+
+      const arm = document.getElementById("view-arm");
+      const armCap = document.getElementById("view-arm-caption");
+      if (arm && r.arm_figure) {
+        arm.src = r.arm_figure;
+        if (armCap) {
+          armCap.textContent = `Arch ${r.architecture_id} · εw=${fmt(op.epsilon_w, 3)} · εs=${fmt(op.epsilon_s, 3)}`;
+        }
+      }
+
+      const pos = document.getElementById("view-position");
+      if (pos) {
+        const p = r.position || [];
+        const q = r.joint_configuration_seed || [];
+        pos.innerHTML = `
+          <table>
+            <tbody>
+              <tr><th>Branch</th><td class="mono">${r.position_branch_id || "—"}</td></tr>
+              <tr><th>Position</th><td class="mono">${p.map((v) => fmt(v)).join(", ")}</td></tr>
+              <tr><th>Seed q</th><td class="mono">${q.map((v) => fmt(v)).join(", ")}</td></tr>
+              <tr><th>Offsets</th><td class="mono">εw=${fmt(op.epsilon_w, 3)}, εs=${fmt(op.epsilon_s, 3)}, Lt=${fmt(op.Lt, 3)}</td></tr>
+            </tbody>
+          </table>`;
+      }
+
+      const ti = document.getElementById("view-ti");
+      if (ti) {
+        ti.innerHTML = `
+          <table>
+            <tbody>
+              <tr><th>Type</th><td class="mono">${r.linkage_type == null ? "—" : r.linkage_type}</td></tr>
+              <tr><th>T₁…T₄</th><td class="mono">${[r.T1, r.T2, r.T3, r.T4].map((v) => fmt(v)).join(", ")}</td></tr>
+              <tr><th>Signs</th><td class="mono">${r.T_sign_tuple ? signText(r.T_sign_tuple) : "—"}</td></tr>
+              <tr><th>Input / output</th><td>${r.input_motion_class} / ${r.output_motion_class}</td></tr>
+              <tr><th>Hand (β)</th><td>${r.hand_link_motion_class}</td></tr>
+              <tr><th>Angles αβγη</th><td class="mono">${
+                r.spherical_link_angles
+                  ? r.spherical_link_angles.map((v) => fmt(v)).join(", ")
+                  : "withheld"
+              }</td></tr>
+            </tbody>
+          </table>`;
+      }
+
+      const pred = document.getElementById("view-prediction");
+      if (pred) {
+        pred.innerHTML = `
+          <table>
+            <tbody>
+              <tr><th>Analytical candidate</th><td>${r.analytical_prediction ? '<span class="badge hyp">yes</span>' : '<span class="badge no">no</span>'}</td></tr>
+              <tr><th>Strict sampled dexterity</th><td>${r.strict_sampled_dexterity ? "true" : "false"}</td></tr>
+              <tr><th>Outcome</th><td class="mono">${r.prediction_outcome}</td></tr>
+              <tr><th>Eligible solve rate</th><td class="mono">${fmt((r.extras || {}).eligible_solve_rate)}</td></tr>
+            </tbody>
+          </table>`;
+      }
+
+      const status = document.getElementById("view-status");
+      if (status) {
+        status.innerHTML = `
+          <p>${badgeStatus(r.regional_reduction_status)} regional · ${badgeStatus(r.spherical_reduction_status)} spherical</p>
+          <p class="note">Regional reachable: ${r.regional_reachable ? "yes" : "no"} · residual shown whenever not exact.</p>
+          <p class="mono">ρ_C = ${fmt(r.concurrency_residual, 6)}</p>`;
+      }
+
+      const cov = document.getElementById("view-coverage");
+      if (cov) {
+        cov.innerHTML = `
+          <div class="stat-row">
+            <div class="stat"><div class="k">Coverage</div><div class="v mono">${fmt(r.orientation_coverage)}</div></div>
+            <div class="stat"><div class="k">Components</div><div class="v mono">${r.orientation_component_count}</div></div>
+            <div class="stat"><div class="k">Solved</div><div class="v mono">${r.solved_count}</div></div>
+            <div class="stat"><div class="k">Unreachable</div><div class="v mono">${r.unreachable_count}</div></div>
+            <div class="stat"><div class="k">Solver failed</div><div class="v mono">${r.solver_failed_count}</div></div>
+          </div>`;
+      }
+
+      const connCap = document.getElementById("view-connectivity-caption");
+      if (connCap) {
+        connCap.textContent = `Record coverage=${fmt(r.orientation_coverage)} · components=${r.orientation_component_count}`;
+      }
+    }
+
+    if (epsWVal) epsWVal.textContent = String(epsAt(epsW));
+    if (epsSVal) epsSVal.textContent = String(epsAt(epsS));
+    if (epsW) {
+      epsW.addEventListener("input", () => {
+        if (epsWVal) epsWVal.textContent = String(epsAt(epsW));
+        paintPicker();
+      });
+    }
+    if (epsS) {
+      epsS.addEventListener("input", () => {
+        if (epsSVal) epsSVal.textContent = String(epsAt(epsS));
+        paintPicker();
+      });
+    }
+    picker.addEventListener("change", paintState);
+
+    const gates = document.getElementById("gate-stats");
+    if (gates && data.gates) {
+      const g = data.gates;
+      gates.innerHTML = `
+        <div class="stat"><div class="k">Gate 3 precision</div><div class="v mono">${g.gate3_crank_precision == null ? "—" : fmt(g.gate3_crank_precision)}</div></div>
+        <div class="stat"><div class="k">Gate 3 recall</div><div class="v mono">${g.gate3_crank_recall == null ? "—" : fmt(g.gate3_crank_recall)}</div></div>
+        <div class="stat"><div class="k">Gate 4 corr</div><div class="v mono">${g.gate4_residual_error_correlation == null ? "—" : fmt(g.gate4_residual_error_correlation)}</div></div>
+        <div class="stat"><div class="k">Gate 5 C stable</div><div class="v">${g.gate5_c_orientation_stable ? '<span class="badge exact">yes</span>' : '<span class="badge approximate">no/—</span>'}</div></div>
+      `;
+    }
+
+    paintPicker();
+  }
+
   if (data.sprint === 0) renderSprint0();
   if (data.sprint === 1) renderSprint1();
   if (data.sprint === 2) renderSprint2();
   if (data.sprint === 3) renderSprint3();
   if (data.sprint === 4) renderSprint4();
   if (data.sprint === 5) renderSprint5();
+  if (data.sprint === 6) renderSprint6();
 })();

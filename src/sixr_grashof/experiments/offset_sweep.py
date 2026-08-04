@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass
 from typing import Any
 
@@ -164,6 +164,7 @@ class ExperimentSummary:
     gate4_residual_error_correlation: float | None
     gate5_c_orientation_stable: bool | None
     notes: str
+    outcome_counts: dict[str, int] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -173,6 +174,7 @@ class ExperimentSummary:
             "gate3_crank_recall": self.gate3_crank_recall,
             "gate4_residual_error_correlation": self.gate4_residual_error_correlation,
             "gate5_c_orientation_stable": self.gate5_c_orientation_stable,
+            "outcome_counts": self.outcome_counts or {},
             "notes": self.notes,
             "records": [r.to_dict() for r in self.records],
         }
@@ -223,15 +225,27 @@ def run_architecture_experiments(
     *,
     resolution: SampleResolution = "coarse",
     seed: int = 0,
-    n_ik_starts: int = 4,
-    n_a_positions: int = 4,
-    epsilon_w_values: tuple[float, ...] = (0.0, 0.05, 0.2),
-    epsilon_s_values: tuple[float, ...] = (0.0, 0.05, 0.2),
-    orientation_count: int | None = None,
+    n_ik_starts: int = 3,
+    n_a_positions: int = 5,
+    include_a_grid: bool = True,
+    grid_radial: int = 4,
+    grid_elbow: int = 3,
+    epsilon_w_values: tuple[float, ...] = (0.0, 0.025, 0.05, 0.10, 0.20),
+    epsilon_s_values: tuple[float, ...] = (0.0, 0.025, 0.05, 0.10, 0.20),
+    orientation_count: int | None = 512,
 ) -> ExperimentSummary:
-    """Run A workspace + B εw sweep + C εs sweep comparisons."""
+    """Run A workspace + B εw sweep + C εs sweep comparisons.
+
+    Published densification defaults: full ``{0,0.025,0.05,0.10,0.20}`` offset
+    sweeps and ``orientation_count=128`` (a dense coarse subset; use 512 for the
+    full coarse catalog via the generator ``--full-coarse`` flag).
+    """
     records: list[ExperimentRecord] = []
-    a_samples = architecture_a_workspace_samples()[:n_a_positions]
+    a_samples = list(architecture_a_workspace_samples()[:n_a_positions])
+    if include_a_grid:
+        a_samples.extend(
+            radial_grid_positions(n_radial=grid_radial, n_elbow=grid_elbow)
+        )
 
     # Architecture A
     for sample in a_samples:
@@ -354,7 +368,12 @@ def run_architecture_experiments(
         gate3_crank_recall=rec,
         gate4_residual_error_correlation=corr,
         gate5_c_orientation_stable=gate5,
-        notes="Sprint 5 controlled architecture experiments",
+        notes=(
+            "Sprint 5 controlled architecture experiments; "
+            f"orientation_count={orientation_count}; "
+            f"epsilon_w={list(epsilon_w_values)}; epsilon_s={list(epsilon_s_values)}"
+        ),
+        outcome_counts=dict(Counter(r.prediction_outcome for r in records)),
     )
 
 

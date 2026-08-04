@@ -21,7 +21,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--dashboard",
         action="store_true",
-        help="Generate Sprint 0–5 static HTML dashboards under results/",
+        help="Generate Sprint 0–6 static HTML dashboards under results/",
     )
     p.add_argument(
         "--results-dir",

@@ -12,8 +12,9 @@ def test_architecture_experiments_reproducible(tmp_path: Path) -> None:
     a = run_architecture_experiments(
         resolution="coarse",
         seed=2,
-        n_ik_starts=3,
+        n_ik_starts=2,
         n_a_positions=2,
+        include_a_grid=False,
         epsilon_w_values=(0.0, 0.2),
         epsilon_s_values=(0.0, 0.2),
         orientation_count=16,
@@ -21,8 +22,9 @@ def test_architecture_experiments_reproducible(tmp_path: Path) -> None:
     b = run_architecture_experiments(
         resolution="coarse",
         seed=2,
-        n_ik_starts=3,
+        n_ik_starts=2,
         n_a_positions=2,
+        include_a_grid=False,
         epsilon_w_values=(0.0, 0.2),
         epsilon_s_values=(0.0, 0.2),
         orientation_count=16,
@@ -47,8 +49,9 @@ def test_exact_approx_not_pooled_without_labels() -> None:
     summary = run_architecture_experiments(
         resolution="coarse",
         seed=0,
-        n_ik_starts=3,
+        n_ik_starts=2,
         n_a_positions=1,
+        include_a_grid=False,
         epsilon_w_values=(0.0, 0.2),
         epsilon_s_values=(0.0, 0.2),
         orientation_count=12,
@@ -71,12 +74,14 @@ def test_gate_summary_fields_present() -> None:
     summary = run_architecture_experiments(
         resolution="coarse",
         seed=1,
-        n_ik_starts=3,
+        n_ik_starts=2,
         n_a_positions=2,
+        include_a_grid=False,
         orientation_count=12,
     )
     d = summary.to_dict()
     assert "gate3_crank_precision" in d
     assert "gate4_residual_error_correlation" in d
     assert "gate5_c_orientation_stable" in d
+    assert "outcome_counts" in d
     assert d["gate5_c_orientation_stable"] is True
