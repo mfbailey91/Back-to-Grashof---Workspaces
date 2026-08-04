@@ -441,8 +441,148 @@ def write_sprint3_dashboard(
     return index
 
 
+def _sprint4_payload() -> dict[str, Any]:
+    from sixr_grashof.architectures import ArchitectureA
+    from sixr_grashof.experiments.convergence import run_convergence_study
+    from sixr_grashof.experiments.fixed_position import run_fixed_position_experiment
+    from sixr_grashof.sampling.workspace import architecture_a_workspace_samples
+
+    sample = architecture_a_workspace_samples()[0]
+    result = run_fixed_position_experiment(
+        ArchitectureA(),
+        sample,
+        resolution="coarse",
+        seed=0,
+        n_ik_starts=3,
+        orientation_count=48,
+    )
+    report = run_convergence_study(
+        sample=sample,
+        seed=0,
+        resolutions=("coarse", "medium"),
+        n_ik_starts=3,
+        orientation_counts={"coarse": 32, "medium": 64},
+        coverage_tol=0.25,
+    )
+    return {
+        "sprint": 4,
+        "title": "Sprint 4 — Numerical orientation ground truth",
+        "gate2": {
+            "gate2_pass": report.gate2_pass,
+            "coverage": result.record.orientation_coverage,
+            "component_count": result.record.orientation_component_count,
+            "eligible_solve_rate": result.eligible_solve_rate,
+            "coverage_delta_coarse_medium": report.coverage_delta_coarse_medium,
+            "notes": report.notes,
+        },
+        "solver_counts": {
+            "solved": result.record.solved_count,
+            "unreachable": result.record.unreachable_count,
+            "solver_failed": result.record.solver_failed_count,
+        },
+        "figures": {
+            "cloud": "figures/orientation_sample_cloud.png",
+            "components": "figures/connectivity_components.png",
+            "gate2": "figures/gate2_coverage_convergence.png",
+            "diagnostics": "figures/solver_diagnostics.png",
+        },
+    }
+
+
+def _sprint5_payload(figures_src: Path) -> dict[str, Any]:
+    summary_path = figures_src / "experiment_summary.json"
+    if summary_path.is_file():
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    else:
+        from sixr_grashof.experiments.offset_sweep import run_architecture_experiments
+
+        summary = run_architecture_experiments(
+            orientation_count=24, n_a_positions=2, n_ik_starts=3, seed=0
+        ).to_dict()
+    return {
+        "sprint": 5,
+        "title": "Sprint 5 — Controlled architecture experiments",
+        "gates": {
+            "gate3_crank_precision": summary.get("gate3_crank_precision"),
+            "gate3_crank_recall": summary.get("gate3_crank_recall"),
+            "gate4_residual_error_correlation": summary.get("gate4_residual_error_correlation"),
+            "gate5_c_orientation_stable": summary.get("gate5_c_orientation_stable"),
+        },
+        "records": summary.get("records", [])[:40],
+        "confusion": summary.get("confusion", []),
+        "figures": {
+            "confusion": "figures/confusion_heatmap.png",
+            "residual": "figures/residual_vs_error.png",
+            "sweeps": "figures/offset_sweeps.png",
+            "agreement": "figures/agreement_map.png",
+        },
+    }
+
+
+def write_sprint4_dashboard(
+    output_dir: Path,
+    *,
+    figures_src: Path,
+) -> Path:
+    """Write Sprint 4 static dashboard; return index path."""
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    _copy_assets(output_dir / "assets")
+    _copy_figures(
+        figures_src,
+        output_dir / "figures",
+        [
+            "orientation_sample_cloud.png",
+            "connectivity_components.png",
+            "gate2_coverage_convergence.png",
+            "solver_diagnostics.png",
+        ],
+    )
+    data = _sprint4_payload()
+    (output_dir / "dashboard.json").write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    html = _render(
+        _asset_text("sprint4.template.html"),
+        title=str(data["title"]),
+        data=data,
+    )
+    index = output_dir / "index.html"
+    index.write_text(html, encoding="utf-8")
+    return index
+
+
+def write_sprint5_dashboard(
+    output_dir: Path,
+    *,
+    figures_src: Path,
+) -> Path:
+    """Write Sprint 5 static dashboard; return index path."""
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    _copy_assets(output_dir / "assets")
+    _copy_figures(
+        figures_src,
+        output_dir / "figures",
+        [
+            "confusion_heatmap.png",
+            "residual_vs_error.png",
+            "offset_sweeps.png",
+            "agreement_map.png",
+        ],
+    )
+    data = _sprint5_payload(figures_src)
+    (output_dir / "dashboard.json").write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    html = _render(
+        _asset_text("sprint5.template.html"),
+        title=str(data["title"]),
+        data=data,
+    )
+    index = output_dir / "index.html"
+    index.write_text(html, encoding="utf-8")
+    return index
+
+
 def write_overview_index(output_dir: Path) -> Path:
-    """Write a top-level index linking Sprint 0–3 dashboards."""
+    """Write a top-level index linking Sprint 0–5 dashboards."""
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     html = _asset_text("overview.template.html")
@@ -458,13 +598,17 @@ def generate_dashboards(
     figures1: Path | None = None,
     figures2: Path | None = None,
     figures3: Path | None = None,
+    figures4: Path | None = None,
+    figures5: Path | None = None,
 ) -> dict[str, Path]:
-    """Build Sprint 0–3 dashboards under ``results_root`` when figure dirs exist."""
+    """Build Sprint 0–5 dashboards under ``results_root`` when figure dirs exist."""
     results_root = Path(results_root)
     fig0 = Path(figures0) if figures0 else results_root / "sprint00_classification"
     fig1 = Path(figures1) if figures1 else results_root / "sprint01_geometry"
     fig2 = Path(figures2) if figures2 else results_root / "sprint02_reduction"
     fig3 = Path(figures3) if figures3 else results_root / "sprint03_prediction"
+    fig4 = Path(figures4) if figures4 else results_root / "sprint04_orientation"
+    fig5 = Path(figures5) if figures5 else results_root / "sprint05_experiments"
     out: dict[str, Path] = {}
     if fig0.is_dir():
         out["sprint0"] = write_sprint0_dashboard(results_root / "sprint00_dashboard", figures_src=fig0)
@@ -474,5 +618,9 @@ def generate_dashboards(
         out["sprint2"] = write_sprint2_dashboard(results_root / "sprint02_dashboard", figures_src=fig2)
     if fig3.is_dir():
         out["sprint3"] = write_sprint3_dashboard(results_root / "sprint03_dashboard", figures_src=fig3)
+    if fig4.is_dir():
+        out["sprint4"] = write_sprint4_dashboard(results_root / "sprint04_dashboard", figures_src=fig4)
+    if fig5.is_dir():
+        out["sprint5"] = write_sprint5_dashboard(results_root / "sprint05_dashboard", figures_src=fig5)
     out["overview"] = write_overview_index(results_root)
     return out

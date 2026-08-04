@@ -1,0 +1,605 @@
+{
+  "n_records": 9,
+  "confusion": [
+    {
+      "linkage_type": 11,
+      "n_states": 6,
+      "mean_coverage": 0.2916666666666667,
+      "frac_numerical_dexterous": 0.0,
+      "false_positives": 6,
+      "false_negatives": 0,
+      "agreements": 0
+    }
+  ],
+  "gate3_crank_precision": 0.0,
+  "gate3_crank_recall": null,
+  "gate4_residual_error_correlation": null,
+  "gate5_c_orientation_stable": true,
+  "notes": "Sprint 5 controlled architecture experiments",
+  "records": [
+    {
+      "architecture_id": "A",
+      "offset_parameters": {
+        "epsilon_w": 0.0,
+        "epsilon_s": 0.0,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        1.8,
+        0.0,
+        0.25
+      ],
+      "position_branch_id": "q=(0.000,0.000,0.000,0.000,0.000,0.000)",
+      "joint_configuration_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regional_reduction_status": "exact",
+      "regional_reachable": true,
+      "spherical_reduction_status": "exact",
+      "concurrency_residual": 0.0,
+      "spherical_link_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "T1": 1.5707963267948966,
+      "T2": 1.5707963267948966,
+      "T3": -1.5707963267948966,
+      "T4": -1.5707963267948966,
+      "T_sign_tuple": [
+        1,
+        1,
+        -1,
+        -1
+      ],
+      "T_product": 6.088068189625151,
+      "linkage_type": 11,
+      "input_motion_class": "crank",
+      "output_motion_class": "crank",
+      "hand_link_motion_class": "crank",
+      "analytical_prediction": true,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.3125,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 10,
+      "unreachable_count": 16,
+      "solver_failed_count": 6,
+      "prediction_outcome": "false_positive",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 0.625
+      }
+    },
+    {
+      "architecture_id": "A",
+      "offset_parameters": {
+        "epsilon_w": 0.0,
+        "epsilon_s": 0.0,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        1.7898741080947724,
+        0.0,
+        0.08121381538244599
+      ],
+      "position_branch_id": "q=(0.000,0.250,-0.350,0.000,0.200,0.000)",
+      "joint_configuration_seed": [
+        0.0,
+        0.25,
+        -0.35,
+        0.0,
+        0.2,
+        0.0
+      ],
+      "regional_reduction_status": "exact",
+      "regional_reachable": true,
+      "spherical_reduction_status": "exact",
+      "concurrency_residual": 0.0,
+      "spherical_link_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        2.9415926535897925,
+        1.5707963267948966
+      ],
+      "T1": 1.370796326794896,
+      "T2": 1.370796326794896,
+      "T3": -1.370796326794896,
+      "T4": -1.3707963267948955,
+      "T_sign_tuple": [
+        1,
+        1,
+        -1,
+        -1
+      ],
+      "T_product": 3.530951303203087,
+      "linkage_type": 11,
+      "input_motion_class": "crank",
+      "output_motion_class": "crank",
+      "hand_link_motion_class": "crank",
+      "analytical_prediction": true,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.375,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 12,
+      "unreachable_count": 15,
+      "solver_failed_count": 5,
+      "prediction_outcome": "false_positive",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 0.7058823529411765
+      }
+    },
+    {
+      "architecture_id": "A",
+      "offset_parameters": {
+        "epsilon_w": 0.0,
+        "epsilon_s": 0.0,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        1.6338567997617441,
+        0.6639904542337387,
+        0.3672613978827907
+      ],
+      "position_branch_id": "q=(0.400,-0.200,0.300,0.100,-0.150,0.050)",
+      "joint_configuration_seed": [
+        0.4,
+        -0.2,
+        0.3,
+        0.1,
+        -0.15,
+        0.05
+      ],
+      "regional_reduction_status": "exact",
+      "regional_reachable": true,
+      "spherical_reduction_status": "exact",
+      "concurrency_residual": 1.0880706194438626e-16,
+      "spherical_link_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        2.961523673954577,
+        1.5707963267948966
+      ],
+      "T1": 1.3907273471596806,
+      "T2": 1.3907273471596806,
+      "T3": -1.3907273471596806,
+      "T4": -1.3907273471596806,
+      "T_sign_tuple": [
+        1,
+        1,
+        -1,
+        -1
+      ],
+      "T_product": 3.740830054424538,
+      "linkage_type": 11,
+      "input_motion_class": "crank",
+      "output_motion_class": "crank",
+      "hand_link_motion_class": "crank",
+      "analytical_prediction": true,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.3125,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 10,
+      "unreachable_count": 18,
+      "solver_failed_count": 4,
+      "prediction_outcome": "false_positive",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 0.7142857142857143
+      }
+    },
+    {
+      "architecture_id": "B",
+      "offset_parameters": {
+        "epsilon_w": 0.0,
+        "epsilon_s": 0.0,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        1.8,
+        0.0,
+        0.25
+      ],
+      "position_branch_id": "B_ew=0:q=(0.000,0.000,0.000,0.000,0.000,0.000)",
+      "joint_configuration_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regional_reduction_status": "exact",
+      "regional_reachable": true,
+      "spherical_reduction_status": "exact",
+      "concurrency_residual": 0.0,
+      "spherical_link_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "T1": 1.5707963267948966,
+      "T2": 1.5707963267948966,
+      "T3": -1.5707963267948966,
+      "T4": -1.5707963267948966,
+      "T_sign_tuple": [
+        1,
+        1,
+        -1,
+        -1
+      ],
+      "T_product": 6.088068189625151,
+      "linkage_type": 11,
+      "input_motion_class": "crank",
+      "output_motion_class": "crank",
+      "hand_link_motion_class": "crank",
+      "analytical_prediction": true,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.28125,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 9,
+      "unreachable_count": 16,
+      "solver_failed_count": 7,
+      "prediction_outcome": "false_positive",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 0.5625
+      }
+    },
+    {
+      "architecture_id": "B",
+      "offset_parameters": {
+        "epsilon_w": 0.05,
+        "epsilon_s": 0.0,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        1.85,
+        0.0,
+        0.25
+      ],
+      "position_branch_id": "B_ew=0.05:q=(0.000,0.000,0.000,0.000,0.000,0.000)",
+      "joint_configuration_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regional_reduction_status": "approximate",
+      "regional_reachable": true,
+      "spherical_reduction_status": "approximate",
+      "concurrency_residual": 0.025000000000000133,
+      "spherical_link_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "T1": 1.5707963267948966,
+      "T2": 1.5707963267948966,
+      "T3": -1.5707963267948966,
+      "T4": -1.5707963267948966,
+      "T_sign_tuple": [
+        1,
+        1,
+        -1,
+        -1
+      ],
+      "T_product": 6.088068189625151,
+      "linkage_type": 11,
+      "input_motion_class": "crank",
+      "output_motion_class": "crank",
+      "hand_link_motion_class": "crank",
+      "analytical_prediction": true,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.15625,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 5,
+      "unreachable_count": 21,
+      "solver_failed_count": 6,
+      "prediction_outcome": "false_positive",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 0.45454545454545453
+      }
+    },
+    {
+      "architecture_id": "B",
+      "offset_parameters": {
+        "epsilon_w": 0.2,
+        "epsilon_s": 0.0,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        2.0,
+        0.0,
+        0.25
+      ],
+      "position_branch_id": "B_ew=0.2:q=(0.000,0.000,0.000,0.000,0.000,0.000)",
+      "joint_configuration_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regional_reduction_status": "approximate",
+      "regional_reachable": true,
+      "spherical_reduction_status": "invalid",
+      "concurrency_residual": 0.10000000000000009,
+      "spherical_link_angles": null,
+      "T1": null,
+      "T2": null,
+      "T3": null,
+      "T4": null,
+      "T_sign_tuple": null,
+      "T_product": null,
+      "linkage_type": null,
+      "input_motion_class": "not_applicable",
+      "output_motion_class": "not_applicable",
+      "hand_link_motion_class": "not_applicable",
+      "analytical_prediction": false,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.03125,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 1,
+      "unreachable_count": 30,
+      "solver_failed_count": 1,
+      "prediction_outcome": "invalid_reduction",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 0.5
+      }
+    },
+    {
+      "architecture_id": "C",
+      "offset_parameters": {
+        "epsilon_w": 0.0,
+        "epsilon_s": 0.0,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        1.8,
+        0.0,
+        0.25
+      ],
+      "position_branch_id": "C_es=0:q=(0.000,0.000,0.000,0.000,0.000,0.000)",
+      "joint_configuration_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regional_reduction_status": "exact",
+      "regional_reachable": true,
+      "spherical_reduction_status": "exact",
+      "concurrency_residual": 0.0,
+      "spherical_link_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "T1": 1.5707963267948966,
+      "T2": 1.5707963267948966,
+      "T3": -1.5707963267948966,
+      "T4": -1.5707963267948966,
+      "T_sign_tuple": [
+        1,
+        1,
+        -1,
+        -1
+      ],
+      "T_product": 6.088068189625151,
+      "linkage_type": 11,
+      "input_motion_class": "crank",
+      "output_motion_class": "crank",
+      "hand_link_motion_class": "crank",
+      "analytical_prediction": true,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.3125,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 10,
+      "unreachable_count": 16,
+      "solver_failed_count": 6,
+      "prediction_outcome": "false_positive",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 0.625
+      }
+    },
+    {
+      "architecture_id": "C",
+      "offset_parameters": {
+        "epsilon_w": 0.0,
+        "epsilon_s": 0.05,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        1.85,
+        0.0,
+        0.25
+      ],
+      "position_branch_id": "C_es=0.05:q=(0.000,0.000,0.000,0.000,0.000,0.000)",
+      "joint_configuration_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regional_reduction_status": "approximate",
+      "regional_reachable": false,
+      "spherical_reduction_status": "exact",
+      "concurrency_residual": 0.0,
+      "spherical_link_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "T1": 1.5707963267948966,
+      "T2": 1.5707963267948966,
+      "T3": -1.5707963267948966,
+      "T4": -1.5707963267948966,
+      "T_sign_tuple": [
+        1,
+        1,
+        -1,
+        -1
+      ],
+      "T_product": 6.088068189625151,
+      "linkage_type": 11,
+      "input_motion_class": "crank",
+      "output_motion_class": "crank",
+      "hand_link_motion_class": "crank",
+      "analytical_prediction": true,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.21875,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 7,
+      "unreachable_count": 21,
+      "solver_failed_count": 4,
+      "prediction_outcome": "regional_unreachable",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 0.6363636363636364
+      }
+    },
+    {
+      "architecture_id": "C",
+      "offset_parameters": {
+        "epsilon_w": 0.0,
+        "epsilon_s": 0.2,
+        "L2": 1.0,
+        "L3": 0.8,
+        "Lt": 0.25
+      },
+      "position": [
+        2.0,
+        0.0,
+        0.25
+      ],
+      "position_branch_id": "C_es=0.2:q=(0.000,0.000,0.000,0.000,0.000,0.000)",
+      "joint_configuration_seed": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regional_reduction_status": "approximate",
+      "regional_reachable": false,
+      "spherical_reduction_status": "exact",
+      "concurrency_residual": 0.0,
+      "spherical_link_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "T1": 1.5707963267948966,
+      "T2": 1.5707963267948966,
+      "T3": -1.5707963267948966,
+      "T4": -1.5707963267948966,
+      "T_sign_tuple": [
+        1,
+        1,
+        -1,
+        -1
+      ],
+      "T_product": 6.088068189625151,
+      "linkage_type": 11,
+      "input_motion_class": "crank",
+      "output_motion_class": "crank",
+      "hand_link_motion_class": "crank",
+      "analytical_prediction": true,
+      "orientation_sample_count": 32,
+      "orientation_coverage": 0.0625,
+      "orientation_component_count": 1,
+      "strict_sampled_dexterity": false,
+      "singularity_flags": 0,
+      "solved_count": 2,
+      "unreachable_count": 30,
+      "solver_failed_count": 0,
+      "prediction_outcome": "regional_unreachable",
+      "sample_resolution": "coarse",
+      "random_seed": 0,
+      "software_version": "0.3.0",
+      "notes": "Sprint 5 analytical+numerical comparison",
+      "extras": {
+        "eligible_solve_rate": 1.0
+      }
+    }
+  ]
+}

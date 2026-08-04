@@ -10,6 +10,8 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "matplotlib>=3.8",
+  "numpy>=1.25",
+  "scipy>=1.11",
 ]
 
 [project.optional-dependencies]
@@ -47,5 +49,5 @@ strict = true
 packages = ["grashof_workspace", "sixr_grashof"]
 
 [[tool.mypy.overrides]]
-module = ["matplotlib.*", "mpl_toolkits.*"]
+module = ["matplotlib.*", "mpl_toolkits.*", "scipy.*", "scipy.*.*"]
 ignore_missing_imports = true

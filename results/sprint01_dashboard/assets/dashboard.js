@@ -298,8 +298,78 @@
     }
   }
 
+  function renderSprint4() {
+    const stats = document.getElementById("gate2-stats");
+    const table = document.getElementById("solver-table");
+    if (!data.gate2) return;
+    const g = data.gate2;
+    if (stats) {
+      stats.innerHTML = `
+        <div class="stat"><div class="k">Gate 2</div><div class="v">${g.gate2_pass ? '<span class="badge exact">PASS</span>' : '<span class="badge invalid">FAIL</span>'}</div></div>
+        <div class="stat"><div class="k">Coverage</div><div class="v mono">${fmt(g.coverage)}</div></div>
+        <div class="stat"><div class="k">Components</div><div class="v mono">${g.component_count}</div></div>
+        <div class="stat"><div class="k">Eligible solve</div><div class="v mono">${fmt(g.eligible_solve_rate)}</div></div>
+      `;
+    }
+    if (table && data.solver_counts) {
+      const s = data.solver_counts;
+      table.innerHTML = `
+        <table>
+          <thead><tr><th>Status</th><th>Count</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge exact">solved</span></td><td class="mono">${s.solved}</td><td>Residual below tolerance</td></tr>
+            <tr><td><span class="badge invalid">unreachable</span></td><td class="mono">${s.unreachable}</td><td>Geometric precheck failed</td></tr>
+            <tr><td><span class="badge approximate">solver_failed</span></td><td class="mono">${s.solver_failed}</td><td>Eligible but optimizer missed</td></tr>
+          </tbody>
+        </table>`;
+    }
+  }
+
+  function renderSprint5() {
+    const stats = document.getElementById("gate-stats");
+    const table = document.getElementById("experiment-table");
+    if (!data.gates) return;
+    const g = data.gates;
+    if (stats) {
+      stats.innerHTML = `
+        <div class="stat"><div class="k">Gate 3 precision</div><div class="v mono">${g.gate3_crank_precision == null ? "—" : fmt(g.gate3_crank_precision)}</div></div>
+        <div class="stat"><div class="k">Gate 3 recall</div><div class="v mono">${g.gate3_crank_recall == null ? "—" : fmt(g.gate3_crank_recall)}</div></div>
+        <div class="stat"><div class="k">Gate 4 corr(ρ,err)</div><div class="v mono">${g.gate4_residual_error_correlation == null ? "—" : fmt(g.gate4_residual_error_correlation)}</div></div>
+        <div class="stat"><div class="k">Gate 5 C stable</div><div class="v">${g.gate5_c_orientation_stable ? '<span class="badge exact">yes</span>' : '<span class="badge approximate">no/—</span>'}</div></div>
+      `;
+    }
+    if (table && data.records) {
+      table.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Arch</th><th>Spherical</th><th>ρ_C</th><th>Type</th>
+              <th>Coverage</th><th>Outcome</th><th>Hypothesis</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${data.records
+              .map(
+                (r) => `<tr>
+                  <td class="mono">${r.architecture_id}</td>
+                  <td>${badgeStatus(r.spherical_reduction_status)}</td>
+                  <td class="mono">${fmt(r.concurrency_residual, 6)}</td>
+                  <td class="mono">${r.linkage_type == null ? "—" : r.linkage_type}</td>
+                  <td class="mono">${fmt(r.orientation_coverage)}</td>
+                  <td>${r.prediction_outcome}</td>
+                  <td>${r.analytical_prediction ? "candidate" : "no"}</td>
+                </tr>`
+              )
+              .join("")}
+          </tbody>
+        </table>`;
+    }
+  }
+
   if (data.sprint === 0) renderSprint0();
   if (data.sprint === 1) renderSprint1();
   if (data.sprint === 2) renderSprint2();
   if (data.sprint === 3) renderSprint3();
+  if (data.sprint === 4) renderSprint4();
+  if (data.sprint === 5) renderSprint5();
 })();

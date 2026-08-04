@@ -162,3 +162,13 @@ See `docs/spherical_reduction.md` for Architecture A conventions:
 - regional reachability \(|L_2-L_3|\le\rho_w\le L_2+L_3\) and planar virtual four-bar \((\rho_p,L_t,L_3,L_2)\);
 - spherical virtual four-bar angles from meridional normal and wrist axes \((n,a_4,a_5,a_6)\) with \(\beta=\angle(a_5,a_6)\) as the hand-orientation link;
 - invalid concurrency residuals must not emit spherical angles.
+
+## 9. Numerical orientation ground truth (6R Sprints 4–5)
+
+See `docs/experiment_protocol.md`:
+
+- reproducible Hopf \(SO(3)\) samples at coarse / medium / fine resolutions;
+- IK status taxonomy `solved` | `unreachable` | `solver_failed`;
+- coverage \(C(p)\) and connected components over feasible orientation samples;
+- Gate 2: aggregate metrics must converge with sample density before Sprint 5 interpretation;
+- analytical prediction is compared to numerical labels; product \(\neq\) dexterity.
