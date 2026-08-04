@@ -1,9 +1,0 @@
-architecture_id: C
-name: offset_shoulder_exact_spherical_wrist
-L2: 1.0
-L3: 0.8
-Lt: 0.25
-epsilon_w: 0.0
-epsilon_s: 0.0
-epsilon_s_sweep: [0.0, 0.025, 0.05, 0.10, 0.20]
-notes: Shoulder offset epsilon_s with concurrent wrist for all values.

@@ -4,14 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "grashof-workspace"
-version = "0.3.0"
-description = "Analytical planar 3R and synthetic 6R spherical Grashof workspace research"
+version = "0.2.0"
+description = "Analytical planar 3R workspace characterization using an equivalent four-bar mechanism"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "matplotlib>=3.8",
-  "numpy>=1.25",
-  "scipy>=1.11",
 ]
 
 [project.optional-dependencies]
@@ -23,14 +21,9 @@ dev = [
 
 [project.scripts]
 grashof-workspace = "grashof_workspace.cli:main"
-sixr-grashof = "sixr_grashof.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.setuptools.package-data]
-grashof_workspace = ["dashboard_assets/*"]
-sixr_grashof = ["data/*.json", "dashboard_assets/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -46,8 +39,8 @@ target-version = "py311"
 [tool.mypy]
 python_version = "3.12"
 strict = true
-packages = ["grashof_workspace", "sixr_grashof"]
+packages = ["grashof_workspace"]
 
 [[tool.mypy.overrides]]
-module = ["matplotlib.*", "mpl_toolkits.*", "scipy.*", "scipy.*.*"]
+module = ["matplotlib.*"]
 ignore_missing_imports = true
