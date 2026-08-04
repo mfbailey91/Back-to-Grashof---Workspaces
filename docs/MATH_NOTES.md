@@ -116,7 +116,59 @@ The Grashof margin remains \(P+Q-S-L\) on the sorted lengths. Exported labels us
 2. `degenerate-coincident-ground-pivots` when \(d=0\);
 3. `degenerate-collinear` when \(m_a=0\);
 4. `change-point`;
-5. `special-grashof-tied-shortest`;
-6. conventional `double-crank`, `crank-rocker`, or `double-rocker`.
+5. `special-tied-shortest`;
+6. conventional `double-crank`, `crank-rocker`, `grashof-double-rocker`, or `non-grashof-double-rocker`.
 
 A separate `grashof_class` field reports `non-assemblable`, `grashof`, `change-point`, or `non-grashof`. Exact terminal-link rotatability is still decided by loop-closure interval containment and never by the textual inversion label alone.
+
+## 6. Grashof classification versus designated-link rotatability
+
+\[
+\text{Grashof} \not\Rightarrow \text{terminal input fully rotates}.
+\]
+
+Canonical counterexample `unequal_proximal` with \((l_1,l_2,l_3)=(3,1,2.5)\):
+
+| Radius | Grashof | Inversion | Input rotates | Dexterous |
+|---|---|---|---:|---:|
+| \(0<\rho<0.5\) | Grashof | double-crank | yes | yes |
+| \(\rho=0.5\) | change-point | change-point | yes | yes |
+| \(0.5<\rho<1.5\) | non-Grashof | double-rocker | no | no |
+| \(1.5<\rho<4.5\) | Grashof | grashof-double-rocker | no | no |
+| \(4.5<\rho<6.5\) | non-Grashof | double-rocker | no | no |
+
+Exact radial partitions use analytical transition radii (reachable/dexterous bounds, \(\rho\in\{l_1,l_2,l_3\}\), and exact zeros of the piecewise-linear Grashof margin), not coarse sampling.
+
+## 7. Spherical 4R characteristics (6R extension)
+
+See `docs/theory.md` for full conventions. For spherical link angles \((\alpha,\beta,\gamma,\eta)\) in the Murray–Larochelle / McCarthy–Soh ordering (input, output, ground, coupler),
+
+\[
+\begin{aligned}
+T_1 &= \gamma - \alpha + \eta - \beta,\\
+T_2 &= \gamma - \alpha - \eta + \beta,\\
+T_3 &= \eta + \beta - \gamma - \alpha,\\
+T_4 &= 2\pi - (\alpha + \beta + \gamma + \eta).
+\end{aligned}
+\]
+
+Grashof family: \(T_1 T_2 T_3 T_4 > 0\). The hand-orientation link is the output \(\beta\). Dexterity is never inferred from the product alone.
+
+## 8. Regional and spherical reductions (6R Sprints 2–3)
+
+See `docs/spherical_reduction.md` for Architecture A conventions:
+
+- base-azimuth quotient about \(\hat a_1\);
+- regional reachability \(|L_2-L_3|\le\rho_w\le L_2+L_3\) and planar virtual four-bar \((\rho_p,L_t,L_3,L_2)\);
+- spherical virtual four-bar angles from meridional normal and wrist axes \((n,a_4,a_5,a_6)\) with \(\beta=\angle(a_5,a_6)\) as the hand-orientation link;
+- invalid concurrency residuals must not emit spherical angles.
+
+## 9. Numerical orientation ground truth (6R Sprints 4–5)
+
+See `docs/experiment_protocol.md`:
+
+- reproducible Hopf \(SO(3)\) samples at coarse / medium / fine resolutions;
+- IK status taxonomy `solved` | `unreachable` | `solver_failed`;
+- coverage \(C(p)\) and connected components over feasible orientation samples;
+- Gate 2: aggregate metrics must converge with sample density before Sprint 5 interpretation;
+- analytical prediction is compared to numerical labels; product \(\neq\) dexterity.

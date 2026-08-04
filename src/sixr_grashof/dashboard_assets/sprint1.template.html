@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}}</title>
+  <link rel="stylesheet" href="assets/dashboard.css" />
+</head>
+<body>
+  <nav class="topnav">
+    <a href="../sprint00_dashboard/index.html">Sprint 0</a>
+    <a class="active" href="index.html">Sprint 1</a>
+    <a href="../sprint02_dashboard/index.html">Sprint 2</a>
+    <a href="../sprint03_dashboard/index.html">Sprint 3</a>
+    <a href="../sprint04_dashboard/index.html">Sprint 4</a>
+    <a href="../sprint05_dashboard/index.html">Sprint 5</a>
+    <a href="../sprint06_dashboard/index.html">Sprint 6</a>
+    <a href="../index.html">Overview</a>
+  </nav>
+  <div class="shell">
+    <header class="hero">
+      <span class="brand">Back to Grashof · sixr_grashof</span>
+      <h1>Sprint 1 — Synthetic 6R geometry</h1>
+      <p class="lead">
+        Architectures A/B/C with explicit axis lines, concurrency residual ρ_C,
+        and exact / approximate / invalid labels. No URDF, no joint limits.
+      </p>
+      <p class="warning">
+        Exact spherical reduction is required before trusting orientation classification.
+        Approximate cases must display ρ_C beside every claim.
+      </p>
+    </header>
+
+    <section>
+      <h2>Architecture panel</h2>
+      <p class="section-lead">A exact · B at εw=0 and 0.2 · C at εs=0.2. Links, axes, and wrist-center candidate c*.</p>
+      <figure class="panel">
+        <img src="figures/architecture_panel.png" alt="Architecture comparison panel" />
+      </figure>
+    </section>
+
+    <section>
+      <h2>Residual sweeps</h2>
+      <p class="section-lead">
+        Architecture B residual grows with wrist offset. Architecture C keeps an exact spherical wrist
+        while the shoulder gap d(z₁,z₂) tracks εs.
+      </p>
+      <figure class="panel">
+        <img src="figures/residual_sweeps.png" alt="Residual sweeps for architectures B and C" />
+      </figure>
+      <div class="grid-2" style="margin-top: 1rem;">
+        <div>
+          <h3 style="margin:0 0 0.5rem;font-size:1rem;">Architecture B</h3>
+          <div id="sweep-b" class="panel"></div>
+        </div>
+        <div>
+          <h3 style="margin:0 0 0.5rem;font-size:1rem;">Architecture C</h3>
+          <div id="sweep-c" class="panel"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Per-architecture views</h2>
+      <p class="section-lead">Filter by family. Status badges come from named residual thresholds.</p>
+      <div class="controls">
+        <button type="button" class="active" data-arch-filter="all">All</button>
+        <button type="button" data-arch-filter="A">A</button>
+        <button type="button" data-arch-filter="B">B</button>
+        <button type="button" data-arch-filter="C">C</button>
+      </div>
+      <div id="arch-cards" class="gallery"></div>
+    </section>
+  </div>
+
+  <!--DASHBOARD_DATA-->
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>

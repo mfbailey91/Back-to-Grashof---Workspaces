@@ -1,0 +1,81 @@
+{
+  "sprint": 2,
+  "title": "Sprint 2 \u2014 Reductions",
+  "reductions": [
+    {
+      "architecture_id": "A",
+      "regional_status": "exact",
+      "spherical_status": "exact",
+      "concurrency_residual": 0.0,
+      "rho_w": 1.8,
+      "spherical_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "linkage_type": 11,
+      "notes": "Architecture A axis-sphere construction (docs/spherical_reduction.md)"
+    },
+    {
+      "architecture_id": "B0",
+      "regional_status": "exact",
+      "spherical_status": "exact",
+      "concurrency_residual": 0.0,
+      "rho_w": 1.8,
+      "spherical_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "linkage_type": 11,
+      "notes": "Architecture A axis-sphere construction (docs/spherical_reduction.md)"
+    },
+    {
+      "architecture_id": "B0.2",
+      "regional_status": "approximate",
+      "spherical_status": "invalid",
+      "concurrency_residual": 0.10000000000000009,
+      "rho_w": 1.8,
+      "spherical_angles": null,
+      "linkage_type": null,
+      "notes": "invalid concurrency residual; spherical angles withheld"
+    },
+    {
+      "architecture_id": "C0",
+      "regional_status": "exact",
+      "spherical_status": "exact",
+      "concurrency_residual": 0.0,
+      "rho_w": 1.8,
+      "spherical_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "linkage_type": 11,
+      "notes": "Architecture A axis-sphere construction (docs/spherical_reduction.md)"
+    },
+    {
+      "architecture_id": "C0.2",
+      "regional_status": "approximate",
+      "spherical_status": "exact",
+      "concurrency_residual": 0.0,
+      "rho_w": 2.0,
+      "spherical_angles": [
+        1.5707963267948966,
+        1.5707963267948966,
+        3.141592653589793,
+        1.5707963267948966
+      ],
+      "linkage_type": 11,
+      "notes": "Architecture A axis-sphere construction (docs/spherical_reduction.md)"
+    }
+  ],
+  "figures": {
+    "regional": "figures/regional_planar_reduction.png",
+    "spherical": "figures/spherical_orientation_reduction.png",
+    "exact_vs_offset": "figures/exact_A_vs_offset_B.png"
+  }
+}

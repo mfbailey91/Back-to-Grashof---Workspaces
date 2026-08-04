@@ -1,0 +1,197 @@
+{
+  "sprint": 1,
+  "title": "Sprint 1 \u2014 Synthetic 6R geometry",
+  "thresholds": {
+    "rho_exact": 1e-09,
+    "rho_invalid": 0.05
+  },
+  "architecture_a": {
+    "spherical_status": "exact",
+    "regional_exact_candidate": true,
+    "rho": 0.0
+  },
+  "architectures": [
+    {
+      "id": "A",
+      "label": "Architecture A",
+      "stem": "arch_A_ew0_es0",
+      "note": "Exact regional + exact spherical wrist",
+      "figure": "figures/arch_A_ew0_es0.png",
+      "report": {
+        "architecture_id": "A",
+        "z1_z2_distance": "0.000000e+00",
+        "z2_z3_parallel": "True",
+        "z2_z3_z4_parallel": "False",
+        "regional_exact_candidate": "True",
+        "wrist_center": "(1.8, 0.0, 0.0)",
+        "concurrency_residual_rho": "0.000000e+00",
+        "spherical_status": "exact"
+      }
+    },
+    {
+      "id": "B0",
+      "label": "Architecture B (\u03b5w=0)",
+      "stem": "arch_B_ew0_es0",
+      "note": "Exact spherical only at zero wrist offset",
+      "figure": "figures/arch_B_ew0_es0.png",
+      "report": {
+        "architecture_id": "B",
+        "z1_z2_distance": "0.000000e+00",
+        "z2_z3_parallel": "True",
+        "z2_z3_z4_parallel": "True",
+        "regional_exact_candidate": "True",
+        "wrist_center": "(1.8, 0.0, 0.0)",
+        "concurrency_residual_rho": "0.000000e+00",
+        "spherical_status": "exact"
+      }
+    },
+    {
+      "id": "B05",
+      "label": "Architecture B (\u03b5w=0.05)",
+      "stem": "arch_B_ew0.05_es0",
+      "note": "Approximate / invalid residual grows with \u03b5w",
+      "figure": "figures/arch_B_ew0.05_es0.png",
+      "report": {
+        "architecture_id": "B",
+        "z1_z2_distance": "0.000000e+00",
+        "z2_z3_parallel": "True",
+        "z2_z3_z4_parallel": "True",
+        "regional_exact_candidate": "True",
+        "wrist_center": "(1.8250000000000002, 0.0, 0.0)",
+        "concurrency_residual_rho": "2.500000e-02",
+        "spherical_status": "approximate"
+      }
+    },
+    {
+      "id": "B20",
+      "label": "Architecture B (\u03b5w=0.2)",
+      "stem": "arch_B_ew0.2_es0",
+      "note": "Larger wrist concurrency residual",
+      "figure": "figures/arch_B_ew0.2_es0.png",
+      "report": {
+        "architecture_id": "B",
+        "z1_z2_distance": "0.000000e+00",
+        "z2_z3_parallel": "True",
+        "z2_z3_z4_parallel": "True",
+        "regional_exact_candidate": "True",
+        "wrist_center": "(1.9, 0.0, 0.0)",
+        "concurrency_residual_rho": "1.000000e-01",
+        "spherical_status": "invalid"
+      }
+    },
+    {
+      "id": "C0",
+      "label": "Architecture C (\u03b5s=0)",
+      "stem": "arch_C_ew0_es0",
+      "note": "Concurrent wrist; no shoulder offset",
+      "figure": "figures/arch_C_ew0_es0.png",
+      "report": {
+        "architecture_id": "C",
+        "z1_z2_distance": "0.000000e+00",
+        "z2_z3_parallel": "True",
+        "z2_z3_z4_parallel": "False",
+        "regional_exact_candidate": "True",
+        "wrist_center": "(1.8, 0.0, 0.0)",
+        "concurrency_residual_rho": "0.000000e+00",
+        "spherical_status": "exact"
+      }
+    },
+    {
+      "id": "C05",
+      "label": "Architecture C (\u03b5s=0.05)",
+      "stem": "arch_C_ew0_es0.05",
+      "note": "Shoulder offset; spherical remains exact",
+      "figure": "figures/arch_C_ew0_es0.05.png",
+      "report": {
+        "architecture_id": "C",
+        "z1_z2_distance": "5.000000e-02",
+        "z2_z3_parallel": "True",
+        "z2_z3_z4_parallel": "False",
+        "regional_exact_candidate": "False",
+        "wrist_center": "(1.85, 0.0, 0.0)",
+        "concurrency_residual_rho": "0.000000e+00",
+        "spherical_status": "exact"
+      }
+    },
+    {
+      "id": "C20",
+      "label": "Architecture C (\u03b5s=0.2)",
+      "stem": "arch_C_ew0_es0.2",
+      "note": "Larger shoulder gap; spherical remains exact",
+      "figure": "figures/arch_C_ew0_es0.2.png",
+      "report": {
+        "architecture_id": "C",
+        "z1_z2_distance": "2.000000e-01",
+        "z2_z3_parallel": "True",
+        "z2_z3_z4_parallel": "False",
+        "regional_exact_candidate": "False",
+        "wrist_center": "(2.0, 0.0, 0.0)",
+        "concurrency_residual_rho": "0.000000e+00",
+        "spherical_status": "exact"
+      }
+    }
+  ],
+  "sweep_b": [
+    {
+      "epsilon_w": 0.0,
+      "rho": 0.0,
+      "status": "exact"
+    },
+    {
+      "epsilon_w": 0.025,
+      "rho": 0.012499999999999956,
+      "status": "approximate"
+    },
+    {
+      "epsilon_w": 0.05,
+      "rho": 0.025000000000000133,
+      "status": "approximate"
+    },
+    {
+      "epsilon_w": 0.1,
+      "rho": 0.050000000000000044,
+      "status": "invalid"
+    },
+    {
+      "epsilon_w": 0.2,
+      "rho": 0.10000000000000009,
+      "status": "invalid"
+    }
+  ],
+  "sweep_c": [
+    {
+      "epsilon_s": 0.0,
+      "z1_z2_distance": 0.0,
+      "rho": 0.0,
+      "status": "exact"
+    },
+    {
+      "epsilon_s": 0.025,
+      "z1_z2_distance": 0.025,
+      "rho": 0.0,
+      "status": "exact"
+    },
+    {
+      "epsilon_s": 0.05,
+      "z1_z2_distance": 0.05,
+      "rho": 0.0,
+      "status": "exact"
+    },
+    {
+      "epsilon_s": 0.1,
+      "z1_z2_distance": 0.1,
+      "rho": 0.0,
+      "status": "exact"
+    },
+    {
+      "epsilon_s": 0.2,
+      "z1_z2_distance": 0.2,
+      "rho": 0.0,
+      "status": "exact"
+    }
+  ],
+  "figures": {
+    "panel": "figures/architecture_panel.png",
+    "residual_sweeps": "figures/residual_sweeps.png"
+  }
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 4 — Numerical orientation ground truth</title>
+  <link rel="stylesheet" href="assets/dashboard.css" />
+</head>
+<body>
+  <nav class="topnav">
+    <a href="../sprint00_dashboard/index.html">Sprint 0</a>
+    <a href="../sprint01_dashboard/index.html">Sprint 1</a>
+    <a href="../sprint02_dashboard/index.html">Sprint 2</a>
+    <a href="../sprint03_dashboard/index.html">Sprint 3</a>
+    <a class="active" href="index.html">Sprint 4</a>
+    <a href="../sprint05_dashboard/index.html">Sprint 5</a>
+    <a href="../sprint06_dashboard/index.html">Sprint 6</a>
+    <a href="../index.html">Overview</a>
+  </nav>
+  <div class="shell">
+    <header class="hero">
+      <span class="brand">Back to Grashof · sixr_grashof</span>
+      <h1>Sprint 4 — Numerical orientation ground truth</h1>
+      <p class="lead">
+        Reproducible SO(3) sampling, multi-start IK, coverage and connectivity at fixed
+        Cartesian positions. Architecture A is the Gate-2 positive control.
+      </p>
+      <p class="warning">
+        Solver failure is not geometric non-reachability. Analytical classification is never
+        used as ground truth here.
+      </p>
+    </header>
+
+    <section>
+      <h2>Gate 2 metrics</h2>
+      <div id="gate2-stats" class="stat-row"></div>
+      <div id="solver-table" class="panel"></div>
+    </section>
+
+    <section>
+      <h2>Orientation sample cloud</h2>
+      <figure class="panel">
+        <img src="figures/orientation_sample_cloud.png" alt="Orientation sample cloud" />
+      </figure>
+    </section>
+
+    <section class="grid-2">
+      <figure class="panel">
+        <img src="figures/connectivity_components.png" alt="Connectivity components" />
+        <figcaption>Connected components among solved orientations</figcaption>
+      </figure>
+      <figure class="panel">
+        <img src="figures/gate2_coverage_convergence.png" alt="Gate 2 convergence" />
+        <figcaption>Coverage vs sample density</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Solver diagnostics</h2>
+      <figure class="panel">
+        <img src="figures/solver_diagnostics.png" alt="Solver diagnostics" />
+      </figure>
+    </section>
+  </div>
+  <script id="dashboard-data" type="application/json">
+{
+  "sprint": 4,
+  "title": "Sprint 4 \u2014 Numerical orientation ground truth",
+  "gate2": {
+    "gate2_pass": true,
+    "coverage": 0.2708333333333333,
+    "component_count": 1,
+    "eligible_solve_rate": 0.5909090909090909,
+    "coverage_delta_coarse_medium": 0.046875,
+    "notes": "Gate 2 convergence"
+  },
+  "solver_counts": {
+    "solved": 13,
+    "unreachable": 26,
+    "solver_failed": 9
+  },
+  "figures": {
+    "cloud": "figures/orientation_sample_cloud.png",
+    "components": "figures/connectivity_components.png",
+    "gate2": "figures/gate2_coverage_convergence.png",
+    "diagnostics": "figures/solver_diagnostics.png"
+  }
+}
+</script>
+  <script src="assets/dashboard.js"></script>
+</body>
+</html>
