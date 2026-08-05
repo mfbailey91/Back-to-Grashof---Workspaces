@@ -385,8 +385,9 @@ At sampled fixed-position configurations:
 1. verify `dp/dq6 = 0`;
 2. verify `dd/dq6 = 0`;
 3. verify that `q6` changes tool roll;
-4. verify that the fixed-position configuration Jacobian has nullity three;
-5. verify that the position-and-pointing Jacobian has nullity two after quotienting the `q6` direction.
+4. verify that the position Jacobian has rank three and nullity three;
+5. verify that the full position-and-pointing Jacobian has rank five and nullity one, with its kernel aligned to the `q6` roll direction;
+6. remove the `q6` direction from the fixed-position null space and verify that the remaining two-dimensional tangent basis `N_red` satisfies `rank(J_d N_red) = 2`.
 
 ### 12.2 Stage B: verify the two-DOF `SUUR` representation
 
