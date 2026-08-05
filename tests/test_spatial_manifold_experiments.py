@@ -65,5 +65,5 @@ def test_runner_source_identifier_and_readout(tmp_path: Path) -> None:
     assert dumped["pass_count"] == written["pass_count"] == 5
     for exp_id in S4_IDS:
         assert exp_id in html
-    assert "Check-in 4 remains a human gate" in html
+    assert "Check-in 4 is approved with validation limitations" in html
     assert SOURCE_IDENTIFIER in html

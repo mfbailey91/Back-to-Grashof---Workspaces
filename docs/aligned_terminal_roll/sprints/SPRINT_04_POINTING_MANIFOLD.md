@@ -42,7 +42,7 @@ scripts/generate_atr_sprint04_readout.py
 |---|---|---|
 | `ATR_EXP_016` | IP pair persistence | both distances 0 at regular and seeded `q` |
 | `ATR_EXP_017` | Generic negative control | pairs skew; `φ` undefined; old principal angles ~0 |
-| `ATR_EXP_018` | IP coordinate-map + closure | `φ` defined; closure residuals below tol |
+| `ATR_EXP_018` | IP compound-coordinate definedness and round-trip | `φ` defined; round-trip residuals below tol |
 | `ATR_EXP_019` | IP continuation patch | 2D regular subset; rank-two pointing away from labeled singular set |
 | `ATR_EXP_020` | UR-like continuation | same C10 claim via the same API; no SUUR map required |
 

@@ -78,7 +78,7 @@ Evaluate local mechanism order rather than relying only on mobility count. Sprin
 
 ## Phase 4 — Fixed-position pointing manifold
 
-**Status:** `COMPLETE` pending Check-in 4
+**Status:** `COMPLETE WITH VALIDATION LIMITATIONS`
 
 Implement predictor-corrector continuation for:
 
@@ -87,15 +87,37 @@ p(q) = p0
 q6 = constant
 ```
 
-Produce a local two-parameter manifold and map it to `S2`. Include discriminating SUUR tests before reading the patch through compound coordinates.
+Produce a local two-parameter solution neighborhood and map it to `S2`. Include discriminating architecture-specific compound-coordinate tests before reading the intersecting-pairs patch through those coordinates.
 
-**Check-in 4:** Draft. Local patches exist on intersecting-pairs and UR-like models; singular samples are labeled separately.
+**Check-in 4:** Approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`). Local regular neighborhoods exist on intersecting-pairs and UR-like models, but sequential branch tracking, corrected chart rank, duplicate avoidance, and refinement stability require Sprint 04B.
+
+---
+
+## Phase 4B — Sequential continuation and pointing-chart validation
+
+**Status:** `COMPLETE` pending Check-in 4B
+
+Replace the seed-frozen tangent-plane projection with sequential predictor-corrector continuation using a locally recomputed and aligned tangent frame.
+
+Validate:
+
+- true forward/reverse continuation;
+- numerical rank two of the corrected configuration chart;
+- numerical rank two of the pointing chart;
+- duplicate and collapse detection;
+- grid and step-size refinement;
+- loop and alternate-path sensitivity;
+- persistence of architecture-specific intersecting pairs;
+- UR-like continuation without imposed `SUUR` topology;
+- complete clean-source result provenance.
+
+**Check-in 4B:** Authorize fiber work only after a connected, reversible, rank-two, noncollapsed local chart is established.
 
 ---
 
 ## Phase 5 — Explicit one-dimensional fibers
 
-**Status:** `BLOCKED` by Phase 4
+**Status:** `BLOCKED` by Phase 4B
 
 Define one independent scalar constraint such as:
 

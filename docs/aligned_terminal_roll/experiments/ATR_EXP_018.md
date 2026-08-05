@@ -1,4 +1,4 @@
-# ATR_EXP_018 — SUUR coordinate map and closure
+# ATR_EXP_018 — IP compound-coordinate definedness and round-trip consistency
 
 **Status:** Complete
 **Date:** 2026-08-04
@@ -8,11 +8,11 @@
 
 ## 1. Purpose
 
-Exercise the explicit map `φ(θ; q6*)=(θ, q6*)`, defined only when both intersecting pairs persist, and check closure residuals.
+Verify that the intersecting-pair compound coordinate map `φ(θ; q6*)=(θ, q6*)` is defined when both pairs persist, and that it round-trips with serial coordinates.
 
 ## 2. Expected result
 
-`φ` is defined on `IntersectingPairsAligned6R`; pair, FK, and inverse residuals stay below tolerance.
+`φ` is defined on `IntersectingPairsAligned6R`; pair distances and inverse residuals stay below tolerance.
 
 ## 3. Command
 
@@ -23,9 +23,9 @@ python scripts/validate_pointing_manifold.py
 ## 4. Results
 
 - status: PASS
-- observed: `defined=True`, `closed=True`, position residual `0`
+- observed: `defined=True`, round-trip residuals `0`
 
 ## 5. Interpretation
 
-- `PASS` authorizes reading regular IP continuation samples through SUUR coordinates locally.
-- This is not global continued equivalence of an independent SUUR mechanism model.
+- `PASS` is coordinate-map definedness and round-trip consistency only.
+- This does **not** independently validate the forward kinematics of a separate closed `SUUR` mechanism.

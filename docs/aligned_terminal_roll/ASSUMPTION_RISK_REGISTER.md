@@ -29,7 +29,7 @@
 | R02 | Rank threshold misclassifies near-singular cases | High | High | publish singular values; threshold sensitivity | conclusion changes with threshold | MITIGATED |
 | R03 | Finite-difference scale masks implementation error | Medium | Medium | multi-step convergence study | no stable error plateau | MITIGATED |
 | R04 | Transform-order bug preserves one fixture accidentally | Medium | High | independent geometric and numerical oracles | analytical/numerical disagreement | MITIGATED |
-| R05 | Continuation jumps branches | High | High | predictor-corrector diagnostics, reverse runs, branch IDs | discontinuous configuration jump | MITIGATED (local reverse-run on Sprint 04 patches; global branching still open) |
+| R05 | Continuation jumps branches | High | High | sequential PC, transported frames, true reverse, loop/alternate-path, duplicate scan | discontinuous configuration jump | MITIGATED (Sprint 04B local sequential reverse/loop/duplicate gates; global branching still open) |
 | R06 | Coordinate fixing creates an artificial fiber | High | High | prefer task-space constraint; compare parameterizations | fiber disappears under reparameterization | OPEN |
 | R07 | Mobility count is mistaken for equivalence | Medium | High | require discriminating coordinate-map and continued-motion tests | matching count but mismatched motion | MITIGATED (negative control plus φ definedness; independent SUUR solver still absent) |
 | R08 | Spherical candidate passes only at one pose | High | High | branch-wide concurrency and arc tests | residual grows under continuation | OPEN |

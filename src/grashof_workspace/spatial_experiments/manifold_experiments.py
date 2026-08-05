@@ -124,7 +124,7 @@ def evaluate_coordinate_map_closure() -> dict[str, Any]:
     return {
         "experiment_id": "ATR_EXP_018",
         "status": "PASS" if ok else "FAIL",
-        "expected": "φ defined on IntersectingPairsAligned6R; closure residuals below tolerance",
+        "expected": "φ defined on IntersectingPairsAligned6R; coordinate round-trip residuals below tolerance",
         "observed": (
             f"defined={mapped.defined}, closed={closed.closed}, "
             f"pos_res={closed.position_residual_m:.3e}, extra_max_pos={extra_max_pos:.3e}"
@@ -434,7 +434,7 @@ def _plot_closure(metrics: dict[str, Any], dest: Path) -> None:
     ]
     fig, ax = plt.subplots(figsize=(6.4, 3.8))
     ax.semilogy(labels, values, marker="o")
-    ax.set_title("ATR_EXP_018 SUUR closure residuals")
+    ax.set_title("ATR_EXP_018 definedness and round-trip residuals")
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(dest, dpi=120)

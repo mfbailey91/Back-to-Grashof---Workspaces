@@ -28,7 +28,7 @@
 | C7 | Position-and-pointing kernel is terminal roll only | SVD of `J_pd` and alignment to `e6` | nullity 1 and kernel parallel to roll | extra self-motion, singularity, or incorrect task map |
 | C8 | Reduced pointing tangent is 2D | `rank(J_d N_red)` | rank 2 | pointing degeneracy or incorrect quotient basis |
 | C9 | Compound-joint model matches physical chain | tangent principal angles and continued trajectories | thresholds satisfied over branch | representation only instantaneous or incorrectly ordered |
-| C10 | Fixed-position parent is a 2D manifold | two-parameter continuation and correction residuals | noncollapsed patch stable under refinement | singularity, branch issue, or wrong constraint count |
+| C10 | Fixed-position parent is a 2D manifold | sequential continuation, chart-rank `Q`/`D`, reverse rays, duplicates, and refinement | reversible rank-two noncollapsed local chart | singularity, branch issue, or wrong constraint count |
 | C11 | Scalar constraint defines a 1D fiber | constrained Jacobian and continuation | nullity 1 over nonzero branch | redundant, singular, or coordinate-artifact constraint |
 | C12 | Candidate is exact spherical `RRRR` | concurrency, arc invariance, locking, motion equivalence | every prerequisite passes | candidate rejected; do not apply McCarthy-Soh |
 | C13 | McCarthy-Soh predicts fiber rotatability | classification versus numerical continuation | stable agreement over accepted cases | classifier not useful for intended output motion |
@@ -92,6 +92,19 @@ Use both an off-axis point and misaligned direction.
 Expected:
 
 - both position and pointing change.
+
+## 4B. Sprint 04B chart-validation evidence
+
+Sequential continuation evidence required for C10:
+
+- predictor origin is the last accepted `q_k`, not a seed-frozen tangent plane;
+- `N_red` is recomputed and Procrustes-aligned at every accepted sample;
+- genuine reverse rays start at the forward endpoint;
+- interior central differences give `rank(Q)=2` and `rank(D)=2`;
+- duplicate wrapped configurations are absent from the approved patch;
+- shared-node refinement preserves rank class and stays inside joint/pointing tolerances;
+- rectangular-loop error decreases when the integrator step is halved at fixed step count;
+- architecture-specific pair diagnostics stay off the general continuation API.
 
 ## 5. Numerical oracles
 

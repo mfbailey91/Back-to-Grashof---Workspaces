@@ -45,4 +45,4 @@ In particular:
 
 ## Current next action
 
-Hold Check-in 4 on the pointing-manifold packet (`CHECKIN_04_POINTING_MANIFOLD.md`) before fiber construction.
+Hold Check-in 4B on the sequential pointing-chart packet (`CHECKIN_04B_POINTING_CHART_VALIDATION.md`) before fiber construction.

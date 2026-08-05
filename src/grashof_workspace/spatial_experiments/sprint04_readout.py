@@ -19,14 +19,14 @@ S4_IDS = (
 S4_TITLES = {
     "ATR_EXP_016": "Intersecting-pair persistence",
     "ATR_EXP_017": "Nonintersecting negative control",
-    "ATR_EXP_018": "SUUR coordinate map and closure",
+    "ATR_EXP_018": "IP compound-coordinate definedness and round-trip consistency",
     "ATR_EXP_019": "Intersecting-pairs continuation patch",
     "ATR_EXP_020": "UR-like continuation patch",
 }
 
 M4_WARNING = (
-    "This readout does not authorize fibers, spherical four-bars, McCarthy–Soh, or exact UR. "
-    "Check-in 4 remains a human gate."
+    "Check-in 4 is approved with validation limitations. This diagnostic readout does not "
+    "authorize fibers, spherical four-bars, McCarthy–Soh, or exact UR. Sprint 04B is next."
 )
 
 
