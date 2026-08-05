@@ -5,7 +5,7 @@
 **Sprint(s):** Sprint 04C — Bounded implementation and method audit
 **Repository commit:** `82622cf` (implementation); artifacts regenerated from that clean revision
 **Decision owner:** Michael Bailey
-**Decision status:** Draft — awaiting human review together with Check-in 4B
+**Decision status:** Approved 2026-08-04 — Pass
 
 ## 1. Claim under review
 
@@ -42,14 +42,12 @@ The local sequential chart evidence in Check-in 4B can be reviewed honestly: rev
 
 ## 5. Decision
 
-**Pending human review of Check-in 4B together with this packet.**
+**APPROVED — Pass**
 
-Recommended case: **Pass** — authorize Sprint 05 after both drafts are approved, using `IntersectingPairsAligned6R` as the primary fiber benchmark and `URLikeAligned6R` as the parallel architecture.
+The method audit is accepted. ATR_EXP_024/026 interpretations stand. Sprint 05 is authorized together with Check-in 4B Case A, using `IntersectingPairsAligned6R` as the primary fiber benchmark and `URLikeAligned6R` as the parallel architecture.
 
-Conditional pass if further named doc cleanup is requested. Fail only if a later review finds an implementation defect that changes an accepted 04B conclusion.
-
-Still blocked until approval: `h(q)=c`, spherical `RRRR`, McCarthy–Soh, exact UR/URDF, global dexterity.
+Still blocked: spherical `RRRR`, McCarthy–Soh, exact UR/URDF, and global dexterity.
 
 ## 6. Next sprint recommendation
 
-After human Pass on 4B+04C, open Sprint 05 for one independent scalar constraint.
+Review `SPRINT_05_EXPLICIT_ONE_DIMENSIONAL_FIBER.md`, then implement one independent scalar constraint.

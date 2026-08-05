@@ -1,7 +1,7 @@
 # Project Plan — Aligned Terminal-Roll Reduction
 
 **Project owner:** Michael Bailey
-**Status:** Sprint 04C pre-approval audit / Check-in 4B and 04C drafts pending review
+**Status:** Sprint 05 implemented / Check-in 5 ready for review
 **Last updated:** 2026-08-04
 **Planning horizon:** Reduction proof through exact-robot generalization
 **Change policy:** Update at formal check-ins; record material reversals in `decisions/`
@@ -235,15 +235,14 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 | Compound / `SUUR` regrouping | Local coordinate-map defined on intersecting pairs; generic negative control passes |
 | Sprint 04 | Implementation complete (ATR_EXP_016–020 PASS with validation limitations) |
 | Check-in 4 | Approved (`CONTINUE WITH CHANGED SCOPE`) |
-| Sprint 04B | Implementation complete (ATR_EXP_021–026 PASS; descriptions under 04C correction) |
-| Sprint 04C | Pre-approval method audit before Check-in 4B |
-| Check-in 4B | Draft pending human review |
-| Check-in 04C | Draft pending human review |
-| Fiber construction | Blocked by Check-in 4B and 04C |
-| Spherical Grashof work | Blocked by M6 |
+| Sprint 04B | Complete (ATR_EXP_021–026 PASS; Check-in 4B Case A) |
+| Sprint 04C | Complete (Check-in 04C Pass) |
+| Check-in 4B | Approved 2026-08-04 (Case A) |
+| Check-in 04C | Approved 2026-08-04 (Pass) |
+| Sprint 05 | Complete (ATR_EXP_027–031 PASS; Check-in 5 draft) |
+| Fiber construction | Local C11 fiber implemented; human Check-in 5 pending |
+| Spherical Grashof work | Blocked by M5 / M6 |
 
 ## 11. Immediate project decision
 
-Complete Sprint 04C, then hold human review of Check-in 4B and Check-in 04C before selecting a one-dimensional fiber.
-
-Do not start fiber, spherical-four-bar, McCarthy–Soh, or exact-UR work until both check-ins are approved.
+Review `CHECKIN_05_EXPLICIT_FIBER.md`. Do not start spherical-four-bar, McCarthy–Soh, or exact-UR work until Check-in 5 authorizes that narrower hypothesis.

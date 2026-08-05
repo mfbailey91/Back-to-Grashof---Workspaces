@@ -172,3 +172,49 @@ See `docs/experiment_protocol.md`:
 - coverage \(C(p)\) and connected components over feasible orientation samples;
 - Gate 2: aggregate metrics must converge with sample density before Sprint 5 interpretation;
 - analytical prediction is compared to numerical labels; product \(\neq\) dexterity.
+
+## 10. Aligned-terminal pointing fiber (spatial Sprint 05)
+
+Conventions: joint order \((q_1,\ldots,q_6)\) in radians; space-frame pointing \(d(q)\) is the unit terminal axis; \(p(q)\) is the task point. The Sprint 04B/04C parent is the roll-quotiented fixed-position set
+
+\[
+P_{p_0,q_6^*}=\bigl\{q:p(q)=p_0,\ q_6=q_6^*\bigr\}.
+\]
+
+An explicit one-dimensional fiber is the additional task-space level set
+
+\[
+F_c=\bigl\{q\in P_{p_0,q_6^*}:h(q)=c\bigr\},
+\]
+
+with primary scalar
+
+\[
+h(q)=n\cdot d(q),
+\]
+
+where \(n\) is a fixed world-frame unit vector, recorded in the experiment manifest, and \(c=h(q_0)\) at a named regular seed. The analytical gradient is
+
+\[
+\frac{\partial h}{\partial q_i}=n\cdot\bigl(w_i(q)\times d(q)\bigr)=\bigl(n^\top J_d(q)\bigr)_i.
+\]
+
+Under the aligned-terminal conditions \(p\in R_6\) and \(d\parallel w_6\), terminal roll does not change pointing, so
+
+\[
+\frac{\partial h}{\partial q_6}=0.
+\]
+
+The stacked reduced constraint on \((q_1,\ldots,q_5)\) is
+
+\[
+\mathcal{F}(q)=\begin{bmatrix}p(q)-p_0\\ h(q)-c\end{bmatrix}\in\mathbb{R}^4,
+\qquad
+J_{\mathcal{F}}=\begin{bmatrix}J_p\\ n^\top J_d\end{bmatrix}_{:,1:5}\in\mathbb{R}^{4\times 5}.
+\]
+
+At a regular independent seed, \(\operatorname{rank}(J_{\mathcal{F}})=4\) and \(\operatorname{nullity}(J_{\mathcal{F}})=1\). The fiber tangent is that one-dimensional kernel, embedded in \(\mathbb{R}^6\) with a zero \(q_6\) component.
+
+An alternate task-space scalar \(h'(q)=n'\cdot d(q)\) with a second fixed unit \(n'\) is a distinct slice of the same pointing parent. Freezing a single non-terminal joint is a coordinate control, not a candidate primary \(h\).
+
+This section does not assert spherical \(RRRR\) equivalence, McCarthy–Soh classification, or exact-UR geometry.

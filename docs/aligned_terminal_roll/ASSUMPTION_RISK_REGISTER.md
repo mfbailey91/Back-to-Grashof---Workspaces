@@ -15,7 +15,7 @@
 | A06 | Reduced pointing tangent has rank 2 | mathematical | `rank(J_d N_red)` | local pointing coverage degenerates | VERIFIED |
 | A07 | Two intersecting physical axis pairs admit a useful compound-joint representation | modeling | explicit coordinate-map, closure equivalence, pair persistence, and negative control | `SUUR`/related shorthand rejected | CONSTRAINED (local φ definedness and pair persistence only; not an independent SUUR mechanism solver) |
 | A08 | UR-like ordering preserves the reduction | architecture | synthetic comparison | result is narrower than typical UR-like arms | CONSTRAINED (Stage A and local C10 patch on synthetic UR-like only; not exact UR) |
-| A09 | A nonarbitrary scalar fiber constraint exists | research | constrained-rank and coordinate-invariance tests | spherical-fiber program stops |
+| A09 | A nonarbitrary scalar fiber constraint exists | research | constrained-rank and coordinate-invariance tests | spherical-fiber program stops | OPEN (Sprint 05 under test) |
 | A10 | A useful fiber has four globally concurrent axes | research | branch-wide concurrency residual | spherical `RRRR` rejected |
 | A11 | Spherical arc dimensions remain fixed | research | branch-wide angular invariants | only instantaneous quadrilateral exists |
 | A12 | McCarthy-Soh rotatability maps to required pointing motion | research | compare against continued motion | Grashof classifier rejected for this use |

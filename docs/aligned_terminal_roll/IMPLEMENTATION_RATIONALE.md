@@ -1,8 +1,8 @@
 # Implementation rationale — aligned terminal-roll spatial kernel
 
-**Status:** Sprint 04C audit  
-**Scope:** Decision-bearing methods used through Check-in 4B  
-**Nonclaim:** This note does not authorize fibers, spherical `RRRR`, McCarthy–Soh, or exact UR.
+**Status:** Sprint 05 local C11  
+**Scope:** Decision-bearing methods used through Check-in 5 draft  
+**Nonclaim:** This note authorizes only a local task-space pointing fiber (C11). It does not authorize spherical `RRRR`, McCarthy–Soh, or exact UR.
 
 ## Inventory
 
@@ -12,6 +12,10 @@
 | `jacobians.py` | `position_jacobian`, `pointing_jacobian`, `matrix_rank_report`, `reduced_pointing_basis` | C6–C8 | ATR_EXP_006–012 | general |
 | `continuation.py` | `sequential_predictor_step`, `continue_sequential_chart`, `procrustes_align_frame` | C10 | ATR_EXP_021–026 | general |
 | `chart_diagnostics.py` | `chart_differentials`, `true_forward_reverse`, `rectangular_loop`, `duplicate_report` | C10 | ATR_EXP_021–026 | general |
+| `fiber_constraints.py` | `pointing_scalar`, `pointing_scalar_gradient`, `fiber_independence_report`, `reduced_fiber_tangent` | C11 / H1 | ATR_EXP_027, 030 | general |
+| `fiber_continuation.py` | `sequential_fiber_step`, `continue_fiber_ray`, `continue_fiber` | C11 / H2–H4 | ATR_EXP_028–031 | general |
+| `fiber_diagnostics.py` | `fiber_forward_reverse`, `pointing_image_report` | C11 / H3–H5 | ATR_EXP_028–031 | general |
+| `fiber_continuation.py` | `continue_joint_freeze_ray` | R06 negative control | ATR_EXP_030 | control only |
 | `suur_coordinates.py` | `pair_intersection_distances`, `suur_map` | C9 local / A07 | ATR_EXP_016–018, 022 | IP only |
 | `continuation.py` | `continue_fixed_position_patch` | historical Sprint 04 | ATR_EXP_019–020 | developer / regression |
 | `compound_joints.py` | principal-angle probes | ADR 002 negative control | ATR_EXP_013–014 | developer / labeled non-discriminating |
@@ -82,3 +86,27 @@ Internal chart microstep `MAX_MICROSTEP=0.005` is a project-specific integrator 
 - **Validity:** Local patch only. Loop error is a diagnostic; exact closure is not required.
 - **Check:** ATR_EXP_021, 025, 026.
 - **Does not authorize:** Geometric holonomy measurement or global injectivity.
+
+## Pointing-scalar fiber constraint
+
+- **What:** `h(q)=n·d(q)` with locked world units `n=(0,1,0)` and alternate `n'=(1,0,0)`. Analytical `∇h = n^T J_d`. Stacked reduced Jacobian of `(p,h)` on `q1…q5`.
+- **Why:** One independent task-space slice of the validated pointing parent, not a joint- or chart-coordinate freeze.
+- **Validity:** Named regular seeds; `n` not parallel to `d(q0)`; aligned terminal roll implies `dh/dq6=0`.
+- **Check:** ATR_EXP_027 interior rank 4 / nullity 1; parallel-`n` exterior rank drop; FD vs analytical `∇h`.
+- **Does not authorize:** Spherical four-bar geometry or global pointing coverage.
+
+## One-dimensional sequential fiber continuation
+
+- **What:** Predict `q_k + t_k Δσ` with a sign-aligned 1D tangent; freeze `q6`; Newton-correct `(p,h)=(p0,c)` on `q1…q5`. Stored `q_pred` is the full-`Δσ` prediction; `correction_norm` is the max microstep wrap correction.
+- **Why:** Same sequential PC discipline as Sprint 04B, reduced to one parameter.
+- **Validity:** Local regular branch through the seed; reverse starts at the accepted endpoint.
+- **Check:** ATR_EXP_028/029 reverse and pointing-image gates; ATR_EXP_031 `max_microstep=None` refinement.
+- **Does not authorize:** A spherical `RRRR`, McCarthy–Soh labels, or exact UR.
+
+## Alternate-`h` and joint-freeze controls
+
+- **What:** Repeat the fiber under `n'`; compare against a `q2`-freeze path on the pointing parent.
+- **Why:** R06 / A09 artifact control. A useful `h` must survive a second task-space slice and must not coincide with a joint freeze.
+- **Validity:** Same seeds and step schedule; distinctness is a wrap-norm gap at shared `|σ|`.
+- **Check:** ATR_EXP_030.
+- **Does not authorize:** Closure of R06 for every possible scalar, or Phase 6 spherical tests without Check-in 5.

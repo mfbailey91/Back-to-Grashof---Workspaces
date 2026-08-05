@@ -1,6 +1,6 @@
 # Sprint 04C — Bounded Implementation and Method Audit
 
-**Sprint status:** Implementation complete — awaiting Check-in 4B/04C  
+**Sprint status:** Complete — Check-in 04C approved Pass  
 **Milestone target:** Close implementation-review debt before Check-in 4B approval  
 **Authorized by:** Pre-approval amendment to Sprint 04B (before human Check-in 4B review)  
 **Timebox:** One bounded audit cycle  

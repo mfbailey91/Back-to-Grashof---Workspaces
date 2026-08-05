@@ -95,7 +95,7 @@ Produce a local two-parameter solution neighborhood and map it to `S2`. Include 
 
 ## Phase 4B — Sequential continuation and pointing-chart validation
 
-**Status:** `COMPLETE` pending Check-in 4B after Sprint 04C amendment
+**Status:** `COMPLETE`
 
 Replace the seed-frozen tangent-plane projection with sequential predictor-corrector continuation using a locally recomputed and aligned tangent frame.
 
@@ -111,45 +111,47 @@ Validate:
 - UR-like continuation without imposed `SUUR` topology;
 - complete clean-source result provenance.
 
-**Check-in 4B:** Authorize fiber work only after a connected, reversible, rank-two, noncollapsed local chart is established, and after Sprint 04C corrects overclaimed 024/026 interpretations.
+**Check-in 4B:** Approved 2026-08-04 (Case A). Local sequential charts are validated on intersecting-pairs and UR-like models.
 
 ---
 
 ## Phase 4C — Implementation and method audit
 
-**Status:** `COMPLETE` pending Check-in 4B and 04C
+**Status:** `COMPLETE`
 
-Pre-approval amendment: document method rationale, correct ATR_EXP_024/026 claim language, and leave Check-in 4B plus Check-in 04C for human review.
+Pre-approval amendment: document method rationale and correct ATR_EXP_024/026 claim language before Check-in 4B approval.
 
-**Check-in 04C:** Authorize or block Sprint 05 together with Check-in 4B. Do not treat microstep consistency as independent refinement or alternate-path residuals as proven holonomy.
+**Check-in 04C:** Approved 2026-08-04 (Pass). Method audit accepted; 024/026 claim corrections stand.
 
 ---
 
 ## Phase 5 — Explicit one-dimensional fibers
 
-**Status:** `BLOCKED` by Phase 4B and Phase 4C
+**Status:** `COMPLETE` implementation — Check-in 5 ready for review
 
-Define one independent scalar constraint such as:
+Locked scalar:
 
 ```text
-n^T d(q) = c
+h(q) = n · d(q) = c
+n  = (0, 1, 0)
+n' = (1, 0, 0)
 ```
 
 Continue:
 
 ```text
 p(q) = p0
-q6 = 0
+q6 = q6*   (0.70 rad on the locked regular seeds; not q6=0)
 h(q) = c
 ```
 
-**Check-in 5:** Is the fiber regular, nondegenerate, reproducible, and geometrically meaningful?
+ATR_EXP_027–031 PASS on IP (primary) and UR-like (parallel). **Check-in 5** decides whether this is enough to open Phase 6.
 
 ---
 
 ## Phase 6 — Exact spherical-four-bar tests
 
-**Status:** `BLOCKED` by Phase 5
+**Status:** `BLOCKED` by Check-in 5
 
 For each candidate fiber, test in order:
 

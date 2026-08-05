@@ -1,6 +1,6 @@
 # Method references — aligned terminal-roll spatial kernel
 
-**Status:** Sprint 04C audit  
+**Status:** Sprint 05 local C11  
 **Rule:** Curated list only. Project-specific constructions are labeled as such.
 
 ## Product of exponentials / screw kinematics
@@ -31,7 +31,7 @@ Golub and Van Loan, *Matrix Computations*, 4th ed., §6.4 (orthogonal Procrustes
 
 Allgower and Georg, *Introduction to Numerical Continuation Methods*, SIAM, 2003, Ch. 2–3.
 
-**Use:** Sequential fixed-position continuation in `continuation.py`. Chart coordinates `(s,t)` are local continuation parameters, not intrinsic manifold coordinates.
+**Use:** Sequential fixed-position continuation in `continuation.py`, and one-dimensional fiber continuation in `fiber_continuation.py`. Chart coordinates `(s,t)` and fiber parameter `σ` are local continuation parameters, not intrinsic manifold coordinates.
 
 ## Project-specific constructions (not textbook identities)
 
@@ -42,6 +42,9 @@ Allgower and Georg, *Introduction to Numerical Continuation Methods*, SIAM, 2003
 | Internal continuation microstep `0.005` | `MAX_MICROSTEP` | Integrator subdivision; ATR_EXP_024 consistency, not independent refinement |
 | Architecture-specific pair map `φ(θ;q6*)` | `suur_coordinates.py` | Definedness/round-trip only; not a closed SUUR FK solver |
 | Seed-frozen Sprint 04 patch | `continue_fixed_position_patch` | Historical / regression only |
+| Pointing scalar `h=n·d` with locked `n=(0,1,0)`, `n'=(1,0,0)` | `fiber_constraints.py` | Task-space level set; not a spherical invariant |
+| 1D sign-aligned fiber tangent | `reduced_fiber_tangent` | Kernel of stacked `(Jp; ∇h)` on `q1…q5` |
+| Joint-freeze negative control | `continue_joint_freeze_ray` | R06 control only; not a candidate `h` |
 
 ## Developer-only paths
 
