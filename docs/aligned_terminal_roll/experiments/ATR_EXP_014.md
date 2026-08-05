@@ -35,5 +35,6 @@ python scripts/validate_architecture_comparison.py
 
 ## 6. Interpretation
 
-- `PASS` is local continued-motion evidence only.
-- Sprint 04 remains responsible for C10 / global continuation.
+- `PASS` numerically, but Check-in 3 rules the test **non-discriminating**.
+- Identical short trajectories are expected once both models step in the same fixed-roll null space.
+- Do not treat this as independent local C9 / `SUUR` evidence.

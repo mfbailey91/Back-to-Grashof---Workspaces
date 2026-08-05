@@ -1,9 +1,9 @@
 # Sprint 03 — Architecture Comparison
 
-**Sprint status:** Implementation complete / Check-in 3 draft
+**Sprint status:** Complete / Check-in 3 approved (`CONTINUE WITH CHANGED SCOPE`)
 **HTML readout:** `results/aligned_terminal_roll/sprint03_readout/index.html`
 **Milestone target:** M3 — Architecture comparison (local Stage B only)
-**Check-in:** Check-in 3 (draft; not auto-approved)
+**Check-in:** Check-in 3 (Approved 2026-08-04, `CONTINUE WITH CHANGED SCOPE`)
 **Authorized by:** Check-in 2 (`CONTINUE`, 2026-08-04)
 **Timebox:** Stage A on two new architectures plus local compound-joint probes; no continuation solver
 

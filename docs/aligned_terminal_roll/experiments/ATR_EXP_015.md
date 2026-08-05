@@ -34,5 +34,6 @@ python scripts/validate_architecture_comparison.py
 
 ## 6. Interpretation
 
-- `PASS` authorizes a Check-in 3 draft only.
-- Human gate required before Sprint 04 continuation.
+- `PASS` for Stage A survival across the three architectures.
+- Continuation parent `IntersectingPairsAligned6R` is a workshop-architecture choice, not an empirical ranking from ATR_EXP_013–014.
+- Check-in 3: `PARTIALLY SUPPORTED` / `CONTINUE WITH CHANGED SCOPE`.

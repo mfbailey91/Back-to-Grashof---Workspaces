@@ -25,8 +25,8 @@ S3_TITLES = {
 }
 
 M3_WARNING = (
-    "This readout does not authorize pointing-manifold continuation, fibers, "
-    "spherical four-bars, or exact UR. Check-in 3 remains a human gate."
+    "Check-in 3 is approved with changed scope. ATR_EXP_013–014 do not establish "
+    "SUUR equivalence. Fibers, spherical four-bars, and exact UR remain blocked."
 )
 
 
@@ -56,7 +56,7 @@ def assemble_sprint03_payload(results_root: Path) -> dict[str, Any]:
         "title": "Sprint 03 — Architecture comparison",
         "subtitle": "Stage A survival and local compound-joint probes",
         "brand": "aligned terminal-roll",
-        "sprint_status": "Implementation complete / Check-in 3 draft",
+        "sprint_status": "Complete / Check-in 3 approved with changed scope",
         "milestone": "M3 — Architecture comparison",
         "warning": M3_WARNING,
         "claim": (
@@ -66,25 +66,27 @@ def assemble_sprint03_payload(results_root: Path) -> dict[str, Any]:
         ),
         "pass_count": pass_count,
         "experiment_count": len(experiments),
-        "checkin_interpretation": "SUPPORTED",
+        "checkin_interpretation": "PARTIALLY SUPPORTED",
         "checkin_rationale": (
-            "Stage A holds at the named regular configurations of GenericAligned6R, "
-            "IntersectingPairsAligned6R, and URLikeAligned6R. Local compound-joint "
-            "embedding of the intersecting-pair chain matches physical N_red within "
-            "the stated principal-angle tolerance, and short corrected N_red steps "
-            "keep position near p0 with agreeing pointing increments. This is a local "
-            "C9 result only. It does not establish global continued equivalence or "
-            "select a continuation parent automatically."
+            "Stage A survives at the named regular configurations of GenericAligned6R, "
+            "IntersectingPairsAligned6R, and URLikeAligned6R. ATR_EXP_013 and ATR_EXP_014 "
+            "do not independently establish local compound-joint equivalence: the compound "
+            "basis is the fixed-roll portion of the same physical J_p null space used to "
+            "construct N_red. SUUR remains a proposed exact kinematic regrouping. "
+            "IntersectingPairsAligned6R is the continuation benchmark because it "
+            "instantiates the workshop architecture, not because those tests selected it."
         ),
-        "checkin_decision": "CONTINUE",
-        "human_gate_required": True,
+        "checkin_decision": "CONTINUE WITH CHANGED SCOPE",
+        "human_gate_required": False,
         "recommended_continuation_parent": "IntersectingPairsAligned6R",
         "repository_commits": sorted({c for c in commits if c and c != "unknown"}),
         "experiments": experiments,
         "next_stage": (
-            "Pending human Check-in 3. If approved, next stage is local pointing-manifold "
-            "continuation on the recommended intersecting-pairs parent, with UR-like "
-            "retained as a parallel check. Fibers, spherical RRRR, and exact UR remain blocked."
+            "Check-in 3 is approved with changed scope. Sprint 04: predictor-corrector "
+            "continuation of p(q)=p0 with q6 constant on IntersectingPairsAligned6R, then "
+            "URLikeAligned6R. Before interpreting continuation through SUUR, add an explicit "
+            "coordinate-map/closure test, away-from-home pair persistence, a nonintersecting "
+            "negative control, and committed source identifiers."
         ),
         "reproduce": [
             "python scripts/validate_architecture_comparison.py",

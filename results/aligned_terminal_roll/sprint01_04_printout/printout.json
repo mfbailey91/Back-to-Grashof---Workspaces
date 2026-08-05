@@ -1,0 +1,680 @@
+{
+  "title": "Aligned terminal-roll \u2014 Sprints 01\u201304",
+  "subtitle": "Combined printable readout",
+  "date": "2026-08-04",
+  "pass_count": 20,
+  "experiment_count": 20,
+  "sprints": [
+    {
+      "title": "Sprint 01 \u2014 Spatial Foundations",
+      "subtitle": "Terminal-roll fixture",
+      "brand": "aligned terminal-roll",
+      "sprint_status": "Complete",
+      "milestone": "M1 \u2014 Terminal-roll symmetry established",
+      "warning": "This readout does not establish 6R rank or nullity. It only validates an isolated terminal-roll fixture (Level 0 / M1).",
+      "claim": "If p lies on R6 and d is parallel to w6, then dp/dq6 = 0 and dd/dq6 = 0, while full tool orientation changes by roll about d.",
+      "pass_count": 5,
+      "experiment_count": 5,
+      "tests_passed": 76,
+      "checkin_interpretation": "SUPPORTED",
+      "checkin_decision": "CONTINUE",
+      "human_gate_required": false,
+      "repository_commits": [
+        "0d27bb139c1a965dba91244f3df5096231b381da"
+      ],
+      "experiments": [
+        {
+          "experiment_id": "ATR_EXP_001",
+          "title": "Aligned positive control",
+          "status": "PASS",
+          "expected": "position invariant; pointing invariant; roll recovers Delta q6",
+          "observed": "max|dp|=0.000e+00 m; max|dd|=0.000e+00; max roll err=1.332e-15 rad",
+          "notes": "",
+          "metrics": {
+            "experiment_id": "ATR_EXP_001",
+            "max_position_residual_m": 0.0,
+            "max_pointing_residual": 0.0,
+            "max_roll_angle_error_rad": 1.3322676295501878e-15,
+            "max_roll_axis_misalignment": 0.0,
+            "mean_position_residual_m": 0.0,
+            "mean_pointing_residual": 0.0,
+            "position_changes": false,
+            "pointing_changes": false,
+            "roll_recovered": true
+          },
+          "tolerances": {
+            "position_abs_tol_m": 1e-12,
+            "pointing_abs_tol": 1e-12,
+            "roll_abs_tol_rad": 1e-10,
+            "position_motion_floor_m": 1e-06,
+            "pointing_motion_floor": 1e-06
+          },
+          "units": {
+            "length": "metre",
+            "angle": "radian",
+            "axis_direction": "dimensionless unit vector"
+          },
+          "model": {
+            "axis_r_m": [
+              0.1,
+              -0.2,
+              0.3
+            ],
+            "axis_w": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "p0_m": [
+              0.1,
+              -0.2,
+              0.35
+            ],
+            "d0": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          "residual_figure": "figures/residuals_ATR_EXP_001.png",
+          "figures": [
+            "figures/ATR_EXP_001_residuals_ATR_EXP_001.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_002",
+          "title": "Off-axis task point",
+          "status": "PASS",
+          "expected": "position changes; pointing invariant",
+          "observed": "position_changes=True; pointing_changes=False; max|dp|=4.000e-02 m",
+          "notes": "",
+          "metrics": {
+            "experiment_id": "ATR_EXP_002",
+            "max_position_residual_m": 0.03999999999999998,
+            "max_pointing_residual": 0.0,
+            "max_roll_angle_error_rad": 1.3322676295501878e-15,
+            "max_roll_axis_misalignment": 0.0,
+            "mean_position_residual_m": 0.025394090150630454,
+            "mean_pointing_residual": 0.0,
+            "position_changes": true,
+            "pointing_changes": false,
+            "roll_recovered": true
+          },
+          "tolerances": {
+            "position_abs_tol_m": 1e-12,
+            "pointing_abs_tol": 1e-12,
+            "roll_abs_tol_rad": 1e-10,
+            "position_motion_floor_m": 1e-06,
+            "pointing_motion_floor": 1e-06
+          },
+          "units": {
+            "length": "metre",
+            "angle": "radian",
+            "axis_direction": "dimensionless unit vector"
+          },
+          "model": {
+            "axis_r_m": [
+              0.1,
+              -0.2,
+              0.3
+            ],
+            "axis_w": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "p0_m": [
+              0.1,
+              -0.18000000000000002,
+              0.35
+            ],
+            "d0": [
+              0.0,
+              0.0,
+              1.0
+            ]
+          },
+          "residual_figure": "figures/residuals_ATR_EXP_002.png",
+          "figures": [
+            "figures/ATR_EXP_002_residuals_ATR_EXP_002.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_003",
+          "title": "Misaligned pointing direction",
+          "status": "PASS",
+          "expected": "position invariant; pointing changes",
+          "observed": "position_changes=False; pointing_changes=True; max|dd|=3.973e-01",
+          "notes": "",
+          "metrics": {
+            "experiment_id": "ATR_EXP_003",
+            "max_position_residual_m": 0.0,
+            "max_pointing_residual": 0.39733866159012243,
+            "max_roll_angle_error_rad": 0.08747656189852515,
+            "max_roll_axis_misalignment": 0.2781747010965634,
+            "mean_position_residual_m": 0.0,
+            "mean_pointing_residual": 0.25225134481876044,
+            "position_changes": false,
+            "pointing_changes": true,
+            "roll_recovered": false
+          },
+          "tolerances": {
+            "position_abs_tol_m": 1e-12,
+            "pointing_abs_tol": 1e-12,
+            "roll_abs_tol_rad": 1e-10,
+            "position_motion_floor_m": 1e-06,
+            "pointing_motion_floor": 1e-06
+          },
+          "units": {
+            "length": "metre",
+            "angle": "radian",
+            "axis_direction": "dimensionless unit vector"
+          },
+          "model": {
+            "axis_r_m": [
+              0.1,
+              -0.2,
+              0.3
+            ],
+            "axis_w": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "p0_m": [
+              0.1,
+              -0.2,
+              0.35
+            ],
+            "d0": [
+              0.0,
+              0.19866933079506122,
+              0.9800665778412416
+            ]
+          },
+          "residual_figure": "figures/residuals_ATR_EXP_003.png",
+          "figures": [
+            "figures/ATR_EXP_003_residuals_ATR_EXP_003.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_004",
+          "title": "Combined alignment violation",
+          "status": "PASS",
+          "expected": "position and pointing both change",
+          "observed": "position_changes=True; pointing_changes=True",
+          "notes": "",
+          "metrics": {
+            "experiment_id": "ATR_EXP_004",
+            "max_position_residual_m": 0.03999999999999998,
+            "max_pointing_residual": 0.39733866159012243,
+            "max_roll_angle_error_rad": 0.08747656189852515,
+            "max_roll_axis_misalignment": 0.2781747010965634,
+            "mean_position_residual_m": 0.025394090150630454,
+            "mean_pointing_residual": 0.25225134481876044,
+            "position_changes": true,
+            "pointing_changes": true,
+            "roll_recovered": false
+          },
+          "tolerances": {
+            "position_abs_tol_m": 1e-12,
+            "pointing_abs_tol": 1e-12,
+            "roll_abs_tol_rad": 1e-10,
+            "position_motion_floor_m": 1e-06,
+            "pointing_motion_floor": 1e-06
+          },
+          "units": {
+            "length": "metre",
+            "angle": "radian",
+            "axis_direction": "dimensionless unit vector"
+          },
+          "model": {
+            "axis_r_m": [
+              0.1,
+              -0.2,
+              0.3
+            ],
+            "axis_w": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "p0_m": [
+              0.1,
+              -0.18000000000000002,
+              0.35
+            ],
+            "d0": [
+              0.0,
+              0.19866933079506122,
+              0.9800665778412416
+            ]
+          },
+          "residual_figure": "figures/residuals_ATR_EXP_004.png",
+          "figures": [
+            "figures/ATR_EXP_004_residuals_ATR_EXP_004.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_005",
+          "title": "Finite-difference refinement",
+          "status": "PASS",
+          "expected": "analytical vs central-FD derivative error converges over usable h",
+          "observed": "h=0.01: dp_err=3.333e-07, dd_err=3.311e-06; h=0.001: dp_err=3.333e-09, dd_err=3.311e-08; h=0.0001: dp_err=3.336e-11, dd_err=3.312e-10; h=1e-05: dp_err=4.699e-13, dd_err=3.471e-12; h=1e-06: dp_err=5.174e-12, dd_err=3.713e-12",
+          "notes": "Fixture intentionally violates alignment so derivatives are nonzero.",
+          "metrics": {
+            "experiment_id": "ATR_EXP_005",
+            "max_position_residual_m": 0.03999999999999998,
+            "max_pointing_residual": 0.39733866159012243,
+            "max_roll_angle_error_rad": 0.08711895018964899,
+            "max_roll_axis_misalignment": 0.2781747010965624,
+            "mean_position_residual_m": 0.024760827619925607,
+            "mean_pointing_residual": 0.2459608526591246,
+            "position_changes": true,
+            "pointing_changes": true,
+            "roll_recovered": false
+          },
+          "tolerances": {
+            "position_abs_tol_m": 1e-12,
+            "pointing_abs_tol": 1e-12,
+            "roll_abs_tol_rad": 1e-10,
+            "position_motion_floor_m": 1e-06,
+            "pointing_motion_floor": 1e-06
+          },
+          "units": {
+            "length": "metre",
+            "angle": "radian",
+            "axis_direction": "dimensionless unit vector"
+          },
+          "model": {
+            "axis_r_m": [
+              0.1,
+              -0.2,
+              0.3
+            ],
+            "axis_w": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "p0_m": [
+              0.1,
+              -0.18000000000000002,
+              0.35
+            ],
+            "d0": [
+              0.0,
+              0.19866933079506122,
+              0.9800665778412416
+            ]
+          },
+          "residual_figure": "figures/residuals_ATR_EXP_005.png",
+          "figures": [
+            "figures/ATR_EXP_005_residuals_ATR_EXP_005.png"
+          ]
+        }
+      ],
+      "fd_refinement": [
+        {
+          "h": 0.01,
+          "dp_error": 3.333316666529955e-07,
+          "dd_error": 3.311138957613458e-06
+        },
+        {
+          "h": 0.001,
+          "dp_error": 3.3333312907116705e-09,
+          "dd_error": 3.311155439708849e-08
+        },
+        {
+          "h": 0.0001,
+          "dp_error": 3.3356193965102396e-11,
+          "dd_error": 3.3115002395407163e-10
+        },
+        {
+          "h": 1e-05,
+          "dp_error": 4.699487730710234e-13,
+          "dd_error": 3.4711832579062307e-12
+        },
+        {
+          "h": 1e-06,
+          "dp_error": 5.173893994004436e-12,
+          "dd_error": 3.712669492902941e-12
+        }
+      ],
+      "acceptance": [
+        {
+          "criterion": "Isolated under spatial_experiments",
+          "required": "no planar / 6R coupling",
+          "observed": "package separate; no sixr import",
+          "status": "PASS"
+        },
+        {
+          "criterion": "Planar tests unchanged",
+          "required": "trusted suite green",
+          "observed": "fourbar/planar3r/validation + spatial: 76 passed",
+          "status": "PASS"
+        },
+        {
+          "criterion": "Positive/negative qualitative behavior",
+          "required": "Sprint matrix",
+          "observed": "all five PASS",
+          "status": "PASS"
+        },
+        {
+          "criterion": "Analytical vs FD",
+          "required": "convergence",
+          "observed": "O(h\u00b2) then mild round-off",
+          "status": "PASS"
+        },
+        {
+          "criterion": "Orientation roll without Euler subtraction",
+          "required": "relative R + probe atan2",
+          "observed": "max roll err ~1e-15 rad on aligned case",
+          "status": "PASS"
+        },
+        {
+          "criterion": "Explicit tolerances/units",
+          "required": "documented",
+          "observed": "metres / radians in manifests",
+          "status": "PASS"
+        },
+        {
+          "criterion": "Experiment manifests/summaries",
+          "required": "results/aligned_terminal_roll/<id>/",
+          "observed": "written",
+          "status": "PASS"
+        },
+        {
+          "criterion": "No 6R / spherical / continuation code",
+          "required": "deferred",
+          "observed": "not introduced",
+          "status": "PASS"
+        }
+      ],
+      "limitations": [
+        "Single revolute only; no serial-chain forward kinematics.",
+        "Does not test fixed-position Jacobian rank or quotient bases.",
+        "Finite-difference round-off appears near h \u2272 1e-6 rad.",
+        "Spherical four-bar / McCarthy-Soh work remains deferred."
+      ],
+      "next_stage": "Check-in 1 is approved. Next authorized stage: generic synthetic aligned-terminal 6R kernel and local rank/nullity checks. Compound-joint, UR-like, fiber, and spherical four-bar work remain blocked.",
+      "reproduce": [
+        "python scripts/validate_terminal_roll_fixture.py",
+        "python scripts/generate_atr_sprint01_readout.py"
+      ],
+      "fd_figure": "figures/fd_refinement_ATR_EXP_005.png",
+      "_dir": "sprint01_readout"
+    },
+    {
+      "title": "Sprint 02 \u2014 Generic aligned 6R",
+      "subtitle": "Stage A differential reduction",
+      "brand": "aligned terminal-roll",
+      "sprint_status": "Complete / Check-in 2 approved",
+      "milestone": "M2 \u2014 Two-dimensional reduction established",
+      "warning": "Check-in 2 is approved. This readout still does not authorize continuation, fibers, or spherical-four-bar work.",
+      "claim": "At regular aligned-terminal 6R configurations, rank(J_p)=3, rank(J_pd)=5 with ker(J_pd) aligned to e6, and rank(J_d N_red)=2.",
+      "pass_count": 5,
+      "experiment_count": 5,
+      "checkin_interpretation": "SUPPORTED",
+      "checkin_rationale": "For the GenericAligned6R skew reference chain, the named regular configuration and all 48 seeded configurations satisfy the expected local fixed-position and position-and-pointing ranks. Terminal roll is the sole task-kernel direction, and the quotient fixed-position tangent space has rank-two pointing motion. This establishes the numerical Stage A reference result but does not yet establish architecture independence or global continuation.",
+      "checkin_decision": "CONTINUE",
+      "human_gate_required": false,
+      "repository_commits": [
+        "ebea47784b478f8b52c38eda485de4d9066f4d7b"
+      ],
+      "experiments": [
+        {
+          "experiment_id": "ATR_EXP_006",
+          "title": "Regular configuration rank suite",
+          "status": "PASS",
+          "expected": "rank(J_p)=3, ker dim 3, J_pd rank 5 nullity 1 aligned to e6, rank(J_d N_red)=2",
+          "observed": "rank_jp=3, null_jp=3, rank_jpd=5, null_jpd=1, align=0.000e+00, rank_jd_nred=2",
+          "figures": [
+            "figures/ATR_EXP_006_ATR_EXP_006_singular_values.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_007",
+          "title": "Jacobian finite-difference refinement",
+          "status": "PASS",
+          "expected": "analytical vs central-FD Jacobian error converges over usable h",
+          "observed": "h=0.01: jp=1.528e-05, jd=2.853e-05; h=0.001: jp=1.528e-07, jd=2.853e-07; h=0.0001: jp=1.528e-09, jd=2.851e-09; h=1e-05: jp=1.824e-11, jd=3.119e-11; h=1e-06: jp=1.473e-10, jd=1.086e-10",
+          "figures": [
+            "figures/ATR_EXP_007_ATR_EXP_007_fd_refinement.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_008",
+          "title": "Full-chain terminal-roll check",
+          "status": "PASS",
+          "expected": "full-chain dp/dq6=0, dd/dq6=0, position/pointing invariant, roll recovers Delta q6",
+          "observed": "||J_p e6||=6.015e-17, ||J_d e6||=0.000e+00, |dp|=0.000e+00 m, |dd|=5.551e-17, roll_err=4.441e-16 rad, axis_mis=2.388e-16",
+          "figures": []
+        },
+        {
+          "experiment_id": "ATR_EXP_009",
+          "title": "Alignment negative controls",
+          "status": "PASS",
+          "expected": "off-axis p makes J_p e6 nonzero; misaligned d makes J_d e6 nonzero",
+          "observed": "off-axis ||J_p e6||=3.000e-02; misaligned ||J_d e6||=2.474e-01",
+          "figures": []
+        },
+        {
+          "experiment_id": "ATR_EXP_010",
+          "title": "Seeded survey and named near-singular sample",
+          "status": "PASS",
+          "expected": "regular subset supports C6-C8; named sample is singular or near-singular and labeled separately",
+          "observed": "survey regular=48/48, singular_jp=0, named rank_jp=3, named_sigma_ratio=1.431e-02, median_regular_sigma_ratio=2.240e-01",
+          "figures": [
+            "figures/ATR_EXP_010_ATR_EXP_010_survey_ranks.png"
+          ]
+        }
+      ],
+      "next_stage": "Check-in 2 is approved. Next authorized stage: architecture comparison (generic vs compound-joint vs UR-like). Continuation and spherical four-bars remain blocked.",
+      "reproduce": [
+        "python scripts/validate_aligned_6r_reduction.py",
+        "python scripts/generate_atr_sprint02_readout.py"
+      ],
+      "_dir": "sprint02_readout"
+    },
+    {
+      "title": "Sprint 03 \u2014 Architecture comparison",
+      "subtitle": "Stage A survival and local compound-joint probes",
+      "brand": "aligned terminal-roll",
+      "sprint_status": "Complete / Check-in 3 approved with changed scope",
+      "milestone": "M3 \u2014 Architecture comparison",
+      "warning": "Check-in 3 is approved with changed scope. ATR_EXP_013\u2013014 do not establish SUUR equivalence. Fibers, spherical four-bars, and exact UR remain blocked.",
+      "claim": "Stage A identities survive on IntersectingPairsAligned6R and URLikeAligned6R. On the intersecting-pair chain, literal UA/UB/RC grouping matches physical N_red locally by principal angles and short N_red steps.",
+      "pass_count": 5,
+      "experiment_count": 5,
+      "checkin_interpretation": "PARTIALLY SUPPORTED",
+      "checkin_rationale": "Stage A survives at the named regular configurations of GenericAligned6R, IntersectingPairsAligned6R, and URLikeAligned6R. ATR_EXP_013 and ATR_EXP_014 do not independently establish local compound-joint equivalence: the compound basis is the fixed-roll portion of the same physical J_p null space used to construct N_red. SUUR remains a proposed exact kinematic regrouping. IntersectingPairsAligned6R is the continuation benchmark because it instantiates the workshop architecture, not because those tests selected it.",
+      "checkin_decision": "CONTINUE WITH CHANGED SCOPE",
+      "human_gate_required": false,
+      "recommended_continuation_parent": "IntersectingPairsAligned6R",
+      "repository_commits": [
+        "1c7776c724971216cc7d0b404a28accdbb127880"
+      ],
+      "experiments": [
+        {
+          "experiment_id": "ATR_EXP_011",
+          "title": "Intersecting-pairs Stage A",
+          "status": "PASS",
+          "expected": "IntersectingPairsAligned6R Stage A C6\u2013C8; exact R1\u2229R2 and R3\u2229R4",
+          "observed": "regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, d_ua=0.000e+00, d_ub=0.000e+00",
+          "figures": [
+            "figures/ATR_EXP_011_ATR_EXP_011_singular_values.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_012",
+          "title": "UR-like Stage A",
+          "status": "PASS",
+          "expected": "URLikeAligned6R Stage A C6\u2013C8; exact R2\u2225R3 and R4\u2229R5\u2229R6",
+          "observed": "regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, elbow_par=0.000e+00, wrist=('0.000e+00', '0.000e+00', '0.000e+00')",
+          "figures": [
+            "figures/ATR_EXP_012_ATR_EXP_012_singular_values.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_013",
+          "title": "Compound-joint principal angles",
+          "status": "PASS",
+          "expected": "max principal angle(N_red, compound embed) <= 1e-08 rad",
+          "observed": "angles_rad=('0.000e+00', '0.000e+00'), max=0.000e+00",
+          "figures": [
+            "figures/ATR_EXP_013_ATR_EXP_013_principal_angles.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_014",
+          "title": "Local N_red step probes",
+          "status": "PASS",
+          "expected": "local 3 N_red steps keep ||p-p0|| <= 1e-10 m and pointing increments agree within 1e-08",
+          "observed": "max_p_residual_m=1.570e-16, max_pointing_diff=0.000e+00",
+          "figures": [
+            "figures/ATR_EXP_014_ATR_EXP_014_local_nred_steps.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_015",
+          "title": "Three-architecture comparison",
+          "status": "PASS",
+          "expected": "Stage A survives all three architectures; local C9 reported; continuation parent recorded but not auto-selected",
+          "observed": "stage_a_all=True, local_c9=True, recommended_parent=IntersectingPairsAligned6R, auto_selected=false",
+          "figures": [
+            "figures/ATR_EXP_015_ATR_EXP_015_architecture_comparison.png"
+          ]
+        }
+      ],
+      "next_stage": "Check-in 3 is approved with changed scope. Sprint 04: predictor-corrector continuation of p(q)=p0 with q6 constant on IntersectingPairsAligned6R, then URLikeAligned6R. Before interpreting continuation through SUUR, add an explicit coordinate-map/closure test, away-from-home pair persistence, a nonintersecting negative control, and committed source identifiers.",
+      "reproduce": [
+        "python scripts/validate_architecture_comparison.py",
+        "python scripts/generate_atr_sprint03_readout.py"
+      ],
+      "_dir": "sprint03_readout"
+    },
+    {
+      "title": "Sprint 04 \u2014 Pointing manifold",
+      "subtitle": "Local fixed-position continuation and discriminating SUUR tests",
+      "brand": "aligned terminal-roll",
+      "sprint_status": "Implementation complete / Check-in 4 draft",
+      "milestone": "M4 \u2014 Two-dimensional pointing surface",
+      "warning": "This readout does not authorize fibers, spherical four-bars, McCarthy\u2013Soh, or exact UR. Check-in 4 remains a human gate.",
+      "claim": "Predictor-corrector continuation of p(q)=p0 with q6 constant produces a local 2D regular subset with rank-two pointing motion. SUUR \u03c6 is defined exactly when intersecting-axis pairs persist, and the old N_red embedding test is non-discriminating.",
+      "pass_count": 5,
+      "experiment_count": 5,
+      "checkin_interpretation": "SUPPORTED",
+      "checkin_rationale": "Intersecting-pair distances persist away from home, \u03c6 is defined only on that geometry, and GenericAligned6R remains a negative control where the deprecated compound-tangent test still passes. Local continuation patches on IntersectingPairsAligned6R and URLikeAligned6R stay near p0 with rank-two pointing on the regular subset. This is a local C10 patch, not a fiber or spherical RRRR.",
+      "checkin_decision": "CONTINUE",
+      "human_gate_required": true,
+      "source_identifiers": [
+        "grashof_workspace.spatial_experiments.manifold_experiments:sprint04-v1"
+      ],
+      "repository_commits": [
+        "6f43611165e0e0c4a1436d336ca445d1b13a3f2e"
+      ],
+      "experiments": [
+        {
+          "experiment_id": "ATR_EXP_016",
+          "title": "Intersecting-pair persistence",
+          "status": "PASS",
+          "expected": "IntersectingPairsAligned6R pair distances remain 0 at regular and seeded q",
+          "observed": "named_ua=0.000e+00, named_ub=0.000e+00, seeded_max_ua=0.000e+00, seeded_max_ub=0.000e+00",
+          "figures": [
+            "figures/ATR_EXP_016_ATR_EXP_016_pair_persistence.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_017",
+          "title": "Nonintersecting negative control",
+          "status": "PASS",
+          "expected": "GenericAligned6R pairs do not intersect; \u03c6 undefined; old principal angles ~0",
+          "observed": "dist_ua=1.535e-02, dist_ub=1.386e-01, phi_defined=False, old_max_angle=0.000e+00",
+          "figures": [
+            "figures/ATR_EXP_017_ATR_EXP_017_negative_control.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_018",
+          "title": "SUUR coordinate map and closure",
+          "status": "PASS",
+          "expected": "\u03c6 defined on IntersectingPairsAligned6R; closure residuals below tolerance",
+          "observed": "defined=True, closed=True, pos_res=0.000e+00, extra_max_pos=0.000e+00",
+          "figures": [
+            "figures/ATR_EXP_018_ATR_EXP_018_closure_residuals.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_019",
+          "title": "Intersecting-pairs continuation patch",
+          "status": "PASS",
+          "expected": "IP continuation patch is locally 2D with rank-two pointing away from labeled singular samples; \u03c6 defined on the regular subset",
+          "observed": "regular=81/81, singular=0, failed=0, max_p=6.991e-15, reverse_err=0.000e+00, phi_regular=True",
+          "figures": [
+            "figures/ATR_EXP_019_ATR_EXP_019_pointing_patch.png"
+          ]
+        },
+        {
+          "experiment_id": "ATR_EXP_020",
+          "title": "UR-like continuation patch",
+          "status": "PASS",
+          "expected": "URLike continuation via the same API yields a local 2D regular subset; no SUUR map required",
+          "observed": "regular=81/81, singular=0, failed=0, max_p=9.845e-15, reverse_err=0.000e+00",
+          "figures": [
+            "figures/ATR_EXP_020_ATR_EXP_020_pointing_patch.png"
+          ]
+        }
+      ],
+      "next_stage": "Pending human Check-in 4. If approved, next stage is an explicit one-dimensional fiber constraint. Spherical RRRR and exact UR remain blocked.",
+      "reproduce": [
+        "python scripts/validate_pointing_manifold.py",
+        "python scripts/generate_atr_sprint04_readout.py"
+      ],
+      "_dir": "sprint04_readout"
+    }
+  ],
+  "checkins": [
+    {
+      "n": "1",
+      "milestone": "M1 Terminal-roll symmetry",
+      "interpretation": "SUPPORTED",
+      "decision": "CONTINUE",
+      "status": "Approved"
+    },
+    {
+      "n": "2",
+      "milestone": "M2 Two-dimensional reduction",
+      "interpretation": "SUPPORTED",
+      "decision": "CONTINUE",
+      "status": "Approved"
+    },
+    {
+      "n": "3",
+      "milestone": "M3 Architecture comparison",
+      "interpretation": "PARTIALLY SUPPORTED",
+      "decision": "CONTINUE WITH CHANGED SCOPE",
+      "status": "Approved"
+    },
+    {
+      "n": "4",
+      "milestone": "M4 Pointing manifold",
+      "interpretation": "SUPPORTED (draft)",
+      "decision": "CONTINUE (draft)",
+      "status": "Human gate"
+    }
+  ],
+  "blocked": [
+    "fibers / h(q)=c until Check-in 4",
+    "spherical RRRR",
+    "McCarthy\u2013Soh classification",
+    "exact UR / URDF / sixr_grashof"
+  ],
+  "reproduce": [
+    "python scripts/generate_atr_sprint01_readout.py",
+    "python scripts/generate_atr_sprint02_readout.py",
+    "python scripts/generate_atr_sprint03_readout.py",
+    "python scripts/generate_atr_sprint04_readout.py",
+    "python scripts/generate_atr_sprint01_04_printout.py"
+  ]
+}

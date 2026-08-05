@@ -1,0 +1,9 @@
+metric,value
+defined,True
+closed,True
+dist_ua_m,0.0
+dist_ub_m,0.0
+position_residual_m,0.0
+pointing_residual,0.0
+inverse_residual,0.0
+extra_max_position_residual_m,0.0

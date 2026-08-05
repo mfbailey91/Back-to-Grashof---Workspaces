@@ -1,0 +1,41 @@
+{
+  "experiment_id": "ATR_EXP_016",
+  "repository_commit": "6f43611165e0e0c4a1436d336ca445d1b13a3f2e",
+  "source_identifier": "grashof_workspace.spatial_experiments.manifold_experiments:sprint04-v1",
+  "status": "PASS",
+  "expected": "IntersectingPairsAligned6R pair distances remain 0 at regular and seeded q",
+  "observed": "named_ua=0.000e+00, named_ub=0.000e+00, seeded_max_ua=0.000e+00, seeded_max_ub=0.000e+00",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09,
+    "pair_distance_tol_m": 1e-12,
+    "position_residual_tol_m": 1e-10
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_016",
+    "status": "PASS",
+    "expected": "IntersectingPairsAligned6R pair distances remain 0 at regular and seeded q",
+    "observed": "named_ua=0.000e+00, named_ub=0.000e+00, seeded_max_ua=0.000e+00, seeded_max_ub=0.000e+00",
+    "metrics": {
+      "named_dist_ua_m": 0.0,
+      "named_dist_ub_m": 0.0,
+      "seeded_max_dist_ua_m": 0.0,
+      "seeded_max_dist_ub_m": 0.0,
+      "seed": 23,
+      "count": 24
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint04"
+}

@@ -3,8 +3,9 @@
 **Date:** 2026-08-04
 **Milestone:** M3 — Architecture comparison
 **Sprint(s):** Sprint 03 — Architecture comparison
+**Repository commit:** 6f43611
 **Decision owner:** Michael Bailey
-**Decision status:** Draft — awaiting human confirmation
+**Decision status:** Approved 2026-08-04
 
 ## 1. Claim under review
 
@@ -39,39 +40,47 @@ This check-in does **not** claim global continued equivalence, a 2D pointing man
 |---|---|---|
 | ATR_EXP_011 | intersecting-pairs Stage A | PASS |
 | ATR_EXP_012 | UR-like Stage A | PASS |
-| ATR_EXP_013 | principal angles vs compound embedding | PASS |
-| ATR_EXP_014 | local `N_red` steps | PASS |
+| ATR_EXP_013 | principal angles vs compound embedding | PASS (non-discriminating; see §4) |
+| ATR_EXP_014 | local `N_red` steps | PASS (non-discriminating; see §4) |
 | ATR_EXP_015 | three-architecture comparison | PASS |
 
 ## 4. Interpretation
 
-Select one:
+**PARTIALLY SUPPORTED**
 
-- `SUPPORTED`
+Stage A survives at the named regular configurations of `GenericAligned6R`, `IntersectingPairsAligned6R`, and `URLikeAligned6R`. The two new architectures satisfy the expected position, position-and-pointing, terminal-roll-kernel, and reduced-pointing ranks.
 
-Stage A survives on `GenericAligned6R`, `IntersectingPairsAligned6R`, and `URLikeAligned6R` at the named regular configurations. Local compound-joint embedding of the intersecting-pair chain matches physical `N_red` within the stated principal-angle tolerance, and short corrected steps keep `p` near `p0` with agreeing pointing increments. This establishes local C9 on the intersecting-pair architecture and architecture survival of Stage A. It does not establish global continued equivalence.
+The exact axis intersections and parallelisms of the synthetic architectures are also verified by construction.
+
+ATR_EXP_013 and ATR_EXP_014 do not independently establish local compound-joint equivalence. The current compound basis is the fixed-roll portion of the same physical position-Jacobian null space used to construct `N_red`; consequently, zero principal angles and identical short trajectories are expected from the terminal-roll quotient itself and do not depend on the `UA` and `UB` intersection structure.
+
+The `SUUR` grouping therefore remains a proposed exact kinematic regrouping that must be stated or implemented explicitly. Global continued equivalence and the two-dimensional pointing manifold remain untested.
 
 ## 5. Decision
 
-Select one (human gate):
+**CONTINUE WITH CHANGED SCOPE**
 
-- `CONTINUE`
-- `CONTINUE WITH CHANGED SCOPE`
-- `REPEAT EXPERIMENT`
-- `PIVOT`
-- `STOP THIS BRANCH`
+Authorize Sprint 04 pointing-manifold work on `IntersectingPairsAligned6R`, with `URLikeAligned6R` retained as a parallel architecture check.
 
-Recommended if approved: Sprint 04 local pointing-manifold continuation with parent `IntersectingPairsAligned6R` (workshop SUUR path). Retain `URLikeAligned6R` as a parallel check. **Not auto-selected.**
+Before interpreting continuation through the `SUUR` model, Sprint 04 must:
 
-Blocked work: fibers, spherical `RRRR`, McCarthy-Soh, exact UR / URDF / `sixr_grashof`.
+1. replace the non-discriminating compound-tangent tests with an explicit coordinate-map and closure-equivalence test;
+2. verify persistence of both intersecting-axis pairs away from the home configuration;
+3. add a nonintersecting negative control demonstrating that the previous basis comparison did not test compound geometry;
+4. regenerate experiment artifacts with a reproducible committed source identifier.
+
+`IntersectingPairsAligned6R` is selected as the controlled continuation benchmark because it directly instantiates the workshop architecture, not because ATR_EXP_013–014 empirically selected it over the UR-like model.
+
+Blocked work remains: fibers, spherical `RRRR`, McCarthy–Soh classification, and exact UR/URDF integration.
 
 ## 6. Next sprint recommendation
 
-If Check-in 3 is approved, implement predictor-corrector continuation of
+Implement predictor-corrector continuation of
 
 ```text
-p(q) = p0
-q6 held / quotiented
+p(q) = p0,    q6 = constant
 ```
 
-on `IntersectingPairsAligned6R`. Do not start spherical four-bar classification.
+first on `IntersectingPairsAligned6R` and then through the same continuation interface on `URLikeAligned6R`.
+
+The Sprint 04 exit gate is a stable two-dimensional fixed-position manifold with rank-two pointing motion away from explicitly identified singular sets.

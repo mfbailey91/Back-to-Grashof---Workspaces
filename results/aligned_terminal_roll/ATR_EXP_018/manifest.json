@@ -1,0 +1,43 @@
+{
+  "experiment_id": "ATR_EXP_018",
+  "repository_commit": "6f43611165e0e0c4a1436d336ca445d1b13a3f2e",
+  "source_identifier": "grashof_workspace.spatial_experiments.manifold_experiments:sprint04-v1",
+  "status": "PASS",
+  "expected": "\u03c6 defined on IntersectingPairsAligned6R; closure residuals below tolerance",
+  "observed": "defined=True, closed=True, pos_res=0.000e+00, extra_max_pos=0.000e+00",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09,
+    "pair_distance_tol_m": 1e-12,
+    "position_residual_tol_m": 1e-10
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_018",
+    "status": "PASS",
+    "expected": "\u03c6 defined on IntersectingPairsAligned6R; closure residuals below tolerance",
+    "observed": "defined=True, closed=True, pos_res=0.000e+00, extra_max_pos=0.000e+00",
+    "metrics": {
+      "defined": true,
+      "closed": true,
+      "dist_ua_m": 0.0,
+      "dist_ub_m": 0.0,
+      "position_residual_m": 0.0,
+      "pointing_residual": 0.0,
+      "inverse_residual": 0.0,
+      "extra_max_position_residual_m": 0.0
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint04"
+}

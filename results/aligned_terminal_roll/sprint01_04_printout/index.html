@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aligned terminal-roll — Sprints 01–04</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1b1f24;
+      --muted: #5b6570;
+      --line: #c9d1d9;
+      --panel: #f6f8fa;
+      --pass: #0f7b4c;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #fff;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; line-height: 1.45; }
+    .shell { max-width: 980px; margin: 0 auto; padding: 1.25rem 1.5rem 3rem; }
+    h1 { margin: 0.2rem 0 0.4rem; font-size: 1.85rem; }
+    h2 { margin: 1.4rem 0 0.4rem; font-size: 1.25rem; page-break-after: avoid; }
+    .muted, figcaption { color: var(--muted); font-size: 0.92rem; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin: 1rem 0; }
+    .stat { background: var(--panel); border: 1px solid var(--line); padding: 0.7rem 0.8rem; }
+    .stat b { display: block; font-size: 1.15rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; margin: 0.6rem 0 1rem; }
+    th, td { border: 1px solid var(--line); padding: 0.35rem 0.45rem; vertical-align: top; text-align: left; }
+    th { background: var(--panel); }
+    td.pass { color: var(--pass); font-weight: 600; }
+    .figures { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    figure { margin: 0; }
+    img { width: 100%; height: auto; border: 1px solid var(--line); background: #fff; }
+    .sprint { page-break-before: always; }
+    .sprint:first-of-type { page-break-before: auto; }
+    code { display: inline-block; background: var(--panel); border: 1px solid var(--line); padding: 0.15rem 0.4rem; margin: 0.15rem 0.25rem 0.15rem 0; font-size: 0.82rem; }
+    ul { margin-top: 0.3rem; }
+    @media print {
+      .shell { max-width: none; padding: 0; }
+      a { color: inherit; text-decoration: none; }
+      .sprint { break-before: page; }
+      .sprint:first-of-type { break-before: auto; }
+      img { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <p class="muted">aligned terminal-roll · 2026-08-04</p>
+    <h1>Aligned terminal-roll — Sprints 01–04</h1>
+    <p class="muted">Combined printable readout. Twenty experiments across four sprints. Check-in 4 remains a human gate.</p>
+    <section class="stats">
+      <div class="stat"><span class="muted">Experiments</span><b>20/20 PASS</b></div>
+      <div class="stat"><span class="muted">Sprints</span><b>01–04</b></div>
+      <div class="stat"><span class="muted">Approved gates</span><b>Check-ins 1–3</b></div>
+      <div class="stat"><span class="muted">Open gate</span><b>Check-in 4</b></div>
+    </section>
+    <h2>Check-in ledger</h2>
+    <table>
+      <thead><tr><th>#</th><th>Milestone</th><th>Interpretation</th><th>Decision</th><th>Status</th></tr></thead>
+      <tbody><tr><td>1</td><td>M1 Terminal-roll symmetry</td><td>SUPPORTED</td><td>CONTINUE</td><td>Approved</td></tr><tr><td>2</td><td>M2 Two-dimensional reduction</td><td>SUPPORTED</td><td>CONTINUE</td><td>Approved</td></tr><tr><td>3</td><td>M3 Architecture comparison</td><td>PARTIALLY SUPPORTED</td><td>CONTINUE WITH CHANGED SCOPE</td><td>Approved</td></tr><tr><td>4</td><td>M4 Pointing manifold</td><td>SUPPORTED (draft)</td><td>CONTINUE (draft)</td><td>Human gate</td></tr></tbody>
+    </table>
+    <h2>Still blocked</h2>
+    <ul><li>fibers / h(q)=c until Check-in 4</li><li>spherical RRRR</li><li>McCarthy–Soh classification</li><li>exact UR / URDF / sixr_grashof</li></ul>
+    
+            <section class="sprint">
+              <h2>Sprint 01 — Spatial Foundations</h2>
+              <p class="muted">Terminal-roll fixture · Complete · M1 — Terminal-roll symmetry established</p>
+              <p><strong>Check-in.</strong> SUPPORTED / CONTINUE</p>
+              <p>If p lies on R6 and d is parallel to w6, then dp/dq6 = 0 and dd/dq6 = 0, while full tool orientation changes by roll about d.</p>
+              <table>
+                <thead><tr><th>ID</th><th>Title</th><th>Status</th><th>Expected</th><th>Observed</th></tr></thead>
+                <tbody><tr><td>ATR_EXP_001</td><td>Aligned positive control</td><td class='pass'>PASS</td><td>position invariant; pointing invariant; roll recovers Delta q6</td><td>max|dp|=0.000e+00 m; max|dd|=0.000e+00; max roll err=1.332e-15 rad</td></tr><tr><td>ATR_EXP_002</td><td>Off-axis task point</td><td class='pass'>PASS</td><td>position changes; pointing invariant</td><td>position_changes=True; pointing_changes=False; max|dp|=4.000e-02 m</td></tr><tr><td>ATR_EXP_003</td><td>Misaligned pointing direction</td><td class='pass'>PASS</td><td>position invariant; pointing changes</td><td>position_changes=False; pointing_changes=True; max|dd|=3.973e-01</td></tr><tr><td>ATR_EXP_004</td><td>Combined alignment violation</td><td class='pass'>PASS</td><td>position and pointing both change</td><td>position_changes=True; pointing_changes=True</td></tr><tr><td>ATR_EXP_005</td><td>Finite-difference refinement</td><td class='pass'>PASS</td><td>analytical vs central-FD derivative error converges over usable h</td><td>h=0.01: dp_err=3.333e-07, dd_err=3.311e-06; h=0.001: dp_err=3.333e-09, dd_err=3.311e-08; h=0.0001: dp_err=3.336e-11, dd_err=3.312e-10; h=1e-05: dp_err=4.699e-13, dd_err=3.471e-12; h=1e-06: dp_err=5.174e-12, dd_err=3.713e-12</td></tr></tbody>
+              </table>
+              <div class='figures'><figure><img src='figures/ATR_EXP_001_residuals_ATR_EXP_001.png' alt='ATR_EXP_001' /><figcaption>ATR_EXP_001 — Aligned positive control</figcaption></figure><figure><img src='figures/ATR_EXP_002_residuals_ATR_EXP_002.png' alt='ATR_EXP_002' /><figcaption>ATR_EXP_002 — Off-axis task point</figcaption></figure><figure><img src='figures/ATR_EXP_003_residuals_ATR_EXP_003.png' alt='ATR_EXP_003' /><figcaption>ATR_EXP_003 — Misaligned pointing direction</figcaption></figure><figure><img src='figures/ATR_EXP_004_residuals_ATR_EXP_004.png' alt='ATR_EXP_004' /><figcaption>ATR_EXP_004 — Combined alignment violation</figcaption></figure><figure><img src='figures/ATR_EXP_005_residuals_ATR_EXP_005.png' alt='ATR_EXP_005' /><figcaption>ATR_EXP_005 — Finite-difference refinement</figcaption></figure></div>
+            </section>
+            
+            <section class="sprint">
+              <h2>Sprint 02 — Generic aligned 6R</h2>
+              <p class="muted">Stage A differential reduction · Complete / Check-in 2 approved · M2 — Two-dimensional reduction established</p>
+              <p><strong>Check-in.</strong> SUPPORTED / CONTINUE</p>
+              <p>For the GenericAligned6R skew reference chain, the named regular configuration and all 48 seeded configurations satisfy the expected local fixed-position and position-and-pointing ranks. Terminal roll is the sole task-kernel direction, and the quotient fixed-position tangent space has rank-two pointing motion. This establishes the numerical Stage A reference result but does not yet establish architecture independence or global continuation.</p>
+              <table>
+                <thead><tr><th>ID</th><th>Title</th><th>Status</th><th>Expected</th><th>Observed</th></tr></thead>
+                <tbody><tr><td>ATR_EXP_006</td><td>Regular configuration rank suite</td><td class='pass'>PASS</td><td>rank(J_p)=3, ker dim 3, J_pd rank 5 nullity 1 aligned to e6, rank(J_d N_red)=2</td><td>rank_jp=3, null_jp=3, rank_jpd=5, null_jpd=1, align=0.000e+00, rank_jd_nred=2</td></tr><tr><td>ATR_EXP_007</td><td>Jacobian finite-difference refinement</td><td class='pass'>PASS</td><td>analytical vs central-FD Jacobian error converges over usable h</td><td>h=0.01: jp=1.528e-05, jd=2.853e-05; h=0.001: jp=1.528e-07, jd=2.853e-07; h=0.0001: jp=1.528e-09, jd=2.851e-09; h=1e-05: jp=1.824e-11, jd=3.119e-11; h=1e-06: jp=1.473e-10, jd=1.086e-10</td></tr><tr><td>ATR_EXP_008</td><td>Full-chain terminal-roll check</td><td class='pass'>PASS</td><td>full-chain dp/dq6=0, dd/dq6=0, position/pointing invariant, roll recovers Delta q6</td><td>||J_p e6||=6.015e-17, ||J_d e6||=0.000e+00, |dp|=0.000e+00 m, |dd|=5.551e-17, roll_err=4.441e-16 rad, axis_mis=2.388e-16</td></tr><tr><td>ATR_EXP_009</td><td>Alignment negative controls</td><td class='pass'>PASS</td><td>off-axis p makes J_p e6 nonzero; misaligned d makes J_d e6 nonzero</td><td>off-axis ||J_p e6||=3.000e-02; misaligned ||J_d e6||=2.474e-01</td></tr><tr><td>ATR_EXP_010</td><td>Seeded survey and named near-singular sample</td><td class='pass'>PASS</td><td>regular subset supports C6-C8; named sample is singular or near-singular and labeled separately</td><td>survey regular=48/48, singular_jp=0, named rank_jp=3, named_sigma_ratio=1.431e-02, median_regular_sigma_ratio=2.240e-01</td></tr></tbody>
+              </table>
+              <div class='figures'><figure><img src='figures/ATR_EXP_006_ATR_EXP_006_singular_values.png' alt='ATR_EXP_006' /><figcaption>ATR_EXP_006 — Regular configuration rank suite</figcaption></figure><figure><img src='figures/ATR_EXP_007_ATR_EXP_007_fd_refinement.png' alt='ATR_EXP_007' /><figcaption>ATR_EXP_007 — Jacobian finite-difference refinement</figcaption></figure><figure><img src='figures/ATR_EXP_010_ATR_EXP_010_survey_ranks.png' alt='ATR_EXP_010' /><figcaption>ATR_EXP_010 — Seeded survey and named near-singular sample</figcaption></figure></div>
+            </section>
+            
+            <section class="sprint">
+              <h2>Sprint 03 — Architecture comparison</h2>
+              <p class="muted">Stage A survival and local compound-joint probes · Complete / Check-in 3 approved with changed scope · M3 — Architecture comparison</p>
+              <p><strong>Check-in.</strong> PARTIALLY SUPPORTED / CONTINUE WITH CHANGED SCOPE</p>
+              <p>Stage A survives at the named regular configurations of GenericAligned6R, IntersectingPairsAligned6R, and URLikeAligned6R. ATR_EXP_013 and ATR_EXP_014 do not independently establish local compound-joint equivalence: the compound basis is the fixed-roll portion of the same physical J_p null space used to construct N_red. SUUR remains a proposed exact kinematic regrouping. IntersectingPairsAligned6R is the continuation benchmark because it instantiates the workshop architecture, not because those tests selected it.</p>
+              <table>
+                <thead><tr><th>ID</th><th>Title</th><th>Status</th><th>Expected</th><th>Observed</th></tr></thead>
+                <tbody><tr><td>ATR_EXP_011</td><td>Intersecting-pairs Stage A</td><td class='pass'>PASS</td><td>IntersectingPairsAligned6R Stage A C6–C8; exact R1∩R2 and R3∩R4</td><td>regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, d_ua=0.000e+00, d_ub=0.000e+00</td></tr><tr><td>ATR_EXP_012</td><td>UR-like Stage A</td><td class='pass'>PASS</td><td>URLikeAligned6R Stage A C6–C8; exact R2∥R3 and R4∩R5∩R6</td><td>regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, elbow_par=0.000e+00, wrist=(&#x27;0.000e+00&#x27;, &#x27;0.000e+00&#x27;, &#x27;0.000e+00&#x27;)</td></tr><tr><td>ATR_EXP_013</td><td>Compound-joint principal angles</td><td class='pass'>PASS</td><td>max principal angle(N_red, compound embed) &lt;= 1e-08 rad</td><td>angles_rad=(&#x27;0.000e+00&#x27;, &#x27;0.000e+00&#x27;), max=0.000e+00</td></tr><tr><td>ATR_EXP_014</td><td>Local N_red step probes</td><td class='pass'>PASS</td><td>local 3 N_red steps keep ||p-p0|| &lt;= 1e-10 m and pointing increments agree within 1e-08</td><td>max_p_residual_m=1.570e-16, max_pointing_diff=0.000e+00</td></tr><tr><td>ATR_EXP_015</td><td>Three-architecture comparison</td><td class='pass'>PASS</td><td>Stage A survives all three architectures; local C9 reported; continuation parent recorded but not auto-selected</td><td>stage_a_all=True, local_c9=True, recommended_parent=IntersectingPairsAligned6R, auto_selected=false</td></tr></tbody>
+              </table>
+              <div class='figures'><figure><img src='figures/ATR_EXP_011_ATR_EXP_011_singular_values.png' alt='ATR_EXP_011' /><figcaption>ATR_EXP_011 — Intersecting-pairs Stage A</figcaption></figure><figure><img src='figures/ATR_EXP_012_ATR_EXP_012_singular_values.png' alt='ATR_EXP_012' /><figcaption>ATR_EXP_012 — UR-like Stage A</figcaption></figure><figure><img src='figures/ATR_EXP_013_ATR_EXP_013_principal_angles.png' alt='ATR_EXP_013' /><figcaption>ATR_EXP_013 — Compound-joint principal angles</figcaption></figure><figure><img src='figures/ATR_EXP_014_ATR_EXP_014_local_nred_steps.png' alt='ATR_EXP_014' /><figcaption>ATR_EXP_014 — Local N_red step probes</figcaption></figure><figure><img src='figures/ATR_EXP_015_ATR_EXP_015_architecture_comparison.png' alt='ATR_EXP_015' /><figcaption>ATR_EXP_015 — Three-architecture comparison</figcaption></figure></div>
+            </section>
+            
+            <section class="sprint">
+              <h2>Sprint 04 — Pointing manifold</h2>
+              <p class="muted">Local fixed-position continuation and discriminating SUUR tests · Implementation complete / Check-in 4 draft · M4 — Two-dimensional pointing surface</p>
+              <p><strong>Check-in.</strong> SUPPORTED / CONTINUE</p>
+              <p>Intersecting-pair distances persist away from home, φ is defined only on that geometry, and GenericAligned6R remains a negative control where the deprecated compound-tangent test still passes. Local continuation patches on IntersectingPairsAligned6R and URLikeAligned6R stay near p0 with rank-two pointing on the regular subset. This is a local C10 patch, not a fiber or spherical RRRR.</p>
+              <table>
+                <thead><tr><th>ID</th><th>Title</th><th>Status</th><th>Expected</th><th>Observed</th></tr></thead>
+                <tbody><tr><td>ATR_EXP_016</td><td>Intersecting-pair persistence</td><td class='pass'>PASS</td><td>IntersectingPairsAligned6R pair distances remain 0 at regular and seeded q</td><td>named_ua=0.000e+00, named_ub=0.000e+00, seeded_max_ua=0.000e+00, seeded_max_ub=0.000e+00</td></tr><tr><td>ATR_EXP_017</td><td>Nonintersecting negative control</td><td class='pass'>PASS</td><td>GenericAligned6R pairs do not intersect; φ undefined; old principal angles ~0</td><td>dist_ua=1.535e-02, dist_ub=1.386e-01, phi_defined=False, old_max_angle=0.000e+00</td></tr><tr><td>ATR_EXP_018</td><td>SUUR coordinate map and closure</td><td class='pass'>PASS</td><td>φ defined on IntersectingPairsAligned6R; closure residuals below tolerance</td><td>defined=True, closed=True, pos_res=0.000e+00, extra_max_pos=0.000e+00</td></tr><tr><td>ATR_EXP_019</td><td>Intersecting-pairs continuation patch</td><td class='pass'>PASS</td><td>IP continuation patch is locally 2D with rank-two pointing away from labeled singular samples; φ defined on the regular subset</td><td>regular=81/81, singular=0, failed=0, max_p=6.991e-15, reverse_err=0.000e+00, phi_regular=True</td></tr><tr><td>ATR_EXP_020</td><td>UR-like continuation patch</td><td class='pass'>PASS</td><td>URLike continuation via the same API yields a local 2D regular subset; no SUUR map required</td><td>regular=81/81, singular=0, failed=0, max_p=9.845e-15, reverse_err=0.000e+00</td></tr></tbody>
+              </table>
+              <div class='figures'><figure><img src='figures/ATR_EXP_016_ATR_EXP_016_pair_persistence.png' alt='ATR_EXP_016' /><figcaption>ATR_EXP_016 — Intersecting-pair persistence</figcaption></figure><figure><img src='figures/ATR_EXP_017_ATR_EXP_017_negative_control.png' alt='ATR_EXP_017' /><figcaption>ATR_EXP_017 — Nonintersecting negative control</figcaption></figure><figure><img src='figures/ATR_EXP_018_ATR_EXP_018_closure_residuals.png' alt='ATR_EXP_018' /><figcaption>ATR_EXP_018 — SUUR coordinate map and closure</figcaption></figure><figure><img src='figures/ATR_EXP_019_ATR_EXP_019_pointing_patch.png' alt='ATR_EXP_019' /><figcaption>ATR_EXP_019 — Intersecting-pairs continuation patch</figcaption></figure><figure><img src='figures/ATR_EXP_020_ATR_EXP_020_pointing_patch.png' alt='ATR_EXP_020' /><figcaption>ATR_EXP_020 — UR-like continuation patch</figcaption></figure></div>
+            </section>
+            
+    <section>
+      <h2>Reproduce</h2>
+      <p><code>python scripts/generate_atr_sprint01_readout.py</code><code>python scripts/generate_atr_sprint02_readout.py</code><code>python scripts/generate_atr_sprint03_readout.py</code><code>python scripts/generate_atr_sprint04_readout.py</code><code>python scripts/generate_atr_sprint01_04_printout.py</code></p>
+    </section>
+  </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "experiment_id": "ATR_EXP_019",
+  "repository_commit": "6f43611165e0e0c4a1436d336ca445d1b13a3f2e",
+  "source_identifier": "grashof_workspace.spatial_experiments.manifold_experiments:sprint04-v1",
+  "status": "PASS",
+  "expected": "IP continuation patch is locally 2D with rank-two pointing away from labeled singular samples; \u03c6 defined on the regular subset",
+  "observed": "regular=81/81, singular=0, failed=0, max_p=6.991e-15, reverse_err=0.000e+00, phi_regular=True",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09,
+    "pair_distance_tol_m": 1e-12,
+    "position_residual_tol_m": 1e-10
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_019",
+    "status": "PASS",
+    "expected": "IP continuation patch is locally 2D with rank-two pointing away from labeled singular samples; \u03c6 defined on the regular subset",
+    "observed": "regular=81/81, singular=0, failed=0, max_p=6.991e-15, reverse_err=0.000e+00, phi_regular=True",
+    "metrics": {
+      "ok": true,
+      "n_samples": 81,
+      "n_regular": 81,
+      "n_singular": 0,
+      "n_failed": 0,
+      "max_regular_p_residual_m": 6.9908796491407646e-15,
+      "reverse_return_error": 0.0,
+      "pair_ok": true,
+      "phi_defined_on_regular": true,
+      "suur_interpreted": true
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "chart": {
+      "ds": 0.03,
+      "dt": 0.03,
+      "ns": 9,
+      "nt": 9
+    },
+    "n_samples": 81
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint04"
+}

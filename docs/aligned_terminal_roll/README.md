@@ -45,4 +45,4 @@ In particular:
 
 ## Current next action
 
-Hold Check-in 3 on the architecture-comparison packet (`CHECKIN_03_ARCHITECTURE_COMPARISON.md`) before pointing-manifold continuation.
+Hold Check-in 4 on the pointing-manifold packet (`CHECKIN_04_POINTING_MANIFOLD.md`) before fiber construction.

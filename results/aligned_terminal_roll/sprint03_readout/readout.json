@@ -2,16 +2,16 @@
   "title": "Sprint 03 \u2014 Architecture comparison",
   "subtitle": "Stage A survival and local compound-joint probes",
   "brand": "aligned terminal-roll",
-  "sprint_status": "Implementation complete / Check-in 3 draft",
+  "sprint_status": "Complete / Check-in 3 approved with changed scope",
   "milestone": "M3 \u2014 Architecture comparison",
-  "warning": "This readout does not authorize pointing-manifold continuation, fibers, spherical four-bars, or exact UR. Check-in 3 remains a human gate.",
+  "warning": "Check-in 3 is approved with changed scope. ATR_EXP_013\u2013014 do not establish SUUR equivalence. Fibers, spherical four-bars, and exact UR remain blocked.",
   "claim": "Stage A identities survive on IntersectingPairsAligned6R and URLikeAligned6R. On the intersecting-pair chain, literal UA/UB/RC grouping matches physical N_red locally by principal angles and short N_red steps.",
   "pass_count": 5,
   "experiment_count": 5,
-  "checkin_interpretation": "SUPPORTED",
-  "checkin_rationale": "Stage A holds at the named regular configurations of GenericAligned6R, IntersectingPairsAligned6R, and URLikeAligned6R. Local compound-joint embedding of the intersecting-pair chain matches physical N_red within the stated principal-angle tolerance, and short corrected N_red steps keep position near p0 with agreeing pointing increments. This is a local C9 result only. It does not establish global continued equivalence or select a continuation parent automatically.",
-  "checkin_decision": "CONTINUE",
-  "human_gate_required": true,
+  "checkin_interpretation": "PARTIALLY SUPPORTED",
+  "checkin_rationale": "Stage A survives at the named regular configurations of GenericAligned6R, IntersectingPairsAligned6R, and URLikeAligned6R. ATR_EXP_013 and ATR_EXP_014 do not independently establish local compound-joint equivalence: the compound basis is the fixed-roll portion of the same physical J_p null space used to construct N_red. SUUR remains a proposed exact kinematic regrouping. IntersectingPairsAligned6R is the continuation benchmark because it instantiates the workshop architecture, not because those tests selected it.",
+  "checkin_decision": "CONTINUE WITH CHANGED SCOPE",
+  "human_gate_required": false,
   "recommended_continuation_parent": "IntersectingPairsAligned6R",
   "repository_commits": [
     "1c7776c724971216cc7d0b404a28accdbb127880"
@@ -68,7 +68,7 @@
       ]
     }
   ],
-  "next_stage": "Pending human Check-in 3. If approved, next stage is local pointing-manifold continuation on the recommended intersecting-pairs parent, with UR-like retained as a parallel check. Fibers, spherical RRRR, and exact UR remain blocked.",
+  "next_stage": "Check-in 3 is approved with changed scope. Sprint 04: predictor-corrector continuation of p(q)=p0 with q6 constant on IntersectingPairsAligned6R, then URLikeAligned6R. Before interpreting continuation through SUUR, add an explicit coordinate-map/closure test, away-from-home pair persistence, a nonintersecting negative control, and committed source identifiers.",
   "reproduce": [
     "python scripts/validate_architecture_comparison.py",
     "python scripts/generate_atr_sprint03_readout.py"

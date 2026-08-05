@@ -1,0 +1,78 @@
+{
+  "title": "Sprint 04 \u2014 Pointing manifold",
+  "subtitle": "Local fixed-position continuation and discriminating SUUR tests",
+  "brand": "aligned terminal-roll",
+  "sprint_status": "Implementation complete / Check-in 4 draft",
+  "milestone": "M4 \u2014 Two-dimensional pointing surface",
+  "warning": "This readout does not authorize fibers, spherical four-bars, McCarthy\u2013Soh, or exact UR. Check-in 4 remains a human gate.",
+  "claim": "Predictor-corrector continuation of p(q)=p0 with q6 constant produces a local 2D regular subset with rank-two pointing motion. SUUR \u03c6 is defined exactly when intersecting-axis pairs persist, and the old N_red embedding test is non-discriminating.",
+  "pass_count": 5,
+  "experiment_count": 5,
+  "checkin_interpretation": "SUPPORTED",
+  "checkin_rationale": "Intersecting-pair distances persist away from home, \u03c6 is defined only on that geometry, and GenericAligned6R remains a negative control where the deprecated compound-tangent test still passes. Local continuation patches on IntersectingPairsAligned6R and URLikeAligned6R stay near p0 with rank-two pointing on the regular subset. This is a local C10 patch, not a fiber or spherical RRRR.",
+  "checkin_decision": "CONTINUE",
+  "human_gate_required": true,
+  "source_identifiers": [
+    "grashof_workspace.spatial_experiments.manifold_experiments:sprint04-v1"
+  ],
+  "repository_commits": [
+    "6f43611165e0e0c4a1436d336ca445d1b13a3f2e"
+  ],
+  "experiments": [
+    {
+      "experiment_id": "ATR_EXP_016",
+      "title": "Intersecting-pair persistence",
+      "status": "PASS",
+      "expected": "IntersectingPairsAligned6R pair distances remain 0 at regular and seeded q",
+      "observed": "named_ua=0.000e+00, named_ub=0.000e+00, seeded_max_ua=0.000e+00, seeded_max_ub=0.000e+00",
+      "figures": [
+        "figures/ATR_EXP_016_pair_persistence.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_017",
+      "title": "Nonintersecting negative control",
+      "status": "PASS",
+      "expected": "GenericAligned6R pairs do not intersect; \u03c6 undefined; old principal angles ~0",
+      "observed": "dist_ua=1.535e-02, dist_ub=1.386e-01, phi_defined=False, old_max_angle=0.000e+00",
+      "figures": [
+        "figures/ATR_EXP_017_negative_control.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_018",
+      "title": "SUUR coordinate map and closure",
+      "status": "PASS",
+      "expected": "\u03c6 defined on IntersectingPairsAligned6R; closure residuals below tolerance",
+      "observed": "defined=True, closed=True, pos_res=0.000e+00, extra_max_pos=0.000e+00",
+      "figures": [
+        "figures/ATR_EXP_018_closure_residuals.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_019",
+      "title": "Intersecting-pairs continuation patch",
+      "status": "PASS",
+      "expected": "IP continuation patch is locally 2D with rank-two pointing away from labeled singular samples; \u03c6 defined on the regular subset",
+      "observed": "regular=81/81, singular=0, failed=0, max_p=6.991e-15, reverse_err=0.000e+00, phi_regular=True",
+      "figures": [
+        "figures/ATR_EXP_019_pointing_patch.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_020",
+      "title": "UR-like continuation patch",
+      "status": "PASS",
+      "expected": "URLike continuation via the same API yields a local 2D regular subset; no SUUR map required",
+      "observed": "regular=81/81, singular=0, failed=0, max_p=9.845e-15, reverse_err=0.000e+00",
+      "figures": [
+        "figures/ATR_EXP_020_pointing_patch.png"
+      ]
+    }
+  ],
+  "next_stage": "Pending human Check-in 4. If approved, next stage is an explicit one-dimensional fiber constraint. Spherical RRRR and exact UR remain blocked.",
+  "reproduce": [
+    "python scripts/validate_pointing_manifold.py",
+    "python scripts/generate_atr_sprint04_readout.py"
+  ]
+}

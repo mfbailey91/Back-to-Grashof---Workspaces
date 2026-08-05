@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 04 — Pointing manifold</title>
+  <style>
+    :root {
+      --bg0:#10151b; --bg1:#182028; --panel:#24303c; --ink:#e8eef4; --muted:#9aa8b5;
+      --line:#3a4a5a; --teal:#2a9d8f; --amber:#e9a319; --good:#3cbf9a;
+      font-family:"IBM Plex Sans","Segoe UI",sans-serif; color:var(--ink);
+      background: radial-gradient(ellipse 80% 50% at 10% -10%, #243a28 0%, transparent 55%),
+                  linear-gradient(160deg, var(--bg0), var(--bg1));
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; line-height:1.5; padding-bottom:3rem; }
+    .shell { max-width:1100px; margin:0 auto; padding:1.5rem; }
+    .brand { color:var(--teal); letter-spacing:.04em; font-size:.85rem; text-transform:uppercase; }
+    h1 { margin:.35rem 0 .6rem; font-size:2rem; }
+    .lead,.muted { color:var(--muted); }
+    .warning { border-left:3px solid var(--amber); background:rgba(233,163,25,.08); padding:.75rem 1rem; }
+    .claim,.card,.stat { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:1rem; margin:1rem 0; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:.75rem; }
+    .stat { margin:0; }
+    .badge.pass { color:var(--good); border:1px solid var(--good); border-radius:999px; padding:.15rem .55rem; font-size:.75rem; }
+    img { max-width:100%; height:auto; border-radius:6px; background:#0b1014; margin-top:.6rem; }
+    code { display:inline-block; background:#0b1014; border:1px solid var(--line); border-radius:4px; padding:.2rem .45rem; margin:.2rem .35rem .2rem 0; }
+    footer { color:var(--muted); margin-top:2rem; font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">aligned terminal-roll</div>
+    <h1>Sprint 04 — Pointing manifold</h1>
+    <p class="lead">Local fixed-position continuation and discriminating SUUR tests · Implementation complete / Check-in 4 draft · M4 — Two-dimensional pointing surface</p>
+    <p class="warning">This readout does not authorize fibers, spherical four-bars, McCarthy–Soh, or exact UR. Check-in 4 remains a human gate.</p>
+    <section class="claim"><strong>Claim under test.</strong><p>Predictor-corrector continuation of p(q)=p0 with q6 constant produces a local 2D regular subset with rank-two pointing motion. SUUR φ is defined exactly when intersecting-axis pairs persist, and the old N_red embedding test is non-discriminating.</p></section>
+    <section class="claim"><strong>Check-in 4 interpretation.</strong> SUPPORTED.
+      <p>Intersecting-pair distances persist away from home, φ is defined only on that geometry, and GenericAligned6R remains a negative control where the deprecated compound-tangent test still passes. Local continuation patches on IntersectingPairsAligned6R and URLikeAligned6R stay near p0 with rank-two pointing on the regular subset. This is a local C10 patch, not a fiber or spherical RRRR.</p></section>
+    <section class="stats">
+      <div class="stat"><div class="muted">Experiments</div><div>5/5 PASS</div></div>
+      <div class="stat"><div class="muted">Check-in 4</div><div>SUPPORTED</div></div>
+      <div class="stat"><div class="muted">Decision</div><div>CONTINUE</div><div class="muted">human gate still required</div></div>
+    </section>
+    <h2>Experiments</h2>
+    
+            <article class="card">
+              <h3>ATR_EXP_016 — Intersecting-pair persistence
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> IntersectingPairsAligned6R pair distances remain 0 at regular and seeded q</p>
+              <p><strong>Observed.</strong> named_ua=0.000e+00, named_ub=0.000e+00, seeded_max_ua=0.000e+00, seeded_max_ub=0.000e+00</p>
+              <img src="figures/ATR_EXP_016_pair_persistence.png" alt="ATR_EXP_016 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_017 — Nonintersecting negative control
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> GenericAligned6R pairs do not intersect; φ undefined; old principal angles ~0</p>
+              <p><strong>Observed.</strong> dist_ua=1.535e-02, dist_ub=1.386e-01, phi_defined=False, old_max_angle=0.000e+00</p>
+              <img src="figures/ATR_EXP_017_negative_control.png" alt="ATR_EXP_017 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_018 — SUUR coordinate map and closure
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> φ defined on IntersectingPairsAligned6R; closure residuals below tolerance</p>
+              <p><strong>Observed.</strong> defined=True, closed=True, pos_res=0.000e+00, extra_max_pos=0.000e+00</p>
+              <img src="figures/ATR_EXP_018_closure_residuals.png" alt="ATR_EXP_018 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_019 — Intersecting-pairs continuation patch
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> IP continuation patch is locally 2D with rank-two pointing away from labeled singular samples; φ defined on the regular subset</p>
+              <p><strong>Observed.</strong> regular=81/81, singular=0, failed=0, max_p=6.991e-15, reverse_err=0.000e+00, phi_regular=True</p>
+              <img src="figures/ATR_EXP_019_pointing_patch.png" alt="ATR_EXP_019 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_020 — UR-like continuation patch
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> URLike continuation via the same API yields a local 2D regular subset; no SUUR map required</p>
+              <p><strong>Observed.</strong> regular=81/81, singular=0, failed=0, max_p=9.845e-15, reverse_err=0.000e+00</p>
+              <img src="figures/ATR_EXP_020_pointing_patch.png" alt="ATR_EXP_020 figure" />
+            </article>
+            
+    <h2>Next stage</h2>
+    <div class="card"><p>Pending human Check-in 4. If approved, next stage is an explicit one-dimensional fiber constraint. Spherical RRRR and exact UR remain blocked.</p></div>
+    <footer><p>Reproduce: <code>python scripts/validate_pointing_manifold.py</code><code>python scripts/generate_atr_sprint04_readout.py</code></p><p>Manifest commits: 6f43611165e0</p><p>Source identifiers: grashof_workspace.spatial_experiments.manifold_experiments:sprint04-v1</p></footer>
+  </div>
+</body>
+</html>

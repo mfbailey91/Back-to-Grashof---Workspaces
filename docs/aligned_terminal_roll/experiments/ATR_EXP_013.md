@@ -35,5 +35,6 @@ python scripts/validate_architecture_comparison.py
 
 ## 6. Interpretation
 
-- `PASS` supports local C9 on this architecture only.
-- This is not a global continuation-equivalence claim.
+- `PASS` numerically, but Check-in 3 rules the test **non-discriminating**.
+- Zero principal angles are expected from the terminal-roll quotient itself and do not test `UA`/`UB` intersection structure.
+- Do not treat this as independent local C9 / `SUUR` evidence.

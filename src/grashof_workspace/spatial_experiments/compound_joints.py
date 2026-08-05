@@ -1,18 +1,12 @@
-"""Local compound-joint grouping and reduced-tangent probes.
+"""Deprecated non-discriminating compound-tangent probes.
 
-Conventions
------------
-On ``IntersectingPairsAligned6R`` only::
+These helpers compare ``ker(J_p[:, :5])`` to ``N_red``. That comparison is the
+terminal-roll quotient and does **not** test ``UA``/``UB`` intersection
+geometry (Check-in 3 / ADR 002). Keep them only as a negative-control
+oracle showing that skew chains still produce zero principal angles.
 
-    UA = (R1, R2)   UB = (R3, R4)   RC = R5   roll = R6
-
-Reduced coordinates are ``(q1…q5)`` with ``q6`` held at the sample value
-(quotient). Compound tangent vectors are embedded in ``R^6`` as
-``(v1…v5, 0)`` after removing any residual ``e6`` component.
-
-Local continued-motion probes take a few explicit Euler steps along a unit
-``N_red`` direction with an optional Newton corrector on ``p(q)=p0`` only.
-This is not a predictor-corrector manifold solver.
+Discriminating SUUR tests live in ``suur_coordinates.py``. Predictor-corrector
+continuation lives in ``continuation.py``.
 """
 
 from __future__ import annotations

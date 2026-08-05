@@ -13,8 +13,8 @@
 | A04 | Regular 6R fixed-position set has dimension 3 | mathematical | `J_p` SVD survey | reduction premise changes locally | VERIFIED |
 | A05 | Terminal roll is the only kernel direction of `(p,d)` at regular poses | mathematical | `J_pd` SVD and kernel alignment | additional self-motion or degeneracy exists | VERIFIED |
 | A06 | Reduced pointing tangent has rank 2 | mathematical | `rank(J_d N_red)` | local pointing coverage degenerates | VERIFIED |
-| A07 | Two intersecting physical axis pairs admit a useful compound-joint representation | modeling | tangent and continuation comparison | `SUUR`/related shorthand rejected | CONSTRAINED (local tangent / short steps only; continuation still open) |
-| A08 | UR-like ordering preserves the reduction | architecture | synthetic comparison | result is narrower than typical UR-like arms | CONSTRAINED (Stage A on synthetic UR-like only; not exact UR) |
+| A07 | Two intersecting physical axis pairs admit a useful compound-joint representation | modeling | explicit coordinate-map, closure equivalence, pair persistence, and negative control | `SUUR`/related shorthand rejected | CONSTRAINED (local φ definedness and pair persistence only; not an independent SUUR mechanism solver) |
+| A08 | UR-like ordering preserves the reduction | architecture | synthetic comparison | result is narrower than typical UR-like arms | CONSTRAINED (Stage A and local C10 patch on synthetic UR-like only; not exact UR) |
 | A09 | A nonarbitrary scalar fiber constraint exists | research | constrained-rank and coordinate-invariance tests | spherical-fiber program stops |
 | A10 | A useful fiber has four globally concurrent axes | research | branch-wide concurrency residual | spherical `RRRR` rejected |
 | A11 | Spherical arc dimensions remain fixed | research | branch-wide angular invariants | only instantaneous quadrilateral exists |
@@ -29,9 +29,9 @@
 | R02 | Rank threshold misclassifies near-singular cases | High | High | publish singular values; threshold sensitivity | conclusion changes with threshold | MITIGATED |
 | R03 | Finite-difference scale masks implementation error | Medium | Medium | multi-step convergence study | no stable error plateau | MITIGATED |
 | R04 | Transform-order bug preserves one fixture accidentally | Medium | High | independent geometric and numerical oracles | analytical/numerical disagreement | MITIGATED |
-| R05 | Continuation jumps branches | High | High | predictor-corrector diagnostics, reverse runs, branch IDs | discontinuous configuration jump | OPEN |
+| R05 | Continuation jumps branches | High | High | predictor-corrector diagnostics, reverse runs, branch IDs | discontinuous configuration jump | MITIGATED (local reverse-run on Sprint 04 patches; global branching still open) |
 | R06 | Coordinate fixing creates an artificial fiber | High | High | prefer task-space constraint; compare parameterizations | fiber disappears under reparameterization | OPEN |
-| R07 | Mobility count is mistaken for equivalence | Medium | High | require tangent and continued-motion tests | matching count but mismatched motion | MITIGATED (local principal-angle and step probes; global continuation still open) |
+| R07 | Mobility count is mistaken for equivalence | Medium | High | require discriminating coordinate-map and continued-motion tests | matching count but mismatched motion | MITIGATED (negative control plus φ definedness; independent SUUR solver still absent) |
 | R08 | Spherical candidate passes only at one pose | High | High | branch-wide concurrency and arc tests | residual grows under continuation | OPEN |
 | R09 | Spatial work destabilizes planar v0.2 | Low | High | isolated package and tests; no planar API edits | planar regressions | MITIGATED |
 | R10 | Scope expands into URDFs before reduction is established | Medium | Medium | milestone authorization gates | exact robot work begins before M5/M7 | OPEN |

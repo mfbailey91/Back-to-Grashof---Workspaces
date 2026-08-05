@@ -59,7 +59,9 @@ def test_runner_and_readout(tmp_path: Path) -> None:
     assert all(r["status"] == "PASS" for r in results)
     results_root = repo / "results" / "aligned_terminal_roll"
     payload = assemble_sprint03_payload(results_root)
-    assert payload["human_gate_required"] is True
+    assert payload["human_gate_required"] is False
+    assert payload["checkin_interpretation"] == "PARTIALLY SUPPORTED"
+    assert payload["checkin_decision"] == "CONTINUE WITH CHANGED SCOPE"
     assert payload["warning"] == M3_WARNING
     out = tmp_path / "sprint03_readout"
     written = write_sprint03_readout(results_root, out)
@@ -68,5 +70,6 @@ def test_runner_and_readout(tmp_path: Path) -> None:
     assert dumped["pass_count"] == written["pass_count"] == 5
     for exp_id in S3_IDS:
         assert exp_id in html
-    assert "Check-in 3 remains a human gate" in html
+    assert "Check-in 3 is approved with changed scope" in html
+    assert "do not establish SUUR equivalence" in html
     assert "IntersectingPairsAligned6R" in html

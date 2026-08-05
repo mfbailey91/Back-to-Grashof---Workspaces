@@ -62,7 +62,7 @@ Implement the minimum full serial-chain kernel and verify:
 
 ## Phase 3 — Architecture comparison
 
-**Status:** `COMPLETE` pending Check-in 3
+**Status:** `COMPLETE`
 
 Compare:
 
@@ -70,26 +70,26 @@ Compare:
 2. literal compound-joint synthetic representation;
 3. synthetic UR-like shoulder-elbow-wrist chain.
 
-Evaluate local mechanism order rather than relying only on mobility count. Sprint 03 answers local Stage A survival and local C9 only.
+Evaluate local mechanism order rather than relying only on mobility count. Sprint 03 established Stage A survival on all three architectures. ATR_EXP_013–014 are non-discriminating for `SUUR` equivalence.
 
-**Check-in 3:** Draft. Local evidence supports `IntersectingPairsAligned6R` as the continuation parent, with UR-like retained as a parallel check. Global continued equivalence remains Phase 4.
+**Check-in 3:** Approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`). `IntersectingPairsAligned6R` is the controlled continuation benchmark because it instantiates the workshop architecture. `SUUR` remains a proposed regrouping until explicit coordinate-map and closure tests exist.
 
 ---
 
 ## Phase 4 — Fixed-position pointing manifold
 
-**Status:** `BLOCKED` by Phase 2 and Phase 3
+**Status:** `COMPLETE` pending Check-in 4
 
 Implement predictor-corrector continuation for:
 
 ```text
 p(q) = p0
-q6 = 0
+q6 = constant
 ```
 
-Produce a local two-parameter manifold and map it to `S2`.
+Produce a local two-parameter manifold and map it to `S2`. Include discriminating SUUR tests before reading the patch through compound coordinates.
 
-**Check-in 4:** Does the parent remain two-dimensional and provide independent pointing motions away from singular sets?
+**Check-in 4:** Draft. Local patches exist on intersecting-pairs and UR-like models; singular samples are labeled separately.
 
 ---
 

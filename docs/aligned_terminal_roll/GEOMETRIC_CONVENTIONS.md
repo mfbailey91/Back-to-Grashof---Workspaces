@@ -157,7 +157,43 @@ Use these terms consistently:
 
 Do not call a result global when it is based on a single continued branch.
 
-## 10. Naming
+## 10. SUUR coordinate map and pair persistence
+
+Workshop grouping on an intersecting-pair 6R:
+
+```text
+UA = (R1, R2)   UB = (R3, R4)   RC = R5   roll = R6
+θ = (α1, α2, β1, β2, γ)
+φ(θ; q6*) = (α1, α2, β1, β2, γ, q6*)
+```
+
+`φ` is defined only when current-axis pairwise distances satisfy
+
+```text
+dist(R1, R2) = 0
+dist(R3, R4) = 0
+```
+
+with
+
+```text
+dist(A, B) = ||(r_B - r_A) · (w_A × w_B)|| / ||w_A × w_B||
+```
+
+for non-parallel axes, else the parallel transverse offset. Consecutive home-intersecting serial axes remain intersecting at every configuration (pair persistence). A map that ignores this definedness test and compares `ker(J_p[:,:5])` to `N_red` is the terminal-roll quotient, not a compound-joint test.
+
+## 11. Fixed-position continuation residual
+
+Local pointing-manifold continuation uses
+
+```text
+F(q) = p(q) - p0 ∈ R³
+q6 = q6*
+```
+
+Predictor steps lie in `N_red`. The corrector is Newton on `F(q)=0` with `q6` frozen. A regular sample on the local patch satisfies the Stage A ranks, including `rank(J_d N_red)=2`. This is not a fiber (`h(q)=c`) and not a spherical `RRRR`.
+
+## 12. Naming
 
 - use `aligned terminal roll`, not merely `intersecting terminal axis`;
 - use `redundant 7R`, not `over-defined 7R`;
