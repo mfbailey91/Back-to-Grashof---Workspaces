@@ -1,4 +1,4 @@
-"""Sprint 02 HTML readout assembly."""
+"""Sprint 03 HTML readout assembly."""
 
 from __future__ import annotations
 
@@ -8,39 +8,43 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
-S2_IDS = (
-    "ATR_EXP_006",
-    "ATR_EXP_007",
-    "ATR_EXP_008",
-    "ATR_EXP_009",
-    "ATR_EXP_010",
+S3_IDS = (
+    "ATR_EXP_011",
+    "ATR_EXP_012",
+    "ATR_EXP_013",
+    "ATR_EXP_014",
+    "ATR_EXP_015",
 )
 
-S2_TITLES = {
-    "ATR_EXP_006": "Regular configuration rank suite",
-    "ATR_EXP_007": "Jacobian finite-difference refinement",
-    "ATR_EXP_008": "Full-chain terminal-roll check",
-    "ATR_EXP_009": "Alignment negative controls",
-    "ATR_EXP_010": "Seeded survey and named near-singular sample",
+S3_TITLES = {
+    "ATR_EXP_011": "Intersecting-pairs Stage A",
+    "ATR_EXP_012": "UR-like Stage A",
+    "ATR_EXP_013": "Compound-joint principal angles",
+    "ATR_EXP_014": "Local N_red step probes",
+    "ATR_EXP_015": "Three-architecture comparison",
 }
 
-M2_WARNING = (
-    "Check-in 2 is approved. This readout still does not authorize continuation, "
-    "fibers, or spherical-four-bar work."
+M3_WARNING = (
+    "This readout does not authorize pointing-manifold continuation, fibers, "
+    "spherical four-bars, or exact UR. Check-in 3 remains a human gate."
 )
 
 
-def assemble_sprint02_payload(results_root: Path) -> dict[str, Any]:
+def assemble_sprint03_payload(results_root: Path) -> dict[str, Any]:
     experiments = []
     commits: list[str] = []
-    for exp_id in S2_IDS:
+    for exp_id in S3_IDS:
         manifest = json.loads((results_root / exp_id / "manifest.json").read_text(encoding="utf-8"))
         commits.append(str(manifest.get("repository_commit", "unknown")))
-        figures = sorted((results_root / exp_id / "figures").glob("*.png")) if (results_root / exp_id / "figures").is_dir() else []
+        figures = (
+            sorted((results_root / exp_id / "figures").glob("*.png"))
+            if (results_root / exp_id / "figures").is_dir()
+            else []
+        )
         experiments.append(
             {
                 "experiment_id": exp_id,
-                "title": S2_TITLES[exp_id],
+                "title": S3_TITLES[exp_id],
                 "status": manifest["status"],
                 "expected": manifest["expected"],
                 "observed": manifest["observed"],
@@ -49,44 +53,48 @@ def assemble_sprint02_payload(results_root: Path) -> dict[str, Any]:
         )
     pass_count = sum(1 for exp in experiments if exp["status"] == "PASS")
     return {
-        "title": "Sprint 02 — Generic aligned 6R",
-        "subtitle": "Stage A differential reduction",
+        "title": "Sprint 03 — Architecture comparison",
+        "subtitle": "Stage A survival and local compound-joint probes",
         "brand": "aligned terminal-roll",
-        "sprint_status": "Complete / Check-in 2 approved",
-        "milestone": "M2 — Two-dimensional reduction established",
-        "warning": M2_WARNING,
+        "sprint_status": "Implementation complete / Check-in 3 draft",
+        "milestone": "M3 — Architecture comparison",
+        "warning": M3_WARNING,
         "claim": (
-            "At regular aligned-terminal 6R configurations, rank(J_p)=3, rank(J_pd)=5 with "
-            "ker(J_pd) aligned to e6, and rank(J_d N_red)=2."
+            "Stage A identities survive on IntersectingPairsAligned6R and URLikeAligned6R. "
+            "On the intersecting-pair chain, literal UA/UB/RC grouping matches physical "
+            "N_red locally by principal angles and short N_red steps."
         ),
         "pass_count": pass_count,
         "experiment_count": len(experiments),
         "checkin_interpretation": "SUPPORTED",
         "checkin_rationale": (
-            "For the GenericAligned6R skew reference chain, the named regular configuration "
-            "and all 48 seeded configurations satisfy the expected local fixed-position and "
-            "position-and-pointing ranks. Terminal roll is the sole task-kernel direction, "
-            "and the quotient fixed-position tangent space has rank-two pointing motion. "
-            "This establishes the numerical Stage A reference result but does not yet "
-            "establish architecture independence or global continuation."
+            "Stage A holds at the named regular configurations of GenericAligned6R, "
+            "IntersectingPairsAligned6R, and URLikeAligned6R. Local compound-joint "
+            "embedding of the intersecting-pair chain matches physical N_red within "
+            "the stated principal-angle tolerance, and short corrected N_red steps "
+            "keep position near p0 with agreeing pointing increments. This is a local "
+            "C9 result only. It does not establish global continued equivalence or "
+            "select a continuation parent automatically."
         ),
         "checkin_decision": "CONTINUE",
-        "human_gate_required": False,
+        "human_gate_required": True,
+        "recommended_continuation_parent": "IntersectingPairsAligned6R",
         "repository_commits": sorted({c for c in commits if c and c != "unknown"}),
         "experiments": experiments,
         "next_stage": (
-            "Check-in 2 is approved. Next authorized stage: architecture comparison "
-            "(generic vs compound-joint vs UR-like). Continuation and spherical four-bars remain blocked."
+            "Pending human Check-in 3. If approved, next stage is local pointing-manifold "
+            "continuation on the recommended intersecting-pairs parent, with UR-like "
+            "retained as a parallel check. Fibers, spherical RRRR, and exact UR remain blocked."
         ),
         "reproduce": [
-            "python scripts/validate_aligned_6r_reduction.py",
-            "python scripts/generate_atr_sprint02_readout.py",
+            "python scripts/validate_architecture_comparison.py",
+            "python scripts/generate_atr_sprint03_readout.py",
         ],
     }
 
 
-def write_sprint02_readout(results_root: Path, out_dir: Path) -> dict[str, Any]:
-    payload = assemble_sprint02_payload(results_root)
+def write_sprint03_readout(results_root: Path, out_dir: Path) -> dict[str, Any]:
+    payload = assemble_sprint03_payload(results_root)
     fig_dir = out_dir / "figures"
     fig_dir.mkdir(parents=True, exist_ok=True)
     rendered_exps = []
@@ -102,11 +110,11 @@ def write_sprint02_readout(results_root: Path, out_dir: Path) -> dict[str, Any]:
         rendered_exps.append(item)
     payload["experiments"] = rendered_exps
     (out_dir / "readout.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    (out_dir / "index.html").write_text(render_sprint02_html(payload), encoding="utf-8")
+    (out_dir / "index.html").write_text(render_sprint03_html(payload), encoding="utf-8")
     return payload
 
 
-def render_sprint02_html(payload: dict[str, Any]) -> str:
+def render_sprint03_html(payload: dict[str, Any]) -> str:
     cards = []
     for exp in payload["experiments"]:
         imgs = "".join(
@@ -163,12 +171,13 @@ def render_sprint02_html(payload: dict[str, Any]) -> str:
     <p class="lead">{escape(payload["subtitle"])} · {escape(payload["sprint_status"])} · {escape(payload["milestone"])}</p>
     <p class="warning">{escape(payload["warning"])}</p>
     <section class="claim"><strong>Claim under test.</strong><p>{escape(payload["claim"])}</p></section>
-    <section class="claim"><strong>Check-in 2 interpretation.</strong> {escape(payload["checkin_interpretation"])}.
+    <section class="claim"><strong>Check-in 3 interpretation.</strong> {escape(payload["checkin_interpretation"])}.
       <p>{escape(payload["checkin_rationale"])}</p></section>
     <section class="stats">
       <div class="stat"><div class="muted">Experiments</div><div>{payload["pass_count"]}/{payload["experiment_count"]} PASS</div></div>
-      <div class="stat"><div class="muted">Check-in 2</div><div>{escape(payload["checkin_interpretation"])}</div></div>
+      <div class="stat"><div class="muted">Check-in 3</div><div>{escape(payload["checkin_interpretation"])}</div></div>
       <div class="stat"><div class="muted">Decision</div><div>{escape(payload["checkin_decision"])}</div><div class="muted">{escape(gate)}</div></div>
+      <div class="stat"><div class="muted">Recommended parent</div><div>{escape(payload["recommended_continuation_parent"])}</div><div class="muted">not auto-selected</div></div>
     </section>
     <h2>Experiments</h2>
     {''.join(cards)}

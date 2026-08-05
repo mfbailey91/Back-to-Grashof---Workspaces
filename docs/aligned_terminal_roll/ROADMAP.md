@@ -45,7 +45,7 @@ tool direction rotated away from R6
 
 ## Phase 2 — Generic synthetic aligned 6R
 
-**Status:** `COMPLETE` pending Check-in 2
+**Status:** `COMPLETE`
 
 Implement the minimum full serial-chain kernel and verify:
 
@@ -56,13 +56,13 @@ Implement the minimum full serial-chain kernel and verify:
 - two-dimensional reduced pointing tangent space;
 - singular configurations reported separately.
 
-**Check-in 2:** Is the reduction a property of the full chain rather than only the terminal fixture?
+**Check-in 2:** Approved 2026-08-04. Stage A holds for the `GenericAligned6R` reference chain.
 
 ---
 
 ## Phase 3 — Architecture comparison
 
-**Status:** `PLANNED`
+**Status:** `COMPLETE` pending Check-in 3
 
 Compare:
 
@@ -70,9 +70,9 @@ Compare:
 2. literal compound-joint synthetic representation;
 3. synthetic UR-like shoulder-elbow-wrist chain.
 
-Evaluate mechanism order rather than relying only on mobility count.
+Evaluate local mechanism order rather than relying only on mobility count. Sprint 03 answers local Stage A survival and local C9 only.
 
-**Check-in 3:** Which reduced topology accurately represents the physical chain under continued motion?
+**Check-in 3:** Draft. Local evidence supports `IntersectingPairsAligned6R` as the continuation parent, with UR-like retained as a parallel check. Global continued equivalence remains Phase 4.
 
 ---
 

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 03 — Architecture comparison</title>
+  <style>
+    :root {
+      --bg0:#10151b; --bg1:#182028; --panel:#24303c; --ink:#e8eef4; --muted:#9aa8b5;
+      --line:#3a4a5a; --teal:#2a9d8f; --amber:#e9a319; --good:#3cbf9a;
+      font-family:"IBM Plex Sans","Segoe UI",sans-serif; color:var(--ink);
+      background: radial-gradient(ellipse 80% 50% at 10% -10%, #1e3a42 0%, transparent 55%),
+                  linear-gradient(160deg, var(--bg0), var(--bg1));
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; line-height:1.5; padding-bottom:3rem; }
+    .shell { max-width:1100px; margin:0 auto; padding:1.5rem; }
+    .brand { color:var(--teal); letter-spacing:.04em; font-size:.85rem; text-transform:uppercase; }
+    h1 { margin:.35rem 0 .6rem; font-size:2rem; }
+    .lead,.muted { color:var(--muted); }
+    .warning { border-left:3px solid var(--amber); background:rgba(233,163,25,.08); padding:.75rem 1rem; }
+    .claim,.card,.stat { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:1rem; margin:1rem 0; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:.75rem; }
+    .stat { margin:0; }
+    .badge.pass { color:var(--good); border:1px solid var(--good); border-radius:999px; padding:.15rem .55rem; font-size:.75rem; }
+    img { max-width:100%; height:auto; border-radius:6px; background:#0b1014; margin-top:.6rem; }
+    code { display:inline-block; background:#0b1014; border:1px solid var(--line); border-radius:4px; padding:.2rem .45rem; margin:.2rem .35rem .2rem 0; }
+    footer { color:var(--muted); margin-top:2rem; font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">aligned terminal-roll</div>
+    <h1>Sprint 03 — Architecture comparison</h1>
+    <p class="lead">Stage A survival and local compound-joint probes · Implementation complete / Check-in 3 draft · M3 — Architecture comparison</p>
+    <p class="warning">This readout does not authorize pointing-manifold continuation, fibers, spherical four-bars, or exact UR. Check-in 3 remains a human gate.</p>
+    <section class="claim"><strong>Claim under test.</strong><p>Stage A identities survive on IntersectingPairsAligned6R and URLikeAligned6R. On the intersecting-pair chain, literal UA/UB/RC grouping matches physical N_red locally by principal angles and short N_red steps.</p></section>
+    <section class="claim"><strong>Check-in 3 interpretation.</strong> SUPPORTED.
+      <p>Stage A holds at the named regular configurations of GenericAligned6R, IntersectingPairsAligned6R, and URLikeAligned6R. Local compound-joint embedding of the intersecting-pair chain matches physical N_red within the stated principal-angle tolerance, and short corrected N_red steps keep position near p0 with agreeing pointing increments. This is a local C9 result only. It does not establish global continued equivalence or select a continuation parent automatically.</p></section>
+    <section class="stats">
+      <div class="stat"><div class="muted">Experiments</div><div>5/5 PASS</div></div>
+      <div class="stat"><div class="muted">Check-in 3</div><div>SUPPORTED</div></div>
+      <div class="stat"><div class="muted">Decision</div><div>CONTINUE</div><div class="muted">human gate still required</div></div>
+      <div class="stat"><div class="muted">Recommended parent</div><div>IntersectingPairsAligned6R</div><div class="muted">not auto-selected</div></div>
+    </section>
+    <h2>Experiments</h2>
+    
+            <article class="card">
+              <h3>ATR_EXP_011 — Intersecting-pairs Stage A
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> IntersectingPairsAligned6R Stage A C6–C8; exact R1∩R2 and R3∩R4</p>
+              <p><strong>Observed.</strong> regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, d_ua=0.000e+00, d_ub=0.000e+00</p>
+              <img src="figures/ATR_EXP_011_singular_values.png" alt="ATR_EXP_011 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_012 — UR-like Stage A
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> URLikeAligned6R Stage A C6–C8; exact R2∥R3 and R4∩R5∩R6</p>
+              <p><strong>Observed.</strong> regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, elbow_par=0.000e+00, wrist=(&#x27;0.000e+00&#x27;, &#x27;0.000e+00&#x27;, &#x27;0.000e+00&#x27;)</p>
+              <img src="figures/ATR_EXP_012_singular_values.png" alt="ATR_EXP_012 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_013 — Compound-joint principal angles
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> max principal angle(N_red, compound embed) &lt;= 1e-08 rad</p>
+              <p><strong>Observed.</strong> angles_rad=(&#x27;0.000e+00&#x27;, &#x27;0.000e+00&#x27;), max=0.000e+00</p>
+              <img src="figures/ATR_EXP_013_principal_angles.png" alt="ATR_EXP_013 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_014 — Local N_red step probes
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> local 3 N_red steps keep ||p-p0|| &lt;= 1e-10 m and pointing increments agree within 1e-08</p>
+              <p><strong>Observed.</strong> max_p_residual_m=1.570e-16, max_pointing_diff=0.000e+00</p>
+              <img src="figures/ATR_EXP_014_local_nred_steps.png" alt="ATR_EXP_014 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_015 — Three-architecture comparison
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> Stage A survives all three architectures; local C9 reported; continuation parent recorded but not auto-selected</p>
+              <p><strong>Observed.</strong> stage_a_all=True, local_c9=True, recommended_parent=IntersectingPairsAligned6R, auto_selected=false</p>
+              <img src="figures/ATR_EXP_015_architecture_comparison.png" alt="ATR_EXP_015 figure" />
+            </article>
+            
+    <h2>Next stage</h2>
+    <div class="card"><p>Pending human Check-in 3. If approved, next stage is local pointing-manifold continuation on the recommended intersecting-pairs parent, with UR-like retained as a parallel check. Fibers, spherical RRRR, and exact UR remain blocked.</p></div>
+    <footer><p>Reproduce: <code>python scripts/validate_architecture_comparison.py</code><code>python scripts/generate_atr_sprint03_readout.py</code></p><p>Manifest commits: 1c7776c72497</p></footer>
+  </div>
+</body>
+</html>

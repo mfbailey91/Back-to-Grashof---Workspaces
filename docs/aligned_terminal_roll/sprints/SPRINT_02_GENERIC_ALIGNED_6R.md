@@ -1,9 +1,9 @@
 # Sprint 02 — Generic Aligned 6R Reduction
 
-**Sprint status:** Implementation complete / Check-in 2 draft
+**Sprint status:** Complete / Check-in 2 approved
 **HTML readout:** `results/aligned_terminal_roll/sprint02_readout/index.html`
 **Milestone target:** M2 — Two-dimensional reduction established
-**Check-in:** Check-in 2 (draft; not auto-approved)
+**Check-in:** Check-in 2 (Approved 2026-08-04, `CONTINUE`)
 **Authorized by:** Check-in 1 (`CONTINUE`, 2026-08-04)
 **Timebox:** Full-chain differential reduction only; no compound joints or continuation
 

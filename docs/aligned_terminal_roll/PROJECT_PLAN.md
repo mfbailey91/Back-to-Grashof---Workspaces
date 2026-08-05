@@ -1,7 +1,7 @@
 # Project Plan — Aligned Terminal-Roll Reduction
 
 **Project owner:** Michael Bailey
-**Status:** Sprint 02 implementation complete / Check-in 2 draft
+**Status:** Sprint 03 implementation complete / Check-in 3 draft
 **Last updated:** 2026-08-04
 **Planning horizon:** Reduction proof through exact-robot generalization
 **Change policy:** Update at formal check-ins; record material reversals in `decisions/`
@@ -226,13 +226,15 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 | Sprint 01 | Complete |
 | Check-in 1 | Approved (`CONTINUE`) |
 | Terminal fixture | Complete (ATR_EXP_001–005 PASS) |
-| Sprint 02 | Implementation complete (ATR_EXP_006–010 PASS) |
-| Check-in 2 | Draft |
-| Generic 6R kernel | Implemented; awaiting Check-in 2 |
-| UR-like model | Deferred to M3 |
+| Sprint 02 | Complete (ATR_EXP_006–010 PASS) |
+| Check-in 2 | Approved (`CONTINUE`) |
+| Generic 6R kernel | Complete |
+| Sprint 03 | Implementation complete (ATR_EXP_011–015 PASS) |
+| Check-in 3 | Draft |
+| UR-like / compound-joint models | Implemented locally; awaiting Check-in 3 |
 | Fiber construction | Blocked by M4 |
 | Spherical Grashof work | Blocked by M6 |
 
 ## 11. Immediate project decision
 
-Sprint 02 Stage A evidence is ready for Check-in 2. Do not start compound-joint, UR-like, continuation, or spherical-four-bar work until Check-in 2 is approved.
+Sprint 03 local Stage B evidence is ready for Check-in 3. Do not start pointing-manifold continuation, fibers, or spherical-four-bar work until Check-in 3 is approved. Recommended continuation parent if approved: `IntersectingPairsAligned6R`, with `URLikeAligned6R` retained as a parallel check.

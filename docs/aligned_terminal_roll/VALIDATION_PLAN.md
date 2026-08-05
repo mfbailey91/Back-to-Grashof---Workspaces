@@ -34,7 +34,25 @@
 | C13 | McCarthy-Soh predicts fiber rotatability | classification versus numerical continuation | stable agreement over accepted cases | classifier not useful for intended output motion |
 | C14 | Synthetic conclusions generalize to exact UR | repeat relevant tests with exact geometry | supported claims remain within stated conditions | architecture or frame-specific limitation |
 
-## 3. Sprint 01 test matrix
+## 3. Sprint 03 local architecture matrix
+
+Positive geometric identities:
+
+```text
+IntersectingPairsAligned6R: R1 ∩ R2 and R3 ∩ R4 exact; p on R6; d ∥ w6
+URLikeAligned6R: R2 ∥ R3; R4 ∩ R5 ∩ R6 exact; p on R6 beyond wrist; d ∥ w6
+```
+
+Local compound-joint probe (intersecting pairs only):
+
+```text
+principal angles(N_red, embed(ker(J_p[:,:5]))) <= 1e-8 rad
+1–3 Euler steps along unit N_red with p(q)=p0 corrector
+```
+
+This is not a C10 continuation test.
+
+## 4. Sprint 01 test matrix
 
 ### Positive control P0
 
@@ -75,7 +93,7 @@ Expected:
 
 - both position and pointing change.
 
-## 4. Numerical oracles
+## 5. Numerical oracles
 
 ### Finite differences
 
@@ -101,7 +119,7 @@ Extract the axis-angle representation. For the aligned case, the axis should ali
 
 When comparing tangent spaces, use principal angles or projection-matrix residuals rather than comparing arbitrary basis columns directly.
 
-## 5. Singular-case policy
+## 6. Singular-case policy
 
 - singular configurations are valid observations, not generic test failures;
 - deterministic singular examples should be named and reported;
@@ -109,7 +127,7 @@ When comparing tangent spaces, use principal angles or projection-matrix residua
 - acceptance criteria for a regular claim apply only where the stated regularity conditions hold;
 - unexpectedly frequent singular samples trigger architecture review.
 
-## 6. Reproducibility
+## 7. Reproducibility
 
 Every decision-bearing run records:
 
@@ -124,7 +142,7 @@ Every decision-bearing run records:
 - solver tolerances;
 - generated metrics and plots.
 
-## 7. Check-in evidence package
+## 8. Check-in evidence package
 
 A formal check-in must include:
 

@@ -1,0 +1,11 @@
+metric,value
+rank_jp,3
+nullity_jp,3
+rank_jpd,5
+nullity_jpd,1
+jp_e6_norm,2.7922043542911716e-16
+jd_e6_norm,0.0
+ker_jpd_align_e6,0.0
+rank_jd_nred,2
+nred_cols,2
+regular,True

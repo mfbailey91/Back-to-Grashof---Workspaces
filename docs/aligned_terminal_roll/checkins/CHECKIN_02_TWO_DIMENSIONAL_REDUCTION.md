@@ -4,7 +4,7 @@
 **Milestone:** M2 — Two-dimensional reduction established
 **Sprint(s):** Sprint 02 — Generic aligned 6R
 **Decision owner:** Michael Bailey
-**Decision status:** Draft — awaiting human confirmation
+**Decision status:** Approved 2026-08-04
 
 ## 1. Claim under review
 
@@ -48,16 +48,12 @@ For the `GenericAligned6R` skew reference chain, the named regular configuration
 
 ## 5. Decision
 
-Select one (human gate):
-
 - `CONTINUE`
-- `CONTINUE WITH CHANGED SCOPE`
-- `REPEAT EXPERIMENT`
-- `PIVOT`
-- `STOP THIS BRANCH`
 
-Recommended if approved: architecture comparison (generic vs compound-joint vs UR-like). Still blocked: continuation fibers and spherical `RRRR`.
+Authorized next stage: Sprint 03 architecture comparison (generic vs intersecting-pair compound-joint vs UR-like). **Approved.**
+
+Blocked work: pointing-manifold continuation, fibers, spherical `RRRR`, exact UR.
 
 ## 6. Next sprint recommendation
 
-If Check-in 2 is approved, implement controlled synthetic compound-joint / UR-like models and compare tangent spaces. Do not start spherical four-bar classification.
+Implement controlled synthetic compound-joint and UR-like models and compare local tangent spaces. Do not start spherical four-bar classification.

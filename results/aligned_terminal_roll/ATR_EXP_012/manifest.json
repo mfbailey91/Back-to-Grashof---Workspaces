@@ -1,0 +1,163 @@
+{
+  "experiment_id": "ATR_EXP_012",
+  "repository_commit": "1c7776c724971216cc7d0b404a28accdbb127880",
+  "status": "PASS",
+  "expected": "URLikeAligned6R Stage A C6\u2013C8; exact R2\u2225R3 and R4\u2229R5\u2229R6",
+  "observed": "regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, elbow_par=0.000e+00, wrist=('0.000e+00', '0.000e+00', '0.000e+00')",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09,
+    "geometry_tol": 1e-12,
+    "principal_angle_tol_rad": 1e-08,
+    "position_residual_tol_m": 1e-10,
+    "pointing_agree_tol": 1e-08
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_012",
+    "status": "PASS",
+    "expected": "URLikeAligned6R Stage A C6\u2013C8; exact R2\u2225R3 and R4\u2229R5\u2229R6",
+    "observed": "regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, elbow_par=0.000e+00, wrist=('0.000e+00', '0.000e+00', '0.000e+00')",
+    "snapshot": {
+      "q": [
+        0.35,
+        -0.42,
+        0.55,
+        0.28,
+        -0.33,
+        0.7
+      ],
+      "rank_jp": 3,
+      "nullity_jp": 3,
+      "rank_jpd": 5,
+      "nullity_jpd": 1,
+      "sv_jp": [
+        0.48686331599962895,
+        0.42444625023840094,
+        0.08308207600119992
+      ],
+      "sv_jpd": [
+        1.7540408905761184,
+        0.9687826715045189,
+        0.4264724528474733,
+        0.3041169909651476,
+        0.05060696136939056,
+        6.026187794630497e-32
+      ],
+      "jp_e6_norm": 3.9312160115072253e-17,
+      "jd_e6_norm": 0.0,
+      "ker_jpd_align_e6": 0.0,
+      "rank_jd_nred": 2,
+      "nred_cols": 2,
+      "regular": true
+    },
+    "home_point_axis_distance_m": 0.0,
+    "home_pointing_parallelism": 0.0,
+    "elbow_parallelism": 0.0,
+    "wrist_concurrency_m": {
+      "r45": 0.0,
+      "r56": 0.0,
+      "r46": 0.0
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "model": {
+      "name": "URLikeAligned6R",
+      "aligned": true,
+      "task_point_m": [
+        0.457,
+        0.0,
+        0.23399999999999999
+      ],
+      "d0": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "home_axes": [
+        {
+          "r_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "w": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "r_m": [
+            0.0,
+            0.0,
+            0.152
+          ],
+          "w": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "r_m": [
+            0.244,
+            0.0,
+            0.152
+          ],
+          "w": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "r_m": [
+            0.457,
+            0.0,
+            0.152
+          ],
+          "w": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "r_m": [
+            0.457,
+            0.0,
+            0.152
+          ],
+          "w": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "r_m": [
+            0.457,
+            0.0,
+            0.152
+          ],
+          "w": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ]
+    }
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint03"
+}

@@ -99,6 +99,29 @@ def parallelism_residual(
     return float(np.linalg.norm(np.cross(a_hat, b_hat)))
 
 
+def line_line_distance(a: AxisLine, b: AxisLine) -> float:
+    """Return the Euclidean distance between two directed lines.
+
+    Formula::
+
+        ||(r_b - r_a) · (w_a × w_b)|| / ||w_a × w_b||
+
+    when the directions are not parallel. Parallel lines use the transverse
+    offset of ``r_b - r_a`` from ``w_a``.
+
+    Equality: intersecting or coincident lines have distance ``0``.
+    Interior / exterior: a positive common perpendicular length is returned.
+    """
+    w_a = a.w_array
+    w_b = b.w_array
+    delta = b.r_array - a.r_array
+    cross = np.cross(w_a, w_b)
+    n = float(np.linalg.norm(cross))
+    if n == 0.0:
+        return float(np.linalg.norm(delta - float(np.dot(delta, w_a)) * w_a))
+    return abs(float(np.dot(delta, cross))) / n
+
+
 def are_parallel(
     a: Vec3 | tuple[float, float, float],
     b: Vec3 | tuple[float, float, float],

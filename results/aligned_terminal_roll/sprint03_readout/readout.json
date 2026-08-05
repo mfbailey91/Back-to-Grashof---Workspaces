@@ -1,0 +1,76 @@
+{
+  "title": "Sprint 03 \u2014 Architecture comparison",
+  "subtitle": "Stage A survival and local compound-joint probes",
+  "brand": "aligned terminal-roll",
+  "sprint_status": "Implementation complete / Check-in 3 draft",
+  "milestone": "M3 \u2014 Architecture comparison",
+  "warning": "This readout does not authorize pointing-manifold continuation, fibers, spherical four-bars, or exact UR. Check-in 3 remains a human gate.",
+  "claim": "Stage A identities survive on IntersectingPairsAligned6R and URLikeAligned6R. On the intersecting-pair chain, literal UA/UB/RC grouping matches physical N_red locally by principal angles and short N_red steps.",
+  "pass_count": 5,
+  "experiment_count": 5,
+  "checkin_interpretation": "SUPPORTED",
+  "checkin_rationale": "Stage A holds at the named regular configurations of GenericAligned6R, IntersectingPairsAligned6R, and URLikeAligned6R. Local compound-joint embedding of the intersecting-pair chain matches physical N_red within the stated principal-angle tolerance, and short corrected N_red steps keep position near p0 with agreeing pointing increments. This is a local C9 result only. It does not establish global continued equivalence or select a continuation parent automatically.",
+  "checkin_decision": "CONTINUE",
+  "human_gate_required": true,
+  "recommended_continuation_parent": "IntersectingPairsAligned6R",
+  "repository_commits": [
+    "1c7776c724971216cc7d0b404a28accdbb127880"
+  ],
+  "experiments": [
+    {
+      "experiment_id": "ATR_EXP_011",
+      "title": "Intersecting-pairs Stage A",
+      "status": "PASS",
+      "expected": "IntersectingPairsAligned6R Stage A C6\u2013C8; exact R1\u2229R2 and R3\u2229R4",
+      "observed": "regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, d_ua=0.000e+00, d_ub=0.000e+00",
+      "figures": [
+        "figures/ATR_EXP_011_singular_values.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_012",
+      "title": "UR-like Stage A",
+      "status": "PASS",
+      "expected": "URLikeAligned6R Stage A C6\u2013C8; exact R2\u2225R3 and R4\u2229R5\u2229R6",
+      "observed": "regular=True, rank_jp=3, rank_jpd=5, rank_jd_nred=2, elbow_par=0.000e+00, wrist=('0.000e+00', '0.000e+00', '0.000e+00')",
+      "figures": [
+        "figures/ATR_EXP_012_singular_values.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_013",
+      "title": "Compound-joint principal angles",
+      "status": "PASS",
+      "expected": "max principal angle(N_red, compound embed) <= 1e-08 rad",
+      "observed": "angles_rad=('0.000e+00', '0.000e+00'), max=0.000e+00",
+      "figures": [
+        "figures/ATR_EXP_013_principal_angles.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_014",
+      "title": "Local N_red step probes",
+      "status": "PASS",
+      "expected": "local 3 N_red steps keep ||p-p0|| <= 1e-10 m and pointing increments agree within 1e-08",
+      "observed": "max_p_residual_m=1.570e-16, max_pointing_diff=0.000e+00",
+      "figures": [
+        "figures/ATR_EXP_014_local_nred_steps.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_015",
+      "title": "Three-architecture comparison",
+      "status": "PASS",
+      "expected": "Stage A survives all three architectures; local C9 reported; continuation parent recorded but not auto-selected",
+      "observed": "stage_a_all=True, local_c9=True, recommended_parent=IntersectingPairsAligned6R, auto_selected=false",
+      "figures": [
+        "figures/ATR_EXP_015_architecture_comparison.png"
+      ]
+    }
+  ],
+  "next_stage": "Pending human Check-in 3. If approved, next stage is local pointing-manifold continuation on the recommended intersecting-pairs parent, with UR-like retained as a parallel check. Fibers, spherical RRRR, and exact UR remain blocked.",
+  "reproduce": [
+    "python scripts/validate_architecture_comparison.py",
+    "python scripts/generate_atr_sprint03_readout.py"
+  ]
+}

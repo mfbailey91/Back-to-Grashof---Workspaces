@@ -45,4 +45,4 @@ In particular:
 
 ## Current next action
 
-Hold Check-in 2 on the generic aligned 6R Stage A results (`CHECKIN_02_TWO_DIMENSIONAL_REDUCTION.md`) before architecture comparison.
+Hold Check-in 3 on the architecture-comparison packet (`CHECKIN_03_ARCHITECTURE_COMPARISON.md`) before pointing-manifold continuation.

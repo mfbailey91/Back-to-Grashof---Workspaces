@@ -1,0 +1,64 @@
+{
+  "experiment_id": "ATR_EXP_015",
+  "repository_commit": "1c7776c724971216cc7d0b404a28accdbb127880",
+  "status": "PASS",
+  "expected": "Stage A survives all three architectures; local C9 reported; continuation parent recorded but not auto-selected",
+  "observed": "stage_a_all=True, local_c9=True, recommended_parent=IntersectingPairsAligned6R, auto_selected=false",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09,
+    "geometry_tol": 1e-12,
+    "principal_angle_tol_rad": 1e-08,
+    "position_residual_tol_m": 1e-10,
+    "pointing_agree_tol": 1e-08
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_015",
+    "status": "PASS",
+    "expected": "Stage A survives all three architectures; local C9 reported; continuation parent recorded but not auto-selected",
+    "observed": "stage_a_all=True, local_c9=True, recommended_parent=IntersectingPairsAligned6R, auto_selected=false",
+    "comparison_rows": [
+      {
+        "model": "GenericAligned6R",
+        "stage_a": true,
+        "rank_jp": 3,
+        "rank_jpd": 5,
+        "rank_jd_nred": 2,
+        "local_c9": null
+      },
+      {
+        "model": "IntersectingPairsAligned6R",
+        "stage_a": true,
+        "rank_jp": 3,
+        "rank_jpd": 5,
+        "rank_jd_nred": 2,
+        "local_c9": true,
+        "max_principal_angle_rad": 0.0
+      },
+      {
+        "model": "URLikeAligned6R",
+        "stage_a": true,
+        "rank_jp": 3,
+        "rank_jpd": 5,
+        "rank_jd_nred": 2,
+        "local_c9": null
+      }
+    ],
+    "continuation_parent_recommendation": "IntersectingPairsAligned6R",
+    "continuation_parent_auto_selected": false,
+    "local_c9_max_principal_angle_rad": 0.0,
+    "metrics": {
+      "generic_stage_a": true,
+      "intersecting_pairs_stage_a": true,
+      "urlike_stage_a": true,
+      "local_c9": true,
+      "recommended_parent": "IntersectingPairsAligned6R",
+      "auto_selected": false
+    }
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint03"
+}

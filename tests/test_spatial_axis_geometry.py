@@ -10,6 +10,7 @@ import pytest
 from grashof_workspace.spatial_experiments.axis_geometry import (
     AxisLine,
     are_parallel,
+    line_line_distance,
     parallelism_residual,
     point_axis_distance,
     unit_vector,
@@ -64,3 +65,21 @@ def test_parallelism_residual_exterior_oblique() -> None:
     # 45 degrees: ||a x b|| = sin(theta) = sqrt(2)/2
     residual = parallelism_residual((1.0, 0.0, 0.0), (1.0, 1.0, 0.0))
     assert residual == pytest.approx(math.sqrt(2.0) / 2.0)
+
+
+def test_line_line_distance_intersecting_equality() -> None:
+    a = AxisLine((0.0, 0.0, 0.0), (0.0, 0.0, 1.0))
+    b = AxisLine((0.0, 0.0, 0.0), (1.0, 0.0, 0.0))
+    assert line_line_distance(a, b) == pytest.approx(0.0)
+
+
+def test_line_line_distance_skew_exterior() -> None:
+    a = AxisLine((0.0, 0.0, 0.0), (1.0, 0.0, 0.0))
+    b = AxisLine((0.0, 0.3, 0.4), (0.0, 0.0, 1.0))
+    assert line_line_distance(a, b) == pytest.approx(0.3)
+
+
+def test_line_line_distance_parallel_offset_boundary() -> None:
+    a = AxisLine((0.0, 0.0, 0.0), (0.0, 0.0, 1.0))
+    b = AxisLine((0.5, 0.0, 3.0), (0.0, 0.0, 1.0))
+    assert line_line_distance(a, b) == pytest.approx(0.5)

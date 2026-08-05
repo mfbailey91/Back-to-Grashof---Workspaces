@@ -18,7 +18,7 @@ REGULAR_Q = (0.35, -0.42, 0.55, 0.28, -0.33, 0.70)
 SINGULAR_SEARCH_SEED = 17
 
 
-def _frame_from_pointing(d: tuple[float, float, float]) -> tuple[tuple[float, float, float], ...]:
+def frame_from_pointing(d: tuple[float, float, float]) -> tuple[tuple[float, float, float], ...]:
     z = unit_vector(d, name="pointing")
     helper = np.array([1.0, 0.0, 0.0], dtype=float)
     if abs(float(np.dot(helper, z))) > 0.9:
@@ -57,7 +57,7 @@ class GenericAligned6R:
         w6 = np.asarray(axes[5].w, dtype=float)
         p0 = tuple(float(x) for x in (r6 + 0.04 * w6))
         d0 = tuple(float(x) for x in w6)
-        chain = SerialRevoluteChain(home_axes=axes, p0=p0, d0=d0, R0=_frame_from_pointing(d0))
+        chain = SerialRevoluteChain(home_axes=axes, p0=p0, d0=d0, R0=frame_from_pointing(d0))
         return cls(chain=chain, task_point=p0, is_aligned=True)
 
     @classmethod
@@ -89,7 +89,7 @@ class GenericAligned6R:
         transverse = transverse / float(np.linalg.norm(transverse))
         d0_vec = np.cos(tilt_rad) * w6 + np.sin(tilt_rad) * transverse
         d0 = tuple(float(x) for x in d0_vec)
-        R0 = _frame_from_pointing(d0)
+        R0 = frame_from_pointing(d0)
         chain = SerialRevoluteChain(
             home_axes=base.chain.home_axes,
             p0=base.task_point,

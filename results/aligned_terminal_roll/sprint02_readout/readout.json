@@ -2,16 +2,16 @@
   "title": "Sprint 02 \u2014 Generic aligned 6R",
   "subtitle": "Stage A differential reduction",
   "brand": "aligned terminal-roll",
-  "sprint_status": "Implementation complete / Check-in 2 draft",
+  "sprint_status": "Complete / Check-in 2 approved",
   "milestone": "M2 \u2014 Two-dimensional reduction established",
-  "warning": "This readout does not authorize compound-joint, continuation, or spherical-four-bar work. Check-in 2 remains a human gate.",
+  "warning": "Check-in 2 is approved. This readout still does not authorize continuation, fibers, or spherical-four-bar work.",
   "claim": "At regular aligned-terminal 6R configurations, rank(J_p)=3, rank(J_pd)=5 with ker(J_pd) aligned to e6, and rank(J_d N_red)=2.",
   "pass_count": 5,
   "experiment_count": 5,
   "checkin_interpretation": "SUPPORTED",
   "checkin_rationale": "For the GenericAligned6R skew reference chain, the named regular configuration and all 48 seeded configurations satisfy the expected local fixed-position and position-and-pointing ranks. Terminal roll is the sole task-kernel direction, and the quotient fixed-position tangent space has rank-two pointing motion. This establishes the numerical Stage A reference result but does not yet establish architecture independence or global continuation.",
   "checkin_decision": "CONTINUE",
-  "human_gate_required": true,
+  "human_gate_required": false,
   "repository_commits": [
     "ebea47784b478f8b52c38eda485de4d9066f4d7b"
   ],
@@ -63,7 +63,7 @@
       ]
     }
   ],
-  "next_stage": "Pending human Check-in 2. If approved, next stage is architecture comparison (generic vs compound-joint vs UR-like), not spherical four-bars.",
+  "next_stage": "Check-in 2 is approved. Next authorized stage: architecture comparison (generic vs compound-joint vs UR-like). Continuation and spherical four-bars remain blocked.",
   "reproduce": [
     "python scripts/validate_aligned_6r_reduction.py",
     "python scripts/generate_atr_sprint02_readout.py"

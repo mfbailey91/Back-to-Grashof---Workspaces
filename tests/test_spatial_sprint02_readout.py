@@ -23,7 +23,7 @@ def test_sprint02_payload_and_html(tmp_path: Path) -> None:
     payload = assemble_sprint02_payload(dest)
     assert [exp["experiment_id"] for exp in payload["experiments"]] == list(S2_IDS)
     assert payload["pass_count"] == 5
-    assert payload["human_gate_required"] is True
+    assert payload["human_gate_required"] is False
     assert payload["warning"] == M2_WARNING
     out = tmp_path / "sprint02_readout"
     written = write_sprint02_readout(dest, out)
@@ -32,5 +32,5 @@ def test_sprint02_payload_and_html(tmp_path: Path) -> None:
     assert dumped["pass_count"] == written["pass_count"] == 5
     for exp_id in S2_IDS:
         assert exp_id in html
-    assert "Check-in 2 remains a human gate" in html
+    assert "Check-in 2 is approved" in html
     assert "does not yet establish architecture independence" in html

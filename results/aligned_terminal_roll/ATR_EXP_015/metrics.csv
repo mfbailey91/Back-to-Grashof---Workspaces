@@ -1,0 +1,4 @@
+model,stage_a,rank_jp,rank_jpd,rank_jd_nred,local_c9
+GenericAligned6R,True,3,5,2,
+IntersectingPairsAligned6R,True,3,5,2,True
+URLikeAligned6R,True,3,5,2,
