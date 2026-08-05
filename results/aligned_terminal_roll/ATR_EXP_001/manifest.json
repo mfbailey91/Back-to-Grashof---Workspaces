@@ -1,0 +1,56 @@
+{
+  "experiment_id": "ATR_EXP_001",
+  "repository_commit": "0d27bb139c1a965dba91244f3df5096231b381da",
+  "status": "PASS",
+  "units": {
+    "length": "metre",
+    "angle": "radian",
+    "axis_direction": "dimensionless unit vector"
+  },
+  "tolerances": {
+    "position_abs_tol_m": 1e-12,
+    "pointing_abs_tol": 1e-12,
+    "roll_abs_tol_rad": 1e-10,
+    "position_motion_floor_m": 1e-06,
+    "pointing_motion_floor": 1e-06
+  },
+  "model": {
+    "axis_r_m": [
+      0.1,
+      -0.2,
+      0.3
+    ],
+    "axis_w": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "p0_m": [
+      0.1,
+      -0.2,
+      0.35
+    ],
+    "d0": [
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "metrics": {
+    "experiment_id": "ATR_EXP_001",
+    "max_position_residual_m": 0.0,
+    "max_pointing_residual": 0.0,
+    "max_roll_angle_error_rad": 1.3322676295501878e-15,
+    "max_roll_axis_misalignment": 0.0,
+    "mean_position_residual_m": 0.0,
+    "mean_pointing_residual": 0.0,
+    "position_changes": false,
+    "pointing_changes": false,
+    "roll_recovered": true
+  },
+  "expected": "position invariant; pointing invariant; roll recovers Delta q6",
+  "observed": "max|dp|=0.000e+00 m; max|dd|=0.000e+00; max roll err=1.332e-15 rad",
+  "notes": "",
+  "random_seed": null,
+  "software_version": "grashof-workspace spatial_experiments sprint01"
+}

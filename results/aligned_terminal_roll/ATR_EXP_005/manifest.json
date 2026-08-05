@@ -1,0 +1,83 @@
+{
+  "experiment_id": "ATR_EXP_005",
+  "repository_commit": "0d27bb139c1a965dba91244f3df5096231b381da",
+  "status": "PASS",
+  "units": {
+    "length": "metre",
+    "angle": "radian",
+    "axis_direction": "dimensionless unit vector"
+  },
+  "tolerances": {
+    "position_abs_tol_m": 1e-12,
+    "pointing_abs_tol": 1e-12,
+    "roll_abs_tol_rad": 1e-10,
+    "position_motion_floor_m": 1e-06,
+    "pointing_motion_floor": 1e-06
+  },
+  "model": {
+    "axis_r_m": [
+      0.1,
+      -0.2,
+      0.3
+    ],
+    "axis_w": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "p0_m": [
+      0.1,
+      -0.18000000000000002,
+      0.35
+    ],
+    "d0": [
+      0.0,
+      0.19866933079506122,
+      0.9800665778412416
+    ]
+  },
+  "metrics": {
+    "experiment_id": "ATR_EXP_005",
+    "max_position_residual_m": 0.03999999999999998,
+    "max_pointing_residual": 0.39733866159012243,
+    "max_roll_angle_error_rad": 0.08711895018964899,
+    "max_roll_axis_misalignment": 0.2781747010965624,
+    "mean_position_residual_m": 0.024760827619925607,
+    "mean_pointing_residual": 0.2459608526591246,
+    "position_changes": true,
+    "pointing_changes": true,
+    "roll_recovered": false
+  },
+  "expected": "analytical vs central-FD derivative error converges over usable h",
+  "observed": "h=0.01: dp_err=3.333e-07, dd_err=3.311e-06; h=0.001: dp_err=3.333e-09, dd_err=3.311e-08; h=0.0001: dp_err=3.336e-11, dd_err=3.312e-10; h=1e-05: dp_err=4.699e-13, dd_err=3.471e-12; h=1e-06: dp_err=5.174e-12, dd_err=3.713e-12",
+  "notes": "Fixture intentionally violates alignment so derivatives are nonzero.",
+  "random_seed": null,
+  "software_version": "grashof-workspace spatial_experiments sprint01",
+  "fd_refinement": [
+    {
+      "h": 0.01,
+      "dp_error": 3.333316666529955e-07,
+      "dd_error": 3.311138957613458e-06
+    },
+    {
+      "h": 0.001,
+      "dp_error": 3.3333312907116705e-09,
+      "dd_error": 3.311155439708849e-08
+    },
+    {
+      "h": 0.0001,
+      "dp_error": 3.3356193965102396e-11,
+      "dd_error": 3.3115002395407163e-10
+    },
+    {
+      "h": 1e-05,
+      "dp_error": 4.699487730710234e-13,
+      "dd_error": 3.4711832579062307e-12
+    },
+    {
+      "h": 1e-06,
+      "dp_error": 5.173893994004436e-12,
+      "dd_error": 3.712669492902941e-12
+    }
+  ]
+}
