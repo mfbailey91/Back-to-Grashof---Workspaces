@@ -17,7 +17,7 @@ from grashof_workspace.spatial_experiments.chart_diagnostics import (
 from grashof_workspace.spatial_experiments.continuation import continue_sequential_chart
 
 
-def test_shared_nodes_stable_under_refinement() -> None:
+def test_shared_nodes_agree_under_common_microstep() -> None:
     chain = IntersectingPairsAligned6R.aligned().chain
     coarse = continue_sequential_chart(chain, INTERSECTING_PAIRS_REGULAR_Q, ns=5, nt=5, ds=0.03, dt=0.03)
     fine = continue_sequential_chart(chain, INTERSECTING_PAIRS_REGULAR_Q, ns=9, nt=9, ds=0.015, dt=0.015)
@@ -35,7 +35,7 @@ def test_rectangular_loop_error_decreases_when_step_halved() -> None:
     assert fine.epsilon_q < coarse.epsilon_q
 
 
-def test_alternate_path_discrepancy_shrinks() -> None:
+def test_alternate_path_discrepancy_stable_or_decreased() -> None:
     chain = URLikeAligned6R.aligned().chain
     coarse = alternate_path_to_target(chain, URLIKE_REGULAR_Q, s_target=0.06, t_target=0.06, step_size=0.06)
     fine = alternate_path_to_target(chain, URLIKE_REGULAR_Q, s_target=0.06, t_target=0.06, step_size=0.03)

@@ -1,4 +1,4 @@
-"""Sprint 04B sequential-chart experiments ATR_EXP_021–026."""
+"""Sprint 04B/04C sequential-chart experiments ATR_EXP_021–026."""
 
 from __future__ import annotations
 
@@ -33,6 +33,7 @@ from .chart_diagnostics import (
 )
 from .continuation import (
     MAX_CORRECTOR_ITERS,
+    MAX_MICROSTEP,
     MAX_STEP_REDUCTIONS,
     PATCH_DS,
     PATCH_DT,
@@ -46,7 +47,7 @@ from .continuation_paths import ChartSample
 from .jacobians import ABS_RANK_TOL, REL_RANK_TOL
 from .suur_coordinates import PAIR_DISTANCE_TOL_M, pair_intersection_distances
 
-SOURCE_IDENTIFIER = "grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1"
+SOURCE_IDENTIFIER = "grashof_workspace.spatial_experiments.chart_experiments:sprint04c-v1"
 REVERSE_STEPS = 4
 LOOP_STEPS = 2
 ALT_S = 0.06
@@ -293,14 +294,21 @@ def evaluate_refinement() -> dict[str, Any]:
     return {
         "experiment_id": "ATR_EXP_024",
         "status": "PASS" if ok else "FAIL",
-        "expected": "Shared-node q/d and rank classifications remain stable under grid/step refinement",
+        "expected": (
+            "Shared-node q/d agree under the same internal microstep; rank classifications remain two. "
+            "This is macro-grid consistency, not independent numerical refinement"
+        ),
         "observed": "; ".join(
             f"{row['architecture']}: shared={row['shared']['n_shared']}, "
             f"dq={row['shared']['max_joint_delta']:.3e}, dd={row['shared']['max_pointing_delta']:.3e}, "
             f"ranks={row['baseline_rank_two']}/{row['fine_rank_two']}/{row['compact_rank_two']}"
             for row in comparisons
         ),
-        "metrics": {"comparisons": comparisons},
+        "metrics": {
+            "comparisons": comparisons,
+            "shared_microstep": MAX_MICROSTEP,
+            "independent_refinement": False,
+        },
         "q": list(INTERSECTING_PAIRS_REGULAR_Q),
     }
 
@@ -346,10 +354,10 @@ def evaluate_alternate_and_duplicates() -> dict[str, Any]:
         coarse_alt = alternate_path_to_target(chain, q0, s_target=ALT_S, t_target=ALT_T, step_size=0.06)
         fine_alt = alternate_path_to_target(chain, q0, s_target=ALT_S, t_target=ALT_T, step_size=0.03)
         rel = abs(fine_alt.epsilon_q - coarse_alt.epsilon_q) / max(coarse_alt.epsilon_q, 1e-30)
-        shrunk = fine_alt.epsilon_q < coarse_alt.epsilon_q or (
+        stable_or_decreased = fine_alt.epsilon_q < coarse_alt.epsilon_q or (
             max(fine_alt.epsilon_q, coarse_alt.epsilon_q) <= 5e-4 and rel <= 0.05
         )
-        arch_ok = dups.n_duplicates == 0 and shrunk and fine_alt.epsilon_q <= 5e-3
+        arch_ok = dups.n_duplicates == 0 and stable_or_decreased and fine_alt.epsilon_q <= 5e-3
         ok = ok and arch_ok
         reports.append(
             {
@@ -358,14 +366,14 @@ def evaluate_alternate_and_duplicates() -> dict[str, Any]:
                 "min_nn_distance": dups.min_nn_distance,
                 "coarse_alt": asdict(coarse_alt),
                 "fine_alt": asdict(fine_alt),
-                "discrepancy_decreased": shrunk,
+                "discrepancy_stable_or_decreased": stable_or_decreased,
                 "passed": arch_ok,
             }
         )
     return {
         "experiment_id": "ATR_EXP_026",
         "status": "PASS" if ok else "FAIL",
-        "expected": "No duplicate solutions; s-then-t vs t-then-s discrepancy shrinks under refinement",
+        "expected": "No duplicate solutions; s-then-t vs t-then-s discrepancy remains small and stable",
         "observed": "; ".join(
             f"{row['architecture']}: dups={row['duplicates']}, "
             f"alt_coarse={row['coarse_alt']['epsilon_q']:.3e}, alt_fine={row['fine_alt']['epsilon_q']:.3e}"
@@ -445,7 +453,7 @@ def write_chart_artifacts(
         "observed": result["observed"],
         "units": {"length": "metre", "angle": "radian"},
         "result": slim,
-        "software_version": "grashof-workspace spatial_experiments sprint04b",
+        "software_version": "grashof-workspace spatial_experiments sprint04c",
     }
     if "chart_rows" in result:
         _write_chart_csv(out / "samples.csv", result["chart_rows"])

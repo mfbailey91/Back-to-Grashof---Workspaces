@@ -102,7 +102,7 @@ Sequential continuation evidence required for C10:
 - genuine reverse rays start at the forward endpoint;
 - interior central differences give `rank(Q)=2` and `rank(D)=2`;
 - duplicate wrapped configurations are absent from the approved patch;
-- shared-node refinement preserves rank class and stays inside joint/pointing tolerances;
+- shared-node macro-grid consistency (same internal microstep) preserves rank class; ATR_EXP_025 is the independent step-refinement gate;
 - rectangular-loop error decreases when the integrator step is halved at fixed step count;
 - architecture-specific pair diagnostics stay off the general continuation API.
 

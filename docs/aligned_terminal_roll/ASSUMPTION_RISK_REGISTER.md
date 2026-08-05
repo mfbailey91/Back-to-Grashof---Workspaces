@@ -30,6 +30,8 @@
 | R03 | Finite-difference scale masks implementation error | Medium | Medium | multi-step convergence study | no stable error plateau | MITIGATED |
 | R04 | Transform-order bug preserves one fixture accidentally | Medium | High | independent geometric and numerical oracles | analytical/numerical disagreement | MITIGATED |
 | R05 | Continuation jumps branches | High | High | sequential PC, transported frames, true reverse, loop/alternate-path, duplicate scan | discontinuous configuration jump | MITIGATED (Sprint 04B local sequential reverse/loop/duplicate gates; global branching still open) |
+| R13 | Macro-grid consistency is read as independent refinement | High | High | ATR_EXP_024 labeled shared-microstep consistency; ATR_EXP_025 is the step-refinement gate | 024 exact Δq=0 treated as numerical convergence study | MITIGATED (Sprint 04C) |
+| R14 | Alternate-path residual is read as proven holonomy | Medium | High | 026 uses stable-or-decreased language; holonomy not claimed | loop/alt residuals cited as geometric theorems | MITIGATED (Sprint 04C) |
 | R06 | Coordinate fixing creates an artificial fiber | High | High | prefer task-space constraint; compare parameterizations | fiber disappears under reparameterization | OPEN |
 | R07 | Mobility count is mistaken for equivalence | Medium | High | require discriminating coordinate-map and continued-motion tests | matching count but mismatched motion | MITIGATED (negative control plus φ definedness; independent SUUR solver still absent) |
 | R08 | Spherical candidate passes only at one pose | High | High | branch-wide concurrency and arc tests | residual grows under continuation | OPEN |

@@ -34,7 +34,7 @@ This check-in does **not** claim fibers, spherical `RRRR`, McCarthy–Soh, exact
 | ATR_EXP_021 | Sequential forward/reverse | PASS |
 | ATR_EXP_022 | IP transported chart | PASS |
 | ATR_EXP_023 | UR-like transported chart | PASS |
-| ATR_EXP_024 | Grid/step refinement | PASS |
+| ATR_EXP_024 | Macro-grid consistency (shared microstep) | PASS |
 | ATR_EXP_025 | Rectangular-loop refinement | PASS |
 | ATR_EXP_026 | Alternate-path and duplicates | PASS |
 
@@ -44,9 +44,11 @@ All manifests record `repository_commit=e179ead` and `working_tree_dirty=false`.
 
 **SUPPORTED locally, pending human gate.**
 
-Both synthetic architectures admit a sequential local chart that is regular, reversible from the true forward endpoint, rank-two in both configuration and pointing differentials, free of duplicates, and stable under grid/step refinement. Intersecting-pair distances remain zero on the IP patch. UR-like continuation uses the same API without `SUUR` or pair diagnostics.
+Both synthetic architectures admit a sequential local chart that is regular, reversible from the true forward endpoint, rank-two in both configuration and pointing differentials, and free of duplicates. Intersecting-pair distances remain zero on the IP patch. UR-like continuation uses the same API without `SUUR` or pair diagnostics.
 
-Residual rectangular-loop and alternate-path discrepancies are small and consistent with curvature / holonomy on a finite patch. Exact closure and path independence are not claimed.
+ATR_EXP_024 shows deterministic macro-grid consistency: baseline and fine shared nodes agree because both use the same internal `0.005` microstep. That is not independent numerical refinement. ATR_EXP_025 remains the primary step-refinement evidence.
+
+Alternate-path discrepancies are small and stable. They are compatible with finite-path noncommutativity of the transported chart and do not independently establish geometric holonomy. Exact closure and path independence are not claimed.
 
 Recommended check-in case: **A — both architectures pass.**
 
@@ -60,4 +62,4 @@ Still blocked: spherical `RRRR`, McCarthy–Soh, exact UR/URDF, and global dexte
 
 ## 6. Next sprint recommendation
 
-After human approval of Case A or B, open Sprint 05 for one scalar constraint `h(q)=c`.
+After human approval of Case A or B **and** Check-in 04C, open Sprint 05 for one scalar constraint `h(q)=c`.

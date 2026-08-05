@@ -27,6 +27,7 @@ A negative result at any later stage does not invalidate an earlier established 
 - `ASSUMPTION_RISK_REGISTER.md` — research assumptions, project risks, and mitigations.
 - `sprints/SPRINT_01_SPATIAL_FOUNDATIONS.md` — first executable sprint.
 - `sprints/SPRINT_02_GENERIC_ALIGNED_6R.md` — generic aligned 6R Stage A reduction.
+- `IMPLEMENTATION_RATIONALE.md` / `METHOD_REFERENCES.md` — Sprint 04C method audit.
 - `decisions/` — architecture and research decision records.
 - `experiments/` — experiment specifications and result records.
 - `checkins/` — completed check-in packets and decisions.
@@ -45,4 +46,4 @@ In particular:
 
 ## Current next action
 
-Hold Check-in 4B on the sequential pointing-chart packet (`CHECKIN_04B_POINTING_CHART_VALIDATION.md`) before fiber construction.
+Complete Sprint 04C (`SPRINT_04C_IMPLEMENTATION_METHOD_AUDIT.md`), then hold human review of Check-in 4B and Check-in 04C before fiber construction.

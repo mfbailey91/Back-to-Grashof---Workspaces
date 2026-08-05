@@ -1,7 +1,7 @@
 # Project Plan — Aligned Terminal-Roll Reduction
 
 **Project owner:** Michael Bailey
-**Status:** Sprint 04B implementation complete / Check-in 4B draft pending review
+**Status:** Sprint 04C pre-approval audit / Check-in 4B and 04C drafts pending review
 **Last updated:** 2026-08-04
 **Planning horizon:** Reduction proof through exact-robot generalization
 **Change policy:** Update at formal check-ins; record material reversals in `decisions/`
@@ -235,13 +235,15 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 | Compound / `SUUR` regrouping | Local coordinate-map defined on intersecting pairs; generic negative control passes |
 | Sprint 04 | Implementation complete (ATR_EXP_016–020 PASS with validation limitations) |
 | Check-in 4 | Approved (`CONTINUE WITH CHANGED SCOPE`) |
-| Sprint 04B | Ready (ATR_EXP_021–026 planned) |
-| Check-in 4B | Not started |
-| Fiber construction | Blocked by Check-in 4B |
+| Sprint 04B | Implementation complete (ATR_EXP_021–026 PASS; descriptions under 04C correction) |
+| Sprint 04C | Pre-approval method audit before Check-in 4B |
+| Check-in 4B | Draft pending human review |
+| Check-in 04C | Draft pending human review |
+| Fiber construction | Blocked by Check-in 4B and 04C |
 | Spherical Grashof work | Blocked by M6 |
 
 ## 11. Immediate project decision
 
-Execute Sprint 04B before selecting a one-dimensional fiber.
+Complete Sprint 04C, then hold human review of Check-in 4B and Check-in 04C before selecting a one-dimensional fiber.
 
-Sprint 04 established local regular solution neighborhoods, but the project still requires sequential branch tracking, corrected chart-rank validation, duplicate detection, and refinement evidence. Do not start fiber, spherical-four-bar, McCarthy–Soh, or exact-UR work until Check-in 4B is approved.
+Do not start fiber, spherical-four-bar, McCarthy–Soh, or exact-UR work until both check-ins are approved.

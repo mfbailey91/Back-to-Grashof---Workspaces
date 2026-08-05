@@ -1,11 +1,10 @@
-# ATR_EXP_024 — Grid and step-size refinement
+# ATR_EXP_024 — Grid and step-size consistency
 
 **Status:** Complete
 **Date:** 2026-08-04
-**Related sprint:** Sprint 04B — Sequential continuation and pointing-chart validation
+**Related sprint:** Sprint 04B / 04C amendment
 **Related claim IDs:** C10, H5
 **Random seed:** none
-**Implementation commit:** `e179ead`
 
 ## 1. Purpose
 
@@ -13,7 +12,7 @@ Compare baseline `9×9` / `0.03`, fine `17×17` / `0.015`, and compact `9×9` / 
 
 ## 2. Expected result
 
-Shared-node `q`/`d` agree within `1e-4` rad / `1e-6` pointing. Rank classifications remain two under all three grids.
+Shared-node `q`/`d` agree within configured tolerances. Rank classifications remain two. Agreement is interpreted as deterministic macro-grid consistency under a shared internal microstep, not independent numerical refinement.
 
 ## 3. Command
 
@@ -23,11 +22,10 @@ python scripts/validate_pointing_chart.py
 
 ## 4. Results
 
-- status: PASS
-- observed: both architectures `shared=81`, `Δq=0`, `Δd=0`, baseline/fine/compact all rank-two
+Recorded after the Sprint 04C clean implementation commit.
 
 ## 5. Interpretation
 
-- `PASS` supports local chart stability under refinement.
-- Exact shared-node agreement uses a common internal microstep of `0.005`.
-- Path-independent finite coordinates over a curved patch are not claimed.
+Baseline and fine grids agree exactly at shared coordinates because both resolve to the same internal `0.005` continuation microstep sequence. This establishes deterministic consistency between the two macro-grid descriptions, but it is not an independent numerical-refinement result.
+
+Retain ATR_EXP_025 as the primary step-refinement evidence.

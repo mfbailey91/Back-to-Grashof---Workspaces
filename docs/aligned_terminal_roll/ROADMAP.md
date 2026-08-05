@@ -95,7 +95,7 @@ Produce a local two-parameter solution neighborhood and map it to `S2`. Include 
 
 ## Phase 4B — Sequential continuation and pointing-chart validation
 
-**Status:** `COMPLETE` pending Check-in 4B
+**Status:** `COMPLETE` pending Check-in 4B after Sprint 04C amendment
 
 Replace the seed-frozen tangent-plane projection with sequential predictor-corrector continuation using a locally recomputed and aligned tangent frame.
 
@@ -111,13 +111,23 @@ Validate:
 - UR-like continuation without imposed `SUUR` topology;
 - complete clean-source result provenance.
 
-**Check-in 4B:** Authorize fiber work only after a connected, reversible, rank-two, noncollapsed local chart is established.
+**Check-in 4B:** Authorize fiber work only after a connected, reversible, rank-two, noncollapsed local chart is established, and after Sprint 04C corrects overclaimed 024/026 interpretations.
+
+---
+
+## Phase 4C — Implementation and method audit
+
+**Status:** `COMPLETE` pending Check-in 4B and 04C
+
+Pre-approval amendment: document method rationale, correct ATR_EXP_024/026 claim language, and leave Check-in 4B plus Check-in 04C for human review.
+
+**Check-in 04C:** Authorize or block Sprint 05 together with Check-in 4B. Do not treat microstep consistency as independent refinement or alternate-path residuals as proven holonomy.
 
 ---
 
 ## Phase 5 — Explicit one-dimensional fibers
 
-**Status:** `BLOCKED` by Phase 4B
+**Status:** `BLOCKED` by Phase 4B and Phase 4C
 
 Define one independent scalar constraint such as:
 
