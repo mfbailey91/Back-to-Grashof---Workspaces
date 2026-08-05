@@ -1,0 +1,109 @@
+{
+  "experiment_id": "ATR_EXP_029",
+  "repository_commit": "9eaf0fff6c4216085e7c176de0c7198d156d5b69",
+  "working_tree_dirty": false,
+  "source_identifier": "grashof_workspace.spatial_experiments.fiber_experiments:sprint05-v1",
+  "source_file_sha256": "a7044c731ccde9095e9bf185921b82774e86df0f6372043a34cedf4a7fa326be",
+  "experiment_configuration_sha256": "17023d9e76bd449ad1140d2bc2455cd70ea9c9e1d3d4a553753d89c028ce7cb7",
+  "architecture_parameters": "URLikeAligned6R",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "n": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "alternate_n": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "step_sizes": {
+    "dsigma": 0.03
+  },
+  "n_steps": 4,
+  "rank_tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09
+  },
+  "position_tolerance": 1e-10,
+  "scalar_tolerance": 1e-12,
+  "status": "PASS",
+  "expected": "Sequential \u00b1\u03c3 fiber is regular, reversible from the endpoint, and has a noncollapsed pointing image of local rank 1",
+  "observed": "URLikeAligned6R: n_accepted=9, n_failed=0, reverse_eq=2.741e-09, reverse_ed=1.888e-09, from_end=True, image_dmax=1.641e-01, local_rank1=True",
+  "units": {
+    "length": "metre",
+    "angle": "radian",
+    "pointing_scalar": "dimensionless"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_029",
+    "status": "PASS",
+    "expected": "Sequential \u00b1\u03c3 fiber is regular, reversible from the endpoint, and has a noncollapsed pointing image of local rank 1",
+    "observed": "URLikeAligned6R: n_accepted=9, n_failed=0, reverse_eq=2.741e-09, reverse_ed=1.888e-09, from_end=True, image_dmax=1.641e-01, local_rank1=True",
+    "metrics": {
+      "n_accepted": 9,
+      "n_failed": 0,
+      "n_regular": 9,
+      "reverse": {
+        "architecture": "URLikeAligned6R",
+        "n": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "n_steps": 4,
+        "step_size": 0.03,
+        "epsilon_q": 2.7410401964430025e-09,
+        "epsilon_p": 1.3877787807814457e-17,
+        "epsilon_d": 1.8875430808910273e-09,
+        "epsilon_h": 1.1102230246251565e-16,
+        "forward_accepted": 4,
+        "reverse_accepted": 4,
+        "started_from_endpoint": true,
+        "passed": true
+      },
+      "pointing_image": {
+        "n_samples": 9,
+        "max_pointing_delta": 0.16412379235948074,
+        "min_tangent_norm": 0.6062284503414183,
+        "n_interior": 7,
+        "n_rank_one": 7,
+        "collapsed": false,
+        "local_rank_one": true,
+        "passed": true
+      },
+      "n": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "c": -0.31535450105379514,
+      "step_size": 0.03,
+      "n_steps": 4,
+      "suur_required": false,
+      "pair_fields": "not_applicable"
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "architecture": "URLikeAligned6R",
+    "n": [
+      0.0,
+      1.0,
+      0.0
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint05"
+}

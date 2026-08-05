@@ -3,7 +3,7 @@
 **Date:** 2026-08-04
 **Milestone:** M5 — Fiber legitimacy established
 **Sprint(s):** Sprint 05 — Explicit one-dimensional fiber
-**Repository commit:** TBD (implementation present; regenerate ATR_EXP_027–031 from a clean committed revision)
+**Repository commit:** `9eaf0ff` (implementation); artifacts regenerated from that clean revision
 **Decision owner:** Michael Bailey
 **Decision status:** Ready for review — not approved
 

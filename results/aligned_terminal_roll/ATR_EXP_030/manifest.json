@@ -1,0 +1,164 @@
+{
+  "experiment_id": "ATR_EXP_030",
+  "repository_commit": "9eaf0fff6c4216085e7c176de0c7198d156d5b69",
+  "working_tree_dirty": false,
+  "source_identifier": "grashof_workspace.spatial_experiments.fiber_experiments:sprint05-v1",
+  "source_file_sha256": "a7044c731ccde9095e9bf185921b82774e86df0f6372043a34cedf4a7fa326be",
+  "experiment_configuration_sha256": "cc6f5bf0253471e068e2b5ada5aa5aecb1388805c15e7b2078a734cdff5cef15",
+  "architecture_parameters": "both",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "n": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "alternate_n": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "step_sizes": {
+    "dsigma": 0.03
+  },
+  "n_steps": 4,
+  "rank_tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09
+  },
+  "position_tolerance": 1e-10,
+  "scalar_tolerance": 1e-12,
+  "status": "PASS",
+  "expected": "Alternate task-space h'=n'\u00b7d remains a regular reversible pointing fiber; q2-freeze control is a distinct path",
+  "observed": "IntersectingPairsAligned6R: alt_ind=True, alt_rev_ed=1.430e-08, freeze_dq=1.482e-02, distinct=True; URLikeAligned6R: alt_ind=True, alt_rev_ed=3.300e-09, freeze_dq=1.557e-01, distinct=True",
+  "units": {
+    "length": "metre",
+    "angle": "radian",
+    "pointing_scalar": "dimensionless"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_030",
+    "status": "PASS",
+    "expected": "Alternate task-space h'=n'\u00b7d remains a regular reversible pointing fiber; q2-freeze control is a distinct path",
+    "observed": "IntersectingPairsAligned6R: alt_ind=True, alt_rev_ed=1.430e-08, freeze_dq=1.482e-02, distinct=True; URLikeAligned6R: alt_ind=True, alt_rev_ed=3.300e-09, freeze_dq=1.557e-01, distinct=True",
+    "metrics": {
+      "reports": [
+        {
+          "architecture": "IntersectingPairsAligned6R",
+          "alternate_independent": true,
+          "alternate_rank": 4,
+          "alternate_nullity": 1,
+          "alternate_reverse": {
+            "architecture": "IntersectingPairsAligned6R",
+            "n": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "n_steps": 4,
+            "step_size": 0.03,
+            "epsilon_q": 3.518049545386186e-08,
+            "epsilon_p": 1.9229626863835638e-16,
+            "epsilon_d": 1.4301597028115795e-08,
+            "epsilon_h": 2.220446049250313e-16,
+            "forward_accepted": 4,
+            "reverse_accepted": 4,
+            "started_from_endpoint": true,
+            "passed": true
+          },
+          "alternate_image": {
+            "n_samples": 9,
+            "max_pointing_delta": 0.09547337962242884,
+            "min_tangent_norm": 0.3161720157288034,
+            "n_interior": 7,
+            "n_rank_one": 7,
+            "collapsed": false,
+            "local_rank_one": true,
+            "passed": true
+          },
+          "joint_freeze_index": 1,
+          "distinct_from_joint_freeze": {
+            "n_shared": 4,
+            "max_joint_delta": 0.014816479138543438,
+            "max_pointing_delta": 0.011261553980668438,
+            "distinct": true
+          },
+          "passed": true
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "alternate_independent": true,
+          "alternate_rank": 4,
+          "alternate_nullity": 1,
+          "alternate_reverse": {
+            "architecture": "URLikeAligned6R",
+            "n": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "n_steps": 4,
+            "step_size": 0.03,
+            "epsilon_q": 3.6196594520194677e-09,
+            "epsilon_p": 5.551115123125783e-17,
+            "epsilon_d": 3.2997868020009466e-09,
+            "epsilon_h": 8.326672684688674e-17,
+            "forward_accepted": 4,
+            "reverse_accepted": 4,
+            "started_from_endpoint": true,
+            "passed": true
+          },
+          "alternate_image": {
+            "n_samples": 9,
+            "max_pointing_delta": 0.21803690162436262,
+            "min_tangent_norm": 0.8973567216021507,
+            "n_interior": 7,
+            "n_rank_one": 7,
+            "collapsed": false,
+            "local_rank_one": true,
+            "passed": true
+          },
+          "joint_freeze_index": 1,
+          "distinct_from_joint_freeze": {
+            "n_shared": 4,
+            "max_joint_delta": 0.15565315949139413,
+            "max_pointing_delta": 0.12513359412383793,
+            "distinct": true
+          },
+          "passed": true
+        }
+      ],
+      "primary_n": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "alternate_n": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "joint_freeze_index": 1
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "n": [
+      1.0,
+      0.0,
+      0.0
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint05"
+}

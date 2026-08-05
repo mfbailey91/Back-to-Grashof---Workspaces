@@ -1,0 +1,137 @@
+{
+  "experiment_id": "ATR_EXP_027",
+  "repository_commit": "9eaf0fff6c4216085e7c176de0c7198d156d5b69",
+  "working_tree_dirty": false,
+  "source_identifier": "grashof_workspace.spatial_experiments.fiber_experiments:sprint05-v1",
+  "source_file_sha256": "a7044c731ccde9095e9bf185921b82774e86df0f6372043a34cedf4a7fa326be",
+  "experiment_configuration_sha256": "f57ca4f9803ec6763266e601701af3d33273cdc364a1ce3bd28b8e240125f3b5",
+  "architecture_parameters": "both",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "n": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "alternate_n": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "step_sizes": {
+    "dsigma": 0.03
+  },
+  "n_steps": 4,
+  "rank_tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09
+  },
+  "position_tolerance": 1e-10,
+  "scalar_tolerance": 1e-12,
+  "status": "PASS",
+  "expected": "Primary h=n\u00b7d is independent at both regular seeds: rank 4 / nullity 1 and dh/dq6=0",
+  "observed": "IntersectingPairsAligned6R: rank=4, null=1, dh_dq6=0.000e+00, independent=True; URLikeAligned6R: rank=4, null=1, dh_dq6=0.000e+00, independent=True",
+  "units": {
+    "length": "metre",
+    "angle": "radian",
+    "pointing_scalar": "dimensionless"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_027",
+    "status": "PASS",
+    "expected": "Primary h=n\u00b7d is independent at both regular seeds: rank 4 / nullity 1 and dh/dq6=0",
+    "observed": "IntersectingPairsAligned6R: rank=4, null=1, dh_dq6=0.000e+00, independent=True; URLikeAligned6R: rank=4, null=1, dh_dq6=0.000e+00, independent=True",
+    "metrics": {
+      "reports": [
+        {
+          "n": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "c": 0.780498929255855,
+          "n_dot_d": 0.780498929255855,
+          "n_cross_d_norm": 0.6251571173956704,
+          "grad_h": [
+            0.24431607121610832,
+            -0.4562228860243628,
+            0.006618619416244087,
+            0.14816670694162715,
+            -0.5971714452668998,
+            0.0
+          ],
+          "dh_dq6": 0.0,
+          "singular_values": [
+            1.053279340797606,
+            0.6201651978049255,
+            0.3074140053196661,
+            0.07196527401983498
+          ],
+          "rank": 4,
+          "nullity": 1,
+          "threshold": 1.053279340797606e-09,
+          "independent": true,
+          "dh_dq6_vanishes": true,
+          "architecture": "IntersectingPairsAligned6R"
+        },
+        {
+          "n": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "c": -0.31535450105379514,
+          "n_dot_d": -0.31535450105379514,
+          "n_cross_d_norm": 0.9489739399293913,
+          "grad_h": [
+            -0.10146249696610761,
+            0.3235358291186325,
+            0.3235358291186325,
+            -0.8656983843735832,
+            0.25137983875519393,
+            0.0
+          ],
+          "dh_dq6": 0.0,
+          "singular_values": [
+            1.0382128534177082,
+            0.439685575627257,
+            0.4228648129726708,
+            0.0796252125310689
+          ],
+          "rank": 4,
+          "nullity": 1,
+          "threshold": 1.0382128534177082e-09,
+          "independent": true,
+          "dh_dq6_vanishes": true,
+          "architecture": "URLikeAligned6R"
+        }
+      ],
+      "n": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "dh_dq6_tol": 1e-12
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "n": [
+      0.0,
+      1.0,
+      0.0
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint05"
+}

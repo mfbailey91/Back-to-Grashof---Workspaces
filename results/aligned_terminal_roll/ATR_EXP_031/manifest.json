@@ -1,0 +1,169 @@
+{
+  "experiment_id": "ATR_EXP_031",
+  "repository_commit": "9eaf0fff6c4216085e7c176de0c7198d156d5b69",
+  "working_tree_dirty": false,
+  "source_identifier": "grashof_workspace.spatial_experiments.fiber_experiments:sprint05-v1",
+  "source_file_sha256": "a7044c731ccde9095e9bf185921b82774e86df0f6372043a34cedf4a7fa326be",
+  "experiment_configuration_sha256": "83881030b03bcace45868b976077822b3eb6bbaf38939afabd8be3e5428022df",
+  "architecture_parameters": "both",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "n": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "alternate_n": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "step_sizes": {
+    "dsigma": 0.03
+  },
+  "n_steps": 4,
+  "rank_tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09
+  },
+  "position_tolerance": 1e-10,
+  "scalar_tolerance": 1e-12,
+  "status": "PASS",
+  "expected": "With max_microstep=None over the same \u03c3 travel, reverse tracking succeeds and both joint and pointing return errors decrease when \u0394\u03c3 is halved; shared-\u03c3 samples stay within 1e-3. Tight 1e-6/5e-8 reverse gates apply to microstepped runs (028/029), not this independent-step refinement diagnostic",
+  "observed": "IntersectingPairsAligned6R: coarse_eq=6.295e-06 -> fine_eq=7.884e-07, shared_dq=6.426e-05; URLikeAligned6R: coarse_eq=5.915e-07 -> fine_eq=7.399e-08, shared_dq=3.310e-05",
+  "units": {
+    "length": "metre",
+    "angle": "radian",
+    "pointing_scalar": "dimensionless"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_031",
+    "status": "PASS",
+    "expected": "With max_microstep=None over the same \u03c3 travel, reverse tracking succeeds and both joint and pointing return errors decrease when \u0394\u03c3 is halved; shared-\u03c3 samples stay within 1e-3. Tight 1e-6/5e-8 reverse gates apply to microstepped runs (028/029), not this independent-step refinement diagnostic",
+    "observed": "IntersectingPairsAligned6R: coarse_eq=6.295e-06 -> fine_eq=7.884e-07, shared_dq=6.426e-05; URLikeAligned6R: coarse_eq=5.915e-07 -> fine_eq=7.399e-08, shared_dq=3.310e-05",
+    "metrics": {
+      "reports": [
+        {
+          "architecture": "IntersectingPairsAligned6R",
+          "coarse_reverse": {
+            "architecture": "IntersectingPairsAligned6R",
+            "n": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "n_steps": 4,
+            "step_size": 0.03,
+            "epsilon_q": 6.294966638468968e-06,
+            "epsilon_p": 3.3583099550713978e-15,
+            "epsilon_d": 1.6212698977442131e-06,
+            "epsilon_h": 7.216449660063518e-15,
+            "forward_accepted": 4,
+            "reverse_accepted": 4,
+            "started_from_endpoint": true,
+            "passed": false
+          },
+          "fine_reverse": {
+            "architecture": "IntersectingPairsAligned6R",
+            "n": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "n_steps": 8,
+            "step_size": 0.015,
+            "epsilon_q": 7.884374974647068e-07,
+            "epsilon_p": 1.5700924586837752e-16,
+            "epsilon_d": 2.0306142011067214e-07,
+            "epsilon_h": 1.1102230246251565e-16,
+            "forward_accepted": 8,
+            "reverse_accepted": 8,
+            "started_from_endpoint": true,
+            "passed": false
+          },
+          "shared_sigma": {
+            "n_shared": 5,
+            "max_joint_delta": 6.425574127862663e-05,
+            "max_pointing_delta": 1.36427923929887e-05,
+            "passed": true
+          },
+          "reverse_improved_or_within_tol": true,
+          "max_microstep": null,
+          "independent_refinement": true,
+          "passed": true
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "coarse_reverse": {
+            "architecture": "URLikeAligned6R",
+            "n": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "n_steps": 4,
+            "step_size": 0.03,
+            "epsilon_q": 5.914601054276596e-07,
+            "epsilon_p": 1.3877787807814457e-17,
+            "epsilon_d": 4.0729288112969357e-07,
+            "epsilon_h": 0.0,
+            "forward_accepted": 4,
+            "reverse_accepted": 4,
+            "started_from_endpoint": true,
+            "passed": false
+          },
+          "fine_reverse": {
+            "architecture": "URLikeAligned6R",
+            "n": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "n_steps": 8,
+            "step_size": 0.015,
+            "epsilon_q": 7.399079629759205e-08,
+            "epsilon_p": 5.721958498152797e-17,
+            "epsilon_d": 5.095176116833621e-08,
+            "epsilon_h": 0.0,
+            "forward_accepted": 8,
+            "reverse_accepted": 8,
+            "started_from_endpoint": true,
+            "passed": false
+          },
+          "shared_sigma": {
+            "n_shared": 5,
+            "max_joint_delta": 3.3096244604728084e-05,
+            "max_pointing_delta": 2.5733523684697002e-05,
+            "passed": true
+          },
+          "reverse_improved_or_within_tol": true,
+          "max_microstep": null,
+          "independent_refinement": true,
+          "passed": true
+        }
+      ],
+      "shared_microstep": null,
+      "independent_refinement": true
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "n": [
+      0.0,
+      1.0,
+      0.0
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint05"
+}

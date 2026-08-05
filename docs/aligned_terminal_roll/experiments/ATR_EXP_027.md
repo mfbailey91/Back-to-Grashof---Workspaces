@@ -5,7 +5,7 @@
 **Related sprint:** Sprint 05 — Explicit one-dimensional fiber
 **Related claim IDs:** C11, H1, A09
 **Random seed:** none
-**Implementation commit:** TBD (regenerate after clean commit)
+**Implementation commit:** `9eaf0ff`
 
 ## 1. Purpose
 
