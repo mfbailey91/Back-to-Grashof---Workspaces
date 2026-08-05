@@ -1,6 +1,6 @@
 # Sprint 05 — Explicit one-dimensional fiber
 
-**Sprint status:** Complete — awaiting Check-in 5  
+**Sprint status:** Complete — Check-in 5 approved `CONTINUE WITH CHANGED SCOPE`  
 **Milestone target:** M5 — Fiber legitimacy established  
 **Check-in:** Check-in 5  
 **Authorized by:** Check-in 4B (Case A) and Check-in 04C (Pass), 2026-08-04  
@@ -131,7 +131,7 @@ tests/
     test_spatial_fiber_continuation.py
 
 docs/aligned_terminal_roll/checkins/
-    CHECKIN_05_EXPLICIT_FIBER.md   # draft after experiments
+    CHECKIN_05_FIBER_LEGITIMACY.md   # approved CONTINUE WITH CHANGED SCOPE
 ```
 
 Keep `include_pairs` / `suur_map` out of the general fiber API.
@@ -200,4 +200,4 @@ This note is accepted for implementation when the decision owner agrees that:
 3. IP is primary and UR-like is parallel;
 4. spherical work remains out of Sprint 05.
 
-Accepted for implementation 2026-08-04. Check-in 5 is the remaining human gate.
+Accepted for implementation 2026-08-04. Check-in 5 approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`): primary and alternate fibers are candidate slices, not canonical fibers. Sprint 06 spherical-equivalence planning is authorized.

@@ -1,7 +1,7 @@
 # Implementation rationale — aligned terminal-roll spatial kernel
 
 **Status:** Sprint 05 local C11  
-**Scope:** Decision-bearing methods used through Check-in 5 draft  
+**Scope:** Decision-bearing methods used through Check-in 5 (`CONTINUE WITH CHANGED SCOPE`)  
 **Nonclaim:** This note authorizes only a local task-space pointing fiber (C11). It does not authorize spherical `RRRR`, McCarthy–Soh, or exact UR.
 
 ## Inventory

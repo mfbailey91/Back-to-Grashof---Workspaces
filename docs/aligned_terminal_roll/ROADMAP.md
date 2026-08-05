@@ -127,7 +127,7 @@ Pre-approval amendment: document method rationale and correct ATR_EXP_024/026 cl
 
 ## Phase 5 — Explicit one-dimensional fibers
 
-**Status:** `COMPLETE` implementation — Check-in 5 ready for review
+**Status:** `COMPLETE`
 
 Locked scalar:
 
@@ -145,24 +145,29 @@ q6 = q6*   (0.70 rad on the locked regular seeds; not q6=0)
 h(q) = c
 ```
 
-ATR_EXP_027–031 PASS on IP (primary) and UR-like (parallel). **Check-in 5** decides whether this is enough to open Phase 6.
+**Check-in 5:** Approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`). Primary and alternate explicit task-space fibers are regular, reversible, noncollapsed, and stable under independent-step refinement on both tested architectures.
+
+The tested fibers are candidate slices. A canonical or architecture-derived fiber remains open.
 
 ---
 
 ## Phase 6 — Exact spherical-four-bar tests
 
-**Status:** `BLOCKED` by Check-in 5
+**Status:** `NEXT`
 
 For each candidate fiber, test in order:
 
-1. four-axis global concurrency;
-2. fixed spherical arc dimensions;
-3. inactive-coordinate locking;
-4. local tangent equivalence;
-5. global continued-motion equivalence;
-6. McCarthy-Soh classification.
+1. duplicate-configuration scan;
+2. branch-wide four-axis concurrency;
+3. fixed spherical arc dimensions;
+4. inactive-coordinate locking;
+5. local tangent equivalence;
+6. continued-motion equivalence;
+7. McCarthy-Soh classification only after items 1–6 pass.
 
-**Check-in 6:** Accept or reject the spherical `RRRR` hypothesis independently of the terminal-roll reduction.
+Test both primary and alternate task-space fibers on the intersecting-pairs architecture and retain the UR-like architecture as a parallel comparison.
+
+**Check-in 6:** Accept or reject each candidate spherical `RRRR` independently. Rejection of one selected slice does not establish nonexistence of all spherical fibers and does not invalidate the terminal-roll reduction.
 
 ---
 

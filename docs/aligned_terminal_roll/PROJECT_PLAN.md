@@ -1,7 +1,7 @@
 # Project Plan — Aligned Terminal-Roll Reduction
 
 **Project owner:** Michael Bailey
-**Status:** Sprint 05 implemented / Check-in 5 ready for review
+**Status:** Sprint 05 complete / Check-in 5 approved with changed scope / Sprint 06 planning authorized
 **Last updated:** 2026-08-04
 **Planning horizon:** Reduction proof through exact-robot generalization
 **Change policy:** Update at formal check-ins; record material reversals in `decisions/`
@@ -131,9 +131,11 @@ Review continuation quality, branch behavior, singular sets, and coverage of the
 
 ### M5 — Fiber legitimacy established
 
-Review the scalar constraint, rank/nullity, branch closure, and coordinate independence.
+Review scalar independence, rank/nullity, sequential branch tracking, reverse return, noncollapse, alternate task-space slices, coordinate-frozen controls, and refinement.
 
-**Decision:** authorize spherical-four-bar search.
+**Decision:** authorize candidate spherical-four-bar tests while keeping canonical or architecture-derived fiber selection open.
+
+Failure of one candidate slice does not establish nonexistence of all spherical fibers.
 
 ### M6 — Spherical equivalence decision
 
@@ -239,10 +241,17 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 | Sprint 04C | Complete (Check-in 04C Pass) |
 | Check-in 4B | Approved 2026-08-04 (Case A) |
 | Check-in 04C | Approved 2026-08-04 (Pass) |
-| Sprint 05 | Complete (ATR_EXP_027–031 PASS; Check-in 5 draft) |
-| Fiber construction | Local C11 fiber implemented; human Check-in 5 pending |
-| Spherical Grashof work | Blocked by M5 / M6 |
+| Sprint 05 | Complete (ATR_EXP_027–031 PASS) |
+| Check-in 5 | Approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`) |
+| Fiber construction | Explicit primary and alternate task-space fibers verified locally |
+| Canonical fiber selection | Open |
+| Sprint 06 | Planning authorized for candidate spherical-equivalence tests |
+| McCarthy–Soh classification | Blocked until exact spherical `RRRR` prerequisites pass |
+| Exact UR work | Deferred |
+| Spherical Grashof work | Authorized at candidate-test planning stage only |
 
 ## 11. Immediate project decision
 
-Review `CHECKIN_05_EXPLICIT_FIBER.md`. Do not start spherical-four-bar, McCarthy–Soh, or exact-UR work until Check-in 5 authorizes that narrower hypothesis.
+Review `SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md`, then implement candidate spherical tests on the named primary and alternate fibers.
+
+Begin with duplicate-configuration detection and branch-wide concurrency. Do not apply McCarthy–Soh and do not infer nonexistence of all spherical fibers from failure of one selected slice.
