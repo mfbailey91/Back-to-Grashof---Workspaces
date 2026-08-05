@@ -377,6 +377,7 @@ def evaluate_alternate_and_duplicates() -> dict[str, Any]:
 
 
 def run_all_chart_experiments(repo_root: Path) -> list[dict[str, Any]]:
+    provenance = _git_provenance(repo_root)
     results = [
         evaluate_forward_reverse(),
         evaluate_intersecting_pairs_chart(),
@@ -386,15 +387,20 @@ def run_all_chart_experiments(repo_root: Path) -> list[dict[str, Any]]:
         evaluate_alternate_and_duplicates(),
     ]
     for result in results:
-        write_chart_artifacts(repo_root, result)
+        write_chart_artifacts(repo_root, result, provenance=provenance)
     return results
 
 
-def write_chart_artifacts(repo_root: Path, result: dict[str, Any]) -> Path:
+def write_chart_artifacts(
+    repo_root: Path,
+    result: dict[str, Any],
+    *,
+    provenance: tuple[str, bool] | None = None,
+) -> Path:
     exp_id = str(result["experiment_id"])
     out = repo_root / "results" / "aligned_terminal_roll" / exp_id
     out.mkdir(parents=True, exist_ok=True)
-    commit, dirty = _git_provenance(repo_root)
+    commit, dirty = provenance if provenance is not None else _git_provenance(repo_root)
     source_path = Path(__file__).resolve()
     source_sha = hashlib.sha256(source_path.read_bytes()).hexdigest()
     config = {
