@@ -486,11 +486,14 @@ def _git_provenance(repo_root: Path) -> tuple[str, bool]:
         status = subprocess.check_output(
             ["git", "status", "--porcelain"], cwd=repo_root, stderr=subprocess.DEVNULL, text=True
         )
-        relevant = [
-            line
-            for line in status.splitlines()
-            if not line.endswith(".DS_Store") and not line.rstrip().endswith(".patch")
-        ]
+        relevant = []
+        for line in status.splitlines():
+            path = line[3:].split(" -> ")[-1]
+            if path.endswith(".DS_Store") or path.endswith(".patch"):
+                continue
+            if path.startswith("results/aligned_terminal_roll/"):
+                continue
+            relevant.append(line)
         return commit, bool(relevant)
     except (subprocess.CalledProcessError, FileNotFoundError):
         return "unknown", True
