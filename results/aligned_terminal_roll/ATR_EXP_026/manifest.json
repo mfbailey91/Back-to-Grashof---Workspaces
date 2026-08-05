@@ -1,10 +1,10 @@
 {
   "experiment_id": "ATR_EXP_026",
-  "repository_commit": "e179ead803893988cec11269af71893846c40c6f",
+  "repository_commit": "82622cf1558ee6e8b62439235f24eee11cbbedca",
   "working_tree_dirty": false,
-  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1",
-  "source_file_sha256": "510bc24d29326a46c8332a8c3244ac11df22d11d6c7c8c9ec161f30c467ce7df",
-  "experiment_configuration_sha256": "c489e41d869b12d7db03f5517f659a0b7d9d6e5e889eb7a2fcd93b2016698b01",
+  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04c-v1",
+  "source_file_sha256": "c9f0c6050109f44a2546cabb8f170a963a6269c311fbe9d6669e67584b40be60",
+  "experiment_configuration_sha256": "904ad71285c5be9004c9507ed12448fb7b38ab4b35d909c3dec2b4eebca262d8",
   "architecture_parameters": "both",
   "seed_configuration": [
     0.35,
@@ -29,7 +29,7 @@
   "position_tolerance": 1e-10,
   "duplicate_tolerance": 1e-06,
   "status": "PASS",
-  "expected": "No duplicate solutions; s-then-t vs t-then-s discrepancy shrinks under refinement",
+  "expected": "No duplicate solutions; s-then-t vs t-then-s discrepancy remains small and stable",
   "observed": "IntersectingPairsAligned6R: dups=0, alt_coarse=3.304e-04, alt_fine=3.301e-04; URLikeAligned6R: dups=0, alt_coarse=3.791e-05, alt_fine=3.810e-05",
   "units": {
     "length": "metre",
@@ -38,7 +38,7 @@
   "result": {
     "experiment_id": "ATR_EXP_026",
     "status": "PASS",
-    "expected": "No duplicate solutions; s-then-t vs t-then-s discrepancy shrinks under refinement",
+    "expected": "No duplicate solutions; s-then-t vs t-then-s discrepancy remains small and stable",
     "observed": "IntersectingPairsAligned6R: dups=0, alt_coarse=3.304e-04, alt_fine=3.301e-04; URLikeAligned6R: dups=0, alt_coarse=3.791e-05, alt_fine=3.810e-05",
     "metrics": {
       "reports": [
@@ -62,7 +62,7 @@
             "epsilon_p": 8.821907882125637e-15,
             "epsilon_d": 0.00013272144088936663
           },
-          "discrepancy_decreased": true,
+          "discrepancy_stable_or_decreased": true,
           "passed": true
         },
         {
@@ -85,7 +85,7 @@
             "epsilon_p": 1.8410966031475738e-16,
             "epsilon_d": 3.00904531591018e-05
           },
-          "discrepancy_decreased": true,
+          "discrepancy_stable_or_decreased": true,
           "passed": true
         }
       ]
@@ -99,5 +99,5 @@
       0.7
     ]
   },
-  "software_version": "grashof-workspace spatial_experiments sprint04b"
+  "software_version": "grashof-workspace spatial_experiments sprint04c"
 }

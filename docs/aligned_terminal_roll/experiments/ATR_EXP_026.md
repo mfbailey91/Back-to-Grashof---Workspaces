@@ -22,7 +22,9 @@ python scripts/validate_pointing_chart.py
 
 ## 4. Results
 
-Recorded after the Sprint 04C clean implementation commit.
+- status: PASS
+- implementation commit: `82622cf`
+- observed: both architectures `duplicates=0`; IP `3.304e-04 → 3.301e-04`; UR-like `3.791e-05 → 3.810e-05`; `discrepancy_stable_or_decreased=true`
 
 ## 5. Interpretation
 

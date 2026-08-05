@@ -22,7 +22,9 @@ python scripts/validate_pointing_chart.py
 
 ## 4. Results
 
-Recorded after the Sprint 04C clean implementation commit.
+- status: PASS
+- implementation commit: `82622cf`
+- observed: both architectures `shared=81`, `Δq=0`, `Δd=0`, ranks two; `shared_microstep=0.005`, `independent_refinement=false`
 
 ## 5. Interpretation
 

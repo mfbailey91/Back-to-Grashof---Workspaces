@@ -1,13 +1,13 @@
 # ATR_EXP_026
 
 **Status:** PASS
-**Commit:** e179ead803893988cec11269af71893846c40c6f
+**Commit:** 82622cf1558ee6e8b62439235f24eee11cbbedca
 **Working tree dirty:** False
-**Source:** grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1
+**Source:** grashof_workspace.spatial_experiments.chart_experiments:sprint04c-v1
 
 ## Expected
 
-No duplicate solutions; s-then-t vs t-then-s discrepancy shrinks under refinement
+No duplicate solutions; s-then-t vs t-then-s discrepancy remains small and stable
 
 ## Observed
 

@@ -1,10 +1,10 @@
 {
   "experiment_id": "ATR_EXP_024",
-  "repository_commit": "e179ead803893988cec11269af71893846c40c6f",
+  "repository_commit": "82622cf1558ee6e8b62439235f24eee11cbbedca",
   "working_tree_dirty": false,
-  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1",
-  "source_file_sha256": "510bc24d29326a46c8332a8c3244ac11df22d11d6c7c8c9ec161f30c467ce7df",
-  "experiment_configuration_sha256": "44bc37e73649d3560c7a6ff9efe57cbcb0bfd3d92390a44c341210f78dcf0a56",
+  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04c-v1",
+  "source_file_sha256": "c9f0c6050109f44a2546cabb8f170a963a6269c311fbe9d6669e67584b40be60",
+  "experiment_configuration_sha256": "331c8eb159377aa4b3e8e5199d1547f9b1c5ec5b3b65d633a7a9308b4eb957e4",
   "architecture_parameters": "both",
   "seed_configuration": [
     0.35,
@@ -29,7 +29,7 @@
   "position_tolerance": 1e-10,
   "duplicate_tolerance": 1e-06,
   "status": "PASS",
-  "expected": "Shared-node q/d and rank classifications remain stable under grid/step refinement",
+  "expected": "Shared-node q/d agree under the same internal microstep; rank classifications remain two. This is macro-grid consistency, not independent numerical refinement",
   "observed": "IntersectingPairsAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True; URLikeAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True",
   "units": {
     "length": "metre",
@@ -38,7 +38,7 @@
   "result": {
     "experiment_id": "ATR_EXP_024",
     "status": "PASS",
-    "expected": "Shared-node q/d and rank classifications remain stable under grid/step refinement",
+    "expected": "Shared-node q/d agree under the same internal microstep; rank classifications remain two. This is macro-grid consistency, not independent numerical refinement",
     "observed": "IntersectingPairsAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True; URLikeAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True",
     "metrics": {
       "comparisons": [
@@ -70,7 +70,9 @@
           "compact_rank_two": true,
           "passed": true
         }
-      ]
+      ],
+      "shared_microstep": 0.005,
+      "independent_refinement": false
     },
     "q": [
       0.35,
@@ -81,5 +83,5 @@
       0.7
     ]
   },
-  "software_version": "grashof-workspace spatial_experiments sprint04b"
+  "software_version": "grashof-workspace spatial_experiments sprint04c"
 }

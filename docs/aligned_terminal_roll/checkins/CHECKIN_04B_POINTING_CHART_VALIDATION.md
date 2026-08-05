@@ -3,7 +3,7 @@
 **Date:** 2026-08-04
 **Milestone:** M4B — Validated local two-dimensional pointing chart
 **Sprint(s):** Sprint 04B — Sequential continuation and pointing-chart validation
-**Repository commit:** `e179ead` (implementation); artifacts regenerated from that clean revision
+**Repository commit:** `e179ead` (original 04B implementation); documentation amended and artifacts regenerated at `82622cf` (Sprint 04C)
 **Decision owner:** Michael Bailey
 **Decision status:** Draft — awaiting human review
 
@@ -38,7 +38,7 @@ This check-in does **not** claim fibers, spherical `RRRR`, McCarthy–Soh, exact
 | ATR_EXP_025 | Rectangular-loop refinement | PASS |
 | ATR_EXP_026 | Alternate-path and duplicates | PASS |
 
-All manifests record `repository_commit=e179ead` and `working_tree_dirty=false`.
+Sprint 04C regenerated manifests record `repository_commit=82622cf`, `working_tree_dirty=false`, and `source_identifier=…:sprint04c-v1`. Numerical PASS/FAIL outcomes are unchanged from the 04B runs.
 
 ## 4. Interpretation
 

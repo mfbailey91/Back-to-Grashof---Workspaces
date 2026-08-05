@@ -3,7 +3,7 @@
 **Date:** 2026-08-04
 **Milestone:** Pre-approval amendment to M4B
 **Sprint(s):** Sprint 04C — Bounded implementation and method audit
-**Repository commit:** pending clean implementation commit
+**Repository commit:** `82622cf` (implementation); artifacts regenerated from that clean revision
 **Decision owner:** Michael Bailey
 **Decision status:** Draft — awaiting human review together with Check-in 4B
 

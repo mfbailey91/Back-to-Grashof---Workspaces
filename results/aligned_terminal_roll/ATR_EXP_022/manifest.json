@@ -1,10 +1,10 @@
 {
   "experiment_id": "ATR_EXP_022",
-  "repository_commit": "e179ead803893988cec11269af71893846c40c6f",
+  "repository_commit": "82622cf1558ee6e8b62439235f24eee11cbbedca",
   "working_tree_dirty": false,
-  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1",
-  "source_file_sha256": "510bc24d29326a46c8332a8c3244ac11df22d11d6c7c8c9ec161f30c467ce7df",
-  "experiment_configuration_sha256": "269a70e4a9b9bd76c05750ce3739c6726ac8bef3f4814d8979eb9f9e7452d3ab",
+  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04c-v1",
+  "source_file_sha256": "c9f0c6050109f44a2546cabb8f170a963a6269c311fbe9d6669e67584b40be60",
+  "experiment_configuration_sha256": "bc36b6acb604aec9b8422b8aa08cca75bc182089aafbd977002ff577a31bd8b7",
   "architecture_parameters": "IntersectingPairsAligned6R",
   "seed_configuration": [
     0.35,
@@ -69,5 +69,5 @@
     ],
     "architecture": "IntersectingPairsAligned6R"
   },
-  "software_version": "grashof-workspace spatial_experiments sprint04b"
+  "software_version": "grashof-workspace spatial_experiments sprint04c"
 }

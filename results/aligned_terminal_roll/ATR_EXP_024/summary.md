@@ -1,13 +1,13 @@
 # ATR_EXP_024
 
 **Status:** PASS
-**Commit:** e179ead803893988cec11269af71893846c40c6f
+**Commit:** 82622cf1558ee6e8b62439235f24eee11cbbedca
 **Working tree dirty:** False
-**Source:** grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1
+**Source:** grashof_workspace.spatial_experiments.chart_experiments:sprint04c-v1
 
 ## Expected
 
-Shared-node q/d and rank classifications remain stable under grid/step refinement
+Shared-node q/d agree under the same internal microstep; rank classifications remain two. This is macro-grid consistency, not independent numerical refinement
 
 ## Observed
 
