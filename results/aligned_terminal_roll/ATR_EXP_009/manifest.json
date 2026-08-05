@@ -1,0 +1,90 @@
+{
+  "experiment_id": "ATR_EXP_009",
+  "repository_commit": "ebea47784b478f8b52c38eda485de4d9066f4d7b",
+  "status": "PASS",
+  "expected": "off-axis p makes J_p e6 nonzero; misaligned d makes J_d e6 nonzero",
+  "observed": "off-axis ||J_p e6||=3.000e-02; misaligned ||J_d e6||=2.474e-01",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09,
+    "e6_col_tol": 1e-09,
+    "kernel_align_tol": 1e-08
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_009",
+    "status": "PASS",
+    "expected": "off-axis p makes J_p e6 nonzero; misaligned d makes J_d e6 nonzero",
+    "observed": "off-axis ||J_p e6||=3.000e-02; misaligned ||J_d e6||=2.474e-01",
+    "off_axis": {
+      "q": [
+        0.35,
+        -0.42,
+        0.55,
+        0.28,
+        -0.33,
+        0.7
+      ],
+      "rank_jp": 3,
+      "nullity_jp": 3,
+      "rank_jpd": 5,
+      "nullity_jpd": 1,
+      "sv_jp": [
+        0.7673613111832294,
+        0.4419407477131225,
+        0.1147523109521824
+      ],
+      "sv_jpd": [
+        1.539911588272479,
+        1.0603226455765131,
+        0.4432077565113252,
+        0.16443990024753377,
+        0.08830899831219702,
+        6.500112271743186e-18
+      ],
+      "jp_e6_norm": 0.030000000000000127,
+      "jd_e6_norm": 0.0,
+      "ker_jpd_align_e6": 0.17809146466537276,
+      "rank_jd_nred": 2,
+      "nred_cols": 2,
+      "regular": false
+    },
+    "misaligned": {
+      "q": [
+        0.35,
+        -0.42,
+        0.55,
+        0.28,
+        -0.33,
+        0.7
+      ],
+      "rank_jp": 3,
+      "nullity_jp": 3,
+      "rank_jpd": 5,
+      "nullity_jpd": 1,
+      "sv_jp": [
+        0.7860931775652177,
+        0.45869263972956303,
+        0.11017114315882602
+      ],
+      "sv_jpd": [
+        1.549547706824613,
+        1.1418208994371841,
+        0.4814476987402092,
+        0.25788251981774973,
+        0.08955439013899759,
+        3.031260797855143e-17
+      ],
+      "jp_e6_norm": 6.014889436379362e-17,
+      "jd_e6_norm": 0.24740395925452305,
+      "ker_jpd_align_e6": 0.3152008148498784,
+      "rank_jd_nred": 2,
+      "nred_cols": 2,
+      "regular": false
+    }
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint02"
+}

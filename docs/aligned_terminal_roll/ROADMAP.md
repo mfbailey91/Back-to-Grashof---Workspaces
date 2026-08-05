@@ -45,7 +45,7 @@ tool direction rotated away from R6
 
 ## Phase 2 — Generic synthetic aligned 6R
 
-**Status:** `NEXT`
+**Status:** `COMPLETE` pending Check-in 2
 
 Implement the minimum full serial-chain kernel and verify:
 

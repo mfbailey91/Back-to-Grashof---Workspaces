@@ -1,7 +1,7 @@
 # Project Plan — Aligned Terminal-Roll Reduction
 
 **Project owner:** Michael Bailey
-**Status:** Check-in 1 approved / Sprint 02 authorized
+**Status:** Sprint 02 implementation complete / Check-in 2 draft
 **Last updated:** 2026-08-04
 **Planning horizon:** Reduction proof through exact-robot generalization
 **Change policy:** Update at formal check-ins; record material reversals in `decisions/`
@@ -226,13 +226,13 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 | Sprint 01 | Complete |
 | Check-in 1 | Approved (`CONTINUE`) |
 | Terminal fixture | Complete (ATR_EXP_001–005 PASS) |
-| Generic 6R kernel | Authorized |
+| Sprint 02 | Implementation complete (ATR_EXP_006–010 PASS) |
+| Check-in 2 | Draft |
+| Generic 6R kernel | Implemented; awaiting Check-in 2 |
 | UR-like model | Deferred to M3 |
 | Fiber construction | Blocked by M4 |
 | Spherical Grashof work | Blocked by M6 |
 
 ## 11. Immediate project decision
 
-Check-in 1 is approved. Proceed to the generic synthetic aligned-terminal 6R kernel.
-
-Do not introduce compound-joint models, UR-like architectures, fibers, or spherical four-bar code until later authorized gates.
+Sprint 02 Stage A evidence is ready for Check-in 2. Do not start compound-joint, UR-like, continuation, or spherical-four-bar work until Check-in 2 is approved.

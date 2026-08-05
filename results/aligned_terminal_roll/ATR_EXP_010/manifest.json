@@ -1,0 +1,152 @@
+{
+  "experiment_id": "ATR_EXP_010",
+  "repository_commit": "ebea47784b478f8b52c38eda485de4d9066f4d7b",
+  "status": "PASS",
+  "expected": "regular subset supports C6-C8; named sample is singular or near-singular and labeled separately",
+  "observed": "survey regular=48/48, singular_jp=0, named rank_jp=3, named_sigma_ratio=1.431e-02, median_regular_sigma_ratio=2.240e-01",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09,
+    "e6_col_tol": 1e-09,
+    "kernel_align_tol": 1e-08
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_010",
+    "status": "PASS",
+    "expected": "regular subset supports C6-C8; named sample is singular or near-singular and labeled separately",
+    "observed": "survey regular=48/48, singular_jp=0, named rank_jp=3, named_sigma_ratio=1.431e-02, median_regular_sigma_ratio=2.240e-01",
+    "survey_regular_count": 48,
+    "survey_singular_jp_count": 0,
+    "named_singular": {
+      "q": [
+        -1.5025540865662197,
+        -2.5606647978377195,
+        2.995852570760189,
+        -2.8909035343888276,
+        2.155531307862479,
+        -2.5040947460767304
+      ],
+      "rank_jp": 3,
+      "nullity_jp": 3,
+      "rank_jpd": 5,
+      "nullity_jpd": 1,
+      "sv_jp": [
+        0.8755102681762591,
+        0.42216227688572056,
+        0.012527663384310467
+      ],
+      "sv_jpd": [
+        1.5736620969648583,
+        1.3298670731048623,
+        0.5358539466376087,
+        0.20894593008846774,
+        0.010881288461853565,
+        3.1971147351247e-18
+      ],
+      "jp_e6_norm": 2.986310844792015e-16,
+      "jd_e6_norm": 9.309503074677274e-17,
+      "ker_jpd_align_e6": 0.0,
+      "rank_jd_nred": 2,
+      "nred_cols": 2,
+      "regular": true
+    },
+    "named_singular_sigma_ratio": 0.014308985102375039,
+    "named_label": "near-singular",
+    "seed": 17,
+    "model": {
+      "name": "GenericAligned6R",
+      "aligned": true,
+      "task_point_m": [
+        0.5847508454947893,
+        0.023167230329859585,
+        0.8195903791232448
+      ],
+      "d0": [
+        0.11877113736973437,
+        0.07918075824648958,
+        0.9897594780811197
+      ],
+      "home_axes": [
+        {
+          "r_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "w": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "r_m": [
+            0.08,
+            0.03,
+            0.26
+          ],
+          "w": [
+            0.9824718648648242,
+            0.17684493567566834,
+            0.05894831189188945
+          ]
+        },
+        {
+          "r_m": [
+            0.24,
+            -0.07,
+            0.47
+          ],
+          "w": [
+            0.21288107492195046,
+            0.9676412496452294,
+            0.13546977495033213
+          ]
+        },
+        {
+          "r_m": [
+            0.41,
+            0.11,
+            0.57
+          ],
+          "w": [
+            -0.11322266334397502,
+            0.31136232419593135,
+            0.9435221945331251
+          ]
+        },
+        {
+          "r_m": [
+            0.53,
+            -0.13,
+            0.71
+          ],
+          "w": [
+            0.964934555533081,
+            -0.21228560221727782,
+            0.15438952888529298
+          ]
+        },
+        {
+          "r_m": [
+            0.58,
+            0.02,
+            0.78
+          ],
+          "w": [
+            0.11877113736973437,
+            0.07918075824648958,
+            0.9897594780811197
+          ]
+        }
+      ]
+    }
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint02",
+  "survey_regular_count": 48,
+  "survey_singular_jp_count": 0
+}

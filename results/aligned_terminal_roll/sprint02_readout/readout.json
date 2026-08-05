@@ -1,0 +1,70 @@
+{
+  "title": "Sprint 02 \u2014 Generic aligned 6R",
+  "subtitle": "Stage A differential reduction",
+  "brand": "aligned terminal-roll",
+  "sprint_status": "Implementation complete / Check-in 2 draft",
+  "milestone": "M2 \u2014 Two-dimensional reduction established",
+  "warning": "This readout does not authorize compound-joint, continuation, or spherical-four-bar work. Check-in 2 remains a human gate.",
+  "claim": "At regular aligned-terminal 6R configurations, rank(J_p)=3, rank(J_pd)=5 with ker(J_pd) aligned to e6, and rank(J_d N_red)=2.",
+  "pass_count": 5,
+  "experiment_count": 5,
+  "checkin_interpretation": "SUPPORTED",
+  "checkin_decision": "CONTINUE",
+  "human_gate_required": true,
+  "repository_commits": [
+    "ebea47784b478f8b52c38eda485de4d9066f4d7b"
+  ],
+  "experiments": [
+    {
+      "experiment_id": "ATR_EXP_006",
+      "title": "Regular configuration rank suite",
+      "status": "PASS",
+      "expected": "rank(J_p)=3, ker dim 3, J_pd rank 5 nullity 1 aligned to e6, rank(J_d N_red)=2",
+      "observed": "rank_jp=3, null_jp=3, rank_jpd=5, null_jpd=1, align=0.000e+00, rank_jd_nred=2",
+      "figures": [
+        "figures/ATR_EXP_006_singular_values.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_007",
+      "title": "Jacobian finite-difference refinement",
+      "status": "PASS",
+      "expected": "analytical vs central-FD Jacobian error converges over usable h",
+      "observed": "h=0.01: jp=1.528e-05, jd=2.853e-05; h=0.001: jp=1.528e-07, jd=2.853e-07; h=0.0001: jp=1.528e-09, jd=2.851e-09; h=1e-05: jp=1.824e-11, jd=3.119e-11; h=1e-06: jp=1.473e-10, jd=1.086e-10",
+      "figures": [
+        "figures/ATR_EXP_007_fd_refinement.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_008",
+      "title": "Full-chain terminal-roll check",
+      "status": "PASS",
+      "expected": "full-chain dp/dq6=0, dd/dq6=0, position/pointing invariant, roll recovers Delta q6",
+      "observed": "||J_p e6||=6.015e-17, ||J_d e6||=0.000e+00, |dp|=0.000e+00 m, |dd|=5.551e-17, roll_err=4.441e-16 rad, axis_mis=2.388e-16",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_009",
+      "title": "Alignment negative controls",
+      "status": "PASS",
+      "expected": "off-axis p makes J_p e6 nonzero; misaligned d makes J_d e6 nonzero",
+      "observed": "off-axis ||J_p e6||=3.000e-02; misaligned ||J_d e6||=2.474e-01",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_010",
+      "title": "Seeded survey and named near-singular sample",
+      "status": "PASS",
+      "expected": "regular subset supports C6-C8; named sample is singular or near-singular and labeled separately",
+      "observed": "survey regular=48/48, singular_jp=0, named rank_jp=3, named_sigma_ratio=1.431e-02, median_regular_sigma_ratio=2.240e-01",
+      "figures": [
+        "figures/ATR_EXP_010_survey_ranks.png"
+      ]
+    }
+  ],
+  "next_stage": "Pending human Check-in 2. If approved, next stage is architecture comparison (generic vs compound-joint vs UR-like), not spherical four-bars.",
+  "reproduce": [
+    "python scripts/validate_aligned_6r_reduction.py",
+    "python scripts/generate_atr_sprint02_readout.py"
+  ]
+}

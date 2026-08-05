@@ -26,6 +26,7 @@ A negative result at any later stage does not invalidate an earlier established 
 - `VALIDATION_PLAN.md` — evidence required for each claim.
 - `ASSUMPTION_RISK_REGISTER.md` — research assumptions, project risks, and mitigations.
 - `sprints/SPRINT_01_SPATIAL_FOUNDATIONS.md` — first executable sprint.
+- `sprints/SPRINT_02_GENERIC_ALIGNED_6R.md` — generic aligned 6R Stage A reduction.
 - `decisions/` — architecture and research decision records.
 - `experiments/` — experiment specifications and result records.
 - `checkins/` — completed check-in packets and decisions.
@@ -44,4 +45,4 @@ In particular:
 
 ## Current next action
 
-Check-in 1 is approved. Build the generic synthetic aligned-terminal 6R kernel and verify local rank/nullity claims.
+Hold Check-in 2 on the generic aligned 6R Stage A results (`CHECKIN_02_TWO_DIMENSIONAL_REDUCTION.md`) before architecture comparison.

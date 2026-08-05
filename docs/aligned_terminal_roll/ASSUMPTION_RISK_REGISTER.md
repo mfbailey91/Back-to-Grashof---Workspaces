@@ -10,9 +10,9 @@
 | A01 | Selected task point lies on `R6` | geometric | axis-distance test | terminal joint changes position | VERIFIED |
 | A02 | Selected tool direction is parallel to `R6` | task definition | angular residual | terminal joint changes pointing | VERIFIED |
 | A03 | `R6` has usable roll range | architecture | joint-range review at later stage | full orientation may remain incomplete | OPEN |
-| A04 | Regular 6R fixed-position set has dimension 3 | mathematical | `J_p` SVD survey | reduction premise changes locally | OPEN |
-| A05 | Terminal roll is the only kernel direction of `(p,d)` at regular poses | mathematical | `J_pd` SVD and kernel alignment | additional self-motion or degeneracy exists | OPEN |
-| A06 | Reduced pointing tangent has rank 2 | mathematical | `rank(J_d N_red)` | local pointing coverage degenerates | OPEN |
+| A04 | Regular 6R fixed-position set has dimension 3 | mathematical | `J_p` SVD survey | reduction premise changes locally | VERIFIED |
+| A05 | Terminal roll is the only kernel direction of `(p,d)` at regular poses | mathematical | `J_pd` SVD and kernel alignment | additional self-motion or degeneracy exists | VERIFIED |
+| A06 | Reduced pointing tangent has rank 2 | mathematical | `rank(J_d N_red)` | local pointing coverage degenerates | VERIFIED |
 | A07 | Two intersecting physical axis pairs admit a useful compound-joint representation | modeling | tangent and continuation comparison | `SUUR`/related shorthand rejected |
 | A08 | UR-like ordering preserves the reduction | architecture | synthetic comparison | result is narrower than typical UR-like arms |
 | A09 | A nonarbitrary scalar fiber constraint exists | research | constrained-rank and coordinate-invariance tests | spherical-fiber program stops |
@@ -26,7 +26,7 @@
 | ID | Risk | Likelihood | Impact | Mitigation | Trigger | Status |
 |---|---|---:|---:|---|---|---|
 | R01 | Frame convention creates a false positive | Medium | High | freeze conventions; positive and negative controls | control behaves unexpectedly | MITIGATED |
-| R02 | Rank threshold misclassifies near-singular cases | High | High | publish singular values; threshold sensitivity | conclusion changes with threshold | OPEN |
+| R02 | Rank threshold misclassifies near-singular cases | High | High | publish singular values; threshold sensitivity | conclusion changes with threshold | MITIGATED |
 | R03 | Finite-difference scale masks implementation error | Medium | Medium | multi-step convergence study | no stable error plateau | MITIGATED |
 | R04 | Transform-order bug preserves one fixture accidentally | Medium | High | independent geometric and numerical oracles | analytical/numerical disagreement | MITIGATED |
 | R05 | Continuation jumps branches | High | High | predictor-corrector diagnostics, reverse runs, branch IDs | discontinuous configuration jump | OPEN |

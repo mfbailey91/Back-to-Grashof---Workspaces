@@ -1,0 +1,147 @@
+{
+  "experiment_id": "ATR_EXP_006",
+  "repository_commit": "ebea47784b478f8b52c38eda485de4d9066f4d7b",
+  "status": "PASS",
+  "expected": "rank(J_p)=3, ker dim 3, J_pd rank 5 nullity 1 aligned to e6, rank(J_d N_red)=2",
+  "observed": "rank_jp=3, null_jp=3, rank_jpd=5, null_jpd=1, align=0.000e+00, rank_jd_nred=2",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09,
+    "e6_col_tol": 1e-09,
+    "kernel_align_tol": 1e-08
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_006",
+    "status": "PASS",
+    "expected": "rank(J_p)=3, ker dim 3, J_pd rank 5 nullity 1 aligned to e6, rank(J_d N_red)=2",
+    "observed": "rank_jp=3, null_jp=3, rank_jpd=5, null_jpd=1, align=0.000e+00, rank_jd_nred=2",
+    "snapshot": {
+      "q": [
+        0.35,
+        -0.42,
+        0.55,
+        0.28,
+        -0.33,
+        0.7
+      ],
+      "rank_jp": 3,
+      "nullity_jp": 3,
+      "rank_jpd": 5,
+      "nullity_jpd": 1,
+      "sv_jp": [
+        0.7860931775652177,
+        0.45869263972956303,
+        0.11017114315882602
+      ],
+      "sv_jpd": [
+        1.5457068909474312,
+        1.0621905949008406,
+        0.4600330455995973,
+        0.18110452017376094,
+        0.09028836037838328,
+        4.857358915188341e-32
+      ],
+      "jp_e6_norm": 6.014889436379362e-17,
+      "jd_e6_norm": 0.0,
+      "ker_jpd_align_e6": 0.0,
+      "rank_jd_nred": 2,
+      "nred_cols": 2,
+      "regular": true
+    },
+    "home_point_axis_distance_m": 5.3024469899007764e-17,
+    "home_pointing_parallelism": 0.0,
+    "model": {
+      "name": "GenericAligned6R",
+      "aligned": true,
+      "task_point_m": [
+        0.5847508454947893,
+        0.023167230329859585,
+        0.8195903791232448
+      ],
+      "d0": [
+        0.11877113736973437,
+        0.07918075824648958,
+        0.9897594780811197
+      ],
+      "home_axes": [
+        {
+          "r_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "w": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "r_m": [
+            0.08,
+            0.03,
+            0.26
+          ],
+          "w": [
+            0.9824718648648242,
+            0.17684493567566834,
+            0.05894831189188945
+          ]
+        },
+        {
+          "r_m": [
+            0.24,
+            -0.07,
+            0.47
+          ],
+          "w": [
+            0.21288107492195046,
+            0.9676412496452294,
+            0.13546977495033213
+          ]
+        },
+        {
+          "r_m": [
+            0.41,
+            0.11,
+            0.57
+          ],
+          "w": [
+            -0.11322266334397502,
+            0.31136232419593135,
+            0.9435221945331251
+          ]
+        },
+        {
+          "r_m": [
+            0.53,
+            -0.13,
+            0.71
+          ],
+          "w": [
+            0.964934555533081,
+            -0.21228560221727782,
+            0.15438952888529298
+          ]
+        },
+        {
+          "r_m": [
+            0.58,
+            0.02,
+            0.78
+          ],
+          "w": [
+            0.11877113736973437,
+            0.07918075824648958,
+            0.9897594780811197
+          ]
+        }
+      ]
+    }
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint02"
+}

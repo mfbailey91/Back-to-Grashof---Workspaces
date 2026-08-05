@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 02 — Generic aligned 6R</title>
+  <style>
+    :root {
+      --bg0:#10151b; --bg1:#182028; --panel:#24303c; --ink:#e8eef4; --muted:#9aa8b5;
+      --line:#3a4a5a; --teal:#2a9d8f; --amber:#e9a319; --good:#3cbf9a;
+      font-family:"IBM Plex Sans","Segoe UI",sans-serif; color:var(--ink);
+      background: radial-gradient(ellipse 80% 50% at 10% -10%, #1e3a42 0%, transparent 55%),
+                  linear-gradient(160deg, var(--bg0), var(--bg1));
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; line-height:1.5; padding-bottom:3rem; }
+    .shell { max-width:1100px; margin:0 auto; padding:1.5rem; }
+    .brand { color:var(--teal); letter-spacing:.04em; font-size:.85rem; text-transform:uppercase; }
+    h1 { margin:.35rem 0 .6rem; font-size:2rem; }
+    .lead,.muted { color:var(--muted); }
+    .warning { border-left:3px solid var(--amber); background:rgba(233,163,25,.08); padding:.75rem 1rem; }
+    .claim,.card,.stat { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:1rem; margin:1rem 0; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:.75rem; }
+    .stat { margin:0; }
+    .badge.pass { color:var(--good); border:1px solid var(--good); border-radius:999px; padding:.15rem .55rem; font-size:.75rem; }
+    img { max-width:100%; height:auto; border-radius:6px; background:#0b1014; margin-top:.6rem; }
+    code { display:inline-block; background:#0b1014; border:1px solid var(--line); border-radius:4px; padding:.2rem .45rem; margin:.2rem .35rem .2rem 0; }
+    footer { color:var(--muted); margin-top:2rem; font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">aligned terminal-roll</div>
+    <h1>Sprint 02 — Generic aligned 6R</h1>
+    <p class="lead">Stage A differential reduction · Implementation complete / Check-in 2 draft · M2 — Two-dimensional reduction established</p>
+    <p class="warning">This readout does not authorize compound-joint, continuation, or spherical-four-bar work. Check-in 2 remains a human gate.</p>
+    <section class="claim"><strong>Claim under test.</strong><p>At regular aligned-terminal 6R configurations, rank(J_p)=3, rank(J_pd)=5 with ker(J_pd) aligned to e6, and rank(J_d N_red)=2.</p></section>
+    <section class="stats">
+      <div class="stat"><div class="muted">Experiments</div><div>5/5 PASS</div></div>
+      <div class="stat"><div class="muted">Check-in 2</div><div>SUPPORTED</div></div>
+      <div class="stat"><div class="muted">Decision</div><div>CONTINUE</div><div class="muted">human gate still required</div></div>
+    </section>
+    <h2>Experiments</h2>
+    
+            <article class="card">
+              <h3>ATR_EXP_006 — Regular configuration rank suite
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> rank(J_p)=3, ker dim 3, J_pd rank 5 nullity 1 aligned to e6, rank(J_d N_red)=2</p>
+              <p><strong>Observed.</strong> rank_jp=3, null_jp=3, rank_jpd=5, null_jpd=1, align=0.000e+00, rank_jd_nred=2</p>
+              <img src="figures/ATR_EXP_006_singular_values.png" alt="ATR_EXP_006 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_007 — Jacobian finite-difference refinement
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> analytical vs central-FD Jacobian error converges over usable h</p>
+              <p><strong>Observed.</strong> h=0.01: jp=1.528e-05, jd=2.853e-05; h=0.001: jp=1.528e-07, jd=2.853e-07; h=0.0001: jp=1.528e-09, jd=2.851e-09; h=1e-05: jp=1.824e-11, jd=3.119e-11; h=1e-06: jp=1.473e-10, jd=1.086e-10</p>
+              <img src="figures/ATR_EXP_007_fd_refinement.png" alt="ATR_EXP_007 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_008 — Full-chain terminal-roll check
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> full-chain dp/dq6=0, dd/dq6=0, position/pointing invariant, roll recovers Delta q6</p>
+              <p><strong>Observed.</strong> ||J_p e6||=6.015e-17, ||J_d e6||=0.000e+00, |dp|=0.000e+00 m, |dd|=5.551e-17, roll_err=4.441e-16 rad, axis_mis=2.388e-16</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_009 — Alignment negative controls
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> off-axis p makes J_p e6 nonzero; misaligned d makes J_d e6 nonzero</p>
+              <p><strong>Observed.</strong> off-axis ||J_p e6||=3.000e-02; misaligned ||J_d e6||=2.474e-01</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_010 — Seeded survey and named near-singular sample
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> regular subset supports C6-C8; named sample is singular or near-singular and labeled separately</p>
+              <p><strong>Observed.</strong> survey regular=48/48, singular_jp=0, named rank_jp=3, named_sigma_ratio=1.431e-02, median_regular_sigma_ratio=2.240e-01</p>
+              <img src="figures/ATR_EXP_010_survey_ranks.png" alt="ATR_EXP_010 figure" />
+            </article>
+            
+    <h2>Next stage</h2>
+    <div class="card"><p>Pending human Check-in 2. If approved, next stage is architecture comparison (generic vs compound-joint vs UR-like), not spherical four-bars.</p></div>
+    <footer><p>Reproduce: <code>python scripts/validate_aligned_6r_reduction.py</code><code>python scripts/generate_atr_sprint02_readout.py</code></p><p>Manifest commits: ebea47784b47</p></footer>
+  </div>
+</body>
+</html>
