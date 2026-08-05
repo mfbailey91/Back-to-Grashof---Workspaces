@@ -113,7 +113,7 @@ docs/aligned_terminal_roll/checkins/
 
 Keep `suur_map` out of the general spherical-test API. IP pair diagnostics remain IP-only.
 
-Closeout language from Check-in 5, if touched: rename `local_rank_one` toward `local_pointing_tangent_nonzero` without changing Sprint 05 numerical outcomes.
+Sprint 05 closeout renamed `local_rank_one` to `local_pointing_tangent_nonzero`. Duplicate scan remains the first Sprint 06 metric.
 
 ## 8. Proposed experiments
 

@@ -27,7 +27,8 @@ A negative result at any later stage does not invalidate an earlier established 
 - `ASSUMPTION_RISK_REGISTER.md` — research assumptions, project risks, and mitigations.
 - `sprints/SPRINT_01_SPATIAL_FOUNDATIONS.md` — first executable sprint.
 - `sprints/SPRINT_02_GENERIC_ALIGNED_6R.md` — generic aligned 6R Stage A reduction.
-- `sprints/SPRINT_05_EXPLICIT_ONE_DIMENSIONAL_FIBER.md` — Stage C fiber sprint note.
+- `sprints/SPRINT_05_EXPLICIT_ONE_DIMENSIONAL_FIBER.md` — Stage C fiber sprint note (closed).
+- `sprints/SPRINT_05_REVIEW_CURSOR_WRITEUP.md` — Sprint 05 review and closeout writeup.
 - `sprints/SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md` — candidate spherical-equivalence planning note.
 - `IMPLEMENTATION_RATIONALE.md` / `METHOD_REFERENCES.md` — method audit through Sprint 05 local C11.
 - `decisions/` — architecture and research decision records.
@@ -48,4 +49,4 @@ In particular:
 
 ## Current next action
 
-Review the Sprint 06 planning note (`SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md`) before implementing candidate spherical tests. Check-in 5 is approved (`CONTINUE WITH CHANGED SCOPE`). McCarthy–Soh and exact UR remain blocked.
+Sprint 05 is closed. Review the Sprint 06 planning note (`SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md`) before implementing candidate spherical tests. McCarthy–Soh and exact UR remain blocked.

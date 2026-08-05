@@ -1,6 +1,6 @@
 # Sprint 05 — Explicit one-dimensional fiber
 
-**Sprint status:** Complete — Check-in 5 approved `CONTINUE WITH CHANGED SCOPE`  
+**Sprint status:** Closed 2026-08-04 — Check-in 5 approved `CONTINUE WITH CHANGED SCOPE`  
 **Milestone target:** M5 — Fiber legitimacy established  
 **Check-in:** Check-in 5  
 **Authorized by:** Check-in 4B (Case A) and Check-in 04C (Pass), 2026-08-04  
@@ -63,7 +63,7 @@ Forward then reverse along the fiber returns within configured joint and pointin
 
 ### H4 — Nondegenerate pointing image
 
-The map from fiber parameter to `d(q)` is a genuine curve (numerical rank 1), not a collapsed point.
+The map from fiber parameter to `d(q)` is a genuine curve with a nonzero local `∂d/∂σ`, not a collapsed point.
 
 ### H5 — Not a coordinate artifact
 
@@ -141,7 +141,7 @@ Keep `include_pairs` / `suur_map` out of the general fiber API.
 | ID | Experiment | Required result |
 |---|---|---|
 | `ATR_EXP_027` | Independence of `h=n·d` at the IP seed | rank 4 / nullity 1; `dh/dq6=0` |
-| `ATR_EXP_028` | IP sequential fiber | regular reversible branch; pointing curve rank 1 |
+| `ATR_EXP_028` | IP sequential fiber | regular reversible branch; nonzero pointing tangent |
 | `ATR_EXP_029` | UR-like sequential fiber, same API | same C11 gates; no SUUR/pair fields required |
 | `ATR_EXP_030` | Alternate task-space `h` artifact control | fiber survives; joint-freeze control is distinct |
 | `ATR_EXP_031` | Step refinement on the fiber | shared-node stability and/or loop/reverse improvement with true integrator steps |
@@ -200,4 +200,4 @@ This note is accepted for implementation when the decision owner agrees that:
 3. IP is primary and UR-like is parallel;
 4. spherical work remains out of Sprint 05.
 
-Accepted for implementation 2026-08-04. Check-in 5 approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`): primary and alternate fibers are candidate slices, not canonical fibers. Sprint 06 spherical-equivalence planning is authorized.
+Accepted for implementation 2026-08-04. Check-in 5 approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`): primary and alternate fibers are candidate slices, not canonical fibers. Sprint 05 is closed. Sprint 06 spherical-equivalence planning is authorized.

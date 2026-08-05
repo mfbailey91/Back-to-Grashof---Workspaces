@@ -56,7 +56,7 @@ All decision-bearing artifacts identify a clean source revision.
 | Coordinate-frozen control | Distinct from primary task-space path | Passed for the tested `q2` freeze | PASS |
 | Independent-step refinement | Errors decrease under half-step refinement | Passed on both architectures | PASS |
 | Architecture neutrality | UR-like path does not require `SUUR` | Passed | PASS |
-| Explicit duplicate scan | No repeated configurations at distinct `sigma` | Not yet implemented as a formal metric | CLOSEOUT ITEM |
+| Explicit duplicate scan | No repeated configurations at distinct `sigma` | Deferred to Sprint 06 as the first formal metric | DEFERRED TO S06 |
 
 ## 4. Interpretation
 
@@ -143,11 +143,7 @@ Record that the tested task-space fibers are distinct from one named joint-coord
 
 ### Metric language
 
-During Sprint 06 closeout or the next bounded cleanup:
-
-- replace `local_rank_one` with language such as `local_pointing_tangent_nonzero`;
-- retain the noncollapse metric;
-- add an explicit pairwise duplicate-configuration report.
+Sprint 05 closeout renamed `local_rank_one` to `local_pointing_tangent_nonzero` and retained the noncollapse metric. An explicit pairwise duplicate-configuration report remains a Sprint 06 first metric.
 
 These are interpretation and closeout corrections; they do not invalidate Sprint 05.
 

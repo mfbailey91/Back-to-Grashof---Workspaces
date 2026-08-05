@@ -13,7 +13,7 @@ Continue the primary fiber `h = n · d = c` on `IntersectingPairsAligned6R` with
 
 ## 2. Expected result
 
-Zero failed samples on the ±4×0.03 benchmark; reverse within `1e-6` rad / `5e-8` pointing; pointing image noncollapsed with local `∂d/∂σ` rank 1.
+Zero failed samples on the ±4×0.03 benchmark; reverse within `1e-6` rad / `5e-8` pointing; pointing image noncollapsed with a nonzero local `∂d/∂σ`.
 
 ## 3. Command
 
@@ -24,7 +24,7 @@ python scripts/validate_pointing_fiber.py
 ## 4. Results
 
 - status: PASS
-- observed: 9 accepted samples, 0 failed; reverse `eq=2.922e-08`, `ed=7.525e-09`, from endpoint; image `dmax=6.150e-02`, local rank 1
+- observed: 9 accepted samples, 0 failed; reverse `eq=2.922e-08`, `ed=7.525e-09`, from endpoint; image `dmax=6.150e-02`, local pointing tangent nonzero
 
 ## 5. Interpretation
 

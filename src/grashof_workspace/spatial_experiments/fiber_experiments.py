@@ -162,13 +162,13 @@ def _segment_eval(exp_id: str, architecture: str, n: tuple[float, float, float])
         "status": "PASS" if ok else "FAIL",
         "expected": (
             "Sequential ±σ fiber is regular, reversible from the endpoint, and has a noncollapsed "
-            "pointing image of local rank 1"
+            "pointing image with a nonzero local tangent"
         ),
         "observed": (
             f"{label}: n_accepted={len(segment.accepted_samples)}, n_failed={n_failed}, "
             f"reverse_eq={reverse.epsilon_q:.3e}, reverse_ed={reverse.epsilon_d:.3e}, "
             f"from_end={reverse.started_from_endpoint}, image_dmax={image.max_pointing_delta:.3e}, "
-            f"local_rank1={image.local_rank_one}"
+            f"local_pointing_tangent_nonzero={image.local_pointing_tangent_nonzero}"
         ),
         "metrics": {
             "n_accepted": len(segment.accepted_samples),

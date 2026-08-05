@@ -24,7 +24,7 @@ python scripts/validate_pointing_fiber.py
 ## 4. Results
 
 - status: PASS
-- observed: 9 accepted samples, 0 failed; reverse `eq=2.741e-09`, `ed=1.888e-09`, from endpoint; image `dmax=1.641e-01`, local rank 1
+- observed: 9 accepted samples, 0 failed; reverse `eq=2.741e-09`, `ed=1.888e-09`, from endpoint; image `dmax=1.641e-01`, local pointing tangent nonzero
 
 ## 5. Interpretation
 

@@ -1,7 +1,7 @@
 # Project Plan — Aligned Terminal-Roll Reduction
 
 **Project owner:** Michael Bailey
-**Status:** Sprint 05 complete / Check-in 5 approved with changed scope / Sprint 06 planning authorized
+**Status:** Sprint 05 closed / Check-in 5 approved with changed scope / Sprint 06 planning authorized
 **Last updated:** 2026-08-04
 **Planning horizon:** Reduction proof through exact-robot generalization
 **Change policy:** Update at formal check-ins; record material reversals in `decisions/`
@@ -241,7 +241,7 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 | Sprint 04C | Complete (Check-in 04C Pass) |
 | Check-in 4B | Approved 2026-08-04 (Case A) |
 | Check-in 04C | Approved 2026-08-04 (Pass) |
-| Sprint 05 | Complete (ATR_EXP_027–031 PASS) |
+| Sprint 05 | Closed 2026-08-04 (ATR_EXP_027–031 PASS; Check-in 5 `CONTINUE WITH CHANGED SCOPE`) |
 | Check-in 5 | Approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`) |
 | Fiber construction | Explicit primary and alternate task-space fibers verified locally |
 | Canonical fiber selection | Open |
@@ -252,6 +252,6 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 
 ## 11. Immediate project decision
 
-Review `SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md`, then implement candidate spherical tests on the named primary and alternate fibers.
+Sprint 05 is closed. Review `SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md`, then implement candidate spherical tests on the named primary and alternate fibers.
 
 Begin with duplicate-configuration detection and branch-wide concurrency. Do not apply McCarthy–Soh and do not infer nonexistence of all spherical fibers from failure of one selected slice.

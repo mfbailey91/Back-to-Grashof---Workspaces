@@ -145,7 +145,7 @@ q6 = q6*   (0.70 rad on the locked regular seeds; not q6=0)
 h(q) = c
 ```
 
-**Check-in 5:** Approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`). Primary and alternate explicit task-space fibers are regular, reversible, noncollapsed, and stable under independent-step refinement on both tested architectures.
+**Check-in 5:** Approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`). Sprint 05 closed 2026-08-04. Primary and alternate explicit task-space fibers are regular, reversible, noncollapsed, and stable under independent-step refinement on both tested architectures.
 
 The tested fibers are candidate slices. A canonical or architecture-derived fiber remains open.
 

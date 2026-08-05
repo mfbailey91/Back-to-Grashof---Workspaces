@@ -112,7 +112,7 @@ def test_pointing_image_is_noncollapsed_curve() -> None:
     image = pointing_image_report(segment.accepted_samples)
     assert image.passed
     assert not image.collapsed
-    assert image.local_rank_one
+    assert image.local_pointing_tangent_nonzero
 
 
 def test_urlike_fiber_path_does_not_invoke_suur(monkeypatch) -> None:

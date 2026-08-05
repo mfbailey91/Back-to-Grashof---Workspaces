@@ -4,7 +4,7 @@ Conventions
 -----------
 Reverse starts at the accepted forward endpoint with the transported tangent.
 Pointing differences are ordinary Euclidean differences of unit vectors.
-A curved spherical image may span a plane globally; local ``∂d/∂σ`` rank 1
+A curved spherical image may span a plane globally; a nonzero local ``∂d/∂σ``
 and a noncollapsed image are the H4 gates.
 """
 
@@ -25,7 +25,6 @@ from .fiber_continuation import (
     FiberStep,
     continue_fiber_ray,
 )
-from .jacobians import matrix_rank_report
 from .serial_chain import SerialRevoluteChain
 
 Vec = NDArray[np.floating]
@@ -60,9 +59,9 @@ class PointingImageReport:
     max_pointing_delta: float
     min_tangent_norm: float
     n_interior: int
-    n_rank_one: int
+    n_nonzero_tangent: int
     collapsed: bool
-    local_rank_one: bool
+    local_pointing_tangent_nonzero: bool
     passed: bool
 
 
@@ -174,7 +173,7 @@ def pointing_image_report(
     collapse_tol: float = POINTING_COLLAPSE_TOL,
     tangent_tol: float = POINTING_TANGENT_TOL,
 ) -> PointingImageReport:
-    """H4: noncollapsed pointing image with local ``∂d/∂σ`` rank 1."""
+    """H4: noncollapsed pointing image with a nonzero local ``∂d/∂σ``."""
     accepted = [step for step in steps if step.accepted and step.d is not None]
     accepted = sorted(accepted, key=lambda step: step.sigma)
     if not accepted:
@@ -183,7 +182,7 @@ def pointing_image_report(
     deltas = [float(np.linalg.norm(np.asarray(step.d, dtype=float) - d0)) for step in accepted]
     max_delta = max(deltas)
     interior = 0
-    rank_one = 0
+    n_nonzero = 0
     tangent_norms: list[float] = []
     for i in range(1, len(accepted) - 1):
         ds = accepted[i + 1].sigma - accepted[i - 1].sigma
@@ -192,21 +191,20 @@ def pointing_image_report(
         dd = (np.asarray(accepted[i + 1].d, dtype=float) - np.asarray(accepted[i - 1].d, dtype=float)) / ds
         interior += 1
         tangent_norms.append(float(np.linalg.norm(dd)))
-        report = matrix_rank_report(dd.reshape(3, 1))
-        if report.rank == 1 and tangent_norms[-1] > tangent_tol:
-            rank_one += 1
+        if tangent_norms[-1] > tangent_tol:
+            n_nonzero += 1
     min_tn = min(tangent_norms) if tangent_norms else 0.0
     collapsed = max_delta <= collapse_tol
-    local_rank_one = interior > 0 and rank_one == interior
+    local_nonzero = interior > 0 and n_nonzero == interior
     return PointingImageReport(
         n_samples=len(accepted),
         max_pointing_delta=max_delta,
         min_tangent_norm=min_tn,
         n_interior=interior,
-        n_rank_one=rank_one,
+        n_nonzero_tangent=n_nonzero,
         collapsed=collapsed,
-        local_rank_one=local_rank_one,
-        passed=not collapsed and local_rank_one,
+        local_pointing_tangent_nonzero=local_nonzero,
+        passed=not collapsed and local_nonzero,
     )
 
 
