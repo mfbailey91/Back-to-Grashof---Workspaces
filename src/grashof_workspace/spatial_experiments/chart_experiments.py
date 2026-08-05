@@ -480,7 +480,12 @@ def _git_provenance(repo_root: Path) -> tuple[str, bool]:
         status = subprocess.check_output(
             ["git", "status", "--porcelain"], cwd=repo_root, stderr=subprocess.DEVNULL, text=True
         )
-        return commit, bool(status.strip())
+        relevant = [
+            line
+            for line in status.splitlines()
+            if not line.endswith(".DS_Store") and not line.rstrip().endswith(".patch")
+        ]
+        return commit, bool(relevant)
     except (subprocess.CalledProcessError, FileNotFoundError):
         return "unknown", True
 
