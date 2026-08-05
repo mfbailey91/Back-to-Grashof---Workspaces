@@ -1,0 +1,384 @@
+{
+  "title": "Sprint 01 \u2014 Spatial Foundations",
+  "subtitle": "Terminal-roll fixture",
+  "brand": "aligned terminal-roll",
+  "sprint_status": "Complete",
+  "milestone": "M1 \u2014 Terminal-roll symmetry established",
+  "warning": "This readout does not establish 6R rank or nullity. It only validates an isolated terminal-roll fixture (Level 0 / M1).",
+  "claim": "If p lies on R6 and d is parallel to w6, then dp/dq6 = 0 and dd/dq6 = 0, while full tool orientation changes by roll about d.",
+  "pass_count": 5,
+  "experiment_count": 5,
+  "tests_passed": 76,
+  "checkin_interpretation": "SUPPORTED",
+  "checkin_decision": "CONTINUE",
+  "human_gate_required": true,
+  "repository_commits": [
+    "0d27bb139c1a965dba91244f3df5096231b381da"
+  ],
+  "experiments": [
+    {
+      "experiment_id": "ATR_EXP_001",
+      "title": "Aligned positive control",
+      "status": "PASS",
+      "expected": "position invariant; pointing invariant; roll recovers Delta q6",
+      "observed": "max|dp|=0.000e+00 m; max|dd|=0.000e+00; max roll err=1.332e-15 rad",
+      "notes": "",
+      "metrics": {
+        "experiment_id": "ATR_EXP_001",
+        "max_position_residual_m": 0.0,
+        "max_pointing_residual": 0.0,
+        "max_roll_angle_error_rad": 1.3322676295501878e-15,
+        "max_roll_axis_misalignment": 0.0,
+        "mean_position_residual_m": 0.0,
+        "mean_pointing_residual": 0.0,
+        "position_changes": false,
+        "pointing_changes": false,
+        "roll_recovered": true
+      },
+      "tolerances": {
+        "position_abs_tol_m": 1e-12,
+        "pointing_abs_tol": 1e-12,
+        "roll_abs_tol_rad": 1e-10,
+        "position_motion_floor_m": 1e-06,
+        "pointing_motion_floor": 1e-06
+      },
+      "units": {
+        "length": "metre",
+        "angle": "radian",
+        "axis_direction": "dimensionless unit vector"
+      },
+      "model": {
+        "axis_r_m": [
+          0.1,
+          -0.2,
+          0.3
+        ],
+        "axis_w": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "p0_m": [
+          0.1,
+          -0.2,
+          0.35
+        ],
+        "d0": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "residual_figure": "figures/residuals_ATR_EXP_001.png"
+    },
+    {
+      "experiment_id": "ATR_EXP_002",
+      "title": "Off-axis task point",
+      "status": "PASS",
+      "expected": "position changes; pointing invariant",
+      "observed": "position_changes=True; pointing_changes=False; max|dp|=4.000e-02 m",
+      "notes": "",
+      "metrics": {
+        "experiment_id": "ATR_EXP_002",
+        "max_position_residual_m": 0.03999999999999998,
+        "max_pointing_residual": 0.0,
+        "max_roll_angle_error_rad": 1.3322676295501878e-15,
+        "max_roll_axis_misalignment": 0.0,
+        "mean_position_residual_m": 0.025394090150630454,
+        "mean_pointing_residual": 0.0,
+        "position_changes": true,
+        "pointing_changes": false,
+        "roll_recovered": true
+      },
+      "tolerances": {
+        "position_abs_tol_m": 1e-12,
+        "pointing_abs_tol": 1e-12,
+        "roll_abs_tol_rad": 1e-10,
+        "position_motion_floor_m": 1e-06,
+        "pointing_motion_floor": 1e-06
+      },
+      "units": {
+        "length": "metre",
+        "angle": "radian",
+        "axis_direction": "dimensionless unit vector"
+      },
+      "model": {
+        "axis_r_m": [
+          0.1,
+          -0.2,
+          0.3
+        ],
+        "axis_w": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "p0_m": [
+          0.1,
+          -0.18000000000000002,
+          0.35
+        ],
+        "d0": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "residual_figure": "figures/residuals_ATR_EXP_002.png"
+    },
+    {
+      "experiment_id": "ATR_EXP_003",
+      "title": "Misaligned pointing direction",
+      "status": "PASS",
+      "expected": "position invariant; pointing changes",
+      "observed": "position_changes=False; pointing_changes=True; max|dd|=3.973e-01",
+      "notes": "",
+      "metrics": {
+        "experiment_id": "ATR_EXP_003",
+        "max_position_residual_m": 0.0,
+        "max_pointing_residual": 0.39733866159012243,
+        "max_roll_angle_error_rad": 0.08747656189852515,
+        "max_roll_axis_misalignment": 0.2781747010965634,
+        "mean_position_residual_m": 0.0,
+        "mean_pointing_residual": 0.25225134481876044,
+        "position_changes": false,
+        "pointing_changes": true,
+        "roll_recovered": false
+      },
+      "tolerances": {
+        "position_abs_tol_m": 1e-12,
+        "pointing_abs_tol": 1e-12,
+        "roll_abs_tol_rad": 1e-10,
+        "position_motion_floor_m": 1e-06,
+        "pointing_motion_floor": 1e-06
+      },
+      "units": {
+        "length": "metre",
+        "angle": "radian",
+        "axis_direction": "dimensionless unit vector"
+      },
+      "model": {
+        "axis_r_m": [
+          0.1,
+          -0.2,
+          0.3
+        ],
+        "axis_w": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "p0_m": [
+          0.1,
+          -0.2,
+          0.35
+        ],
+        "d0": [
+          0.0,
+          0.19866933079506122,
+          0.9800665778412416
+        ]
+      },
+      "residual_figure": "figures/residuals_ATR_EXP_003.png"
+    },
+    {
+      "experiment_id": "ATR_EXP_004",
+      "title": "Combined alignment violation",
+      "status": "PASS",
+      "expected": "position and pointing both change",
+      "observed": "position_changes=True; pointing_changes=True",
+      "notes": "",
+      "metrics": {
+        "experiment_id": "ATR_EXP_004",
+        "max_position_residual_m": 0.03999999999999998,
+        "max_pointing_residual": 0.39733866159012243,
+        "max_roll_angle_error_rad": 0.08747656189852515,
+        "max_roll_axis_misalignment": 0.2781747010965634,
+        "mean_position_residual_m": 0.025394090150630454,
+        "mean_pointing_residual": 0.25225134481876044,
+        "position_changes": true,
+        "pointing_changes": true,
+        "roll_recovered": false
+      },
+      "tolerances": {
+        "position_abs_tol_m": 1e-12,
+        "pointing_abs_tol": 1e-12,
+        "roll_abs_tol_rad": 1e-10,
+        "position_motion_floor_m": 1e-06,
+        "pointing_motion_floor": 1e-06
+      },
+      "units": {
+        "length": "metre",
+        "angle": "radian",
+        "axis_direction": "dimensionless unit vector"
+      },
+      "model": {
+        "axis_r_m": [
+          0.1,
+          -0.2,
+          0.3
+        ],
+        "axis_w": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "p0_m": [
+          0.1,
+          -0.18000000000000002,
+          0.35
+        ],
+        "d0": [
+          0.0,
+          0.19866933079506122,
+          0.9800665778412416
+        ]
+      },
+      "residual_figure": "figures/residuals_ATR_EXP_004.png"
+    },
+    {
+      "experiment_id": "ATR_EXP_005",
+      "title": "Finite-difference refinement",
+      "status": "PASS",
+      "expected": "analytical vs central-FD derivative error converges over usable h",
+      "observed": "h=0.01: dp_err=3.333e-07, dd_err=3.311e-06; h=0.001: dp_err=3.333e-09, dd_err=3.311e-08; h=0.0001: dp_err=3.336e-11, dd_err=3.312e-10; h=1e-05: dp_err=4.699e-13, dd_err=3.471e-12; h=1e-06: dp_err=5.174e-12, dd_err=3.713e-12",
+      "notes": "Fixture intentionally violates alignment so derivatives are nonzero.",
+      "metrics": {
+        "experiment_id": "ATR_EXP_005",
+        "max_position_residual_m": 0.03999999999999998,
+        "max_pointing_residual": 0.39733866159012243,
+        "max_roll_angle_error_rad": 0.08711895018964899,
+        "max_roll_axis_misalignment": 0.2781747010965624,
+        "mean_position_residual_m": 0.024760827619925607,
+        "mean_pointing_residual": 0.2459608526591246,
+        "position_changes": true,
+        "pointing_changes": true,
+        "roll_recovered": false
+      },
+      "tolerances": {
+        "position_abs_tol_m": 1e-12,
+        "pointing_abs_tol": 1e-12,
+        "roll_abs_tol_rad": 1e-10,
+        "position_motion_floor_m": 1e-06,
+        "pointing_motion_floor": 1e-06
+      },
+      "units": {
+        "length": "metre",
+        "angle": "radian",
+        "axis_direction": "dimensionless unit vector"
+      },
+      "model": {
+        "axis_r_m": [
+          0.1,
+          -0.2,
+          0.3
+        ],
+        "axis_w": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "p0_m": [
+          0.1,
+          -0.18000000000000002,
+          0.35
+        ],
+        "d0": [
+          0.0,
+          0.19866933079506122,
+          0.9800665778412416
+        ]
+      },
+      "residual_figure": "figures/residuals_ATR_EXP_005.png"
+    }
+  ],
+  "fd_refinement": [
+    {
+      "h": 0.01,
+      "dp_error": 3.333316666529955e-07,
+      "dd_error": 3.311138957613458e-06
+    },
+    {
+      "h": 0.001,
+      "dp_error": 3.3333312907116705e-09,
+      "dd_error": 3.311155439708849e-08
+    },
+    {
+      "h": 0.0001,
+      "dp_error": 3.3356193965102396e-11,
+      "dd_error": 3.3115002395407163e-10
+    },
+    {
+      "h": 1e-05,
+      "dp_error": 4.699487730710234e-13,
+      "dd_error": 3.4711832579062307e-12
+    },
+    {
+      "h": 1e-06,
+      "dp_error": 5.173893994004436e-12,
+      "dd_error": 3.712669492902941e-12
+    }
+  ],
+  "acceptance": [
+    {
+      "criterion": "Isolated under spatial_experiments",
+      "required": "no planar / 6R coupling",
+      "observed": "package separate; no sixr import",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Planar tests unchanged",
+      "required": "trusted suite green",
+      "observed": "fourbar/planar3r/validation + spatial: 76 passed",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Positive/negative qualitative behavior",
+      "required": "Sprint matrix",
+      "observed": "all five PASS",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Analytical vs FD",
+      "required": "convergence",
+      "observed": "O(h\u00b2) then mild round-off",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Orientation roll without Euler subtraction",
+      "required": "relative R + probe atan2",
+      "observed": "max roll err ~1e-15 rad on aligned case",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Explicit tolerances/units",
+      "required": "documented",
+      "observed": "metres / radians in manifests",
+      "status": "PASS"
+    },
+    {
+      "criterion": "Experiment manifests/summaries",
+      "required": "results/aligned_terminal_roll/<id>/",
+      "observed": "written",
+      "status": "PASS"
+    },
+    {
+      "criterion": "No 6R / spherical / continuation code",
+      "required": "deferred",
+      "observed": "not introduced",
+      "status": "PASS"
+    }
+  ],
+  "limitations": [
+    "Single revolute only; no serial-chain forward kinematics.",
+    "Does not test fixed-position Jacobian rank or quotient bases.",
+    "Finite-difference round-off appears near h \u2272 1e-6 rad.",
+    "Spherical four-bar / McCarthy-Soh work remains deferred."
+  ],
+  "next_stage": "Generic synthetic aligned-terminal 6R kernel and local rank/nullity checks, pending human confirmation of Check-in 1. Sprint 02 is not authorized by this page.",
+  "reproduce": [
+    "python scripts/validate_terminal_roll_fixture.py",
+    "python scripts/generate_atr_sprint01_readout.py"
+  ],
+  "fd_figure": "figures/fd_refinement_ATR_EXP_005.png"
+}

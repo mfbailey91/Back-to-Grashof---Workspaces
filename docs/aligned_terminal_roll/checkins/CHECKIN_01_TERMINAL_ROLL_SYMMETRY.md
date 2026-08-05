@@ -67,6 +67,8 @@ while full tool orientation changes by roll about `d`. This check-in does **not*
 
 `results/aligned_terminal_roll/ATR_EXP_00N/figures/residuals_vs_q6.png`
 
+HTML readout: `results/aligned_terminal_roll/sprint01_readout/index.html` (regenerate with `python scripts/generate_atr_sprint01_readout.py`).
+
 ### Sensitivity and refinement
 
 Central-difference refinement shows expected quadratic convergence until floating-point noise dominates.

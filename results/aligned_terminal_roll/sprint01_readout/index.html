@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 01 — Spatial Foundations</title>
+  <style>
+    :root {
+      --bg0: #10151b;
+      --bg1: #182028;
+      --panel: #24303c;
+      --ink: #e8eef4;
+      --muted: #9aa8b5;
+      --line: #3a4a5a;
+      --teal: #2a9d8f;
+      --amber: #e9a319;
+      --good: #3cbf9a;
+      font-family: "IBM Plex Sans", "Source Sans 3", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, #1e3a42 0%, transparent 55%),
+        linear-gradient(160deg, var(--bg0), var(--bg1));
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; line-height: 1.5; padding-bottom: 3rem; }
+    a { color: var(--teal); text-decoration: none; }
+    .shell { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+    .brand { color: var(--teal); letter-spacing: 0.04em; font-size: 0.85rem; text-transform: uppercase; }
+    h1 { margin: 0.35rem 0 0.6rem; font-size: 2rem; }
+    .lead, .muted { color: var(--muted); }
+    .warning {
+      border-left: 3px solid var(--amber);
+      background: rgba(233, 163, 25, 0.08);
+      padding: 0.75rem 1rem;
+      margin: 1rem 0 0;
+    }
+    .claim {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 1rem 1.1rem;
+      margin: 1.25rem 0;
+      border-radius: 8px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin: 1.25rem 0 1.75rem;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+    }
+    .stat .label { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .stat .value { font-size: 1.25rem; margin-top: 0.25rem; }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1rem;
+      margin: 0 0 1rem;
+    }
+    .card h3 { margin: 0 0 0.4rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+    .badge {
+      font-size: 0.75rem;
+      border-radius: 999px;
+      padding: 0.15rem 0.55rem;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .badge.pass { color: var(--good); border-color: var(--good); }
+    img { max-width: 100%; height: auto; border-radius: 6px; background: #0b1014; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td { border-bottom: 1px solid var(--line); padding: 0.45rem 0.4rem; text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; }
+    code {
+      display: inline-block;
+      background: #0b1014;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 0.2rem 0.45rem;
+      margin: 0.2rem 0.35rem 0.2rem 0;
+      font-size: 0.85rem;
+    }
+    footer { color: var(--muted); margin-top: 2rem; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">aligned terminal-roll</div>
+      <h1>Sprint 01 — Spatial Foundations</h1>
+      <p class="lead">Terminal-roll fixture · status Complete · M1 — Terminal-roll symmetry established</p>
+      <p class="warning">This readout does not establish 6R rank or nullity. It only validates an isolated terminal-roll fixture (Level 0 / M1).</p>
+    </header>
+
+    <section class="claim">
+      <strong>Claim under test.</strong>
+      <p style="margin:0.4rem 0 0;">If p lies on R6 and d is parallel to w6, then dp/dq6 = 0 and dd/dq6 = 0, while full tool orientation changes by roll about d.</p>
+    </section>
+
+    <section class="stats">
+      <div class="stat"><div class="label">Experiments</div><div class="value">5/5 PASS</div></div>
+      <div class="stat"><div class="label">Trusted tests</div><div class="value">76 passed</div></div>
+      <div class="stat"><div class="label">Check-in 1</div><div class="value">SUPPORTED</div></div>
+      <div class="stat"><div class="label">Decision</div><div class="value">CONTINUE</div><div class="muted">human gate still required</div></div>
+    </section>
+
+    <section>
+      <h2>Experiments</h2>
+      
+    <article class="card">
+      <h3>ATR_EXP_001 — Aligned positive control
+        <span class="badge pass">PASS</span>
+      </h3>
+      <p><strong>Expected.</strong> position invariant; pointing invariant; roll recovers Delta q6</p>
+      <p><strong>Observed.</strong> max|dp|=0.000e+00 m; max|dd|=0.000e+00; max roll err=1.332e-15 rad</p>
+      
+      <p class="muted">
+        max |Δp| = 0.000e+00 m ·
+        max |Δd| = 0.000e+00 ·
+        max roll err = 1.332e-15 rad ·
+        position_changes = False ·
+        pointing_changes = False
+      </p>
+      <img src="figures/residuals_ATR_EXP_001.png" alt="ATR_EXP_001 residuals versus q6" />
+    </article>
+    
+
+    <article class="card">
+      <h3>ATR_EXP_002 — Off-axis task point
+        <span class="badge pass">PASS</span>
+      </h3>
+      <p><strong>Expected.</strong> position changes; pointing invariant</p>
+      <p><strong>Observed.</strong> position_changes=True; pointing_changes=False; max|dp|=4.000e-02 m</p>
+      
+      <p class="muted">
+        max |Δp| = 4.000e-02 m ·
+        max |Δd| = 0.000e+00 ·
+        max roll err = 1.332e-15 rad ·
+        position_changes = True ·
+        pointing_changes = False
+      </p>
+      <img src="figures/residuals_ATR_EXP_002.png" alt="ATR_EXP_002 residuals versus q6" />
+    </article>
+    
+
+    <article class="card">
+      <h3>ATR_EXP_003 — Misaligned pointing direction
+        <span class="badge pass">PASS</span>
+      </h3>
+      <p><strong>Expected.</strong> position invariant; pointing changes</p>
+      <p><strong>Observed.</strong> position_changes=False; pointing_changes=True; max|dd|=3.973e-01</p>
+      
+      <p class="muted">
+        max |Δp| = 0.000e+00 m ·
+        max |Δd| = 3.973e-01 ·
+        max roll err = 8.748e-02 rad ·
+        position_changes = False ·
+        pointing_changes = True
+      </p>
+      <img src="figures/residuals_ATR_EXP_003.png" alt="ATR_EXP_003 residuals versus q6" />
+    </article>
+    
+
+    <article class="card">
+      <h3>ATR_EXP_004 — Combined alignment violation
+        <span class="badge pass">PASS</span>
+      </h3>
+      <p><strong>Expected.</strong> position and pointing both change</p>
+      <p><strong>Observed.</strong> position_changes=True; pointing_changes=True</p>
+      
+      <p class="muted">
+        max |Δp| = 4.000e-02 m ·
+        max |Δd| = 3.973e-01 ·
+        max roll err = 8.748e-02 rad ·
+        position_changes = True ·
+        pointing_changes = True
+      </p>
+      <img src="figures/residuals_ATR_EXP_004.png" alt="ATR_EXP_004 residuals versus q6" />
+    </article>
+    
+
+    <article class="card">
+      <h3>ATR_EXP_005 — Finite-difference refinement
+        <span class="badge pass">PASS</span>
+      </h3>
+      <p><strong>Expected.</strong> analytical vs central-FD derivative error converges over usable h</p>
+      <p><strong>Observed.</strong> h=0.01: dp_err=3.333e-07, dd_err=3.311e-06; h=0.001: dp_err=3.333e-09, dd_err=3.311e-08; h=0.0001: dp_err=3.336e-11, dd_err=3.312e-10; h=1e-05: dp_err=4.699e-13, dd_err=3.471e-12; h=1e-06: dp_err=5.174e-12, dd_err=3.713e-12</p>
+      <p class='muted'>Fixture intentionally violates alignment so derivatives are nonzero.</p>
+      <p class="muted">
+        max |Δp| = 4.000e-02 m ·
+        max |Δd| = 3.973e-01 ·
+        max roll err = 8.712e-02 rad ·
+        position_changes = True ·
+        pointing_changes = True
+      </p>
+      <img src="figures/residuals_ATR_EXP_005.png" alt="ATR_EXP_005 residuals versus q6" />
+    </article>
+    
+    </section>
+
+    <section>
+      <h2>Finite-difference refinement</h2>
+      <p class="muted">Central differences versus analytical derivatives. Error falls as O(h²) until round-off near h = 1e-6 rad.</p>
+      <div class="card">
+        <img src="figures/fd_refinement_ATR_EXP_005.png" alt="ATR_EXP_005 finite-difference refinement" />
+        <table>
+          <thead><tr><th>h [rad]</th><th>dp error</th><th>dd error</th></tr></thead>
+          <tbody><tr><td>1.000e-02</td><td>3.333e-07</td><td>3.311e-06</td></tr><tr><td>1.000e-03</td><td>3.333e-09</td><td>3.311e-08</td></tr><tr><td>1.000e-04</td><td>3.336e-11</td><td>3.312e-10</td></tr><tr><td>1.000e-05</td><td>4.699e-13</td><td>3.471e-12</td></tr><tr><td>1.000e-06</td><td>5.174e-12</td><td>3.713e-12</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Acceptance criteria</h2>
+      <div class="card">
+        <table>
+          <thead><tr><th>Criterion</th><th>Required</th><th>Observed</th><th>Status</th></tr></thead>
+          <tbody><tr><td>Isolated under spatial_experiments</td><td>no planar / 6R coupling</td><td>package separate; no sixr import</td><td><span class='badge pass'>PASS</span></td></tr><tr><td>Planar tests unchanged</td><td>trusted suite green</td><td>fourbar/planar3r/validation + spatial: 76 passed</td><td><span class='badge pass'>PASS</span></td></tr><tr><td>Positive/negative qualitative behavior</td><td>Sprint matrix</td><td>all five PASS</td><td><span class='badge pass'>PASS</span></td></tr><tr><td>Analytical vs FD</td><td>convergence</td><td>O(h²) then mild round-off</td><td><span class='badge pass'>PASS</span></td></tr><tr><td>Orientation roll without Euler subtraction</td><td>relative R + probe atan2</td><td>max roll err ~1e-15 rad on aligned case</td><td><span class='badge pass'>PASS</span></td></tr><tr><td>Explicit tolerances/units</td><td>documented</td><td>metres / radians in manifests</td><td><span class='badge pass'>PASS</span></td></tr><tr><td>Experiment manifests/summaries</td><td>results/aligned_terminal_roll/&lt;id&gt;/</td><td>written</td><td><span class='badge pass'>PASS</span></td></tr><tr><td>No 6R / spherical / continuation code</td><td>deferred</td><td>not introduced</td><td><span class='badge pass'>PASS</span></td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Limitations and next stage</h2>
+      <div class="card">
+        <ul><li>Single revolute only; no serial-chain forward kinematics.</li><li>Does not test fixed-position Jacobian rank or quotient bases.</li><li>Finite-difference round-off appears near h ≲ 1e-6 rad.</li><li>Spherical four-bar / McCarthy-Soh work remains deferred.</li></ul>
+        <p>Generic synthetic aligned-terminal 6R kernel and local rank/nullity checks, pending human confirmation of Check-in 1. Sprint 02 is not authorized by this page.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>Reproduce: <code>python scripts/validate_terminal_roll_fixture.py</code><code>python scripts/generate_atr_sprint01_readout.py</code></p>
+      <p>Manifest commits: 0d27bb139c1a</p>
+    </footer>
+  </div>
+</body>
+</html>
