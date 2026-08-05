@@ -62,6 +62,14 @@ def assemble_sprint02_payload(results_root: Path) -> dict[str, Any]:
         "pass_count": pass_count,
         "experiment_count": len(experiments),
         "checkin_interpretation": "SUPPORTED",
+        "checkin_rationale": (
+            "For the GenericAligned6R skew reference chain, the named regular configuration "
+            "and all 48 seeded configurations satisfy the expected local fixed-position and "
+            "position-and-pointing ranks. Terminal roll is the sole task-kernel direction, "
+            "and the quotient fixed-position tangent space has rank-two pointing motion. "
+            "This establishes the numerical Stage A reference result but does not yet "
+            "establish architecture independence or global continuation."
+        ),
         "checkin_decision": "CONTINUE",
         "human_gate_required": True,
         "repository_commits": sorted({c for c in commits if c and c != "unknown"}),
@@ -155,6 +163,8 @@ def render_sprint02_html(payload: dict[str, Any]) -> str:
     <p class="lead">{escape(payload["subtitle"])} · {escape(payload["sprint_status"])} · {escape(payload["milestone"])}</p>
     <p class="warning">{escape(payload["warning"])}</p>
     <section class="claim"><strong>Claim under test.</strong><p>{escape(payload["claim"])}</p></section>
+    <section class="claim"><strong>Check-in 2 interpretation.</strong> {escape(payload["checkin_interpretation"])}.
+      <p>{escape(payload["checkin_rationale"])}</p></section>
     <section class="stats">
       <div class="stat"><div class="muted">Experiments</div><div>{payload["pass_count"]}/{payload["experiment_count"]} PASS</div></div>
       <div class="stat"><div class="muted">Check-in 2</div><div>{escape(payload["checkin_interpretation"])}</div></div>

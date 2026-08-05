@@ -33,3 +33,4 @@ def test_sprint02_payload_and_html(tmp_path: Path) -> None:
     for exp_id in S2_IDS:
         assert exp_id in html
     assert "Check-in 2 remains a human gate" in html
+    assert "does not yet establish architecture independence" in html

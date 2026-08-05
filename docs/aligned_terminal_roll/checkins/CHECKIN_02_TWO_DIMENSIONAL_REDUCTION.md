@@ -44,7 +44,7 @@ Select one:
 
 - `SUPPORTED`
 
-Rationale: the named regular sample and the entire 48-sample survey satisfy C6–C8. Negative controls break the expected `e6` invariance when alignment is violated. Exact `rank(J_p)<3` samples were not found by uniform sampling; a near-singular sample is labeled separately.
+For the `GenericAligned6R` skew reference chain, the named regular configuration and all 48 seeded configurations satisfy the expected local fixed-position and position-and-pointing ranks. Terminal roll is the sole task-kernel direction, and the quotient fixed-position tangent space has rank-two pointing motion. This establishes the numerical Stage A reference result but does not yet establish architecture independence or global continuation.
 
 ## 5. Decision
 
