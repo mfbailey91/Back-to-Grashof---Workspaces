@@ -1,10 +1,11 @@
 # ATR_EXP_026 — Alternate-path and duplicate analysis
 
-**Status:** Ready
+**Status:** Complete
 **Date:** 2026-08-04
 **Related sprint:** Sprint 04B — Sequential continuation and pointing-chart validation
 **Related claim IDs:** C10, H5
 **Random seed:** none
+**Implementation commit:** `e179ead`
 
 ## 1. Purpose
 
@@ -22,8 +23,10 @@ python scripts/validate_pointing_chart.py
 
 ## 4. Results
 
-Recorded after the clean implementation commit.
+- status: PASS
+- observed: both architectures `duplicates=0`; IP `3.304e-04 → 3.301e-04`; UR-like `3.791e-05 → 3.810e-05` (floor, relative change `< 1%`)
 
 ## 5. Interpretation
 
-A pass supports local injectivity of the sampled chart. Exact path independence over a finite curved patch is not claimed.
+- `PASS` supports local injectivity of the sampled chart.
+- UR-like alternate-path discrepancy is already at the geometric floor; exact path independence over a finite curved patch is not claimed.

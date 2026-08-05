@@ -1,10 +1,11 @@
 # ATR_EXP_023 — UR-like transported chart
 
-**Status:** Ready
+**Status:** Complete
 **Date:** 2026-08-04
 **Related sprint:** Sprint 04B — Sequential continuation and pointing-chart validation
 **Related claim IDs:** C10, H1, H2, H3, H6, A08
 **Random seed:** none
+**Implementation commit:** `e179ead`
 
 ## 1. Purpose
 
@@ -22,8 +23,10 @@ python scripts/validate_pointing_chart.py
 
 ## 4. Results
 
-Recorded after the clean implementation commit.
+- status: PASS
+- observed: `regular=81/81`, `rejected=0`, `interior=49`, `rankQ2=49`, `rankD2=49`, `duplicates=0`
 
 ## 5. Interpretation
 
-A pass is synthetic UR-like chart evidence only, not exact UR.
+- `PASS` is synthetic UR-like chart evidence only, not exact UR.
+- Pair/`SUUR` fields are recorded as `not_applicable`.

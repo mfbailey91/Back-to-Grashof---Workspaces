@@ -1,6 +1,6 @@
 # Sprint 04B — Sequential Continuation and Pointing-Chart Validation
 
-**Sprint status:** Implementation complete — awaiting Check-in 4B
+**Sprint status:** Experiments complete — awaiting Check-in 4B
 **Milestone target:** M4B — Validated local two-dimensional pointing chart
 **Check-in:** Check-in 4B
 **Authorized by:** Check-in 4 (`CONTINUE WITH CHANGED SCOPE`, 2026-08-04)

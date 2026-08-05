@@ -3,9 +3,9 @@
 **Date:** 2026-08-04
 **Milestone:** M4B — Validated local two-dimensional pointing chart
 **Sprint(s):** Sprint 04B — Sequential continuation and pointing-chart validation
-**Repository commit:** pending clean implementation commit
+**Repository commit:** `e179ead` (implementation); artifacts regenerated from that clean revision
 **Decision owner:** Michael Bailey
-**Decision status:** Draft — awaiting human review after artifact regeneration
+**Decision status:** Draft — awaiting human review
 
 ## 1. Claim under review
 
@@ -31,29 +31,33 @@ This check-in does **not** claim fibers, spherical `RRRR`, McCarthy–Soh, exact
 
 | Experiment | Purpose | Result |
 |---|---|---|
-| ATR_EXP_021 | Sequential forward/reverse | pending regeneration |
-| ATR_EXP_022 | IP transported chart | pending regeneration |
-| ATR_EXP_023 | UR-like transported chart | pending regeneration |
-| ATR_EXP_024 | Grid/step refinement | pending regeneration |
-| ATR_EXP_025 | Rectangular-loop refinement | pending regeneration |
-| ATR_EXP_026 | Alternate-path and duplicates | pending regeneration |
+| ATR_EXP_021 | Sequential forward/reverse | PASS |
+| ATR_EXP_022 | IP transported chart | PASS |
+| ATR_EXP_023 | UR-like transported chart | PASS |
+| ATR_EXP_024 | Grid/step refinement | PASS |
+| ATR_EXP_025 | Rectangular-loop refinement | PASS |
+| ATR_EXP_026 | Alternate-path and duplicates | PASS |
+
+All manifests record `repository_commit=e179ead` and `working_tree_dirty=false`.
 
 ## 4. Interpretation
 
-Draft. Fill after decision-bearing artifacts are regenerated from a clean commit.
+**SUPPORTED locally, pending human gate.**
+
+Both synthetic architectures admit a sequential local chart that is regular, reversible from the true forward endpoint, rank-two in both configuration and pointing differentials, free of duplicates, and stable under grid/step refinement. Intersecting-pair distances remain zero on the IP patch. UR-like continuation uses the same API without `SUUR` or pair diagnostics.
+
+Residual rectangular-loop and alternate-path discrepancies are small and consistent with curvature / holonomy on a finite patch. Exact closure and path independence are not claimed.
+
+Recommended check-in case: **A — both architectures pass.**
 
 ## 5. Decision
 
 **Pending human review.**
 
-Check-in 4B cases:
+If approved as Case A: authorize Sprint 05 with `IntersectingPairsAligned6R` as the controlled primary fiber benchmark and `URLikeAligned6R` as the practical parallel architecture.
 
-- A — both architectures pass → authorize Sprint 05 with IP primary and UR-like parallel
-- B — IP only → fiber work on IP only
-- C — UR-like only → do not start the compound-topology fiber program
-- D — rank loss under refinement → no Sprint 05
-- E — reverse or duplicates fail → branch tracking unresolved
+Still blocked: spherical `RRRR`, McCarthy–Soh, exact UR/URDF, and global dexterity.
 
 ## 6. Next sprint recommendation
 
-If Case A or B is selected after review, open Sprint 05 for one scalar constraint `h(q)=c`. Still blocked: spherical `RRRR`, McCarthy–Soh, exact UR/URDF, global dexterity.
+After human approval of Case A or B, open Sprint 05 for one scalar constraint `h(q)=c`.

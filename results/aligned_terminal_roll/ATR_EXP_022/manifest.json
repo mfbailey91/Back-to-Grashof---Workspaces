@@ -1,0 +1,73 @@
+{
+  "experiment_id": "ATR_EXP_022",
+  "repository_commit": "e179ead803893988cec11269af71893846c40c6f",
+  "working_tree_dirty": false,
+  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1",
+  "source_file_sha256": "510bc24d29326a46c8332a8c3244ac11df22d11d6c7c8c9ec161f30c467ce7df",
+  "experiment_configuration_sha256": "269a70e4a9b9bd76c05750ce3739c6726ac8bef3f4814d8979eb9f9e7452d3ab",
+  "architecture_parameters": "IntersectingPairsAligned6R",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "step_sizes": {
+    "ds": 0.03,
+    "dt": 0.03
+  },
+  "grid_dimensions": {
+    "ns": 9,
+    "nt": 9
+  },
+  "rank_tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09
+  },
+  "position_tolerance": 1e-10,
+  "duplicate_tolerance": 1e-06,
+  "status": "PASS",
+  "expected": "100% regular sequential chart; rank(Q)=rank(D)=2 at every interior node; no duplicates or failed samples; pair intersections persist",
+  "observed": "regular=81/81, rejected=0, interior=49, rankQ2=49, rankD2=49, duplicates=0, max_ua=0.000e+00, max_ub=0.000e+00",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_022",
+    "status": "PASS",
+    "expected": "100% regular sequential chart; rank(Q)=rank(D)=2 at every interior node; no duplicates or failed samples; pair intersections persist",
+    "observed": "regular=81/81, rejected=0, interior=49, rankQ2=49, rankD2=49, duplicates=0, max_ua=0.000e+00, max_ub=0.000e+00",
+    "metrics": {
+      "n_samples": 81,
+      "n_regular": 81,
+      "n_rejected": 0,
+      "n_interior": 49,
+      "n_rank_q_two": 49,
+      "n_rank_d_two": 49,
+      "n_duplicates": 0,
+      "min_nn_distance": 0.02999421737271099,
+      "collapsed_row": false,
+      "collapsed_column": false,
+      "pair_ok": true,
+      "max_dist_ua_m": 0.0,
+      "max_dist_ub_m": 0.0,
+      "ns": 9,
+      "nt": 9,
+      "ds": 0.03,
+      "dt": 0.03
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "architecture": "IntersectingPairsAligned6R"
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint04b"
+}

@@ -1,0 +1,111 @@
+{
+  "experiment_id": "ATR_EXP_021",
+  "repository_commit": "e179ead803893988cec11269af71893846c40c6f",
+  "working_tree_dirty": false,
+  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1",
+  "source_file_sha256": "510bc24d29326a46c8332a8c3244ac11df22d11d6c7c8c9ec161f30c467ce7df",
+  "experiment_configuration_sha256": "3891edbf34923b6ef6ce8f9cc52d55ed10a301644232047671c25590982cba30",
+  "architecture_parameters": "both",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "step_sizes": {
+    "ds": 0.03,
+    "dt": 0.03
+  },
+  "grid_dimensions": {
+    "ns": 9,
+    "nt": 9
+  },
+  "rank_tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09
+  },
+  "position_tolerance": 1e-10,
+  "duplicate_tolerance": 1e-06,
+  "status": "PASS",
+  "expected": "Sequential forward/reverse rays return within 1e-6 rad / 1e-8 pointing on both architectures and both chart axes",
+  "observed": "IntersectingPairsAligned6R/s: eq=1.010e-08, ed=6.882e-09, from_end=True; IntersectingPairsAligned6R/t: eq=1.967e-08, ed=5.933e-09, from_end=True; URLikeAligned6R/s: eq=1.678e-10, ed=1.199e-10, from_end=True; URLikeAligned6R/t: eq=1.402e-09, ed=9.454e-10, from_end=True",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_021",
+    "status": "PASS",
+    "expected": "Sequential forward/reverse rays return within 1e-6 rad / 1e-8 pointing on both architectures and both chart axes",
+    "observed": "IntersectingPairsAligned6R/s: eq=1.010e-08, ed=6.882e-09, from_end=True; IntersectingPairsAligned6R/t: eq=1.967e-08, ed=5.933e-09, from_end=True; URLikeAligned6R/s: eq=1.678e-10, ed=1.199e-10, from_end=True; URLikeAligned6R/t: eq=1.402e-09, ed=9.454e-10, from_end=True",
+    "metrics": {
+      "reports": [
+        {
+          "architecture": "IntersectingPairsAligned6R",
+          "axis": "s",
+          "n_steps": 4,
+          "step_size": 0.03,
+          "epsilon_q": 1.0103233223350168e-08,
+          "epsilon_p": 2.7194799110210365e-16,
+          "epsilon_d": 6.882077080667827e-09,
+          "forward_accepted": 4,
+          "reverse_accepted": 4,
+          "started_from_endpoint": true,
+          "passed": true
+        },
+        {
+          "architecture": "IntersectingPairsAligned6R",
+          "axis": "t",
+          "n_steps": 4,
+          "step_size": 0.03,
+          "epsilon_q": 1.9666758388656124e-08,
+          "epsilon_p": 1.5700924586837752e-16,
+          "epsilon_d": 5.932993785196048e-09,
+          "forward_accepted": 4,
+          "reverse_accepted": 4,
+          "started_from_endpoint": true,
+          "passed": true
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "axis": "s",
+          "n_steps": 4,
+          "step_size": 0.03,
+          "epsilon_q": 1.6775535754244088e-10,
+          "epsilon_p": 6.938893903907228e-17,
+          "epsilon_d": 1.1992724376923983e-10,
+          "forward_accepted": 4,
+          "reverse_accepted": 4,
+          "started_from_endpoint": true,
+          "passed": true
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "axis": "t",
+          "n_steps": 4,
+          "step_size": 0.03,
+          "epsilon_q": 1.4024569303136246e-09,
+          "epsilon_p": 5.721958498152797e-17,
+          "epsilon_d": 9.454297056695354e-10,
+          "forward_accepted": 4,
+          "reverse_accepted": 4,
+          "started_from_endpoint": true,
+          "passed": true
+        }
+      ],
+      "reverse_steps": 4,
+      "step_size": 0.03
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint04b"
+}

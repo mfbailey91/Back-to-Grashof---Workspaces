@@ -1,10 +1,11 @@
 # ATR_EXP_024 — Grid and step-size refinement
 
-**Status:** Ready
+**Status:** Complete
 **Date:** 2026-08-04
 **Related sprint:** Sprint 04B — Sequential continuation and pointing-chart validation
 **Related claim IDs:** C10, H5
 **Random seed:** none
+**Implementation commit:** `e179ead`
 
 ## 1. Purpose
 
@@ -22,8 +23,11 @@ python scripts/validate_pointing_chart.py
 
 ## 4. Results
 
-Recorded after the clean implementation commit.
+- status: PASS
+- observed: both architectures `shared=81`, `Δq=0`, `Δd=0`, baseline/fine/compact all rank-two
 
 ## 5. Interpretation
 
-A pass supports local chart stability under refinement, not path-independent finite coordinates.
+- `PASS` supports local chart stability under refinement.
+- Exact shared-node agreement uses a common internal microstep of `0.005`.
+- Path-independent finite coordinates over a curved patch are not claimed.

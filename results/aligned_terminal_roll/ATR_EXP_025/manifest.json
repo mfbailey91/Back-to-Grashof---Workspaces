@@ -1,0 +1,97 @@
+{
+  "experiment_id": "ATR_EXP_025",
+  "repository_commit": "e179ead803893988cec11269af71893846c40c6f",
+  "working_tree_dirty": false,
+  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1",
+  "source_file_sha256": "510bc24d29326a46c8332a8c3244ac11df22d11d6c7c8c9ec161f30c467ce7df",
+  "experiment_configuration_sha256": "37f64ab7c471d3b203d5dcb5e1db911a08485ab7355c73d62d9aad974eef46f0",
+  "architecture_parameters": "both",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "step_sizes": {
+    "ds": 0.03,
+    "dt": 0.03
+  },
+  "grid_dimensions": {
+    "ns": 9,
+    "nt": 9
+  },
+  "rank_tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09
+  },
+  "position_tolerance": 1e-10,
+  "duplicate_tolerance": 1e-06,
+  "status": "PASS",
+  "expected": "Rectangular-loop closure error decreases when the step is halved",
+  "observed": "IntersectingPairsAligned6R: coarse_eq=3.301e-04, fine_eq=4.067e-05, decreased=True; URLikeAligned6R: coarse_eq=3.792e-05, fine_eq=4.779e-06, decreased=True",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_025",
+    "status": "PASS",
+    "expected": "Rectangular-loop closure error decreases when the step is halved",
+    "observed": "IntersectingPairsAligned6R: coarse_eq=3.301e-04, fine_eq=4.067e-05, decreased=True; URLikeAligned6R: coarse_eq=3.792e-05, fine_eq=4.779e-06, decreased=True",
+    "metrics": {
+      "reports": [
+        {
+          "architecture": "IntersectingPairsAligned6R",
+          "coarse": {
+            "n_steps": 2,
+            "step_size": 0.03,
+            "epsilon_q": 0.0003301138321232237,
+            "epsilon_p": 6.649299853917621e-15,
+            "epsilon_d": 0.00015061543165749162,
+            "accepted_legs": 4
+          },
+          "fine": {
+            "n_steps": 2,
+            "step_size": 0.015,
+            "epsilon_q": 4.067392043391495e-05,
+            "epsilon_p": 1.5700924586837752e-16,
+            "epsilon_d": 1.8630180478776722e-05,
+            "accepted_legs": 4
+          },
+          "decreased": true
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "coarse": {
+            "n_steps": 2,
+            "step_size": 0.03,
+            "epsilon_q": 3.792154982981131e-05,
+            "epsilon_p": 1.1188630228279524e-16,
+            "epsilon_d": 3.069755202620765e-05,
+            "accepted_legs": 4
+          },
+          "fine": {
+            "n_steps": 2,
+            "step_size": 0.015,
+            "epsilon_q": 4.7786226175019226e-06,
+            "epsilon_p": 5.721958498152797e-17,
+            "epsilon_d": 3.8680443443324486e-06,
+            "accepted_legs": 4
+          },
+          "decreased": true
+        }
+      ]
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint04b"
+}

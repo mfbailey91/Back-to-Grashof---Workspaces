@@ -1,0 +1,85 @@
+{
+  "experiment_id": "ATR_EXP_024",
+  "repository_commit": "e179ead803893988cec11269af71893846c40c6f",
+  "working_tree_dirty": false,
+  "source_identifier": "grashof_workspace.spatial_experiments.chart_experiments:sprint04b-v1",
+  "source_file_sha256": "510bc24d29326a46c8332a8c3244ac11df22d11d6c7c8c9ec161f30c467ce7df",
+  "experiment_configuration_sha256": "44bc37e73649d3560c7a6ff9efe57cbcb0bfd3d92390a44c341210f78dcf0a56",
+  "architecture_parameters": "both",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "step_sizes": {
+    "ds": 0.03,
+    "dt": 0.03
+  },
+  "grid_dimensions": {
+    "ns": 9,
+    "nt": 9
+  },
+  "rank_tolerances": {
+    "abs_rank_tol": 1e-10,
+    "rel_rank_tol": 1e-09
+  },
+  "position_tolerance": 1e-10,
+  "duplicate_tolerance": 1e-06,
+  "status": "PASS",
+  "expected": "Shared-node q/d and rank classifications remain stable under grid/step refinement",
+  "observed": "IntersectingPairsAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True; URLikeAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_024",
+    "status": "PASS",
+    "expected": "Shared-node q/d and rank classifications remain stable under grid/step refinement",
+    "observed": "IntersectingPairsAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True; URLikeAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True",
+    "metrics": {
+      "comparisons": [
+        {
+          "architecture": "IntersectingPairsAligned6R",
+          "shared": {
+            "n_shared": 81,
+            "max_joint_delta": 0.0,
+            "max_pointing_delta": 0.0,
+            "rank_classifications_match": true,
+            "passed": true
+          },
+          "baseline_rank_two": true,
+          "fine_rank_two": true,
+          "compact_rank_two": true,
+          "passed": true
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "shared": {
+            "n_shared": 81,
+            "max_joint_delta": 0.0,
+            "max_pointing_delta": 0.0,
+            "rank_classifications_match": true,
+            "passed": true
+          },
+          "baseline_rank_two": true,
+          "fine_rank_two": true,
+          "compact_rank_two": true,
+          "passed": true
+        }
+      ]
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ]
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint04b"
+}

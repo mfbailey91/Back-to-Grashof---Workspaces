@@ -1,10 +1,11 @@
 # ATR_EXP_021 — Sequential forward/reverse rays
 
-**Status:** Ready
+**Status:** Complete
 **Date:** 2026-08-04
 **Related sprint:** Sprint 04B — Sequential continuation and pointing-chart validation
 **Related claim IDs:** C10, H4
 **Random seed:** none
+**Implementation commit:** `e179ead`
 
 ## 1. Purpose
 
@@ -22,8 +23,10 @@ python scripts/validate_pointing_chart.py
 
 ## 4. Results
 
-Recorded after the clean implementation commit.
+- status: PASS
+- observed: IP `s` `ε_q=1.010e-08` `ε_d=6.882e-09`; IP `t` `ε_q=1.967e-08` `ε_d=5.933e-09`; UR-like `s` `ε_q=1.678e-10` `ε_d=1.199e-10`; UR-like `t` `ε_q=1.402e-09` `ε_d=9.454e-10`; all reverse runs started from the forward endpoint
 
 ## 5. Interpretation
 
-A pass supports reversible sequential branch tracking locally. It is not a global connectedness claim.
+- `PASS` supports reversible sequential branch tracking on the local patch.
+- This is not a global connectedness claim.
