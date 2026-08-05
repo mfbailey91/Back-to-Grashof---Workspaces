@@ -29,8 +29,8 @@ A negative result at any later stage does not invalidate an earlier established 
 - `sprints/SPRINT_02_GENERIC_ALIGNED_6R.md` — generic aligned 6R Stage A reduction.
 - `sprints/SPRINT_05_EXPLICIT_ONE_DIMENSIONAL_FIBER.md` — Stage C fiber sprint note (closed).
 - `sprints/SPRINT_05_REVIEW_CURSOR_WRITEUP.md` — Sprint 05 review and closeout writeup.
-- `sprints/SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md` — candidate spherical-equivalence planning note.
-- `IMPLEMENTATION_RATIONALE.md` / `METHOD_REFERENCES.md` — method audit through Sprint 05 local C11.
+- `sprints/SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md` — candidate spherical-equivalence sprint note (`S−UA−UB−R5`, global `c*`; 032–035 run; 036 deferred).
+- `IMPLEMENTATION_RATIONALE.md` / `METHOD_REFERENCES.md` — method audit through Sprint 06 candidate invariants.
 - `decisions/` — architecture and research decision records.
 - `experiments/` — experiment specifications and result records.
 - `checkins/` — completed check-in packets and decisions.
@@ -49,4 +49,12 @@ In particular:
 
 ## Current next action
 
-Sprint 05 is closed. Review the Sprint 06 planning note (`SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md`) before implementing candidate spherical tests. McCarthy–Soh and exact UR remain blocked.
+Sprint 06 ATR_EXP_032–035 are run: no duplicates; both IP topology-derived candidates fail exact concurrency/arcs; UR-like axes are N/A. ATR_EXP_036, McCarthy–Soh, and exact UR remain blocked. Check-in 6 is next.
+
+Developer-only printable readout through Sprint 06:
+
+```bash
+python scripts/generate_atr_sprint01_06_printout.py
+```
+
+Output: `results/aligned_terminal_roll/sprint01_06_printout/index.html`

@@ -1,0 +1,258 @@
+{
+  "experiment_id": "ATR_EXP_035",
+  "repository_commit": "35630c392f76637e56f3b0e3480dfe1b61cd1902",
+  "working_tree_dirty": true,
+  "source_identifier": "grashof_workspace.spatial_experiments.spherical_experiments:sprint06-v2",
+  "source_file_sha256": "c73d50cacfd5e86259821e3d8b12e5d9f4acc26f698e1b9c9b5738ac6e3ceb9e",
+  "experiment_configuration_sha256": "14c857a245d4af17b5ee9e8670afd219cfcc94af3b1fd1569e0a470bef369b0c",
+  "architecture_parameters": "URLikeAligned6R",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "n": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "alternate_n": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "step_sizes": {
+    "dsigma": 0.03
+  },
+  "n_steps": 4,
+  "status": "PASS",
+  "expected": "UR-like duplicate scans plus exploratory fixed R1\u2013R5 four-subset diagnostics; no exact RRRR claim; no SUUR required",
+  "observed": "primary: dups=0, dup_passed=True, best=R1-R2-R3-R4 max=1.519e-01 m; alternate: dups=0, dup_passed=True, best=R1-R2-R3-R4 max=1.503e-01 m",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_035",
+    "status": "PASS",
+    "expected": "UR-like duplicate scans plus exploratory fixed R1\u2013R5 four-subset diagnostics; no exact RRRR claim; no SUUR required",
+    "observed": "primary: dups=0, dup_passed=True, best=R1-R2-R3-R4 max=1.519e-01 m; alternate: dups=0, dup_passed=True, best=R1-R2-R3-R4 max=1.503e-01 m",
+    "metrics": {
+      "candidates": [
+        {
+          "architecture": "URLikeAligned6R",
+          "fiber": "primary",
+          "n": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "duplicate_passed": true,
+          "n_duplicates": 0,
+          "min_nn_distance": 0.029998116706943734,
+          "n_stations": 9,
+          "axes_construction": "exploratory_fixed_physical_subset",
+          "exact_rrrr_claim": false,
+          "reason": "no_topology_derived_ua_ub_parent",
+          "best_tuple": {
+            "indices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "label": "R1-R2-R3-R4",
+            "global_rms_m": 0.10161976657529075,
+            "global_max_m": 0.15192745491776447,
+            "max_center_drift_m": 0.009636311494709032,
+            "max_arc_residual_rad": 0.10856349266469567
+          },
+          "tuples": [
+            {
+              "indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "label": "R1-R2-R3-R4",
+              "global_rms_m": 0.10161976657529075,
+              "global_max_m": 0.15192745491776447,
+              "max_center_drift_m": 0.009636311494709032,
+              "max_arc_residual_rad": 0.10856349266469567
+            },
+            {
+              "indices": [
+                0,
+                1,
+                2,
+                4
+              ],
+              "label": "R1-R2-R3-R5",
+              "global_rms_m": 0.18370421136403778,
+              "global_max_m": 0.27589748493790717,
+              "max_center_drift_m": 0.004727666006151318,
+              "max_arc_residual_rad": 0.07364808480105887
+            },
+            {
+              "indices": [
+                0,
+                1,
+                3,
+                4
+              ],
+              "label": "R1-R2-R4-R5",
+              "global_rms_m": 0.1812360055407349,
+              "global_max_m": 0.2932082461424209,
+              "max_center_drift_m": 0.003978831268473715,
+              "max_arc_residual_rad": 0.04973461019984238
+            },
+            {
+              "indices": [
+                0,
+                2,
+                3,
+                4
+              ],
+              "label": "R1-R3-R4-R5",
+              "global_rms_m": 0.15388238276736094,
+              "global_max_m": 0.2211932037085809,
+              "max_center_drift_m": 0.007575436891550243,
+              "max_arc_residual_rad": 0.04973461019984238
+            },
+            {
+              "indices": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "label": "R2-R3-R4-R5",
+              "global_rms_m": 0.15864986334490183,
+              "global_max_m": 0.22993921734576553,
+              "max_center_drift_m": 0.0056143435126539964,
+              "max_arc_residual_rad": 0.05431858745525048
+            }
+          ]
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "fiber": "alternate",
+          "n": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "duplicate_passed": true,
+          "n_duplicates": 0,
+          "min_nn_distance": 0.029999204009737636,
+          "n_stations": 9,
+          "axes_construction": "exploratory_fixed_physical_subset",
+          "exact_rrrr_claim": false,
+          "reason": "no_topology_derived_ua_ub_parent",
+          "best_tuple": {
+            "indices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "label": "R1-R2-R3-R4",
+            "global_rms_m": 0.10148868078126964,
+            "global_max_m": 0.1502565491390771,
+            "max_center_drift_m": 0.00479954620623994,
+            "max_arc_residual_rad": 0.06874901385947374
+          },
+          "tuples": [
+            {
+              "indices": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "label": "R1-R2-R3-R4",
+              "global_rms_m": 0.10148868078126964,
+              "global_max_m": 0.1502565491390771,
+              "max_center_drift_m": 0.00479954620623994,
+              "max_arc_residual_rad": 0.06874901385947374
+            },
+            {
+              "indices": [
+                0,
+                1,
+                2,
+                4
+              ],
+              "label": "R1-R2-R3-R5",
+              "global_rms_m": 0.18377183546946207,
+              "global_max_m": 0.2725677511269312,
+              "max_center_drift_m": 0.0025202780463908893,
+              "max_arc_residual_rad": 0.29256263238778096
+            },
+            {
+              "indices": [
+                0,
+                1,
+                3,
+                4
+              ],
+              "label": "R1-R2-R4-R5",
+              "global_rms_m": 0.1812955637064868,
+              "global_max_m": 0.2899883757895424,
+              "max_center_drift_m": 0.0027288661999307793,
+              "max_arc_residual_rad": 0.20716023588234278
+            },
+            {
+              "indices": [
+                0,
+                2,
+                3,
+                4
+              ],
+              "label": "R1-R3-R4-R5",
+              "global_rms_m": 0.153894237858144,
+              "global_max_m": 0.21932574765586027,
+              "max_center_drift_m": 0.004773498837826998,
+              "max_arc_residual_rad": 0.20716023588234278
+            },
+            {
+              "indices": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "label": "R2-R3-R4-R5",
+              "global_rms_m": 0.15866808344218278,
+              "global_max_m": 0.2301049259695159,
+              "max_center_drift_m": 0.003455542327789335,
+              "max_arc_residual_rad": 0.20658540737147907
+            }
+          ]
+        }
+      ],
+      "suur_required": false,
+      "axes_construction": "exploratory_fixed_physical_subset",
+      "exact_rrrr_claim": false
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "n": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "architecture": "URLikeAligned6R"
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint06"
+}

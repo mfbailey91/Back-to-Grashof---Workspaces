@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 04B / 04C — Sequential chart validation</title>
+  <style>
+    :root {
+      --bg0:#10151b; --bg1:#182028; --panel:#24303c; --ink:#e8eef4; --muted:#9aa8b5;
+      --line:#3a4a5a; --teal:#2a9d8f; --amber:#e9a319; --good:#3cbf9a;
+      font-family:"IBM Plex Sans","Segoe UI",sans-serif; color:var(--ink);
+      background: linear-gradient(160deg, var(--bg0), var(--bg1));
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; line-height:1.5; padding-bottom:3rem; }
+    .shell { max-width:1100px; margin:0 auto; padding:1.5rem; }
+    .brand { color:var(--teal); letter-spacing:.04em; font-size:.85rem; text-transform:uppercase; }
+    h1 { margin:.35rem 0 .6rem; font-size:2rem; }
+    .lead,.muted { color:var(--muted); }
+    .warning { border-left:3px solid var(--amber); background:rgba(233,163,25,.08); padding:.75rem 1rem; }
+    .claim,.card,.stat { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:1rem; margin:1rem 0; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:.75rem; }
+    .stat { margin:0; }
+    .badge.pass { color:var(--good); border:1px solid var(--good); border-radius:999px; padding:.15rem .55rem; font-size:.75rem; }
+    .badge.deferred,.badge.warn { color:var(--amber); border:1px solid var(--amber); border-radius:999px; padding:.15rem .55rem; font-size:.75rem; }
+    img { max-width:100%; height:auto; border-radius:6px; background:#0b1014; margin-top:.6rem; }
+    code { display:inline-block; background:#0b1014; border:1px solid var(--line); border-radius:4px; padding:.2rem .45rem; margin:.2rem .35rem .2rem 0; }
+    footer { color:var(--muted); margin-top:2rem; font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">aligned terminal-roll</div>
+    <h1>Sprint 04B / 04C — Sequential chart validation</h1>
+    <p class="lead">Endpoint reverse, rank-two charts, refinement, and claim-language audit · Complete — Check-in 4B Case A / 04C Pass · M4 — Two-dimensional pointing surface</p>
+    <p class="warning">Check-ins 4B and 04C are approved. This diagnostic does not authorize spherical RRRR, McCarthy–Soh, or exact UR.</p>
+    <section class="claim"><strong>Claim under test.</strong><p>Sequential predictor-corrector continuation with transported tangent frames produces a reversible, rank-two, noncollapsed local pointing chart on both IntersectingPairsAligned6R and URLikeAligned6R.</p></section>
+    <section class="claim"><strong>Check-in.</strong> SUPPORTED LOCALLY / CONTINUE / Case A.
+      <p>Check-in 4B Case A and Check-in 04C Pass authorize Sprint 05 fiber work. ATR_EXP_024 is shared-microstep consistency, not independent refinement.</p></section>
+    <section class="stats">
+      <div class="stat"><div class="muted">Experiments</div><div>6/6 PASS</div></div>
+      <div class="stat"><div class="muted">Interpretation</div><div>SUPPORTED LOCALLY</div></div>
+      <div class="stat"><div class="muted">Decision</div><div>CONTINUE / Case A</div></div>
+    </section>
+    <h2>Experiments</h2>
+    
+            <article class="card">
+              <h3>ATR_EXP_021 — Sequential forward/reverse rays
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> Sequential forward/reverse rays return within 1e-6 rad / 1e-8 pointing on both architectures and both chart axes</p>
+              <p><strong>Observed.</strong> IntersectingPairsAligned6R/s: eq=1.010e-08, ed=6.882e-09, from_end=True; IntersectingPairsAligned6R/t: eq=1.967e-08, ed=5.933e-09, from_end=True; URLikeAligned6R/s: eq=1.678e-10, ed=1.199e-10, from_end=True; URLikeAligned6R/t: eq=1.402e-09, ed=9.454e-10, from_end=True</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_022 — Intersecting-pairs transported chart
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> 100% regular sequential chart; rank(Q)=rank(D)=2 at every interior node; no duplicates or failed samples; pair intersections persist</p>
+              <p><strong>Observed.</strong> regular=81/81, rejected=0, interior=49, rankQ2=49, rankD2=49, duplicates=0, max_ua=0.000e+00, max_ub=0.000e+00</p>
+              <img src="figures/ATR_EXP_022_ATR_EXP_022_chart.png" alt="ATR_EXP_022 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_023 — UR-like transported chart
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> 100% regular sequential chart; rank(Q)=rank(D)=2 at every interior node; no duplicates or failed samples; no SUUR/pair fields required</p>
+              <p><strong>Observed.</strong> regular=81/81, rejected=0, interior=49, rankQ2=49, rankD2=49, duplicates=0</p>
+              <img src="figures/ATR_EXP_023_ATR_EXP_023_chart.png" alt="ATR_EXP_023 figure" />
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_024 — Shared-microstep consistency
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> Shared-node q/d agree under the same internal microstep; rank classifications remain two. This is macro-grid consistency, not independent numerical refinement</p>
+              <p><strong>Observed.</strong> IntersectingPairsAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True; URLikeAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_025 — Independent-step refinement
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> Rectangular-loop closure error decreases when the step is halved</p>
+              <p><strong>Observed.</strong> IntersectingPairsAligned6R: coarse_eq=3.301e-04, fine_eq=4.067e-05, decreased=True; URLikeAligned6R: coarse_eq=3.792e-05, fine_eq=4.779e-06, decreased=True</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_026 — Alternate-path and duplicate analysis
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> No duplicate solutions; s-then-t vs t-then-s discrepancy remains small and stable</p>
+              <p><strong>Observed.</strong> IntersectingPairsAligned6R: dups=0, alt_coarse=3.304e-04, alt_fine=3.301e-04; URLikeAligned6R: dups=0, alt_coarse=3.791e-05, alt_fine=3.810e-05</p>
+              
+            </article>
+            
+    <h2>Next stage</h2>
+    <div class="card"><p>Sprint 05 explicit one-dimensional fiber is closed. Sprint 06 candidate spherical tests follow.</p></div>
+    <footer><p>Reproduce: <code>python scripts/validate_pointing_chart.py</code><code>python scripts/generate_atr_sprint01_06_printout.py</code></p><p>Manifest commits: 82622cf1558e</p><p>Source identifiers: grashof_workspace.spatial_experiments.chart_experiments:sprint04c-v1</p></footer>
+  </div>
+</body>
+</html>

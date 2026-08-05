@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sprint 06 — Candidate spherical equivalence</title>
+  <style>
+    :root {
+      --bg0:#10151b; --bg1:#182028; --panel:#24303c; --ink:#e8eef4; --muted:#9aa8b5;
+      --line:#3a4a5a; --teal:#2a9d8f; --amber:#e9a319; --good:#3cbf9a;
+      font-family:"IBM Plex Sans","Segoe UI",sans-serif; color:var(--ink);
+      background: linear-gradient(160deg, var(--bg0), var(--bg1));
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; line-height:1.5; padding-bottom:3rem; }
+    .shell { max-width:1100px; margin:0 auto; padding:1.5rem; }
+    .brand { color:var(--teal); letter-spacing:.04em; font-size:.85rem; text-transform:uppercase; }
+    h1 { margin:.35rem 0 .6rem; font-size:2rem; }
+    .lead,.muted { color:var(--muted); }
+    .warning { border-left:3px solid var(--amber); background:rgba(233,163,25,.08); padding:.75rem 1rem; }
+    .claim,.card,.stat { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:1rem; margin:1rem 0; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:.75rem; }
+    .stat { margin:0; }
+    .badge.pass { color:var(--good); border:1px solid var(--good); border-radius:999px; padding:.15rem .55rem; font-size:.75rem; }
+    .badge.deferred,.badge.warn { color:var(--amber); border:1px solid var(--amber); border-radius:999px; padding:.15rem .55rem; font-size:.75rem; }
+    img { max-width:100%; height:auto; border-radius:6px; background:#0b1014; margin-top:.6rem; }
+    code { display:inline-block; background:#0b1014; border:1px solid var(--line); border-radius:4px; padding:.2rem .45rem; margin:.2rem .35rem .2rem 0; }
+    footer { color:var(--muted); margin-top:2rem; font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">aligned terminal-roll</div>
+    <h1>Sprint 06 — Candidate spherical equivalence</h1>
+    <p class="lead">Topology-derived S−UA−UB−R5 tests on Sprint 05 candidate fibers · 032–035 complete / 036 deferred / Check-in 6 next · M6 — Spherical equivalence decision</p>
+    <p class="warning">Sprint 06 ATR_EXP_032–035 use topology-derived S−UA−UB−R5 axes, a branch-global center c*, and body-fixed axis legitimacy. UR-like 035 is exploratory only. ATR_EXP_036, McCarthy–Soh, and exact UR remain blocked until an IP candidate is exact.</p>
+    <section class="claim"><strong>Claim under test.</strong><p>For each named candidate slice, either branch-wide topology-derived concurrency and fixed arcs hold, or the candidate is rejected / approximate / unresolved / N/A. Failure of one slice is not nonexistence of all spherical fibers.</p></section>
+    <section class="claim"><strong>Check-in.</strong> PENDING CHECK-IN 6 / AWAITING REVIEW.
+      <p>No wrap duplicates. IP primary and alternate fail exact concurrency/arcs (ρ≈0.7–0.8 m). UR-like axis construction is not applicable. Terminal-roll reduction and local fiber existence stand.</p></section>
+    <section class="stats">
+      <div class="stat"><div class="muted">Experiments</div><div>4/5 PASS</div></div>
+      <div class="stat"><div class="muted">Interpretation</div><div>PENDING CHECK-IN 6</div></div>
+      <div class="stat"><div class="muted">Decision</div><div>AWAITING REVIEW</div></div>
+    </section>
+    <h2>Experiments</h2>
+    
+            <article class="card">
+              <h3>ATR_EXP_032 — Duplicate scan on all four candidate fibers
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> All four candidate fibers have no wrap-equivalent repeats at distinct σ (tol=1e-06 rad)</p>
+              <p><strong>Observed.</strong> IntersectingPairsAligned6R/primary: stations=9, dups=0, min_nn=2.999e-02, passed=True; IntersectingPairsAligned6R/alternate: stations=9, dups=0, min_nn=2.999e-02, passed=True; URLikeAligned6R/primary: stations=9, dups=0, min_nn=3.000e-02, passed=True; URLikeAligned6R/alternate: stations=9, dups=0, min_nn=3.000e-02, passed=True</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_033 — IP primary S−UA−UB−R5 global-center invariants
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> Named residual report for S-UA-UB-R5: exact, approximate, fail, or unresolved using global c*, fixed-center drift, arcs, and body-fixed axis legitimacy</p>
+              <p><strong>Observed.</strong> IntersectingPairsAligned6R/primary: verdict=fail, c*_rms=2.477e-01 m, c*_max=3.338e-01 m, drift=9.175e-02 m, arc=7.714e-01 rad, body_fixed=5.109e-01 rad, simple_lock=False, locking=fail</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_034 — IP alternate S−UA−UB−R5 global-center invariants
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> Named residual report for S-UA-UB-R5: exact, approximate, fail, or unresolved using global c*, fixed-center drift, arcs, and body-fixed axis legitimacy</p>
+              <p><strong>Observed.</strong> IntersectingPairsAligned6R/alternate: verdict=fail, c*_rms=1.597e-01 m, c*_max=3.105e-01 m, drift=7.589e-02 m, arc=8.617e-01 rad, body_fixed=5.859e-01 rad, simple_lock=False, locking=fail</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_035 — UR-like duplicate scan plus exploratory fixed tuples
+                <span class="badge pass">PASS</span></h3>
+              <p><strong>Expected.</strong> UR-like duplicate scans plus exploratory fixed R1–R5 four-subset diagnostics; no exact RRRR claim; no SUUR required</p>
+              <p><strong>Observed.</strong> primary: dups=0, dup_passed=True, best=R1-R2-R3-R4 max=1.519e-01 m; alternate: dups=0, dup_passed=True, best=R1-R2-R3-R4 max=1.503e-01 m</p>
+              
+            </article>
+            
+            <article class="card">
+              <h3>ATR_EXP_036 — Tangent and continued-motion equivalence
+                <span class="badge deferred">DEFERRED</span></h3>
+              <p><strong>Expected.</strong> Local tangent and continued-motion match a well-posed spherical RRRR</p>
+              <p><strong>Observed.</strong> Deferred — no exact IP candidate from ATR_EXP_033/034</p>
+              
+            </article>
+            
+    <h2>Next stage</h2>
+    <div class="card"><p>Check-in 6. Do not open ATR_EXP_036 or McCarthy–Soh unless an exact spherical candidate is later established. Exact UR remains blocked.</p></div>
+    <footer><p>Reproduce: <code>python scripts/validate_spherical_candidates.py</code><code>python scripts/generate_atr_sprint01_06_printout.py</code></p><p>Manifest commits: 35630c392f76</p><p>Source identifiers: grashof_workspace.spatial_experiments.spherical_experiments:sprint06-v2</p></footer>
+  </div>
+</body>
+</html>

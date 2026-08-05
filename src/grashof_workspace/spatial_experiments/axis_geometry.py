@@ -122,6 +122,47 @@ def line_line_distance(a: AxisLine, b: AxisLine) -> float:
     return abs(float(np.dot(delta, cross))) / n
 
 
+def line_closest_points(a: AxisLine, b: AxisLine) -> tuple[Vec3, Vec3]:
+    """Return the closest points on ``a`` and ``b``.
+
+    Equality: intersecting lines share the same closest point.
+    Parallel distinct lines return a transverse pair.
+    """
+    w_a = a.w_array
+    w_b = b.w_array
+    delta = b.r_array - a.r_array
+    cos = float(np.dot(w_a, w_b))
+    denom = 1.0 - cos * cos
+    if denom <= 1e-24:
+        point_a = a.r_array + float(np.dot(delta, w_a)) * w_a
+        point_b = b.r_array + float(np.dot(point_a - b.r_array, w_b)) * w_b
+        return point_a, point_b
+    delta_a = float(np.dot(delta, w_a))
+    delta_b = float(np.dot(delta, w_b))
+    s = (delta_a - cos * delta_b) / denom
+    t = (cos * delta_a - delta_b) / denom
+    return a.r_array + s * w_a, b.r_array + t * w_b
+
+
+def line_intersection_point(
+    a: AxisLine,
+    b: AxisLine,
+    *,
+    tol_m: float = 1e-12,
+) -> tuple[float, float, float] | None:
+    """Return the closest-approach midpoint if the lines intersect within ``tol_m``.
+
+    Interior: concurrent nonparallel lines return the shared point.
+    Exterior: a positive common perpendicular rejects the intersection.
+    Boundary: distance equal to ``tol_m`` is accepted.
+    """
+    if line_line_distance(a, b) > tol_m:
+        return None
+    point_a, point_b = line_closest_points(a, b)
+    mid = 0.5 * (point_a + point_b)
+    return (float(mid[0]), float(mid[1]), float(mid[2]))
+
+
 def are_parallel(
     a: Vec3 | tuple[float, float, float],
     b: Vec3 | tuple[float, float, float],

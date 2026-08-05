@@ -1,7 +1,7 @@
 # Project Plan — Aligned Terminal-Roll Reduction
 
 **Project owner:** Michael Bailey
-**Status:** Sprint 05 closed / Check-in 5 approved with changed scope / Sprint 06 planning authorized
+**Status:** Sprint 05 closed / Sprint 06 implementing ATR_EXP_032–035 / McCarthy–Soh blocked
 **Last updated:** 2026-08-04
 **Planning horizon:** Reduction proof through exact-robot generalization
 **Change policy:** Update at formal check-ins; record material reversals in `decisions/`
@@ -76,7 +76,7 @@ The project will produce:
 | 2B | Synthetic UR-like 6R | Test practical architecture ordering | Reduction survives recognizable shoulder-elbow-wrist geometry |
 | 3 | Fixed-position pointing manifold | Establish a two-dimensional parent | Continuation produces a stable 2D patch with rank-two pointing map |
 | 4 | Explicit one-dimensional fiber | Produce a legitimate constrained branch | Constraint is independent and branch is regular and reproducible |
-| 5 | Candidate spherical `RRRR` | Test exact mechanism equivalence | Global concurrency, fixed arcs, locking, and motion equivalence pass |
+| 5 | Candidate spherical `RRRR` | Test exact mechanism equivalence | Global `c*` concurrency, fixed arcs, body-fixed axis legitimacy, and motion equivalence pass |
 | 6 | Exact UR geometry | Generalization test | Supported conclusions survive exact dimensions and frames |
 
 ## 6. Milestones and formal check-ins
@@ -245,13 +245,13 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 | Check-in 5 | Approved 2026-08-04 (`CONTINUE WITH CHANGED SCOPE`) |
 | Fiber construction | Explicit primary and alternate task-space fibers verified locally |
 | Canonical fiber selection | Open |
-| Sprint 06 | Planning authorized for candidate spherical-equivalence tests |
+| Sprint 06 | ATR_EXP_032–035 complete under `S−UA−UB−R5` + global `c*`; IP candidates fail; 035 exploratory; 036 deferred |
 | McCarthy–Soh classification | Blocked until exact spherical `RRRR` prerequisites pass |
 | Exact UR work | Deferred |
 | Spherical Grashof work | Authorized at candidate-test planning stage only |
 
 ## 11. Immediate project decision
 
-Sprint 05 is closed. Review `SPRINT_06_CANDIDATE_SPHERICAL_EQUIVALENCE.md`, then implement candidate spherical tests on the named primary and alternate fibers.
+Sprint 06 ATR_EXP_032–035 are complete under the corrected construction: tested IP slices fail global `c*` concurrency, arcs, and body-fixed legitimacy; UR-like 035 is exploratory only. Mini-check-in / Check-in 6 next. Do not open ATR_EXP_036 or McCarthy–Soh.
 
 Begin with duplicate-configuration detection and branch-wide concurrency. Do not apply McCarthy–Soh and do not infer nonexistence of all spherical fibers from failure of one selected slice.

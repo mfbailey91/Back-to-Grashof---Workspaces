@@ -153,17 +153,19 @@ The tested fibers are candidate slices. A canonical or architecture-derived fibe
 
 ## Phase 6 — Exact spherical-four-bar tests
 
-**Status:** `NEXT`
+**Status:** `NEXT` (032–035 complete, awaiting Check-in 6; 036 and McCarthy–Soh blocked)
 
 For each candidate fiber, test in order:
 
 1. duplicate-configuration scan;
-2. branch-wide four-axis concurrency;
-3. fixed spherical arc dimensions;
-4. inactive-coordinate locking;
-5. local tangent equivalence;
-6. continued-motion equivalence;
+2. branch-wide topology-derived `S−UA−UB−R5` concurrency to one fixed center `c*` (IP only);
+3. fixed spherical arc dimensions on cycle `(S, UA, UB, R5)`;
+4. body-fixed effective-axis invariance (simple coordinate locking is diagnostic only);
+5. local tangent equivalence (deferred);
+6. continued-motion equivalence (deferred);
 7. McCarthy-Soh classification only after items 1–6 pass.
+
+UR-like receives a duplicate scan plus an exploratory fixed physical four-subset diagnostic. That scan is not an exact `RRRR` claim.
 
 Test both primary and alternate task-space fibers on the intersecting-pairs architecture and retain the UR-like architecture as a parallel comparison.
 

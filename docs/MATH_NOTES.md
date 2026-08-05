@@ -218,3 +218,68 @@ At a regular independent seed, \(\operatorname{rank}(J_{\mathcal{F}})=4\) and \(
 An alternate task-space scalar \(h'(q)=n'\cdot d(q)\) with a second fixed unit \(n'\) is a distinct slice of the same pointing parent. Freezing a single non-terminal joint is a coordinate control, not a candidate primary \(h\).
 
 This section does not assert spherical \(RRRR\) equivalence, McCarthy–Soh classification, or exact-UR geometry.
+
+## 11. Topology-derived spherical candidate axes (spatial Sprint 06)
+
+Conventions: the same joint order, space-frame axes \(A_i=(r_i,w_i)\), task point \(p_0\), and unit fiber tangent \(t=(t_1,\ldots,t_5,0)\) as in §10. The intersecting-pairs architecture is
+
+\[
+U_A=(R_1,R_2),\qquad U_B=(R_3,R_4),\qquad R_C=R_5.
+\]
+
+The reduced cyclic parent is
+
+\[
+S-U_A-U_B-R_5.
+\]
+
+This construction is a named, unverified C12 hypothesis. It is not a scan of physical four-axis subsets. The UR-like arm has no \(U_A\)/\(U_B\) parent; any physical four-subset scan there is exploratory only.
+
+Live pair centers are accepted only when \(\operatorname{dist}(R_1,R_2)\le 10^{-12}\,\mathrm{m}\) and \(\operatorname{dist}(R_3,R_4)\le 10^{-12}\,\mathrm{m}\). Instantaneous candidate axes, with continuously sign-aligned unit directions, are
+
+\[
+\Omega_A=t_1\omega_1+t_2\omega_2
+\quad\text{through the current \(U_A\) center},
+\]
+
+\[
+\Omega_B=t_3\omega_3+t_4\omega_4
+\quad\text{through the current \(U_B\) center},
+\]
+
+\[
+\Omega_R=\omega_5
+\quad\text{on the physical \(R_5\) line},
+\]
+
+\[
+\Omega_S=\sum_{i=1}^{5}t_i\omega_i
+\quad\text{through the fixed task point \(p_0\)}.
+\]
+
+\(\Omega_A\), \(\Omega_B\), and \(\Omega_S\) are well-posed only when each has norm greater than \(10^{-8}\). The cyclic order is
+
+\[
+S_{\mathrm{eff}},\ U_{A,\mathrm{eff}},\ U_{B,\mathrm{eff}},\ R_5.
+\]
+
+Adjacent spherical arc angles are \(\alpha_i=\arccos(a_i^\top a_{i+1})\in(0,\pi]\) on that cycle. Arc drift is \(\max_\sigma\|\alpha(\sigma)-\alpha(0)\|\).
+
+Exact concurrency is a single branch-global center, not a per-sample best-fit point. With samples \(j\) and candidate axes \(k\),
+
+\[
+c^*=\arg\min_c\sum_{j,k}
+\left\|
+\bigl(I-a_{jk}a_{jk}^{\mathsf T}\bigr)(c-r_{jk})
+\right\|^2.
+\]
+
+Report the global RMS line-to-center residual, the maximum line-to-center residual, per-sample four-axis centers \(c_j\) and drift \(\|c_j-c^*\|\), and residuals versus \(\sigma\). A spherical mechanism requires a fixed center.
+
+Two distinct legitimacy tests must not be conflated:
+
+1. **Simple coordinate locking.** One coordinate in each \(U\) pair remains constant to within \(10^{-6}\) rad. On the committed primary IP segment this already fails (\(q_1,\ldots,q_5\) all move).
+2. **Body-fixed effective-axis invariance** (Sprint 06 gate). Both \(U\) coordinates may move, but each effective revolute direction remains fixed in its two adjacent body frames: \(S\) in ground and the body after \(R_5\); \(U_A\) in ground and the body after \(R_2\); \(U_B\) in the bodies after \(R_2\) and \(R_4\); \(R_5\) in the bodies after \(R_4\) and \(R_5\).
+
+These identities do not assert an exact spherical \(RRRR\), McCarthy–Soh roles, or mechanism equivalence until the named residuals pass.
+

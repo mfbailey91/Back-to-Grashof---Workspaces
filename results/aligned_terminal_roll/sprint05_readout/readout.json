@@ -1,0 +1,68 @@
+{
+  "title": "Sprint 05 \u2014 Explicit one-dimensional fiber",
+  "subtitle": "Task-space scalar fibers on the validated pointing parent",
+  "brand": "aligned terminal-roll",
+  "sprint_status": "Closed \u2014 Check-in 5 CONTINUE WITH CHANGED SCOPE",
+  "milestone": "M5 \u2014 Fiber legitimacy",
+  "warning": "Check-in 5 is approved with changed scope. Fibers are candidate slices, not canonical. This readout does not authorize spherical RRRR, McCarthy\u2013Soh, or exact UR.",
+  "claim": "One independent task-space scalar h=n\u00b7d on p=p0 and q6=q6* defines a regular, reversible local one-dimensional fiber whose pointing image is noncollapsed.",
+  "pass_count": 5,
+  "experiment_count": 5,
+  "checkin_interpretation": "SUPPORTED LOCALLY",
+  "checkin_rationale": "Primary and alternate fibers exist on IP and UR-like seeds. They are candidate slices, not architecture-derived canonical fibers. Joint-freeze control is distinct.",
+  "checkin_decision": "CONTINUE WITH CHANGED SCOPE",
+  "human_gate_required": false,
+  "source_identifiers": [
+    "grashof_workspace.spatial_experiments.fiber_experiments:sprint05-v1"
+  ],
+  "repository_commits": [
+    "9eaf0fff6c4216085e7c176de0c7198d156d5b69"
+  ],
+  "experiments": [
+    {
+      "experiment_id": "ATR_EXP_027",
+      "title": "Independence of h = n \u00b7 d",
+      "status": "PASS",
+      "expected": "Primary h=n\u00b7d is independent at both regular seeds: rank 4 / nullity 1 and dh/dq6=0",
+      "observed": "IntersectingPairsAligned6R: rank=4, null=1, dh_dq6=0.000e+00, independent=True; URLikeAligned6R: rank=4, null=1, dh_dq6=0.000e+00, independent=True",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_028",
+      "title": "Intersecting-pairs sequential fiber",
+      "status": "PASS",
+      "expected": "Sequential \u00b1\u03c3 fiber is regular, reversible from the endpoint, and has a noncollapsed pointing image of local rank 1",
+      "observed": "IntersectingPairsAligned6R: n_accepted=9, n_failed=0, reverse_eq=2.922e-08, reverse_ed=7.525e-09, from_end=True, image_dmax=6.150e-02, local_rank1=True",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_029",
+      "title": "UR-like sequential fiber",
+      "status": "PASS",
+      "expected": "Sequential \u00b1\u03c3 fiber is regular, reversible from the endpoint, and has a noncollapsed pointing image of local rank 1",
+      "observed": "URLikeAligned6R: n_accepted=9, n_failed=0, reverse_eq=2.741e-09, reverse_ed=1.888e-09, from_end=True, image_dmax=1.641e-01, local_rank1=True",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_030",
+      "title": "Alternate task-space h artifact control",
+      "status": "PASS",
+      "expected": "Alternate task-space h'=n'\u00b7d remains a regular reversible pointing fiber; q2-freeze control is a distinct path",
+      "observed": "IntersectingPairsAligned6R: alt_ind=True, alt_rev_ed=1.430e-08, freeze_dq=1.482e-02, distinct=True; URLikeAligned6R: alt_ind=True, alt_rev_ed=3.300e-09, freeze_dq=1.557e-01, distinct=True",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_031",
+      "title": "Independent-step fiber refinement",
+      "status": "PASS",
+      "expected": "With max_microstep=None over the same \u03c3 travel, reverse tracking succeeds and both joint and pointing return errors decrease when \u0394\u03c3 is halved; shared-\u03c3 samples stay within 1e-3. Tight 1e-6/5e-8 reverse gates apply to microstepped runs (028/029), not this independent-step refinement diagnostic",
+      "observed": "IntersectingPairsAligned6R: coarse_eq=6.295e-06 -> fine_eq=7.884e-07, shared_dq=6.426e-05; URLikeAligned6R: coarse_eq=5.915e-07 -> fine_eq=7.399e-08, shared_dq=3.310e-05",
+      "figures": []
+    }
+  ],
+  "next_stage": "Sprint 06 topology-derived spherical candidate tests. McCarthy\u2013Soh remains blocked.",
+  "reproduce": [
+    "python scripts/validate_pointing_fiber.py",
+    "python scripts/generate_atr_sprint01_06_printout.py"
+  ]
+}

@@ -1,8 +1,8 @@
 # Implementation rationale — aligned terminal-roll spatial kernel
 
-**Status:** Sprint 05 local C11  
-**Scope:** Decision-bearing methods used through Check-in 5 (`CONTINUE WITH CHANGED SCOPE`)  
-**Nonclaim:** This note authorizes only a local task-space pointing fiber (C11). It does not authorize spherical `RRRR`, McCarthy–Soh, or exact UR.
+**Status:** Sprint 06 candidate C12 invariants  
+**Scope:** Decision-bearing methods used through Sprint 06 ATR_EXP_032–035  
+**Nonclaim:** This note authorizes local fiber existence (C11) and topology-derived concurrency/arc tests on IP candidate slices. It does not authorize spherical motion equivalence, McCarthy–Soh, or exact UR.
 
 ## Inventory
 
@@ -16,10 +16,13 @@
 | `fiber_continuation.py` | `sequential_fiber_step`, `continue_fiber_ray`, `continue_fiber` | C11 / H2–H4 | ATR_EXP_028–031 | general |
 | `fiber_diagnostics.py` | `fiber_forward_reverse`, `pointing_image_report` | C11 / H3–H5 | ATR_EXP_028–031 | general |
 | `fiber_continuation.py` | `continue_joint_freeze_ray` | R06 negative control | ATR_EXP_030 | control only |
+| `fiber_duplicates.py` | `fiber_duplicate_report` | C12 / H1 | ATR_EXP_032 | general |
+| `spherical_invariants.py` | `topology_spherical_axes`, global `c*`, arcs, body-fixed drift | C12 / H2–H4 | ATR_EXP_033–035 | IP `S−UA−UB−R5`; UR-like exploratory |
 | `suur_coordinates.py` | `pair_intersection_distances`, `suur_map` | C9 local / A07 | ATR_EXP_016–018, 022 | IP only |
 | `continuation.py` | `continue_fixed_position_patch` | historical Sprint 04 | ATR_EXP_019–020 | developer / regression |
 | `compound_joints.py` | principal-angle probes | ADR 002 negative control | ATR_EXP_013–014 | developer / labeled non-discriminating |
 | `sprint04_readout.py` | HTML assembly | none | diagnostic only | developer-only |
+| `sprint01_06_printout.py` | Combined 01–06 HTML | none | diagnostic only | developer-only |
 
 ## Product-of-exponentials forward kinematics
 
@@ -110,3 +113,19 @@ Internal chart microstep `MAX_MICROSTEP=0.005` is a project-specific integrator 
 - **Validity:** Same seeds and step schedule; distinctness is a wrap-norm gap at shared `|σ|`.
 - **Check:** ATR_EXP_030.
 - **Does not authorize:** Closure of R06 for every possible scalar, or Phase 6 spherical tests without Check-in 5.
+
+## Fiber duplicate scan
+
+- **What:** All-pairs wrap-norm `‖q_i−q_j‖` on accepted fiber stations with `‖σ_i−σ_j‖ > 1e-12`.
+- **Why:** Hidden repeats invalidate branch-wide spherical invariants.
+- **Validity:** Local continued segment only; tolerance `1e-6` rad is numerical policy.
+- **Check:** ATR_EXP_032; synthetic wrap-equivalent pair fails.
+- **Does not authorize:** Global injectivity of `σ`.
+
+## Topology-derived spherical axes
+
+- **What:** Effective `UA`/`UB` axes from fiber rates through live pair centers; physical `R5`; `Ω_S = Σ t_i ω_i` through `p0`; one branch-global center `c*`.
+- **Why:** The predicted four-bar is the compound parent `S−UA−UB−R5`, not four original robot axes.
+- **Validity:** Intersecting-pairs pair persistence; nonzero effective rates; body-fixed axis invariance; marked unverified as a theorem.
+- **Check:** ATR_EXP_033/034 residual reports; generic exteriors undefined; UR-like exploratory fixed tuples only.
+- **Does not authorize:** Per-sample best-tuple search, exact UR-like `RRRR`, McCarthy–Soh, or motion equivalence.

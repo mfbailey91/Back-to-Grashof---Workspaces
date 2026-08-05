@@ -1,0 +1,225 @@
+{
+  "experiment_id": "ATR_EXP_033",
+  "repository_commit": "35630c392f76637e56f3b0e3480dfe1b61cd1902",
+  "working_tree_dirty": true,
+  "source_identifier": "grashof_workspace.spatial_experiments.spherical_experiments:sprint06-v2",
+  "source_file_sha256": "c73d50cacfd5e86259821e3d8b12e5d9f4acc26f698e1b9c9b5738ac6e3ceb9e",
+  "experiment_configuration_sha256": "b1fd426c7b0c3f493787ab18e2347a5c95bd5c23e5f433177a8dad4a77b5b3e3",
+  "architecture_parameters": "IntersectingPairsAligned6R",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "n": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "alternate_n": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "step_sizes": {
+    "dsigma": 0.03
+  },
+  "n_steps": 4,
+  "status": "PASS",
+  "expected": "Named residual report for S-UA-UB-R5: exact, approximate, fail, or unresolved using global c*, fixed-center drift, arcs, and body-fixed axis legitimacy",
+  "observed": "IntersectingPairsAligned6R/primary: verdict=fail, c*_rms=2.477e-01 m, c*_max=3.338e-01 m, drift=9.175e-02 m, arc=7.714e-01 rad, body_fixed=5.109e-01 rad, simple_lock=False, locking=fail",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_033",
+    "status": "PASS",
+    "expected": "Named residual report for S-UA-UB-R5: exact, approximate, fail, or unresolved using global c*, fixed-center drift, arcs, and body-fixed axis legitimacy",
+    "observed": "IntersectingPairsAligned6R/primary: verdict=fail, c*_rms=2.477e-01 m, c*_max=3.338e-01 m, drift=9.175e-02 m, arc=7.714e-01 rad, body_fixed=5.109e-01 rad, simple_lock=False, locking=fail",
+    "metrics": {
+      "fiber": "primary",
+      "verdict": "fail",
+      "construction": "s_ua_ub_r5",
+      "global_center": [
+        0.2508009732613008,
+        0.20380013733803998,
+        0.36393829572808695
+      ],
+      "global_rms_m": 0.24768940263588463,
+      "global_max_m": 0.33378849353121876,
+      "max_center_drift_m": 0.09175107377235024,
+      "max_arc_residual_rad": 0.771425864218432,
+      "max_body_fixed_drift_rad": 0.5109426602847934,
+      "simple_lock_ranges": [
+        0.08633595428463237,
+        0.04278977642407217,
+        0.09477099654145482,
+        0.19507535840587548,
+        0.019773675050222927
+      ],
+      "simple_lock_passed": false,
+      "locking_policy": "body_fixed_effective_axis",
+      "locking": "fail",
+      "n_stations": 9,
+      "stations": [
+        {
+          "sigma": -0.12,
+          "residual_to_cstar_m": 0.27386948963435165,
+          "sample_center_drift_m": 0.05900392020180594,
+          "arcs_rad": [
+            1.5960295340070707,
+            1.9822616635914025,
+            1.6963903157476443,
+            1.3744224213412104
+          ],
+          "body_fixed_drift_rad": 0.5109426602847934,
+          "well_posed": true,
+          "reason": "defined"
+        },
+        {
+          "sigma": -0.09,
+          "residual_to_cstar_m": 0.28083920001839474,
+          "sample_center_drift_m": 0.05114413032583972,
+          "arcs_rad": [
+            1.7403835486048205,
+            2.1073681805573865,
+            1.7044390633245952,
+            1.3893767126523873
+          ],
+          "body_fixed_drift_rad": 0.3839851192503293,
+          "well_posed": true,
+          "reason": "defined"
+        },
+        {
+          "sigma": -0.06,
+          "residual_to_cstar_m": 0.30205071920012216,
+          "sample_center_drift_m": 0.0408669481310655,
+          "arcs_rad": [
+            1.8878217193806486,
+            2.2383526095332402,
+            1.7123489496655488,
+            1.40390514730118
+          ],
+          "body_fixed_drift_rad": 0.2527619164207494,
+          "well_posed": true,
+          "reason": "defined"
+        },
+        {
+          "sigma": -0.03,
+          "residual_to_cstar_m": 0.3179179467136761,
+          "sample_center_drift_m": 0.026836797072395207,
+          "arcs_rad": [
+            2.032466403012943,
+            2.369325407928955,
+            1.72023675977109,
+            1.4178206041343808
+          ],
+          "body_fixed_drift_rad": 0.12300321402390828,
+          "well_posed": true,
+          "reason": "defined"
+        },
+        {
+          "sigma": 0.0,
+          "residual_to_cstar_m": 0.3280278985903105,
+          "sample_center_drift_m": 0.011812820384036766,
+          "arcs_rad": [
+            2.1689075626951255,
+            2.4948010741659585,
+            1.7282243228415441,
+            1.4309783832893115
+          ],
+          "body_fixed_drift_rad": 0.0,
+          "well_posed": true,
+          "reason": "defined"
+        },
+        {
+          "sigma": 0.03,
+          "residual_to_cstar_m": 0.33294114745873454,
+          "sample_center_drift_m": 0.02094362694488762,
+          "arcs_rad": [
+            2.293251563998212,
+            2.6107665893008347,
+            1.736430139652729,
+            1.443275137651746
+          ],
+          "body_fixed_drift_rad": 0.11246047368030454,
+          "well_posed": true,
+          "reason": "defined"
+        },
+        {
+          "sigma": 0.06,
+          "residual_to_cstar_m": 0.33378849353121876,
+          "sample_center_drift_m": 0.04431466414392008,
+          "arcs_rad": [
+            2.403466366664051,
+            2.7150309590994146,
+            1.7449637353642737,
+            1.4546434642810575
+          ],
+          "body_fixed_drift_rad": 0.21245816881856627,
+          "well_posed": true,
+          "reason": "defined"
+        },
+        {
+          "sigma": 0.09,
+          "residual_to_cstar_m": 0.33182200622231556,
+          "sample_center_drift_m": 0.0687014824249566,
+          "arcs_rad": [
+            2.4990906097373133,
+            2.806906503944208,
+            1.7539225443406827,
+            1.465044423258743
+          ],
+          "body_fixed_drift_rad": 0.29966744646531923,
+          "well_posed": true,
+          "reason": "defined"
+        },
+        {
+          "sigma": 0.12,
+          "residual_to_cstar_m": 0.32812848835521474,
+          "sample_center_drift_m": 0.09175107377235024,
+          "arcs_rad": [
+            2.580669347230487,
+            2.8865444538747607,
+            1.7633907662846076,
+            1.474459815616723
+          ],
+          "body_fixed_drift_rad": 0.37480834650312905,
+          "well_posed": true,
+          "reason": "defined"
+        }
+      ],
+      "thresholds": {
+        "duplicate_tol_rad": 1e-06,
+        "pair_center_tol_m": 1e-12,
+        "effective_rate_tol": 1e-08,
+        "global_concurrency_tol_m": 1e-08,
+        "center_drift_tol_m": 1e-08,
+        "arc_drift_tol_rad": 1e-06,
+        "body_fixed_axis_tol_rad": 1e-06,
+        "coordinate_lock_tol_rad": 1e-06,
+        "concurrency_approx_m": 1e-06,
+        "arc_approx_rad": 0.0001
+      }
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "n": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "architecture": "IntersectingPairsAligned6R"
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint06"
+}

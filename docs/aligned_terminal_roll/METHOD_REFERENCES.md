@@ -1,6 +1,6 @@
 # Method references — aligned terminal-roll spatial kernel
 
-**Status:** Sprint 05 local C11  
+**Status:** Sprint 06 candidate C12 invariants (032–035)  
 **Rule:** Curated list only. Project-specific constructions are labeled as such.
 
 ## Product of exponentials / screw kinematics
@@ -45,6 +45,10 @@ Allgower and Georg, *Introduction to Numerical Continuation Methods*, SIAM, 2003
 | Pointing scalar `h=n·d` with locked `n=(0,1,0)`, `n'=(1,0,0)` | `fiber_constraints.py` | Task-space level set; not a spherical invariant |
 | 1D sign-aligned fiber tangent | `reduced_fiber_tangent` | Kernel of stacked `(Jp; ∇h)` on `q1…q5` |
 | Joint-freeze negative control | `continue_joint_freeze_ray` | R06 control only; not a candidate `h` |
+| Fiber wrap-distance duplicate scan | `fiber_duplicates.py` | Sprint 05 closeout metric; Case D gate |
+| Topology-derived `S−UA−UB−R5` axes | `spherical_invariants.py` | Unverified C12 hypothesis; IP only; not physical four-subsets |
+| Global fixed-center concurrency / cycle arcs / body-fixed drift | `spherical_invariants.py` | Numerical policy thresholds; not McCarthy–Soh roles |
+| Exploratory fixed `R1…R5` four-subset scan | `exploratory_fixed_tuple_scan` | UR-like diagnostic only; no exact `RRRR` claim |
 
 ## Developer-only paths
 

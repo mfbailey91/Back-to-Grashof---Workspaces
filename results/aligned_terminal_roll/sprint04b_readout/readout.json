@@ -1,0 +1,80 @@
+{
+  "title": "Sprint 04B / 04C \u2014 Sequential chart validation",
+  "subtitle": "Endpoint reverse, rank-two charts, refinement, and claim-language audit",
+  "brand": "aligned terminal-roll",
+  "sprint_status": "Complete \u2014 Check-in 4B Case A / 04C Pass",
+  "milestone": "M4 \u2014 Two-dimensional pointing surface",
+  "warning": "Check-ins 4B and 04C are approved. This diagnostic does not authorize spherical RRRR, McCarthy\u2013Soh, or exact UR.",
+  "claim": "Sequential predictor-corrector continuation with transported tangent frames produces a reversible, rank-two, noncollapsed local pointing chart on both IntersectingPairsAligned6R and URLikeAligned6R.",
+  "pass_count": 6,
+  "experiment_count": 6,
+  "checkin_interpretation": "SUPPORTED LOCALLY",
+  "checkin_rationale": "Check-in 4B Case A and Check-in 04C Pass authorize Sprint 05 fiber work. ATR_EXP_024 is shared-microstep consistency, not independent refinement.",
+  "checkin_decision": "CONTINUE / Case A",
+  "human_gate_required": false,
+  "source_identifiers": [
+    "grashof_workspace.spatial_experiments.chart_experiments:sprint04c-v1"
+  ],
+  "repository_commits": [
+    "82622cf1558ee6e8b62439235f24eee11cbbedca"
+  ],
+  "experiments": [
+    {
+      "experiment_id": "ATR_EXP_021",
+      "title": "Sequential forward/reverse rays",
+      "status": "PASS",
+      "expected": "Sequential forward/reverse rays return within 1e-6 rad / 1e-8 pointing on both architectures and both chart axes",
+      "observed": "IntersectingPairsAligned6R/s: eq=1.010e-08, ed=6.882e-09, from_end=True; IntersectingPairsAligned6R/t: eq=1.967e-08, ed=5.933e-09, from_end=True; URLikeAligned6R/s: eq=1.678e-10, ed=1.199e-10, from_end=True; URLikeAligned6R/t: eq=1.402e-09, ed=9.454e-10, from_end=True",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_022",
+      "title": "Intersecting-pairs transported chart",
+      "status": "PASS",
+      "expected": "100% regular sequential chart; rank(Q)=rank(D)=2 at every interior node; no duplicates or failed samples; pair intersections persist",
+      "observed": "regular=81/81, rejected=0, interior=49, rankQ2=49, rankD2=49, duplicates=0, max_ua=0.000e+00, max_ub=0.000e+00",
+      "figures": [
+        "figures/ATR_EXP_022_ATR_EXP_022_chart.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_023",
+      "title": "UR-like transported chart",
+      "status": "PASS",
+      "expected": "100% regular sequential chart; rank(Q)=rank(D)=2 at every interior node; no duplicates or failed samples; no SUUR/pair fields required",
+      "observed": "regular=81/81, rejected=0, interior=49, rankQ2=49, rankD2=49, duplicates=0",
+      "figures": [
+        "figures/ATR_EXP_023_ATR_EXP_023_chart.png"
+      ]
+    },
+    {
+      "experiment_id": "ATR_EXP_024",
+      "title": "Shared-microstep consistency",
+      "status": "PASS",
+      "expected": "Shared-node q/d agree under the same internal microstep; rank classifications remain two. This is macro-grid consistency, not independent numerical refinement",
+      "observed": "IntersectingPairsAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True; URLikeAligned6R: shared=81, dq=0.000e+00, dd=0.000e+00, ranks=True/True/True",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_025",
+      "title": "Independent-step refinement",
+      "status": "PASS",
+      "expected": "Rectangular-loop closure error decreases when the step is halved",
+      "observed": "IntersectingPairsAligned6R: coarse_eq=3.301e-04, fine_eq=4.067e-05, decreased=True; URLikeAligned6R: coarse_eq=3.792e-05, fine_eq=4.779e-06, decreased=True",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_026",
+      "title": "Alternate-path and duplicate analysis",
+      "status": "PASS",
+      "expected": "No duplicate solutions; s-then-t vs t-then-s discrepancy remains small and stable",
+      "observed": "IntersectingPairsAligned6R: dups=0, alt_coarse=3.304e-04, alt_fine=3.301e-04; URLikeAligned6R: dups=0, alt_coarse=3.791e-05, alt_fine=3.810e-05",
+      "figures": []
+    }
+  ],
+  "next_stage": "Sprint 05 explicit one-dimensional fiber is closed. Sprint 06 candidate spherical tests follow.",
+  "reproduce": [
+    "python scripts/validate_pointing_chart.py",
+    "python scripts/generate_atr_sprint01_06_printout.py"
+  ]
+}

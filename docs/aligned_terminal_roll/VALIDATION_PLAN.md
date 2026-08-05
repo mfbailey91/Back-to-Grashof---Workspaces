@@ -30,7 +30,7 @@
 | C9 | Compound-joint model matches physical chain | tangent principal angles and continued trajectories | thresholds satisfied over branch | representation only instantaneous or incorrectly ordered |
 | C10 | Fixed-position parent is a 2D manifold | sequential continuation, chart-rank `Q`/`D`, reverse rays, duplicates, and refinement | reversible rank-two noncollapsed local chart | singularity, branch issue, or wrong constraint count |
 | C11 | Scalar constraint defines a 1D fiber | constrained Jacobian and continuation | nullity 1 over nonzero branch | redundant, singular, or coordinate-artifact constraint |
-| C12 | Candidate is exact spherical `RRRR` | concurrency, arc invariance, locking, motion equivalence | every prerequisite passes | candidate rejected; do not apply McCarthy-Soh |
+| C12 | Candidate is exact spherical `RRRR` | duplicate scan; topology-derived `S−UA−UB−R5` global `c*` concurrency and drift; fixed cycle arcs; body-fixed axis legitimacy; later motion equivalence | every applicable prerequisite passes exactly | candidate rejected / approximate / unresolved / exploratory; do not apply McCarthy-Soh |
 | C13 | McCarthy-Soh predicts fiber rotatability | classification versus numerical continuation | stable agreement over accepted cases | classifier not useful for intended output motion |
 | C14 | Synthetic conclusions generalize to exact UR | repeat relevant tests with exact geometry | supported claims remain within stated conditions | architecture or frame-specific limitation |
 

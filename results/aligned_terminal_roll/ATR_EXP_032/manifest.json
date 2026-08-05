@@ -1,0 +1,125 @@
+{
+  "experiment_id": "ATR_EXP_032",
+  "repository_commit": "35630c392f76637e56f3b0e3480dfe1b61cd1902",
+  "working_tree_dirty": true,
+  "source_identifier": "grashof_workspace.spatial_experiments.spherical_experiments:sprint06-v2",
+  "source_file_sha256": "c73d50cacfd5e86259821e3d8b12e5d9f4acc26f698e1b9c9b5738ac6e3ceb9e",
+  "experiment_configuration_sha256": "2434a69492894446487b0726180a1654bb6a34152010c077b255f9a0f801fe7e",
+  "architecture_parameters": "all_four_candidates",
+  "seed_configuration": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "n": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "alternate_n": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "step_sizes": {
+    "dsigma": 0.03
+  },
+  "n_steps": 4,
+  "status": "PASS",
+  "expected": "All four candidate fibers have no wrap-equivalent repeats at distinct \u03c3 (tol=1e-06 rad)",
+  "observed": "IntersectingPairsAligned6R/primary: stations=9, dups=0, min_nn=2.999e-02, passed=True; IntersectingPairsAligned6R/alternate: stations=9, dups=0, min_nn=2.999e-02, passed=True; URLikeAligned6R/primary: stations=9, dups=0, min_nn=3.000e-02, passed=True; URLikeAligned6R/alternate: stations=9, dups=0, min_nn=3.000e-02, passed=True",
+  "units": {
+    "length": "metre",
+    "angle": "radian"
+  },
+  "result": {
+    "experiment_id": "ATR_EXP_032",
+    "status": "PASS",
+    "expected": "All four candidate fibers have no wrap-equivalent repeats at distinct \u03c3 (tol=1e-06 rad)",
+    "observed": "IntersectingPairsAligned6R/primary: stations=9, dups=0, min_nn=2.999e-02, passed=True; IntersectingPairsAligned6R/alternate: stations=9, dups=0, min_nn=2.999e-02, passed=True; URLikeAligned6R/primary: stations=9, dups=0, min_nn=3.000e-02, passed=True; URLikeAligned6R/alternate: stations=9, dups=0, min_nn=3.000e-02, passed=True",
+    "metrics": {
+      "candidates": [
+        {
+          "architecture": "IntersectingPairsAligned6R",
+          "fiber": "primary",
+          "n": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "n_stations": 9,
+          "n_pairs_checked": 36,
+          "n_duplicates": 0,
+          "min_nn_distance": 0.0299927238748679,
+          "passed": true,
+          "duplicate_pairs": []
+        },
+        {
+          "architecture": "IntersectingPairsAligned6R",
+          "fiber": "alternate",
+          "n": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "n_stations": 9,
+          "n_pairs_checked": 36,
+          "n_duplicates": 0,
+          "min_nn_distance": 0.029986339629467024,
+          "passed": true,
+          "duplicate_pairs": []
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "fiber": "primary",
+          "n": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "n_stations": 9,
+          "n_pairs_checked": 36,
+          "n_duplicates": 0,
+          "min_nn_distance": 0.029998116706943734,
+          "passed": true,
+          "duplicate_pairs": []
+        },
+        {
+          "architecture": "URLikeAligned6R",
+          "fiber": "alternate",
+          "n": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "n_stations": 9,
+          "n_pairs_checked": 36,
+          "n_duplicates": 0,
+          "min_nn_distance": 0.029999204009737636,
+          "passed": true,
+          "duplicate_pairs": []
+        }
+      ],
+      "duplicate_tol_rad": 1e-06,
+      "sigma_distinct_tol": 1e-12
+    },
+    "q": [
+      0.35,
+      -0.42,
+      0.55,
+      0.28,
+      -0.33,
+      0.7
+    ],
+    "n": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "architecture": "all_four_candidates"
+  },
+  "software_version": "grashof-workspace spatial_experiments sprint06"
+}

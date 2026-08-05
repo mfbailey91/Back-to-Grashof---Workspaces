@@ -1,0 +1,73 @@
+{
+  "title": "Sprint 06 \u2014 Candidate spherical equivalence",
+  "subtitle": "Topology-derived S\u2212UA\u2212UB\u2212R5 tests on Sprint 05 candidate fibers",
+  "brand": "aligned terminal-roll",
+  "sprint_status": "032\u2013035 complete / 036 deferred / Check-in 6 next",
+  "milestone": "M6 \u2014 Spherical equivalence decision",
+  "warning": "Sprint 06 ATR_EXP_032\u2013035 use topology-derived S\u2212UA\u2212UB\u2212R5 axes, a branch-global center c*, and body-fixed axis legitimacy. UR-like 035 is exploratory only. ATR_EXP_036, McCarthy\u2013Soh, and exact UR remain blocked until an IP candidate is exact.",
+  "claim": "For each named candidate slice, either branch-wide topology-derived concurrency and fixed arcs hold, or the candidate is rejected / approximate / unresolved / N/A. Failure of one slice is not nonexistence of all spherical fibers.",
+  "pass_count": 4,
+  "experiment_count": 5,
+  "checkin_interpretation": "PENDING CHECK-IN 6",
+  "checkin_rationale": "No wrap duplicates. IP primary and alternate fail exact concurrency/arcs (\u03c1\u22480.7\u20130.8 m). UR-like axis construction is not applicable. Terminal-roll reduction and local fiber existence stand.",
+  "checkin_decision": "AWAITING REVIEW",
+  "human_gate_required": true,
+  "source_identifiers": [
+    "grashof_workspace.spatial_experiments.spherical_experiments:sprint06-v2"
+  ],
+  "repository_commits": [
+    "35630c392f76637e56f3b0e3480dfe1b61cd1902"
+  ],
+  "experiments": [
+    {
+      "experiment_id": "ATR_EXP_032",
+      "title": "Duplicate scan on all four candidate fibers",
+      "status": "PASS",
+      "expected": "All four candidate fibers have no wrap-equivalent repeats at distinct \u03c3 (tol=1e-06 rad)",
+      "observed": "IntersectingPairsAligned6R/primary: stations=9, dups=0, min_nn=2.999e-02, passed=True; IntersectingPairsAligned6R/alternate: stations=9, dups=0, min_nn=2.999e-02, passed=True; URLikeAligned6R/primary: stations=9, dups=0, min_nn=3.000e-02, passed=True; URLikeAligned6R/alternate: stations=9, dups=0, min_nn=3.000e-02, passed=True",
+      "verdict": null,
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_033",
+      "title": "IP primary S\u2212UA\u2212UB\u2212R5 global-center invariants",
+      "status": "PASS",
+      "expected": "Named residual report for S-UA-UB-R5: exact, approximate, fail, or unresolved using global c*, fixed-center drift, arcs, and body-fixed axis legitimacy",
+      "observed": "IntersectingPairsAligned6R/primary: verdict=fail, c*_rms=2.477e-01 m, c*_max=3.338e-01 m, drift=9.175e-02 m, arc=7.714e-01 rad, body_fixed=5.109e-01 rad, simple_lock=False, locking=fail",
+      "verdict": "fail",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_034",
+      "title": "IP alternate S\u2212UA\u2212UB\u2212R5 global-center invariants",
+      "status": "PASS",
+      "expected": "Named residual report for S-UA-UB-R5: exact, approximate, fail, or unresolved using global c*, fixed-center drift, arcs, and body-fixed axis legitimacy",
+      "observed": "IntersectingPairsAligned6R/alternate: verdict=fail, c*_rms=1.597e-01 m, c*_max=3.105e-01 m, drift=7.589e-02 m, arc=8.617e-01 rad, body_fixed=5.859e-01 rad, simple_lock=False, locking=fail",
+      "verdict": "fail",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_035",
+      "title": "UR-like duplicate scan plus exploratory fixed tuples",
+      "status": "PASS",
+      "expected": "UR-like duplicate scans plus exploratory fixed R1\u2013R5 four-subset diagnostics; no exact RRRR claim; no SUUR required",
+      "observed": "primary: dups=0, dup_passed=True, best=R1-R2-R3-R4 max=1.519e-01 m; alternate: dups=0, dup_passed=True, best=R1-R2-R3-R4 max=1.503e-01 m",
+      "verdict": "exploratory_fixed_physical_subset",
+      "figures": []
+    },
+    {
+      "experiment_id": "ATR_EXP_036",
+      "title": "Tangent and continued-motion equivalence",
+      "status": "DEFERRED",
+      "expected": "Local tangent and continued-motion match a well-posed spherical RRRR",
+      "observed": "Deferred \u2014 no exact IP candidate from ATR_EXP_033/034",
+      "verdict": "deferred",
+      "figures": []
+    }
+  ],
+  "next_stage": "Check-in 6. Do not open ATR_EXP_036 or McCarthy\u2013Soh unless an exact spherical candidate is later established. Exact UR remains blocked.",
+  "reproduce": [
+    "python scripts/validate_spherical_candidates.py",
+    "python scripts/generate_atr_sprint01_06_printout.py"
+  ]
+}
