@@ -30,8 +30,8 @@ def test_assemble_payload_from_copied_results(tmp_path: Path) -> None:
     assert [exp["experiment_id"] for exp in payload["experiments"]] == list(EXPERIMENT_IDS)
     assert payload["pass_count"] == 5
     assert all(exp["status"] == "PASS" for exp in payload["experiments"])
-    assert payload["human_gate_required"] is True
-    assert "Sprint 02 is not authorized" in payload["next_stage"]
+    assert payload["human_gate_required"] is False
+    assert "Check-in 1 is approved" in payload["next_stage"]
     assert payload["fd_refinement"]
     assert payload["warning"] == M1_WARNING
 
@@ -44,7 +44,7 @@ def test_render_html_contains_ids_and_m1_warning(tmp_path: Path) -> None:
     for exp_id in EXPERIMENT_IDS:
         assert exp_id in html
     assert "does not establish 6R rank or nullity" in html
-    assert "human gate still required" in html
+    assert ">authorized<" in html or "authorized" in html
 
 
 def test_write_readout_artifacts(tmp_path: Path) -> None:

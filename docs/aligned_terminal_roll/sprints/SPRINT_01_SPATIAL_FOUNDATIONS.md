@@ -2,7 +2,7 @@
 
 **Sprint status:** Complete
 **Milestone target:** M1 — Terminal-roll symmetry established
-**Check-in:** Check-in 1 (draft ready for decision)
+**Check-in:** Check-in 1 approved 2026-08-04 (`CONTINUE`)
 **Timebox:** One implementation cycle; do not extend scope to a full 6R chain
 **Completed:** 2026-08-04 — `spatial_experiments` fixture, ATR_EXP_001–005 PASS
 **HTML readout:** `results/aligned_terminal_roll/sprint01_readout/index.html`

@@ -1,6 +1,6 @@
 # Geometric Conventions — Aligned Terminal-Roll Workstream
 
-**Status:** Provisional until Check-in 1
+**Status:** Frozen after Check-in 1 (approved 2026-08-04)
 **Rule:** A convention change after Check-in 1 requires a decision record and rerun of affected experiments.
 
 ## 1. Units

@@ -1,7 +1,7 @@
 # Project Plan — Aligned Terminal-Roll Reduction
 
 **Project owner:** Michael Bailey
-**Status:** Sprint 01 complete / Check-in 1 ready
+**Status:** Check-in 1 approved / Sprint 02 authorized
 **Last updated:** 2026-08-04
 **Planning horizon:** Reduction proof through exact-robot generalization
 **Change policy:** Update at formal check-ins; record material reversals in `decisions/`
@@ -221,17 +221,18 @@ Large generated outputs may remain untracked, but the manifest and summary for e
 |---|---|
 | Workshop hypothesis | Drafted |
 | PM scaffold | Ready |
-| Geometric conventions | Provisional (unchanged after Sprint 01) |
+| Geometric conventions | Frozen after Check-in 1 |
 | Validation matrix | Provisional |
 | Sprint 01 | Complete |
+| Check-in 1 | Approved (`CONTINUE`) |
 | Terminal fixture | Complete (ATR_EXP_001–005 PASS) |
-| Generic 6R kernel | Not authorized (awaiting Check-in 1) |
+| Generic 6R kernel | Authorized |
 | UR-like model | Deferred to M3 |
 | Fiber construction | Blocked by M4 |
 | Spherical Grashof work | Blocked by M6 |
 
 ## 11. Immediate project decision
 
-Begin with the terminal-roll fixture, not a complete robot.
+Check-in 1 is approved. Proceed to the generic synthetic aligned-terminal 6R kernel.
 
-The first check-in occurs before implementing a full 6R chain. This preserves the ability to revise task and frame conventions while the cost of change is low.
+Do not introduce compound-joint models, UR-like architectures, fibers, or spherical four-bar code until later authorized gates.

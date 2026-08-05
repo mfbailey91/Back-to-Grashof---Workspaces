@@ -21,7 +21,7 @@ Deliver:
 
 ## Phase 1 — Terminal-roll fixture
 
-**Status:** `NEXT`
+**Status:** `COMPLETE`
 
 Build an isolated transform fixture in which the terminal axis, task point, and tool direction are explicitly controlled.
 
@@ -39,13 +39,13 @@ task point moved transversely off R6
 tool direction rotated away from R6
 ```
 
-**Check-in 1:** Does `q6` preserve position and pointing only under the stated aligned-terminal conditions?
+**Check-in 1:** Approved 2026-08-04. `q6` preserves position and pointing only under the stated aligned-terminal conditions.
 
 ---
 
 ## Phase 2 — Generic synthetic aligned 6R
 
-**Status:** `PLANNED`
+**Status:** `NEXT`
 
 Implement the minimum full serial-chain kernel and verify:
 

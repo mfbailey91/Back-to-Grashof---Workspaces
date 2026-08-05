@@ -166,7 +166,7 @@ def assemble_sprint01_payload(results_root: Path) -> dict[str, Any]:
         "tests_passed": 76,
         "checkin_interpretation": "SUPPORTED",
         "checkin_decision": "CONTINUE",
-        "human_gate_required": True,
+        "human_gate_required": False,
         "repository_commits": unique_commits,
         "experiments": experiments,
         "fd_refinement": fd_rows,
@@ -186,8 +186,9 @@ def assemble_sprint01_payload(results_root: Path) -> dict[str, Any]:
             "Spherical four-bar / McCarthy-Soh work remains deferred.",
         ],
         "next_stage": (
-            "Generic synthetic aligned-terminal 6R kernel and local rank/nullity checks, "
-            "pending human confirmation of Check-in 1. Sprint 02 is not authorized by this page."
+            "Check-in 1 is approved. Next authorized stage: generic synthetic aligned-terminal "
+            "6R kernel and local rank/nullity checks. Compound-joint, UR-like, fiber, and "
+            "spherical four-bar work remain blocked."
         ),
         "reproduce": [
             "python scripts/validate_terminal_roll_fixture.py",

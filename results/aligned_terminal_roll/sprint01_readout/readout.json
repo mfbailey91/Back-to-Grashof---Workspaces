@@ -11,7 +11,7 @@
   "tests_passed": 76,
   "checkin_interpretation": "SUPPORTED",
   "checkin_decision": "CONTINUE",
-  "human_gate_required": true,
+  "human_gate_required": false,
   "repository_commits": [
     "0d27bb139c1a965dba91244f3df5096231b381da"
   ],
@@ -375,7 +375,7 @@
     "Finite-difference round-off appears near h \u2272 1e-6 rad.",
     "Spherical four-bar / McCarthy-Soh work remains deferred."
   ],
-  "next_stage": "Generic synthetic aligned-terminal 6R kernel and local rank/nullity checks, pending human confirmation of Check-in 1. Sprint 02 is not authorized by this page.",
+  "next_stage": "Check-in 1 is approved. Next authorized stage: generic synthetic aligned-terminal 6R kernel and local rank/nullity checks. Compound-joint, UR-like, fiber, and spherical four-bar work remain blocked.",
   "reproduce": [
     "python scripts/validate_terminal_roll_fixture.py",
     "python scripts/generate_atr_sprint01_readout.py"

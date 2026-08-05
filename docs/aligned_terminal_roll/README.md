@@ -44,4 +44,4 @@ In particular:
 
 ## Current next action
 
-Hold Check-in 1 on the completed terminal-roll fixture (`CHECKIN_01_TERMINAL_ROLL_SYMMETRY.md`) before constructing the generic 6R chain.
+Check-in 1 is approved. Build the generic synthetic aligned-terminal 6R kernel and verify local rank/nullity claims.

@@ -3,8 +3,9 @@
 **Date:** 2026-08-04
 **Milestone:** M1 — Terminal-roll symmetry established
 **Sprint(s):** Sprint 01 — Spatial Foundations
-**Repository commit:** 0d27bb139c1a (baseline rename) + Sprint 01 implementation pending commit
+**Repository commit:** 7b59b64
 **Decision owner:** Michael Bailey
+**Decision status:** Approved 2026-08-04
 
 ## 1. Claim under review
 
@@ -98,15 +99,15 @@ Select one:
 
 - `CONTINUE`
 
-Authorized next stage: Sprint 02 generic synthetic aligned 6R kernel (Jacobian ranks and terminal-roll null direction), **pending human confirmation**.
+Authorized next stage: Sprint 02 generic synthetic aligned 6R kernel (Jacobian ranks and terminal-roll null direction). **Approved.**
 
 Blocked work: compound-joint models, UR-like architectures, fibers, spherical `RRRR`, McCarthy-Soh.
 
 ## 10. Project updates
 
-- Project plan: Terminal fixture → Complete; Sprint 01 → Complete
-- Roadmap: M1 evidence ready for gate
-- Conventions: no change required after implementation
+- Project plan: Terminal fixture → Complete; Sprint 01 → Complete; Check-in 1 → Approved
+- Roadmap: Phase 1 complete; Phase 2 authorized
+- Conventions: frozen after Check-in 1 approval; later changes require a decision record
 - Validation plan: C1–C5 exercised at fixture level
 - Risk register: A01/A02 verified on fixture; R01/R03/R04/R09/R11 mitigated for Sprint 01
 - Decision records: none new (ADR_001 still governs later UR deferral)
