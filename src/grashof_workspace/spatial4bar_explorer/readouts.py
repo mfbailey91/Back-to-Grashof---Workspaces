@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Iterable
 
 from .descriptors import grouped_descriptor_inventory
-from .families import FAMILY_NOTES, FAMILY_PARENT_MAP, ORDERED_FAMILIES
+from .families import FAMILY_AXIS_CASES, FAMILY_NOTES, FAMILY_PARENT_MAP, ORDERED_FAMILIES
 from .models import BranchResult, GeometrySample, dataclass_to_jsonable
 
 
@@ -32,10 +32,15 @@ def write_index_html(outdir: Path, *, sprint_pages: list[str], image_files: list
 
 
 def write_sprint00_html(outdir: Path, family_plot: str, schematics: list[str]) -> None:
-    rows = []
+    family_rows = []
     for family in ORDERED_FAMILIES:
-        rows.append(
+        family_rows.append(
             f"<tr><td>{family.value}</td><td>{FAMILY_PARENT_MAP[family]}</td><td>{FAMILY_NOTES[family]}</td></tr>"
+        )
+    case_rows = []
+    for case in FAMILY_AXIS_CASES:
+        case_rows.append(
+            f"<tr><td>{case.family.value}</td><td>{case.tool_axis.value}</td><td>{case.slug}</td></tr>"
         )
     schematics_html = "\n".join(f'<li><a href="{name}">{name}</a></li>' for name in schematics)
     html = f"""<!doctype html>
@@ -44,9 +49,15 @@ def write_sprint00_html(outdir: Path, family_plot: str, schematics: list[str]) -
 <h1>Sprint 00 — family inventory and explorer shell</h1>
 <p>Focus: enumerate the six ordered one-DOF families and the twelve virtual-tool-axis test cases.</p>
 <img src=\"{family_plot}\" alt=\"family case counts\" style=\"max-width: 900px;\">
+<h2>Ordered family inventory</h2>
 <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
 <tr><th>Family</th><th>Origin</th><th>Note</th></tr>
-{''.join(rows)}
+{''.join(family_rows)}
+</table>
+<h2>Tool-axis case inventory (12 total)</h2>
+<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
+<tr><th>Family</th><th>Tool axis</th><th>Case slug</th></tr>
+{''.join(case_rows)}
 </table>
 <h2>Family schematics</h2>
 <ul>{schematics_html}</ul>
