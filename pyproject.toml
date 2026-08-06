@@ -24,6 +24,7 @@ dev = [
 [project.scripts]
 grashof-workspace = "grashof_workspace.cli:main"
 sixr-grashof = "sixr_grashof.cli:main"
+grashof-visual-probe = "grashof_workspace.visual_probe.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

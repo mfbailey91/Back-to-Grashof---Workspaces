@@ -38,7 +38,18 @@
 - construct candidate equivalent loops;
 - report which reductions are proven, plausible, or invalid.
 
-## Phase 5 — Spatial 6R extension
+## Phase 5A — Spatial 6R visual mechanism probe
+
+- build one controlled aligned-terminal synthetic 6R manipulator;
+- plot physical links, joints, frames, and infinite axes;
+- add the virtual spherical closure and terminal-roll quotient;
+- enumerate exact adjacent intersecting-axis reductions;
+- display `SRUU`, `SURU`, and `SUUR` compound-parent candidates;
+- expand the parents into coordinate-dependent candidate `RRRR` axis tuples;
+- visually screen candidate geometry without making spherical-four-bar claims;
+- follow `PROJECT_PLAN_ALIGNED_TERMINAL_ROLL_VISUAL_PROBE.md`.
+
+## Phase 5B — Spatial 6R analytical extension
 
 - identify intersecting-axis substructures;
 - study spherical four-bar and spherical Grashof tests;

@@ -1,0 +1,105 @@
+{
+  "name": "aligned_terminal_6r_visual_probe",
+  "description": "Topology playground: exact adjacent intersections among R1\u2013R5, task on aligned R6. Visual probe only.",
+  "joints": [
+    {
+      "index": 1,
+      "label": "R1",
+      "home_point": [
+        0.0,
+        0.0,
+        0.28
+      ],
+      "home_direction": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "index": 2,
+      "label": "R2",
+      "home_point": [
+        0.0,
+        0.0,
+        0.28
+      ],
+      "home_direction": [
+        0.9647638212377322,
+        0.2631174057921088,
+        0.0
+      ]
+    },
+    {
+      "index": 3,
+      "label": "R3",
+      "home_point": [
+        0.22,
+        0.06,
+        0.28
+      ],
+      "home_direction": [
+        0.5481509678620253,
+        0.4796320968792722,
+        0.6851887098275316
+      ]
+    },
+    {
+      "index": 4,
+      "label": "R4",
+      "home_point": [
+        0.38,
+        0.2,
+        0.48
+      ],
+      "home_direction": [
+        0.6047078979069521,
+        -0.5183210553488161,
+        0.6047078979069521
+      ]
+    },
+    {
+      "index": 5,
+      "label": "R5",
+      "home_point": [
+        0.52,
+        0.08,
+        0.62
+      ],
+      "home_direction": [
+        0.15168548900740872,
+        -0.9606747637135885,
+        0.23258441647802672
+      ]
+    },
+    {
+      "index": 6,
+      "label": "R6",
+      "home_point": [
+        0.64,
+        0.1,
+        0.78
+      ],
+      "home_direction": [
+        0.11877113736973437,
+        0.07918075824648958,
+        0.9897594780811197
+      ]
+    }
+  ],
+  "default_q": [
+    0.35,
+    -0.42,
+    0.55,
+    0.28,
+    -0.33,
+    0.7
+  ],
+  "roll_compare_q6": 1.9,
+  "tool_offset_along_r6": 0.08,
+  "axis_length": 0.32,
+  "frame_length": 0.07,
+  "incidence_tol": 1e-09,
+  "parallel_tol": 1e-09,
+  "ambiguous_tol": 1e-06
+}
