@@ -21,6 +21,7 @@ dev = [
 
 [project.scripts]
 grashof-workspace = "grashof_workspace.cli:main"
+grashof-spatial4bar-explorer = "grashof_workspace.spatial4bar_explorer.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

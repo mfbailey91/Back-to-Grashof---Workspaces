@@ -38,9 +38,26 @@
 - construct candidate equivalent loops;
 - report which reductions are proven, plausible, or invalid.
 
-## Phase 5 — Spatial 6R extension
+## Phase 5 — Spatial 4-bar explorer (new active track)
 
-- identify intersecting-axis substructures;
-- study spherical four-bar and spherical Grashof tests;
-- separate wrist orientation capability from positioning-chain geometry;
-- state explicit conditions under which quotient reductions remain valid.
+- start from the aligned-terminal 6R position-and-pointing reduction;
+- enumerate the six ordered one-DOF spatial four-bar families;
+- decompose the tool `U` into two perpendicular revolute coordinates;
+- publish visualizations, graphs, JSON exports, and HTML readouts per sprint;
+- sample broad geometry families and record descriptor atlases;
+- compute winding-based crank and rocker classifications numerically first.
+
+## Phase 6 — Spatial Grashof-like discovery and later analytical closure
+
+- identify which geometry descriptors correlate with crank classifications;
+- extract representative and counterexample mechanisms for visual inspection;
+- propose family-specific candidate crank inequalities or thresholds;
+- validate or refute those rules near observed class boundaries;
+- only then attempt analytical derivation.
+
+## Phase 7 — Spatial 6R dexterity reconstruction
+
+- lift one-DOF family results back to the two-DOF pointing parents;
+- map fiber-level crank fields over the pointing-space slice parameter;
+- integrate terminal-roll capability;
+- address joint limits, branch connectivity, and singularity structure.
