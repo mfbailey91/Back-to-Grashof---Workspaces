@@ -129,5 +129,29 @@ def frame_from_axis(origin: Vec3, direction: Vec3, *, length: float = 1.0) -> Ma
     )
 
 
+def triad_from_mat4(t: Mat4) -> tuple[Vec3, Vec3, Vec3, Vec3]:
+    """Return ``(origin, x_hat, y_hat, z_hat)`` from an SE(3) frame matrix.
+
+    Column 0/1/2 are the local basis (normalized); column 3 is the origin in
+    world coordinates.
+    """
+    origin = (float(t[0][3]), float(t[1][3]), float(t[2][3]))
+    x = normalize((float(t[0][0]), float(t[1][0]), float(t[2][0])), name="frame x")
+    y = normalize((float(t[0][1]), float(t[1][1]), float(t[2][1])), name="frame y")
+    z = normalize((float(t[0][2]), float(t[1][2]), float(t[2][2])), name="frame z")
+    return origin, x, y, z
+
+
+def world_frame_mat4(*, length: float = 1.0) -> Mat4:
+    """Return the fixed world frame ``W`` at the origin."""
+    s = float(length)
+    return (
+        (s, 0.0, 0.0, 0.0),
+        (0.0, s, 0.0, 0.0),
+        (0.0, 0.0, s, 0.0),
+        (0.0, 0.0, 0.0, 1.0),
+    )
+
+
 def as_axis_line(point: Vec3, direction: Vec3) -> AxisLine:
     return AxisLine(point=point, direction=normalize(direction, name="axis direction"))

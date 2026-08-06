@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import json
 from pathlib import Path
 from typing import Any
@@ -66,16 +67,85 @@ _VIEWER_JS = r"""
     }
   }
 
-  function drawPoint(p, color, label) {
+  function drawPoint(p, color, label, radius) {
     const q = project(p);
     ctx.beginPath();
     ctx.fillStyle = color;
-    ctx.arc(q[0], q[1], 4, 0, Math.PI*2);
+    ctx.arc(q[0], q[1], radius || 4, 0, Math.PI*2);
     ctx.fill();
     if (label) {
       ctx.fillStyle = "#222";
       ctx.font = "12px ui-monospace, monospace";
       ctx.fillText(label, q[0]+6, q[1]-6);
+    }
+  }
+
+  function drawFrame(frame, length, prefix) {
+    if (!frame) return;
+    const o = frame.origin_world;
+    const axes = [
+      [frame.local_x, "#c62828", (prefix || frame.label) + ".X"],
+      [frame.local_y, "#2e7d32", (prefix || frame.label) + ".Y"],
+      [frame.local_z, "#1565c0", (prefix || frame.label) + ".Z"],
+    ];
+    axes.forEach(([d, col, lab]) => {
+      const tip = [o[0]+d[0]*length, o[1]+d[1]*length, o[2]+d[2]*length];
+      drawLine(o, tip, col, 2.5);
+      const pe = project(tip);
+      ctx.fillStyle = col;
+      ctx.font = "11px ui-monospace, monospace";
+      ctx.fillText(lab, pe[0]+3, pe[1]-3);
+    });
+    drawPoint(o, "#111", frame.label, 3);
+  }
+
+  function drawFk(fk, opacity, opts) {
+    const L = fk.axis_length || 0.3;
+    const FL = fk.frame_length || 0.08;
+    const showLinks = opts.show_links !== false;
+    const showCenters = opts.show_joint_centers !== false;
+    const showAxes = opts.show_axes !== false;
+    const showTask = opts.show_task !== false;
+    const selected = opts.selected_joint_indices || [];
+    const dim = !!opts.dim_unselected_axes;
+    const labelAll = !!opts.label_all_axes;
+    const linkColor = `rgba(40,40,40,${opacity})`;
+
+    if (opts.show_world_frame && fk.world_frame) {
+      drawFrame(fk.world_frame, FL * 1.6, "W");
+    }
+
+    if (showLinks) {
+      (fk.links || []).forEach(link => drawLine(link.start, link.end, linkColor, 3));
+    }
+    (fk.joints || []).forEach(j => {
+      if (showCenters) drawPoint(j.origin, `rgba(20,20,20,${opacity})`, j.label);
+      if (!showAxes) return;
+      const selectedHit = selected.length === 0 || selected.includes(j.index);
+      if (!selectedHit && opts.show_unselected_axes === false) return;
+      const col = (selected.length && selected.includes(j.index))
+        ? "#0b6e4f"
+        : (dim && selected.length && !selected.includes(j.index))
+          ? "rgba(120,120,120,0.35)"
+          : `rgba(30,90,160,${opacity})`;
+      const dash = (opts.show_roll && j.index === 6) ? [6,4] : null;
+      const label = labelAll || (selected.length && selected.includes(j.index)) ? j.label : "";
+      drawAxis(j.axis, L, col, label, dash);
+    });
+
+    if (opts.show_local_frames && fk.local_frames) {
+      fk.local_frames.forEach(fr => drawFrame(fr, FL, fr.label));
+    }
+
+    if (showTask && fk.tool_point) {
+      drawPoint(fk.tool_point, "#b00020", "p");
+      const d = fk.pointing;
+      const tip = [fk.tool_point[0]+d[0]*L*0.8, fk.tool_point[1]+d[1]*L*0.8, fk.tool_point[2]+d[2]*L*0.8];
+      drawLine(fk.tool_point, tip, "#b00020", 2);
+      const pe = project(tip);
+      ctx.fillStyle = "#b00020";
+      ctx.font = "12px ui-monospace, monospace";
+      ctx.fillText("d", pe[0]+4, pe[1]-4);
     }
   }
 
@@ -87,37 +157,29 @@ _VIEWER_JS = r"""
     const fk = data.fk || {};
     const L = fk.axis_length || 0.3;
     const opacity = data.arm_opacity == null ? 1 : data.arm_opacity;
-    const linkColor = `rgba(40,40,40,${opacity})`;
 
-    (fk.links || []).forEach(link => drawLine(link.start, link.end, linkColor, 3));
-    (fk.joints || []).forEach(j => {
-      const showCenters = data.show_joint_centers !== false;
-      if (showCenters) drawPoint(j.origin, `rgba(20,20,20,${opacity})`, j.label);
-      const selected = (data.selected_joint_indices || []).includes(j.index);
-      const dim = data.dim_unselected_axes && !selected && data.selected_joint_indices;
-      const col = selected ? "#0b6e4f" : (dim ? "rgba(120,120,120,0.35)" : `rgba(30,90,160,${opacity})`);
-      const dash = (data.roll && data.roll.style && j.index === 6) ? [6,4] : null;
-      if (data.show_unselected_axes !== false || selected || !data.selected_joint_indices) {
-        drawAxis(j.axis, L, col, selected ? j.label : "", dash);
-      }
-    });
-
-    if (fk.tool_point) {
-      drawPoint(fk.tool_point, "#b00020", "p");
-      const d = fk.pointing;
-      const tip = [fk.tool_point[0]+d[0]*L*0.8, fk.tool_point[1]+d[1]*L*0.8, fk.tool_point[2]+d[2]*L*0.8];
-      drawLine(fk.tool_point, tip, "#b00020", 2);
+    if (data.fk_ghost) {
+      drawFk(data.fk_ghost, data.ghost_opacity == null ? 0.25 : data.ghost_opacity, {
+        show_links: true,
+        show_joint_centers: false,
+        show_axes: false,
+        show_task: false,
+      });
     }
+
+    drawFk(fk, opacity, data);
 
     if (data.closure) {
       const c = data.closure;
-      drawPoint(c.center, "#6a1b9a", "S_v");
-      drawAxis(c.axes.Sx, L*0.7, "#8e24aa", "Sx");
-      drawAxis(c.axes.Sy, L*0.7, "#8e24aa", "Sy");
-      drawAxis(c.axes.Sz, L*0.7, "#8e24aa", "Sz");
+      if (data.show_closure_center !== false) drawPoint(c.center, "#6a1b9a", "S_v", 5);
+      if (data.show_closure_axes !== false) {
+        drawAxis(c.axes.Sx, L*0.7, "#8e24aa", "Sx");
+        drawAxis(c.axes.Sy, L*0.7, "#8e24aa", "Sy");
+        drawAxis(c.axes.Sz, L*0.7, "#8e24aa", "Sz");
+      }
     }
 
-    if (data.roll) {
+    if (data.show_roll && data.roll) {
       drawAxis(data.roll.axis, L, "rgba(180,80,0,0.85)", data.roll.label, [7,5]);
     }
 
@@ -128,13 +190,11 @@ _VIEWER_JS = r"""
       });
     }
 
-    if (data.fk_roll_compare && data.fk_roll_compare.tool_transform === undefined) {
-      // ghost tool frame axes from roll compare via pointing only
-      const g = data.fk_roll_compare;
-      if (g.tool_point && g.pointing) {
-        const tip = [g.tool_point[0]+g.pointing[0]*L*0.5, g.tool_point[1]+g.pointing[1]*L*0.5, g.tool_point[2]+g.pointing[2]*L*0.5];
-        drawLine(g.tool_point, tip, "rgba(180,80,0,0.5)", 2, [4,3]);
-      }
+    if (data.show_intersections && data.relations) {
+      data.relations.forEach(rel => {
+        if (!rel.intersection) return;
+        drawPoint(rel.intersection, "#c62828", `R${rel.joint_a}∩R${rel.joint_b}`, 5);
+      });
     }
   }
 
@@ -182,18 +242,67 @@ def _html_page(title: str, scene: dict[str, Any], *, extra_controls: str = "") -
     payload = json.dumps(scene, indent=2)
     notes = scene.get("notes") or []
     notes_html = "\n".join(f"<li>{n}</li>" for n in notes)
+    step = scene.get("step")
+    group = scene.get("group", "")
+    gallery_href = scene.get("_gallery_href", "gallery.html")
+    step_line = (
+        f'<p class="mono">Step {step} · group {group} · '
+        f'<a href="{gallery_href}">gallery</a></p>'
+        if step is not None
+        else ""
+    )
+    coord_html = ""
+    if scene.get("show_coordinate_table"):
+        fk = scene.get("fk") or {}
+        rows: list[str] = []
+        frames = []
+        if fk.get("world_frame"):
+            frames.append(fk["world_frame"])
+        frames.extend(fk.get("local_frames") or [])
+        for fr in frames:
+            o = fr.get("origin_world", [0, 0, 0])
+            x = fr.get("local_x", [0, 0, 0])
+            y = fr.get("local_y", [0, 0, 0])
+            z = fr.get("local_z", [0, 0, 0])
+            rows.append(
+                "<tr>"
+                f"<td>{fr.get('label')}</td>"
+                f"<td class='mono'>({o[0]:.4f}, {o[1]:.4f}, {o[2]:.4f})</td>"
+                f"<td class='mono'>({x[0]:.3f}, {x[1]:.3f}, {x[2]:.3f})</td>"
+                f"<td class='mono'>({y[0]:.3f}, {y[1]:.3f}, {y[2]:.3f})</td>"
+                f"<td class='mono'>({z[0]:.3f}, {z[1]:.3f}, {z[2]:.3f})</td>"
+                "</tr>"
+            )
+        coord_html = f"""
+    <h2>Coordinates</h2>
+    <p class="mono">Global origin in world XYZ; local X/Y/Z are unit directions in world.</p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Frame</th><th>Origin (world)</th><th>Local X</th><th>Local Y</th><th>Local Z</th></tr></thead>
+      <tbody>
+      {''.join(rows)}
+      </tbody>
+    </table>
+    </div>
+"""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>{title}</title>
-<style>{_SCENE_CSS}</style>
+<style>{_SCENE_CSS}
+.table-wrap {{ overflow:auto; max-height:280px; }}
+table {{ border-collapse:collapse; width:100%; font-size:.75rem; }}
+th, td {{ border:1px solid #cfc8bb; padding:.25rem .35rem; text-align:left; vertical-align:top; }}
+th {{ background:#efece6; }}
+</style>
 </head>
 <body>
 <header>
   <h1>{title}</h1>
   <div class="disclaimer">{scene.get("disclaimer", DISCLAIMER)}</div>
+  {step_line}
 </header>
 <main>
   <div id="view-wrap"><canvas id="view"></canvas></div>
@@ -201,11 +310,16 @@ def _html_page(title: str, scene: dict[str, Any], *, extra_controls: str = "") -
     <h2>Notes</h2>
     <ul>{notes_html}</ul>
     {extra_controls}
+    {coord_html}
     <h2>Legend</h2>
     <ul>
+      <li>World / local frames: <span style="color:#c62828">X</span>,
+          <span style="color:#2e7d32">Y</span>,
+          <span style="color:#1565c0">Z</span></li>
       <li>Blue/green lines: physical revolute axes</li>
       <li>Purple: virtual spherical axes</li>
       <li>Dashed orange: quotiented terminal roll</li>
+      <li>Red X markers: exact adjacent intersections</li>
       <li>Selected axes also distinguished by label weight, not color alone</li>
     </ul>
   </aside>
@@ -347,9 +461,16 @@ def write_json(path: Path, payload: dict[str, Any] | list[Any]) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
-def write_scene_html(path: Path, scene: dict[str, Any]) -> SceneRecord:
+def write_scene_html(
+    path: Path,
+    scene: dict[str, Any],
+    *,
+    gallery_href: str = "gallery.html",
+) -> SceneRecord:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(_html_page(scene["title"], scene), encoding="utf-8")
+    # Inject gallery link depth for nested scene folders.
+    scene_out = {**scene, "_gallery_href": gallery_href}
+    path.write_text(_html_page(scene["title"], scene_out), encoding="utf-8")
     return SceneRecord(
         scene_id=str(scene["scene_id"]),
         title=str(scene["title"]),
@@ -497,3 +618,87 @@ def write_manifest(path: Path, manifest: Manifest) -> None:
             "data_files": list(manifest.data_files),
         },
     )
+
+
+def write_steps_gallery(
+    path: Path,
+    scenes: list[dict[str, Any]],
+    *,
+    plot_dir: Path | None = None,
+    plot_rel_dir: str = "plots",
+) -> None:
+    """Write a storyboard gallery linking each step HTML and PNG.
+
+    Thumbnails are embedded as data URIs when ``plot_dir`` is provided so the
+    gallery still shows images under ``file://`` / IDE preview restrictions that
+    block sibling-directory ``../plots`` loads.
+    """
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for scene in scenes:
+        groups.setdefault(str(scene.get("group", "other")), []).append(scene)
+
+    sections: list[str] = []
+    for group, items in groups.items():
+        cards: list[str] = []
+        for scene in items:
+            sid = scene["scene_id"]
+            href = scene.get("_href", f"{sid}.html")
+            plot_file = (plot_dir / f"{sid}.png") if plot_dir is not None else None
+            if plot_file is not None and plot_file.is_file():
+                raw = plot_file.read_bytes()
+                b64 = base64.b64encode(raw).decode("ascii")
+                img_src = f"data:image/png;base64,{b64}"
+            else:
+                img_src = f"{plot_rel_dir}/{sid}.png"
+            notes = "<br/>".join(scene.get("notes") or [])
+            cards.append(
+                f"""
+<article class="card">
+  <h3>Step {scene.get("step", "?")}: {scene["title"]}</h3>
+  <a href="{href}"><img src="{img_src}" alt="{sid}" loading="lazy"/></a>
+  <p class="mono"><a href="{href}">{sid}.html</a></p>
+  <p>{notes}</p>
+</article>
+"""
+            )
+        sections.append(
+            f"<section><h2>{group}</h2><div class='grid'>{''.join(cards)}</div></section>"
+        )
+
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Visual probe step gallery</title>
+<style>
+body {{ margin:0; font-family: "IBM Plex Sans", "Source Sans 3", "Segoe UI", sans-serif;
+  background:#efece6; color:#1c1b19; }}
+header {{ padding:1rem 1.25rem; border-bottom:1px solid #cfc8bb; background:#f7f5f1; }}
+.disclaimer {{ font-size:.85rem; color:#6b3a00; background:#fff3cd; padding:.5rem .75rem; }}
+main {{ padding:1rem 1.25rem 2rem; }}
+h2 {{ margin-top:1.5rem; border-bottom:1px solid #cfc8bb; padding-bottom:.35rem; }}
+.grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }}
+.card {{ background:#f7f5f1; border:1px solid #cfc8bb; padding:.75rem; }}
+.card img {{ width:100%; height:auto; background:#fff; border:1px solid #ddd; display:block; }}
+.mono {{ font-family: ui-monospace, monospace; font-size:.8rem; word-break:break-all; }}
+nav a {{ margin-right:1rem; }}
+</style>
+</head>
+<body>
+<header>
+  <h1>Aligned terminal-roll visual probe — step gallery</h1>
+  <div class="disclaimer">{DISCLAIMER}</div>
+  <nav>
+    <a href="../index.html">Candidate browser</a>
+    <a href="../contact_sheets/candidates.html">Candidate contact sheet</a>
+  </nav>
+</header>
+<main>
+{''.join(sections)}
+</main>
+</body>
+</html>
+"""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(html, encoding="utf-8")
