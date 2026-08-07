@@ -107,9 +107,26 @@ def test_v03_visuals_and_html_are_generated(tmp_path: Path) -> None:
     assert "V03C" in html
     assert "No crank, winding, or dexterity classification" in html
     assert "S-joint x/y/z" in html
-    assert "Driven branch animation" in html
-    assert "Driven branch animations (all families)" in html
+    assert "Canonical local branch animation" in html
+    assert "Canonical local branch animations (all families)" in html
+    assert "not driven by" in html
+    assert "validated dexterity-derived pointing fiber" in html
     assert "local branch motion only" in html
+    assert "tool_a" in html
+    assert "tool_b" in html
     for family, path_name in animation_paths:
         assert path_name in html
         assert family in html
+
+
+def test_branch_frame_title_reports_tool_a_and_tool_b() -> None:
+    from grashof_workspace.spatial4bar_explorer.continuation_plots import _branch_frame_title
+
+    title = _branch_frame_title(
+        "UUUR",
+        0.4,
+        (0.12, -0.34, 0.0, 0.0, 0.0, 0.0, 0.0),
+        ("tool_alpha", "tool_beta", "j2_u1", "j2_u2", "j3_u1", "j3_u2", "j4_r1"),
+    )
+    assert "tool_a=+0.12 rad" in title
+    assert "tool_b=-0.34 rad" in title

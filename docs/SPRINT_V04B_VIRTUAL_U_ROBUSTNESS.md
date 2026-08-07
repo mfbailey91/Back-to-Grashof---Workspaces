@@ -22,6 +22,25 @@ U_t(alpha, beta) = R_a(alpha) R_b(beta).
 
 Before V05 correlates geometry descriptors with crank labels, V04B checks that the label survives reasonable numerical and virtual-coordinate choices.
 
+## Interpretation correction
+
+The `phi` sweep below is a **diagnostic sensitivity experiment**, not proof that arbitrary in-plane rotations of the provisional `U` are physically distinct pointing fibers. The original pointing hierarchy retains the virtual spherical closure `S_v`; a research-evidence `U_v` must be induced by an explicit one-dimensional pointing slice of that two-DOF parent.
+
+Therefore V04B establishes:
+
+```text
+winding is numerically robust,
+but winding depends on how the provisional U is constructed.
+```
+
+It does **not** establish:
+
+```text
+phi is automatically a physical atlas parameter.
+```
+
+See [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md).
+
 ## V04B tests
 
 ### A. Step-size convergence
@@ -76,7 +95,7 @@ R_a(alpha) R_b(beta)
 R_b(beta) R_a(alpha)
 ```
 
-The two perpendicular axis lines are unchanged; only their serial coordinate order is changed. If the resulting winding classifications differ, axis order becomes an explicit virtual-mechanism parameter rather than a hidden implementation convention.
+The two perpendicular axis lines are unchanged; only their serial coordinate order is changed. Differences diagnose coordinate sensitivity. They do not by themselves establish a new physical mechanism parameter; physical interpretation waits for the task-derived `S_v -> U_v` fiber construction.
 
 ### E. Winding versus angular coverage
 
@@ -109,4 +128,5 @@ V04B is complete when:
 2. a returned branch satisfies `W_minus = -W_plus` for both defined tool windings;
 3. a controlled tool-`U` orientation sweep reports closure audit + winding/coverage at each sampled `phi`;
 4. both `ab` and `ba` tool-axis orders are explicitly evaluated;
-5. V05 is blocked from treating tool-frame orientation/order as irrelevant unless V04B data supports that simplification.
+5. V05 is blocked from treating tool-frame orientation/order as irrelevant unless V04B data supports that simplification;
+6. arbitrary `phi` variants remain diagnostic-only until a task-derived pointing slice proves what physical fiber, if any, they represent.

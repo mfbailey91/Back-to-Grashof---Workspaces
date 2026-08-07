@@ -15,18 +15,20 @@ V05  Do all six spatial four-bar families admit useful winding/crank atlases?
   -> V09  Does virtual crank capability actually predict 6R orientation/dexterity?
 ```
 
-The first four sprints solve the **spatial four-bar classification problem**. V09 tests whether solving that problem is useful for the **robot-workspace problem**.
+V05 first reconnects the standalone four-bar laboratory to the task-derived `S_v -> U_v` fiber construction. V05–V08 then solve the **spatial four-bar classification problem on validated pointing fibers**. V09 tests whether solving that problem is useful for the **robot-workspace problem**.
 
 ## Prerequisite
 
-V04C must close the virtual-tool-`U` interpretation questions far enough to define a canonical experiment contract:
+V04C closes useful numerical / coordinate diagnostics, but it is **not sufficient by itself** to define the physical pointing-fiber contract. Before V05 research evidence is generated, implement [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md):
 
-- whether `ab` / `ba` are equivalent up to coordinate transformation;
-- the retained `phi` domain;
-- the policy for budget-limited open branches;
-- the distinction between winding, angular coverage, and unresolved classification.
+- retain the two-DOF `S_v` pointing parent;
+- define the one-DOF fiber through an explicit scalar pointing constraint;
+- derive `U_v` / `R_a` / `R_b` from that task-derived slice;
+- verify constrained-parent versus `U_v` child tangent / pointing / branch equivalence;
+- keep V04B/V04C arbitrary `phi` sweeps labeled as diagnostic unless they are proved to parameterize legitimate pointing fibers;
+- retain the policy for budget-limited open branches and the distinction between winding, angular coverage, and unresolved classification.
 
-Any canonicalization accepted in V04C remains provisional and must be rechecked on the broader V05 corpus.
+Any `ab` / `ba` or half-turn canonicalization accepted in V04C is a provisional solver-coordinate simplification, not a proof of physical fiber equivalence.
 
 ## Cross-sprint data contract
 
@@ -37,8 +39,10 @@ family
 geometry_id
 full physical geometry / provenance
 invariant physical descriptors
-virtual-U orientation phi
-virtual-U convention / canonicalization metadata
+pointing-slice id / explicit constraint definition
+slice parameter and task provenance
+fiber-equivalence status / residuals
+virtual-U axes and solver convention / canonicalization metadata
 branch_id
 branch_status
 returned

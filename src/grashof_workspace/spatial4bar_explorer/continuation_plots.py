@@ -79,12 +79,43 @@ def plot_tool_coordinate_phase(trace: ContinuationTrace, outpath: Path) -> None:
     figure = plt.figure(figsize=(5.8, 5.4))
     axis = figure.add_subplot(111)
     axis.plot(values[:, alpha_index], values[:, beta_index], marker=".")
-    axis.set_xlabel("tool_alpha [rad]")
-    axis.set_ylabel("tool_beta [rad]")
+    axis.set_xlabel("tool_a [rad]")
+    axis.set_ylabel("tool_b [rad]")
     axis.set_title(f"{trace.family}: local tool-U coordinate path")
     figure.tight_layout()
     figure.savefig(outpath, dpi=170)
     plt.close(figure)
+
+
+def _display_axis_name(name: str) -> str:
+    """Map solver chart names to the tool_a / tool_b readout convention."""
+    if name == "tool_alpha":
+        return "tool_a"
+    if name == "tool_beta":
+        return "tool_b"
+    return name
+
+
+def _axis_style(name: str) -> dict[str, float | str]:
+    if name == "tool_alpha":
+        return {"color": "#1f77b4", "linewidth": 2.6, "alpha": 1.0}
+    if name == "tool_beta":
+        return {"color": "#ff7f0e", "linewidth": 2.6, "alpha": 1.0}
+    return {"color": "#888888", "linewidth": 1.0, "alpha": 0.5}
+
+
+def _branch_frame_title(
+    family: str,
+    arclength: float,
+    q: tuple[float, ...],
+    coordinate_names: tuple[str, ...],
+) -> str:
+    alpha = float(q[coordinate_names.index("tool_alpha")])
+    beta = float(q[coordinate_names.index("tool_beta")])
+    return (
+        f"{family} branch: s={arclength:.2f} | "
+        f"tool_a={alpha:+.2f} rad | tool_b={beta:+.2f} rad"
+    )
 
 
 def _draw_state(
@@ -100,6 +131,9 @@ def _draw_state(
 
     When ``axis_artists`` is None, create artists (static snapshot). When provided,
     update existing Line3D artists in place (animation frames).
+
+    Virtual tool axes are drawn as highlighted ``tool_a`` / ``tool_b`` lines; other
+    scalar chart axes remain muted.
     """
     centers, axis_lines = mechanism_state(geometry, np.asarray(q, dtype=float))
     cycle = [0, 1, 2, 3, 0]
@@ -117,15 +151,27 @@ def _draw_state(
         for origin, direction, name in axis_lines:
             start = origin - axis_extent * direction
             end = origin + axis_extent * direction
+            style = _axis_style(name)
             (axis_line,) = axis.plot(
                 (start[0], end[0]),
                 (start[1], end[1]),
                 (start[2], end[2]),
-                linewidth=1.0,
-                alpha=0.65,
+                color=style["color"],
+                linewidth=style["linewidth"],
+                alpha=style["alpha"],
             )
             artists.append(axis_line)
-            axis.text(end[0], end[1], end[2], name, fontsize=7)
+            label = _display_axis_name(name)
+            weight = "bold" if name in {"tool_alpha", "tool_beta"} else "normal"
+            axis.text(
+                end[0],
+                end[1],
+                end[2],
+                label,
+                fontsize=8 if weight == "bold" else 7,
+                fontweight=weight,
+                color=style["color"],
+            )
         axis.set_xlim(*limits[0])
         axis.set_ylim(*limits[1])
         axis.set_zlim(*limits[2])
@@ -144,7 +190,6 @@ def _draw_state(
         artist.set_data_3d((start[0], end[0]), (start[1], end[1]), (start[2], end[2]))
     axis.set_title(title)
     return axis_artists
-
 
 def _plot_state(
     geometry: SpatialFourBarGeometry,
@@ -201,7 +246,12 @@ def plot_branch_snapshots(
             geometry,
             point.q,
             path,
-            title=f"{geometry.family.value} branch: s={point.arclength:.2f}",
+            title=_branch_frame_title(
+                geometry.family.value,
+                point.arclength,
+                point.q,
+                trace.coordinate_names,
+            ),
             limits=limits,
         )
         paths.append(path)
@@ -220,6 +270,7 @@ def animate_branch(
     """Write a looping GIF of the mechanism along a continued one-DOF branch.
 
     Frames advance by continuation arclength, not by a claimed crank input.
+    Highlighted ``tool_a`` / ``tool_b`` axes and live angles are shown each frame.
     """
     outpath.parent.mkdir(parents=True, exist_ok=True)
     points = [point for point in trace.points if point.converged]
@@ -230,6 +281,7 @@ def animate_branch(
     if frames[-1] is not points[-1]:
         frames.append(points[-1])
     limits = branch_snapshot_limits(geometry, trace)
+    names = trace.coordinate_names
 
     figure = plt.figure(figsize=(7.0, 6.0))
     axis = figure.add_subplot(111, projection="3d")
@@ -238,7 +290,12 @@ def animate_branch(
         geometry,
         frames[0].q,
         limits=limits,
-        title=f"{geometry.family.value} branch: s={frames[0].arclength:.2f}",
+        title=_branch_frame_title(
+            geometry.family.value,
+            frames[0].arclength,
+            frames[0].q,
+            names,
+        ),
     )
     figure.tight_layout()
 
@@ -249,7 +306,12 @@ def animate_branch(
             geometry,
             point.q,
             limits=limits,
-            title=f"{geometry.family.value} branch: s={point.arclength:.2f}",
+            title=_branch_frame_title(
+                geometry.family.value,
+                point.arclength,
+                point.q,
+                names,
+            ),
             axis_artists=artists,
         )
 

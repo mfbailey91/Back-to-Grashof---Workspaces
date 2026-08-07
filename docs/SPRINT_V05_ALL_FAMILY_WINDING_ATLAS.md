@@ -1,7 +1,7 @@
 # Sprint V05 — All-Family Winding Atlas
 
 **Status:** planned after V04C  
-**Purpose:** generalize the verified `UUUR` winding workflow to all six ordered one-DOF spatial four-bar families before any descriptor-to-classification rule mining.
+**Purpose:** generalize the verified winding workflow to all six ordered families **only after** each one-DOF `UXXX` mechanism is derived as a validated pointing fiber of its two-DOF virtual-`S_v` parent.
 
 ## Research question
 
@@ -12,7 +12,7 @@ UUUR, UURU, URUU,
 USRR, URSR, URRS,
 ```
 
-what returned-cycle winding, angular-coverage, singularity, and unresolved-branch behavior occurs over a modest but diverse corpus of physical mechanisms and canonical virtual-tool-`U` orientations?
+what returned-cycle winding, angular-coverage, singularity, and unresolved-branch behavior occurs over a modest corpus of **task-derived pointing fibers**, and which ordered `UXXX` topologies arise from those validated fibers?
 
 ## Inputs
 
@@ -20,46 +20,61 @@ what returned-cycle winding, angular-coverage, singularity, and unresolved-branc
 - V03 seven-coordinate closure and continuation kernel;
 - V04 returned-cycle winding classifier;
 - V04B numerical robustness checks;
-- V04C canonical virtual-`U` convention and unresolved/open-branch policy.
+- V04C solver-coordinate diagnostics and unresolved/open-branch policy;
+- [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md).
 
 V01/V02 mock classifications remain excluded from research evidence.
 
-## Phase V05A — family-wide solver generalization
+## Phase V05A — parent-first pointing-fiber construction
 
-For each family:
+Do not begin V05 evidence generation from an arbitrary standalone `UXXX`. Begin from the two-DOF pointing parent with a virtual spherical closure.
 
-1. build or perturb valid physical reference geometries;
-2. verify reference closure, rank 6, and nullity 1;
-3. apply the V04C canonical virtual-`U` representation;
-4. continue each one-DOF branch to return, change point, invalid state, or explicit budget exhaustion;
-5. compute `W = (w_alpha, w_beta)` when defined;
-6. compute angular coverage and minimum singularity margin;
-7. preserve solver diagnostics and unresolved reason.
+For each candidate parent / slice:
 
-The mechanism is solved once per `(geometry, phi, branch)`; `tool_a` and `tool_b` remain two classifications read from the same returned branch.
+1. construct the regular two-DOF `S_v` pointing parent (`SUUR` / `SSRR` representation where applicable);
+2. define an explicit scalar pointing constraint `h(d)=c`;
+3. continue or otherwise verify that the constrained parent is a regular one-DOF fiber;
+4. derive the virtual universal-joint axes `R_a`, `R_b` associated with that slice;
+5. construct the corresponding ordered `UXXX` child mechanism;
+6. verify tangent, pointing-curve, and branch equivalence between the constrained `S_v` parent and the `U_v` child;
+7. record `slice_provenance`, the constraint definition, and equivalence residuals.
 
-## Phase V05B — initial corpus
+Only a child with `fiber_equivalence_status = PASS` is admitted to the dexterity-derived V05 atlas. Existing V02B/V03/V04 standalone `UXXX` mechanisms remain valuable regression / mechanism-explorer fixtures.
+
+## Phase V05B — family-wide winding generalization
+
+For each validated child family:
+
+1. verify reference closure, rank 6, and nullity 1;
+2. continue each one-DOF branch to return, change point, invalid state, or explicit budget exhaustion;
+3. compute `W = (w_alpha, w_beta)` when defined;
+4. compute angular coverage and minimum singularity margin;
+5. preserve solver diagnostics and unresolved reason.
+
+The mechanism is solved once per validated `(parent, slice, child_geometry, branch)`; `tool_a` and `tool_b` remain two classifications read from the same returned branch.
+
+## Phase V05C — initial corpus
 
 Start modestly:
 
 - target **20–50 physical geometries per family**;
 - include the canonical mechanism, structured perturbations, and broader valid perturbations;
-- use the canonical `phi` domain from V04C;
+- sample explicit pointing constraints / slice definitions, not arbitrary `phi`, unless a proven mapping identifies `phi` with a legitimate fiber parameter;
 - do not target artificial class balance.
 
 If one family is computationally problematic, retain it with an explicit unresolved status rather than quietly dropping it.
 
-## Phase V05C — family atlas readouts
+## Phase V05D — family atlas readouts
 
 For every family publish:
 
-- winding pair versus `phi`;
-- angular coverage versus `phi`;
+- winding pair versus the **task-derived slice parameter** (use `phi` only if V05A proves that correspondence);
+- angular coverage versus the task-derived slice parameter;
 - returned / crank / rocker / change-point / open / invalid counts;
 - minimum singularity-margin distributions;
 - representative 3D crank, rocker, and near-boundary mechanisms;
 - representative unresolved/open cases;
-- selected branch GIFs;
+- selected branch GIFs showing the tool point, pointing direction `d`, and derived `R_a` / `R_b` axes;
 - geometry cards with the most important physical descriptors.
 
 ## Dataset contract
@@ -69,7 +84,12 @@ One atlas row should include at least:
 ```text
 family
 geometry_id
-phi
+slice_id
+slice_definition
+slice_parameter
+slice_provenance
+fiber_equivalence_status
+fiber_equivalence_residuals
 virtual_u_convention
 branch_status
 returned
@@ -101,12 +121,13 @@ geometry_provenance
 V05 passes when:
 
 1. all six families have true continuation-derived outcomes rather than mock classifications;
-2. every family has at least a modest set of valid physical samples evaluated under the canonical V04C contract;
+2. every research-evidence child four-bar is traceable to an explicit `S_v` parent and pointing-slice constraint and passes the fiber-equivalence contract;
 3. winding is reported only for returned cycles;
 4. unresolved/open/change-point cases remain separate from crank/rocker;
 5. the corpus reveals the basic class distribution and computational difficulty of every family;
 6. enough class diversity exists in at least some families to justify V06 trend mining;
-7. any V04C symmetry/canonicalization used in the corpus is rechecked on more than the original `UUUR` example.
+7. arbitrary V04B/V04C `phi` variants are not pooled into the dexterity-derived corpus unless V05A proves that `phi` parameterizes legitimate pointing fibers;
+8. any V04C coordinate symmetry/canonicalization used for storage is rechecked on more than the original `UUUR` example.
 
 ## Non-goals
 

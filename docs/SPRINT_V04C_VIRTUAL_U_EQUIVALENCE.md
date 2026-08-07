@@ -1,7 +1,7 @@
 # Sprint V04C — Virtual-U Equivalence and Fiber Interpretation
 
 **Status:** insertion sprint before V05 descriptor mining
-**Purpose:** determine which virtual-tool `U` choices are genuine mechanism parameters and which are removable coordinate symmetries before building a large crank atlas.
+**Purpose:** diagnose sensitivity and coordinate symmetries of the provisional virtual-tool `U` representation before V05. V04C does **not** establish that arbitrary `U` rotations are physically distinct pointing fibers.
 
 ## Why V04C exists
 
@@ -10,7 +10,9 @@ V04 established continuation-derived winding. V04B then showed two things:
 1. the canonical `UUUR` winding result is numerically stable under step-size refinement and branch-direction reversal;
 2. changing only the virtual tool-`U` orientation can change which tool coordinate is a crank, or whether either coordinate is a crank.
 
-That means V05 must not fit a geometry-to-crank rule until we understand the virtual-`U` parameterization itself.
+That means V05 must not fit a geometry-to-crank rule until we understand the virtual-`U` parameterization itself. More importantly, the V04B/V04C `phi` sweep is now treated as a **diagnostic coordinate-sensitivity probe**. It does not by itself prove that `phi` parameterizes admissible pointing fibers of the original `S_v` parent.
+
+The blocking contract is [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md): a research-evidence `U_v` must be induced by an explicit scalar pointing constraint on the two-DOF `S_v` parent and must pass parent/fiber equivalence checks.
 
 ## Research questions
 
@@ -70,13 +72,15 @@ This produces a first transition map without yet fitting a Grashof-like rule.
 
 ## Canonicalization decision
 
-V04C may emit a **provisional** canonicalization recommendation:
+V04C may emit a **solver-coordinate canonicalization recommendation** for the provisional `U` explorer:
 
 - use `ab` as the stored tool-`U` order if the shifted `ab`/`ba` equivalence passes;
 - reduce `phi` modulo 180 degrees if half-turn periodicity passes;
 - otherwise retain the failed dimension explicitly in V05.
 
-This recommendation applies only to the tested `UUUR` geometry until repeated across a broader corpus.
+This recommendation applies only to the tested `UUUR` geometry and only to storage / diagnostic representation. It does **not** establish the physical `S_v -> U_v` pointing-slice construction.
+
+V05 must derive its `U_v` axes from the pointing task first. Any surviving `phi` parameter may enter the research atlas only if it can be mapped to a legitimate family of explicit pointing slices.
 
 ## Deliverables
 
@@ -98,4 +102,5 @@ V04C is complete when:
 2. 180-degree periodicity is explicitly evaluated;
 3. the `120 deg` and `300 deg` open cases are rerun at larger budgets without interpreting budget exhaustion as proof of an open topology;
 4. transition intervals are densified and report branch state, winding, coverage, and minimum singular-value margin;
-5. V05 receives an explicit parameter-retention/canonicalization decision rather than silently dropping virtual-`U` dimensions.
+5. V05 receives an explicit solver-coordinate retention/canonicalization decision rather than silently dropping virtual-`U` dimensions;
+6. the readout states that arbitrary `phi` sweeps are diagnostic only until the `S_v -> U_v` pointing-slice contract is satisfied.

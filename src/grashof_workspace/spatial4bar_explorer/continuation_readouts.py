@@ -46,8 +46,11 @@ def write_sprint03_html(
     )
     family_animations = "".join(
         f'<figure style="display:inline-block; margin: 8px; vertical-align: top;">'
-        f'<img src="{path}" alt="{family} driven branch animation" style="max-width: 420px;">'
-        f"<figcaption>{family}</figcaption></figure>"
+        f'<img src="{path}" alt="{family} canonical local branch animation with tool_a and tool_b" '
+        f'style="max-width: 420px;">'
+        f"<figcaption>{family}: highlighted <code>tool_a</code> (blue) / "
+        f"<code>tool_b</code> (orange); live angles in the frame title; "
+        f"parameter is continuation arclength <code>s</code></figcaption></figure>"
         for family, path in animation_paths
     )
     html = f"""<!doctype html>
@@ -77,12 +80,16 @@ The plots below are diagnostics of a real closure branch segment; they are not y
 <img src="{residual_plot}" alt="closure residual" style="max-width: 760px;">
 <img src="{singularity_plot}" alt="singularity margin" style="max-width: 760px;">
 <img src="{phase_plot}" alt="tool U coordinate path" style="max-width: 620px;">
-<h3>Driven branch animation</h3>
+<h3>Canonical local branch animation</h3>
 <p>
 The GIF advances along continuation arclength on the local one-DOF closure manifold.
-This is local branch motion only; it is not a crank, winding, or full-cycle proof.
+It is not driven by <code>tool_a</code> or <code>tool_b</code>; continuation arclength <code>s</code> is the branch parameter.
+Highlighted axes are the virtual tool coordinates <code>tool_a</code> (blue) and
+<code>tool_b</code> (orange); each frame title reports their current angles.
+The canonical reference branch may be visually dominated by <code>tool_alpha</code>, but that does not make <code>tool_a</code> the physical input.
+This is local branch motion only; it is not a crank, winding, full-cycle, or validated <code>S_v -&gt; U_v</code> pointing-fiber proof.
 </p>
-<img src="{detailed_animation}" alt="{detailed_family} driven branch animation" style="max-width: 640px;">
+<img src="{detailed_animation}" alt="{detailed_family} canonical local branch animation with tool_a and tool_b" style="max-width: 640px;">
 <h3>3D branch snapshots</h3>
 {snapshots}
 <h2>V03C — same kernel across all six families</h2>
@@ -91,16 +98,19 @@ This is local branch motion only; it is not a crank, winding, or full-cycle proo
 {trace_rows}
 </table>
 <p><a href="{trace_json}">Continuation-trace JSON</a></p>
-<h3>Driven branch animations (all families)</h3>
+<h3>Canonical local branch animations (all families)</h3>
 <p>
-Each GIF uses the same seven-coordinate closure/continuation kernel on that family's V02B reference geometry.
-Motion is along local continuation arclength only; not a crank or winding classification.
+Each GIF uses the same seven-coordinate closure/continuation kernel on that family's V02B reference geometry and the provisional canonical tool-<code>U</code> frame.
+<code>tool_a</code> / <code>tool_b</code> are the two perpendicular tool-U chart axes (solver names
+<code>tool_alpha</code> / <code>tool_beta</code>), read from the same continued branch; neither is the driven input.
+These are mechanism-explorer closure demonstrations, not proof that the displayed <code>U</code> was induced by a valid pointing slice of the original virtual <code>S_v</code>. Motion is along local continuation arclength only; not a crank or winding classification.
 </p>
 {family_animations}
 <h2>Interpretation guardrails</h2>
 <ul>
-<li>V03 establishes local closure motion, not a crank condition.</li>
-<li><code>tool_alpha</code> and <code>tool_beta</code> are both recorded from one mechanism solve; the mechanism is not solved twice.</li>
+<li>V03 establishes local closure motion, not a crank condition or a validated dexterity-derived pointing fiber.</li>
+<li><code>tool_a</code> and <code>tool_b</code> (<code>tool_alpha</code> / <code>tool_beta</code>) are both recorded from one mechanism solve; neither is designated as the driven input by the continuation algorithm.</li>
+<li>A research-evidence <code>U_v</code> must later be derived from an explicit pointing slice of the two-DOF <code>S_v</code> parent; arbitrary standalone <code>UXXX</code> geometry is mechanism-explorer evidence only.</li>
 <li>S-joint x/y/z coordinates are solver-chart coordinates only. They must not be promoted to invariant Grashof descriptors.</li>
 <li>Closed-loop winding and branch return belong to V04.</li>
 </ul>

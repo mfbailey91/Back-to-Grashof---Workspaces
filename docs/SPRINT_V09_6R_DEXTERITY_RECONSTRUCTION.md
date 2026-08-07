@@ -27,16 +27,18 @@ At selected Cartesian point `p`:
 
 1. construct or solve physical arm configurations reaching `p`;
 2. quotient terminal roll under the aligned-terminal assumption;
-3. identify the applicable compound-joint parent / ordered one-DOF family;
-4. construct the virtual tool joint and canonical slice parameterization;
-5. extract an actual `SpatialFourBarGeometry` through the same data contract used in V05–V08;
-6. visualize the robot and extracted virtual mechanism together.
+3. construct the actual two-DOF `S_v` pointing parent after the terminal-roll quotient;
+4. define the explicit pointing constraint / fiber using the same V05 pointing-slice contract;
+5. derive the corresponding task-induced `U_v = R_a R_b` and ordered one-DOF family;
+6. verify parent/fiber equivalence before querying any crank rule / atlas;
+7. extract an actual `SpatialFourBarGeometry` through the same data contract used in V05–V08;
+8. visualize the robot, virtual `S_v`, pointing slice, `R_a` / `R_b`, and extracted four-bar together.
 
 The extraction must be deterministic and debuggable; no manual relabeling in the final pipeline.
 
 ## Phase V09B — fiber crank / coverage field
 
-Across the retained slice parameter `phi` (or its V04C replacement), evaluate:
+Across the **task-derived pointing-slice parameter** (call it `phi` only if the V05/V09 construction proves that identification), evaluate:
 
 ```text
 G_p(phi) = crank / rocker / boundary / no assembly / uncertain
