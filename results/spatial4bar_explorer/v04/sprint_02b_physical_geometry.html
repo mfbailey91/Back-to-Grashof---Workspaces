@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Sprint V02B — physical geometry hardening</title></head>
+<body>
+<h1>Sprint V02B — physical geometry hardening</h1>
+<p><strong>PHYSICAL GEOMETRY / NO CLOSURE SOLVE YET.</strong></p>
+<p>
+This sprint replaces the V01 random descriptor-vector corpus as the geometry source for all future kinematic experiments.
+Each record below contains four actual joint centers, an orthonormal frame at every joint, the exact internal axis structure
+for R/U/S joints, four rigid link adjacencies, and descriptors derived from that geometry.
+</p>
+<p>
+The V01/V02 corpus remains useful only as readout/scaffold test data. It must not be used as crank evidence.
+Sprint V03 will consume the V02B physical geometry objects when loop closure and continuation are implemented.
+</p>
+<h2>Corpus summary</h2>
+<ul><li><strong>UUUR</strong>: 2 reference geometries</li><li><strong>UURU</strong>: 2 reference geometries</li><li><strong>URUU</strong>: 2 reference geometries</li><li><strong>USRR</strong>: 2 reference geometries</li><li><strong>URSR</strong>: 2 reference geometries</li><li><strong>URRS</strong>: 2 reference geometries</li></ul>
+<p><a href="data/physical_geometry_samples.json">Physical geometry JSON export</a></p>
+<h2>Geometry descriptor inventory</h2>
+<h3>distances</h3><table border="1" cellpadding="5" cellspacing="0"><tr><th>Descriptor</th><th>Derived meaning</th></tr><tr><td><code>center_distance_12</code></td><td>L12 divided by mean loop-link center distance</td></tr><tr><td><code>center_distance_23</code></td><td>L23 divided by mean loop-link center distance</td></tr><tr><td><code>center_distance_34</code></td><td>L34 divided by mean loop-link center distance</td></tr><tr><td><code>center_distance_41</code></td><td>L41 divided by mean loop-link center distance</td></tr><tr><td><code>diagonal_distance_13</code></td><td>J1-J3 center distance divided by reference length</td></tr><tr><td><code>diagonal_distance_24</code></td><td>J2-J4 center distance divided by reference length</td></tr></table><h3>angles</h3><table border="1" cellpadding="5" cellspacing="0"><tr><th>Descriptor</th><th>Derived meaning</th></tr><tr><td><code>twist_12_deg</code></td><td>Angle between the primary motion axes at J1 and J2</td></tr><tr><td><code>twist_23_deg</code></td><td>Angle between the primary motion axes at J2 and J3</td></tr><tr><td><code>twist_34_deg</code></td><td>Angle between the primary motion axes at J3 and J4</td></tr><tr><td><code>twist_41_deg</code></td><td>Angle between the primary motion axes at J4 and J1</td></tr><tr><td><code>tool_u_internal_angle_deg</code></td><td>Angle between the two tool-U axes; should be 90 degrees</td></tr><tr><td><code>tool_to_ground_axis_angle_deg</code></td><td>Angle between tool-U primary axis and ground-joint primary axis</td></tr></table><h3>offsets</h3><table border="1" cellpadding="5" cellspacing="0"><tr><th>Descriptor</th><th>Derived meaning</th></tr><tr><td><code>common_normal_13</code></td><td>Shortest distance between primary axes J1/J3, normalized</td></tr><tr><td><code>common_normal_24</code></td><td>Shortest distance between primary axes J2/J4, normalized</td></tr><tr><td><code>offset_1</code></td><td>Signed J1-axis projection toward J3, normalized</td></tr><tr><td><code>offset_2</code></td><td>Signed J2-axis projection toward J4, normalized</td></tr></table><h3>axis-center descriptors</h3><table border="1" cellpadding="5" cellspacing="0"><tr><th>Descriptor</th><th>Derived meaning</th></tr><tr><td><code>axis_to_center_1</code></td><td>Distance from J1 primary axis to J3 center, normalized</td></tr><tr><td><code>axis_to_center_2</code></td><td>Distance from J2 primary axis to J4 center, normalized</td></tr></table><h3>shape descriptors</h3><table border="1" cellpadding="5" cellspacing="0"><tr><th>Descriptor</th><th>Derived meaning</th></tr><tr><td><code>tetra_volume</code></td><td>Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3</td></tr><tr><td><code>coplanarity_residual</code></td><td>Absolute normalized scalar triple product; zero is coplanar</td></tr></table><h3>flags</h3><table border="1" cellpadding="5" cellspacing="0"><tr><th>Descriptor</th><th>Derived meaning</th></tr><tr><td><code>chirality</code></td><td>Sign of the center tetrahedron: right, left, or planar</td></tr><tr><td><code>has_intersection_pair</code></td><td>Whether adjacent primary joint axes intersect within numerical tolerance</td></tr><tr><td><code>has_mirror_symmetry</code></td><td>Whether opposite center-distance pairs are approximately equal</td></tr><tr><td><code>reference_geometry_valid</code></td><td>Geometry object passes V02B structural validation</td></tr></table>
+<h2>Representative 3D mechanisms</h2>
+
+<section style="margin-bottom: 2rem;">
+<h3>uuur_physical_000</h3>
+<p><strong>Family:</strong> UUUR &nbsp; <strong>Seed:</strong> 204656 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_uuur_physical_000.png" alt="3D reference geometry uuur_physical_000" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>U</td><td>2</td><td>(1.35, 0.18, 0.24)</td></tr><tr><td>J3</td><td>U</td><td>2</td><td>(1.92, 1.12, 0.61)</td></tr><tr><td>J4</td><td>R</td><td>1</td><td>(0.28, 1.41, -0.17)</td></tr>
+</table>
+<p>
+L12=0.949,
+L23=0.796,
+L34=1.262,
+L41=0.993,
+twist23=49.1 deg,
+V=-0.0406,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>uuur_physical_001</h3>
+<p><strong>Family:</strong> UUUR &nbsp; <strong>Seed:</strong> 1007302177 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_uuur_physical_001.png" alt="3D reference geometry uuur_physical_001" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>U</td><td>2</td><td>(1.426151174672129, 0.23032633868851704, 0.1384631772375512)</td></tr><tr><td>J3</td><td>U</td><td>2</td><td>(1.9787369485785962, 1.051487099687094, 0.7203689620163122)</td></tr><tr><td>J4</td><td>R</td><td>1</td><td>(0.3679331806546817, 1.3408281225983119, -0.19057753459749352)</td></tr>
+</table>
+<p>
+L12=0.988,
+L23=0.782,
+L34=1.275,
+L41=0.955,
+twist23=50.4 deg,
+V=-0.0632,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>uuru_physical_000</h3>
+<p><strong>Family:</strong> UURU &nbsp; <strong>Seed:</strong> 204659 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_uuru_physical_000.png" alt="3D reference geometry uuru_physical_000" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>U</td><td>2</td><td>(1.35, 0.18, 0.24)</td></tr><tr><td>J3</td><td>R</td><td>1</td><td>(1.92, 1.12, 0.61)</td></tr><tr><td>J4</td><td>U</td><td>2</td><td>(0.28, 1.41, -0.17)</td></tr>
+</table>
+<p>
+L12=0.949,
+L23=0.796,
+L34=1.262,
+L41=0.993,
+twist23=100.2 deg,
+V=-0.0406,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>uuru_physical_001</h3>
+<p><strong>Family:</strong> UURU &nbsp; <strong>Seed:</strong> 43807693 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_uuru_physical_001.png" alt="3D reference geometry uuru_physical_001" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>U</td><td>2</td><td>(1.2717485782572793, 0.07210231461375631, 0.15992169426818886)</td></tr><tr><td>J3</td><td>R</td><td>1</td><td>(1.84284964396561, 1.2139646812961675, 0.529619414615902)</td></tr><tr><td>J4</td><td>U</td><td>2</td><td>(0.21809860107294043, 1.3791949388809368, -0.06988389581014534)</td></tr>
+</table>
+<p>
+L12=0.893,
+L23=0.925,
+L34=1.210,
+L41=0.972,
+twist23=87.6 deg,
+V=-0.0367,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>uruu_physical_000</h3>
+<p><strong>Family:</strong> URUU &nbsp; <strong>Seed:</strong> 204662 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_uruu_physical_000.png" alt="3D reference geometry uruu_physical_000" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>R</td><td>1</td><td>(1.35, 0.18, 0.24)</td></tr><tr><td>J3</td><td>U</td><td>2</td><td>(1.92, 1.12, 0.61)</td></tr><tr><td>J4</td><td>U</td><td>2</td><td>(0.28, 1.41, -0.17)</td></tr>
+</table>
+<p>
+L12=0.949,
+L23=0.796,
+L34=1.262,
+L41=0.993,
+twist23=134.0 deg,
+V=-0.0406,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>uruu_physical_001</h3>
+<p><strong>Family:</strong> URUU &nbsp; <strong>Seed:</strong> 2028379120 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_uruu_physical_001.png" alt="3D reference geometry uruu_physical_001" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>R</td><td>1</td><td>(1.4461888183669396, 0.07722906888605606, 0.3309115662503209)</td></tr><tr><td>J3</td><td>U</td><td>2</td><td>(1.9244711536164498, 1.1837147497179354, 0.49373746833235876)</td></tr><tr><td>J4</td><td>U</td><td>2</td><td>(0.21226171857201104, 1.3715809586174568, -0.07191601814244589)</td></tr>
+</table>
+<p>
+L12=1.006,
+L23=0.824,
+L34=1.228,
+L41=0.941,
+twist23=132.5 deg,
+V=-0.0152,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>usrr_physical_000</h3>
+<p><strong>Family:</strong> USRR &nbsp; <strong>Seed:</strong> 204643 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_usrr_physical_000.png" alt="3D reference geometry usrr_physical_000" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>S</td><td>3</td><td>(1.35, 0.18, 0.24)</td></tr><tr><td>J3</td><td>R</td><td>1</td><td>(1.92, 1.12, 0.61)</td></tr><tr><td>J4</td><td>R</td><td>1</td><td>(0.28, 1.41, -0.17)</td></tr>
+</table>
+<p>
+L12=0.949,
+L23=0.796,
+L34=1.262,
+L41=0.993,
+twist23=103.6 deg,
+V=-0.0406,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>usrr_physical_001</h3>
+<p><strong>Family:</strong> USRR &nbsp; <strong>Seed:</strong> 835072421 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_usrr_physical_001.png" alt="3D reference geometry usrr_physical_001" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>S</td><td>3</td><td>(1.2762041675129292, 0.13960386191315893, 0.2599128250549887)</td></tr><tr><td>J3</td><td>R</td><td>1</td><td>(1.8022519198267215, 1.1757214415451718, 0.6566408232103788)</td></tr><tr><td>J4</td><td>R</td><td>1</td><td>(0.3413254573444465, 1.3848624243851997, -0.1341878418575654)</td></tr>
+</table>
+<p>
+L12=0.928,
+L23=0.870,
+L34=1.186,
+L41=1.015,
+twist23=109.8 deg,
+V=-0.0446,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>ursr_physical_000</h3>
+<p><strong>Family:</strong> URSR &nbsp; <strong>Seed:</strong> 204644 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_ursr_physical_000.png" alt="3D reference geometry ursr_physical_000" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>R</td><td>1</td><td>(1.35, 0.18, 0.24)</td></tr><tr><td>J3</td><td>S</td><td>3</td><td>(1.92, 1.12, 0.61)</td></tr><tr><td>J4</td><td>R</td><td>1</td><td>(0.28, 1.41, -0.17)</td></tr>
+</table>
+<p>
+L12=0.949,
+L23=0.796,
+L34=1.262,
+L41=0.993,
+twist23=132.6 deg,
+V=-0.0406,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>ursr_physical_001</h3>
+<p><strong>Family:</strong> URSR &nbsp; <strong>Seed:</strong> 60514291 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_ursr_physical_001.png" alt="3D reference geometry ursr_physical_001" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>R</td><td>1</td><td>(1.4445174997196308, 0.2410427135685456, 0.27583780094926197)</td></tr><tr><td>J3</td><td>S</td><td>3</td><td>(1.9179134772395703, 1.022928629468124, 0.5558469372010066)</td></tr><tr><td>J4</td><td>R</td><td>1</td><td>(0.1658856485295871, 1.4649974466554936, -0.1336549196394753)</td></tr>
+</table>
+<p>
+L12=1.017,
+L23=0.652,
+L34=1.320,
+L41=1.010,
+twist23=136.5 deg,
+V=-0.0298,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>urrs_physical_000</h3>
+<p><strong>Family:</strong> URRS &nbsp; <strong>Seed:</strong> 204645 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_urrs_physical_000.png" alt="3D reference geometry urrs_physical_000" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>R</td><td>1</td><td>(1.35, 0.18, 0.24)</td></tr><tr><td>J3</td><td>R</td><td>1</td><td>(1.92, 1.12, 0.61)</td></tr><tr><td>J4</td><td>S</td><td>3</td><td>(0.28, 1.41, -0.17)</td></tr>
+</table>
+<p>
+L12=0.949,
+L23=0.796,
+L34=1.262,
+L41=0.993,
+twist23=77.6 deg,
+V=-0.0406,
+chirality=left.
+</p>
+</section>
+
+<section style="margin-bottom: 2rem;">
+<h3>urrs_physical_001</h3>
+<p><strong>Family:</strong> URRS &nbsp; <strong>Seed:</strong> 800960546 &nbsp;
+<strong>Provenance:</strong> <code>physical_geometry_v02b</code></p>
+<p><strong>Reference validation:</strong> PASS</p>
+<img src="figures/physical_urrs_physical_001.png" alt="3D reference geometry urrs_physical_001" style="max-width: 620px;">
+<table border="1" cellpadding="5" cellspacing="0">
+<tr><th>Joint</th><th>Kind</th><th>Motion axes</th><th>Center</th></tr>
+<tr><td>J1</td><td>U</td><td>2</td><td>(0.0, 0.0, 0.0)</td></tr><tr><td>J2</td><td>R</td><td>1</td><td>(1.4382156169812195, 0.2723426914985237, 0.18829505523140772)</td></tr><tr><td>J3</td><td>R</td><td>1</td><td>(1.857466679633612, 1.0533634797196005, 0.6781001529442348)</td></tr><tr><td>J4</td><td>S</td><td>3</td><td>(0.36356711761509297, 1.5062802165669908, -0.09726197807717363)</td></tr>
+</table>
+<p>
+L12=1.021,
+L23=0.700,
+L34=1.205,
+L41=1.074,
+twist23=74.4 deg,
+V=-0.0576,
+chirality=left.
+</p>
+</section>
+
+</body>
+</html>

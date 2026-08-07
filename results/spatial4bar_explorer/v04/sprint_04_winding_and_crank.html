@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Sprint V04 — winding and crank atlas</title></head>
+<body>
+<h1>Sprint V04 — true winding and crank atlas (UUUR-first)</h1>
+<p>
+<strong>STATUS:</strong> windings below are computed from continued one-DOF closure cycles.
+They are <em>not</em> V02 mock heuristics and are <em>not</em> conventional planar Grashof labels.
+</p>
+<p>
+Each UUUR physical sample is solved once with the V03 seven-coordinate kernel.
+<code>tool_alpha</code> and <code>tool_beta</code> windings are read from that single returned cycle.
+</p>
+<h2>Winding summary</h2>
+<img src="figures/v04_uuur_winding_summary.png" alt="winding summary" style="max-width: 980px;">
+<img src="figures/v04_uuur_classification_counts.png" alt="classification counts" style="max-width: 900px;">
+<table border="1" cellpadding="6" cellspacing="0">
+<tr>
+<th>Sample</th><th>Cycle status</th><th>Direction</th><th>Points</th>
+<th>w_alpha</th><th>w_beta</th><th>class_alpha</th><th>class_beta</th><th>Returned</th>
+</tr>
+<tr><td>uuur_physical_000</td><td>returned</td><td>1</td><td>466</td><td>-1</td><td>0</td><td>crank</td><td>rocker</td><td>yes</td></tr><tr><td>uuur_physical_001</td><td>returned</td><td>1</td><td>235</td><td>-1</td><td>0</td><td>crank</td><td>rocker</td><td>yes</td></tr><tr><td>uuur_physical_002</td><td>returned</td><td>1</td><td>472</td><td>-1</td><td>0</td><td>crank</td><td>rocker</td><td>yes</td></tr><tr><td>uuur_physical_003</td><td>returned</td><td>1</td><td>634</td><td>0</td><td>0</td><td>rocker</td><td>rocker</td><td>yes</td></tr><tr><td>uuur_physical_004</td><td>returned</td><td>1</td><td>200</td><td>-1</td><td>0</td><td>crank</td><td>rocker</td><td>yes</td></tr><tr><td>uuur_physical_005</td><td>returned</td><td>1</td><td>996</td><td>-1</td><td>0</td><td>crank</td><td>rocker</td><td>yes</td></tr>
+</table>
+<p><a href="data/v04_uuur_winding_results.json">Winding-result JSON</a> · <a href="data/v04_uuur_cycle_traces.json">Cycle-trace JSON</a></p>
+<h2>Representative examples</h2>
+
+<h3>Crank example: uuur_physical_000</h3>
+<p>
+W=(-1, 0);
+classes=(crank, rocker);
+returned=True; direction=1; points=466.
+</p>
+<img src="figures/v04_uuur_crank_unwrapped.png" alt="Crank example" style="max-width: 820px;">
+
+
+<h3>Rocker example: uuur_physical_003</h3>
+<p>
+W=(0, 0);
+classes=(rocker, rocker);
+returned=True; direction=1; points=634.
+</p>
+<img src="figures/v04_uuur_rocker_unwrapped.png" alt="Rocker example" style="max-width: 820px;">
+
+<h2>Interpretation guardrails</h2>
+<ul>
+<li><code>crank</code> means <code>|w_i| ≥ 1</code> on a returned cycle for that tool coordinate.</li>
+<li><code>rocker</code> means the cycle returned and <code>w_i = 0</code>.</li>
+<li>Conventional planar double-crank / crank-rocker / double-rocker labels are not used here.</li>
+<li>Other ordered families remain V03 diagnostics until UUUR winding is verified.</li>
+<li>Descriptor-trend mining belongs to V05.</li>
+</ul>
+</body>
+</html>
