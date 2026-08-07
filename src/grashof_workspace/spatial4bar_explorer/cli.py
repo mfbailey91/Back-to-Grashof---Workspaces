@@ -4,12 +4,15 @@ import argparse
 from pathlib import Path
 
 from .analysis import classify_mock_branch
+from .continuation import ContinuationConfig, continue_physical_uuur_sample
 from .descriptors import generate_geometry_samples
 from .families import FAMILY_AXIS_CASES, ORDERED_FAMILIES
 from .geometry_descriptors import generate_physical_geometry_samples
 from .geometry_plots import plot_physical_geometry_3d
 from .geometry_readouts import write_sprint02b_html
+from .models import ExplorerCase, OrderedFamily, ToolAxis
 from .plots import (
+    plot_branch_trajectory,
     plot_case_schematic,
     plot_classification_counts,
     plot_descriptor_histogram,
@@ -22,6 +25,7 @@ from .readouts import (
     write_sprint00_html,
     write_sprint01_html,
     write_sprint02_html,
+    write_sprint03_html,
 )
 
 
@@ -90,6 +94,33 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
         json_path=str(physical_json.relative_to(outdir)),
     )
 
+    # Sprint V03: SE(3) closure + continuation on V02B physical UUUR samples only.
+    uuur_samples = [sample for sample in physical_samples if sample.family is OrderedFamily.UUUR][:2]
+    closure_results = []
+    trajectories = []
+    for sample in uuur_samples:
+        for tool_axis in (ToolAxis.A, ToolAxis.B):
+            case = ExplorerCase(family=OrderedFamily.UUUR, tool_axis=tool_axis)
+            trajectory, result = continue_physical_uuur_sample(
+                sample,
+                case,
+                config=ContinuationConfig(step=0.08, max_steps=120),
+            )
+            trajectories.append(trajectory)
+            closure_results.append(result)
+    trajectory_json = data_dir / "branch_trajectories.json"
+    write_json(trajectory_json, trajectories)
+    write_json(data_dir / "uuur_closure_branch_results.json", closure_results)
+    trajectory_plot = figures_dir / "uuur_branch_trajectory.png"
+    plot_branch_trajectory(trajectories[0], trajectory_plot)
+    write_sprint03_html(
+        outdir,
+        results=closure_results,
+        trajectories=trajectories,
+        trajectory_plot=str(trajectory_plot.relative_to(outdir)),
+        trajectory_json=str(trajectory_json.relative_to(outdir)),
+    )
+
     write_index_html(
         outdir,
         sprint_pages=[
@@ -97,6 +128,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             "sprint_01_parameter_inventory.html",
             "sprint_02_mock_branch_results.html",
             "sprint_02b_physical_geometry.html",
+            "sprint_03_closure.html",
         ],
         image_files=[
             str(family_plot.relative_to(outdir)),
@@ -105,6 +137,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             str(classification_plot.relative_to(outdir)),
             str(winding_pair_plot.relative_to(outdir)),
             *image_by_sample.values(),
+            str(trajectory_plot.relative_to(outdir)),
         ],
     )
 

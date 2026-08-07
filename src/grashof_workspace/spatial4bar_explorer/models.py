@@ -76,6 +76,35 @@ class BranchResult:
     notes: list[str] = field(default_factory=list)
 
 
+@dataclass(frozen=True)
+class TrajectorySample:
+    """One assembled pose along a continued one-DOF branch.
+
+    Conventions:
+    - `parameter` is the free tool-axis coordinate in radians.
+    - `joint_angles` follows the UUUR packing documented in `closure.py`.
+    - `residual_norm` is the Euclidean norm of the 6D SE(3) closure residual.
+    """
+
+    parameter: float
+    joint_angles: tuple[float, ...]
+    residual_norm: float
+    singular: bool
+
+
+@dataclass
+class BranchTrajectory:
+    sample_id: str
+    case: ExplorerCase
+    branch_id: str
+    family: OrderedFamily
+    free_parameter: str
+    samples: list[TrajectorySample]
+    branch_closed: bool
+    singularity_count: int
+    notes: list[str] = field(default_factory=list)
+
+
 @dataclass
 class SprintArtifactIndex:
     sprint_name: str

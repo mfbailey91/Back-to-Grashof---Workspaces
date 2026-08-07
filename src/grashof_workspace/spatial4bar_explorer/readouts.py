@@ -6,7 +6,7 @@ from pathlib import Path
 from .analysis import summarize_class_counts, summarize_winding_pairs
 from .descriptors import grouped_descriptor_inventory
 from .families import FAMILY_AXIS_CASES, FAMILY_NOTES, FAMILY_PARENT_MAP, ORDERED_FAMILIES
-from .models import BranchClass, BranchResult, GeometrySample, dataclass_to_jsonable
+from .models import BranchClass, BranchResult, BranchTrajectory, GeometrySample, dataclass_to_jsonable
 
 BRANCH_RESULT_SCHEMA_FIELDS: tuple[tuple[str, str], ...] = (
     ("sample_id", "Geometry sample identifier"),
@@ -238,3 +238,65 @@ True loop-closure continuation arrives in Sprint V03; true winding arrives in Sp
 </body></html>
 """
     (outdir / "sprint_02_mock_branch_results.html").write_text(html, encoding="utf-8")
+
+
+def write_sprint03_html(
+    outdir: Path,
+    *,
+    results: list[BranchResult],
+    trajectories: list[BranchTrajectory],
+    trajectory_plot: str,
+    trajectory_json: str,
+) -> None:
+    rows = []
+    for result in results:
+        rows.append(
+            "<tr>"
+            f"<td>{result.sample_id}</td>"
+            f"<td>{result.case.slug}</td>"
+            f"<td>{result.branch_closed}</td>"
+            f"<td>{result.singularity_count}</td>"
+            f"<td>{result.class_alpha.value}</td>"
+            f"<td>{'—' if result.tool_range_alpha is None else f'{result.tool_range_alpha:.3f}'}</td>"
+            f"<td>{'—' if result.tool_range_beta is None else f'{result.tool_range_beta:.3f}'}</td>"
+            f"<td>{', '.join(result.notes)}</td>"
+            "</tr>"
+        )
+    traj_rows = []
+    for trajectory in trajectories:
+        traj_rows.append(
+            "<tr>"
+            f"<td>{trajectory.sample_id}</td>"
+            f"<td>{trajectory.case.slug}</td>"
+            f"<td>{trajectory.free_parameter}</td>"
+            f"<td>{len(trajectory.samples)}</td>"
+            f"<td>{trajectory.branch_closed}</td>"
+            f"<td>{trajectory.singularity_count}</td>"
+            f"<td>{', '.join(trajectory.notes)}</td>"
+            "</tr>"
+        )
+    html = f"""<!doctype html>
+<html lang=\"en\"><head><meta charset=\"utf-8\"><title>Sprint 03</title></head>
+<body>
+<h1>Sprint 03 — UUUR closure and continuation</h1>
+<p><strong>PHYSICAL GEOMETRY CLOSURE / WINDING NOT COMPUTED YET (V04).</strong></p>
+<p>
+Sprint V03 solves an SE(3) loop-closure residual on V02B physical UUUR assemblies and continues a
+one-DOF branch in the selected tool-axis coordinate. Labels below are provisional continuation
+outcomes, not true winding-based crank/rocker classifications.
+</p>
+<p><a href=\"{trajectory_json}\">branch_trajectories.json</a></p>
+<img src=\"{trajectory_plot}\" alt=\"branch trajectory\" style=\"max-width: 1000px;\">
+<h2>Continued branch summaries</h2>
+<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
+<tr><th>Sample</th><th>Case</th><th>Free parameter</th><th>Samples</th><th>Closed</th><th>Singularities</th><th>Notes</th></tr>
+{''.join(traj_rows)}
+</table>
+<h2>BranchResult records from continuation</h2>
+<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
+<tr><th>Sample</th><th>Case</th><th>Closed</th><th>Singularities</th><th>Class</th><th>range_alpha</th><th>range_beta</th><th>Notes</th></tr>
+{''.join(rows)}
+</table>
+</body></html>
+"""
+    (outdir / "sprint_03_closure.html").write_text(html, encoding="utf-8")

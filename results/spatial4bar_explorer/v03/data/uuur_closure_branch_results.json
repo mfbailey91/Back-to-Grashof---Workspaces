@@ -1,0 +1,91 @@
+[
+  {
+    "sample_id": "uuur_physical_000",
+    "case": {
+      "family": "UUUR",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": false,
+    "singularity_count": 0,
+    "w_alpha": null,
+    "w_beta": null,
+    "class_alpha": "open_branch",
+    "class_beta": "open_branch",
+    "tool_range_alpha": 4.110000000000001,
+    "tool_range_beta": 1.0406552322881184,
+    "notes": [
+      "closure_continuation_v03",
+      "winding_pending_v04",
+      "free_parameter=u0_alpha",
+      "corrector_failed"
+    ]
+  },
+  {
+    "sample_id": "uuur_physical_000",
+    "case": {
+      "family": "UUUR",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": false,
+    "singularity_count": 0,
+    "w_alpha": null,
+    "w_beta": null,
+    "class_alpha": "open_branch",
+    "class_beta": "open_branch",
+    "tool_range_alpha": 1.73211012764451,
+    "tool_range_beta": 0.43000000000000005,
+    "notes": [
+      "closure_continuation_v03",
+      "winding_pending_v04",
+      "free_parameter=u0_beta",
+      "corrector_failed"
+    ]
+  },
+  {
+    "sample_id": "uuur_physical_001",
+    "case": {
+      "family": "UUUR",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": null,
+    "w_beta": null,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 6.240000000000004,
+    "tool_range_beta": 0.7704659534383599,
+    "notes": [
+      "closure_continuation_v03",
+      "winding_pending_v04",
+      "free_parameter=u0_alpha",
+      "free_parameter_period",
+      "provisional_label_pending_true_winding_v04"
+    ]
+  },
+  {
+    "sample_id": "uuur_physical_001",
+    "case": {
+      "family": "UUUR",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": false,
+    "singularity_count": 0,
+    "w_alpha": null,
+    "w_beta": null,
+    "class_alpha": "open_branch",
+    "class_beta": "open_branch",
+    "tool_range_alpha": 1.539387197149666,
+    "tool_range_beta": 0.6000000000000001,
+    "notes": [
+      "closure_continuation_v03",
+      "winding_pending_v04",
+      "free_parameter=u0_beta",
+      "corrector_failed"
+    ]
+  }
+]

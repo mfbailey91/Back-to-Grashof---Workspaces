@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Sprint 03</title></head>
+<body>
+<h1>Sprint 03 — UUUR closure and continuation</h1>
+<p><strong>PHYSICAL GEOMETRY CLOSURE / WINDING NOT COMPUTED YET (V04).</strong></p>
+<p>
+Sprint V03 solves an SE(3) loop-closure residual on V02B physical UUUR assemblies and continues a
+one-DOF branch in the selected tool-axis coordinate. Labels below are provisional continuation
+outcomes, not true winding-based crank/rocker classifications.
+</p>
+<p><a href="data/branch_trajectories.json">branch_trajectories.json</a></p>
+<img src="figures/uuur_branch_trajectory.png" alt="branch trajectory" style="max-width: 1000px;">
+<h2>Continued branch summaries</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<tr><th>Sample</th><th>Case</th><th>Free parameter</th><th>Samples</th><th>Closed</th><th>Singularities</th><th>Notes</th></tr>
+<tr><td>uuur_physical_000</td><td>uuur_tool_a</td><td>u0_alpha</td><td>54</td><td>False</td><td>0</td><td>closure_continuation_v03, winding_pending_v04, free_parameter=u0_alpha, corrector_failed</td></tr><tr><td>uuur_physical_000</td><td>uuur_tool_b</td><td>u0_beta</td><td>8</td><td>False</td><td>0</td><td>closure_continuation_v03, winding_pending_v04, free_parameter=u0_beta, corrector_failed</td></tr><tr><td>uuur_physical_001</td><td>uuur_tool_a</td><td>u0_alpha</td><td>79</td><td>True</td><td>0</td><td>closure_continuation_v03, winding_pending_v04, free_parameter=u0_alpha, free_parameter_period, provisional_label_pending_true_winding_v04</td></tr><tr><td>uuur_physical_001</td><td>uuur_tool_b</td><td>u0_beta</td><td>10</td><td>False</td><td>0</td><td>closure_continuation_v03, winding_pending_v04, free_parameter=u0_beta, corrector_failed</td></tr>
+</table>
+<h2>BranchResult records from continuation</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<tr><th>Sample</th><th>Case</th><th>Closed</th><th>Singularities</th><th>Class</th><th>range_alpha</th><th>range_beta</th><th>Notes</th></tr>
+<tr><td>uuur_physical_000</td><td>uuur_tool_a</td><td>False</td><td>0</td><td>open_branch</td><td>4.110</td><td>1.041</td><td>closure_continuation_v03, winding_pending_v04, free_parameter=u0_alpha, corrector_failed</td></tr><tr><td>uuur_physical_000</td><td>uuur_tool_b</td><td>False</td><td>0</td><td>open_branch</td><td>1.732</td><td>0.430</td><td>closure_continuation_v03, winding_pending_v04, free_parameter=u0_beta, corrector_failed</td></tr><tr><td>uuur_physical_001</td><td>uuur_tool_a</td><td>True</td><td>0</td><td>rocker</td><td>6.240</td><td>0.770</td><td>closure_continuation_v03, winding_pending_v04, free_parameter=u0_alpha, free_parameter_period, provisional_label_pending_true_winding_v04</td></tr><tr><td>uuur_physical_001</td><td>uuur_tool_b</td><td>False</td><td>0</td><td>open_branch</td><td>1.539</td><td>0.600</td><td>closure_continuation_v03, winding_pending_v04, free_parameter=u0_beta, corrector_failed</td></tr>
+</table>
+</body></html>
