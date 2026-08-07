@@ -189,7 +189,9 @@ def plot_branch_snapshots(
     if count < 2:
         indices = [0]
     else:
-        indices = sorted(set(round(index * (len(trace.points) - 1) / (count - 1)) for index in range(count)))
+        indices = sorted(
+            {round(index * (len(trace.points) - 1) / (count - 1)) for index in range(count)}
+        )
     limits = branch_snapshot_limits(geometry, trace)
     paths: list[Path] = []
     for index in indices:
@@ -240,7 +242,7 @@ def animate_branch(
     )
     figure.tight_layout()
 
-    def _update(frame_index: int) -> list:
+    def _update(frame_index: int) -> list[Any]:
         point = frames[frame_index]
         return _draw_state(
             axis,

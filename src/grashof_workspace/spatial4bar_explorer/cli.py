@@ -18,6 +18,7 @@ from .continuation_plots import (
 from .continuation_readouts import write_sprint03_html
 from .descriptors import generate_geometry_samples
 from .families import FAMILY_AXIS_CASES, ORDERED_FAMILIES
+from .geometry import PhysicalGeometrySample
 from .geometry_descriptors import generate_physical_geometry_samples
 from .geometry_plots import plot_physical_geometry_3d
 from .geometry_readouts import write_sprint02b_html
@@ -85,16 +86,18 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
 
     # Sprint V02B: physical geometry objects replace the V01 random-descriptor
     # corpus as the input source for all future kinematic experiments.
-    physical_samples = []
+    physical_samples: list[PhysicalGeometrySample] = []
     image_by_sample: dict[str, str] = {}
     physical_count = max(2, sample_count)
     for family in ORDERED_FAMILIES:
-        family_samples = generate_physical_geometry_samples(family, count=physical_count, seed=202)
-        physical_samples.extend(family_samples)
-        for sample in family_samples[:2]:
-            path = figures_dir / f"physical_{sample.sample_id}.png"
-            plot_physical_geometry_3d(sample.geometry, path)
-            image_by_sample[sample.sample_id] = str(path.relative_to(outdir))
+        physical_family_samples = generate_physical_geometry_samples(
+            family, count=physical_count, seed=202
+        )
+        physical_samples.extend(physical_family_samples)
+        for physical_sample in physical_family_samples[:2]:
+            path = figures_dir / f"physical_{physical_sample.sample_id}.png"
+            plot_physical_geometry_3d(physical_sample.geometry, path)
+            image_by_sample[physical_sample.sample_id] = str(path.relative_to(outdir))
     physical_json = data_dir / "physical_geometry_samples.json"
     write_json(physical_json, physical_samples)
     write_sprint02b_html(

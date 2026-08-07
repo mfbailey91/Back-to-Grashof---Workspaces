@@ -37,7 +37,7 @@ def plot_descriptor_histogram(samples: list[GeometrySample], descriptor_name: st
 
 
 def plot_classification_counts(results: list[BranchResult], outpath: Path) -> None:
-    counter = Counter()
+    counter: Counter[str] = Counter()
     for result in results:
         counter[result.class_alpha.value] += 1
         counter[result.class_beta.value] += 1

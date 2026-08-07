@@ -9,13 +9,13 @@ from .geometry import (
     angle_deg,
     canonical_geometry,
     distance,
+    dot,
     line_to_line_distance,
     perturb_geometry,
     point_to_axis_distance,
     signed_tetrahedral_volume,
     stable_family_seed,
     subtract,
-    dot,
 )
 from .models import GeometryDescriptor, OrderedFamily
 

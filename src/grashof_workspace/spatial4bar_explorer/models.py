@@ -98,7 +98,7 @@ def dataclass_to_jsonable(value: Any) -> Any:
     if isinstance(value, Path):
         return str(value)
     if hasattr(value, "value"):
-        return getattr(value, "value")
+        return value.value
     if isinstance(value, (list, tuple)):
         return [dataclass_to_jsonable(item) for item in value]
     if isinstance(value, dict):

@@ -56,9 +56,11 @@ def _corrector(
         augmented_jacobian = np.vstack((jacobian, tangent))
         delta, *_ = np.linalg.lstsq(augmented_jacobian, -augmented, rcond=None)
         q = q + delta
-        if float(np.linalg.norm(delta)) < tolerance * 0.1:
-            if float(np.linalg.norm(closure_residual(geometry, q))) < tolerance * 10.0:
-                return q, True, iteration
+        if (
+            float(np.linalg.norm(delta)) < tolerance * 0.1
+            and float(np.linalg.norm(closure_residual(geometry, q))) < tolerance * 10.0
+        ):
+            return q, True, iteration
     return q, False, max_iterations
 
 

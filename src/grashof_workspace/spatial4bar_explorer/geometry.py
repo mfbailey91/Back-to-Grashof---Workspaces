@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from enum import Enum
 import math
 import random
-from typing import Iterable
+from collections.abc import Iterable
+from dataclasses import dataclass
+from enum import Enum
 
 from .models import GeometryDescriptor, OrderedFamily
 

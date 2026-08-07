@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import math
+from dataclasses import dataclass
 
 import numpy as np
 
@@ -75,7 +75,7 @@ def _skew(vector: Array) -> Array:
 def _rotation_about_axis(direction: Array, angle: float) -> Array:
     axis = direction / np.linalg.norm(direction)
     k = _skew(axis)
-    return np.eye(3) + math.sin(angle) * k + (1.0 - math.cos(angle)) * (k @ k)
+    return np.asarray(np.eye(3) + math.sin(angle) * k + (1.0 - math.cos(angle)) * (k @ k), dtype=float)
 
 
 def revolute_transform(origin: tuple[float, float, float], direction: tuple[float, float, float], angle: float) -> Array:
@@ -177,11 +177,11 @@ def audit_reference_geometry(geometry: SpatialFourBarGeometry, *, rank_tol: floa
 
 def transform_point(transform: Array, point: tuple[float, float, float]) -> Array:
     homogeneous = np.array((*point, 1.0), dtype=float)
-    return (transform @ homogeneous)[:3]
+    return np.asarray((transform @ homogeneous)[:3], dtype=float)
 
 
 def transform_direction(transform: Array, direction: tuple[float, float, float]) -> Array:
-    return transform[:3, :3] @ np.asarray(direction, dtype=float)
+    return np.asarray(transform[:3, :3] @ np.asarray(direction, dtype=float), dtype=float)
 
 
 def mechanism_state(geometry: SpatialFourBarGeometry, q: Array) -> tuple[Array, tuple[tuple[Array, Array, str], ...]]:
