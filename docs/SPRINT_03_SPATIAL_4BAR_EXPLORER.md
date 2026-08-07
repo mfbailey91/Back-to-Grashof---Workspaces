@@ -241,6 +241,21 @@ See [`docs/SPRINT_V04_WINDING_AND_CRANK_ATLAS.md`](SPRINT_V04_WINDING_AND_CRANK_
 - at least one crank and one rocker example are visualized;
 - UUUR-first; other families remain V03 diagnostics until winding is verified on UUUR.
 
+## Sprint V04B — virtual-U robustness and orientation sweep
+
+### Goal
+Verify that V04 crank/rocker labels are stable under continuation step size, tangent direction, controlled virtual tool-`U` orientation, and tool-axis serial order (`ab` vs `ba`) before descriptor mining.
+
+See [`docs/SPRINT_V04B_VIRTUAL_U_ROBUSTNESS.md`](SPRINT_V04B_VIRTUAL_U_ROBUSTNESS.md).
+
+### Guardrail for V05
+Do not treat tool-frame orientation or axis order as irrelevant parameters unless V04B sweeps support that simplification.
+
+### Deliverables
+- standalone runner `spatial4bar_explorer.v04b`;
+- step-size / direction-reversal / orientation-sweep JSON and plots;
+- `sprint_04b_virtual_u_robustness.html`.
+
 ## Sprint V05 — descriptor trend mining
 
 ### Goal
