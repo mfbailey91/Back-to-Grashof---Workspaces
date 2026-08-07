@@ -3,6 +3,14 @@
 **Status:** insertion sprint before V05 descriptor mining  
 **Purpose:** verify that V04 crank/rocker labels are stable numerical properties of the continued mechanism branch and are not artifacts of continuation direction, step size, or one arbitrary virtual-tool `U` coordinate convention.
 
+> **DIAGNOSTIC ONLY — `phi` is not a dexterity-atlas parameter.**
+>
+> The `phi` sweep deliberately rotates an otherwise arbitrary standalone virtual-U
+> coordinate frame to test sensitivity.  Its non-invariant result means the U axes
+> cannot be selected arbitrarily.  Do not promote `phi` into the dexterity
+> parameterization unless a task-derived `S_v -> U_v` pointing-fiber construction
+> proves that changing `phi` represents a different legitimate pointing fiber.
+
 ## Why V04B exists
 
 V04 established a real numerical result for `UUUR`: one physical mechanism solve produces a returned one-DOF cycle and both tool-`U` coordinates on that same branch,
@@ -76,6 +84,9 @@ Hold all joint centers and all non-tool joint frames fixed. Rotate only the virt
 phi = 0 ... 360 deg.
 ```
 
+This sweep has experiment role `diagnostic_sensitivity_only`.  It is a
+falsification/sensitivity check on coordinate choice, not a physical fiber sweep.
+
 For each `phi`:
 
 1. rebuild only the tool-`U` axes;
@@ -95,7 +106,12 @@ R_a(alpha) R_b(beta)
 R_b(beta) R_a(alpha)
 ```
 
-The two perpendicular axis lines are unchanged; only their serial coordinate order is changed. Differences diagnose coordinate sensitivity. They do not by themselves establish a new physical mechanism parameter; physical interpretation waits for the task-derived `S_v -> U_v` fiber construction.
+The two perpendicular axis lines are unchanged; only their serial coordinate
+order is changed. Differences diagnose coordinate sensitivity. They do not by
+themselves establish a new physical mechanism parameter. For dexterity, the order
+and axes must be fixed by the task-derived pointing-slice construction; this
+diagnostic does not by itself promote axis order or `phi` to physical atlas
+parameters. See [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md).
 
 ### E. Winding versus angular coverage
 

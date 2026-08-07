@@ -44,6 +44,11 @@ U_t(alpha, beta) = R_a(alpha) R_b(beta)
 
 so the first explorer contains **12 family–axis cases**.
 
+These are **12 rotatability/classification questions, not 12 unrelated physical
+mechanisms or 12 required closure solves**.  A physical UXXX branch carries both
+`alpha(s)` and `beta(s)`; A and B remain separate designated-axis questions and
+must both remain visible in the readouts.
+
 ## Required outputs
 
 Every sprint should publish:
@@ -249,7 +254,16 @@ Verify that V04 crank/rocker labels are stable under continuation step size, tan
 See [`docs/SPRINT_V04B_VIRTUAL_U_ROBUSTNESS.md`](SPRINT_V04B_VIRTUAL_U_ROBUSTNESS.md).
 
 ### Guardrail for V05
-Do not treat tool-frame orientation or axis order as irrelevant parameters unless V04B sweeps support that simplification.
+V04B `phi` is a **diagnostic sensitivity experiment only**.  Rotating an
+arbitrarily chosen standalone virtual-U frame and observing different answers
+shows that the U axes cannot be chosen arbitrarily.  It does not establish
+`phi` as a dexterity-atlas parameter.
+
+Before V05 uses UXXX results as dexterity evidence, the `S_v -> U_v` reduction
+must derive the A/B axes from an explicit pointing slice/fiber.  Standalone
+`phi` sweeps remain mechanism-laboratory diagnostics. See
+[`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md) and
+[`AUDIT_TOOL_AXIS_AND_PHI.md`](AUDIT_TOOL_AXIS_AND_PHI.md).
 
 ### Deliverables
 - standalone runner `spatial4bar_explorer.v04b`;

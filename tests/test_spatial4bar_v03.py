@@ -100,6 +100,8 @@ def test_v03_visuals_and_html_are_generated(tmp_path: Path) -> None:
         snapshot_paths=[str(path.relative_to(tmp_path)) for path in snapshots],
         audit_json="data/audit.json",
         trace_json="data/traces.json",
+        axis_drive_cards=[],
+        axis_drive_json="data/axis_drive.json",
     )
     html = (tmp_path / "sprint_03_closure_and_continuation.html").read_text(encoding="utf-8")
     assert "V03A" in html
@@ -109,6 +111,7 @@ def test_v03_visuals_and_html_are_generated(tmp_path: Path) -> None:
     assert "S-joint x/y/z" in html
     assert "Canonical local branch animation" in html
     assert "Canonical local branch animations (all families)" in html
+    assert "Prescribed tool-A and tool-B drive diagnostics" in html
     assert "not driven by" in html
     assert "validated dexterity-derived pointing fiber" in html
     assert "local branch motion only" in html
