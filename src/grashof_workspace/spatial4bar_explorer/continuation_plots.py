@@ -113,8 +113,8 @@ def _branch_frame_title(
     alpha = float(q[coordinate_names.index("tool_alpha")])
     beta = float(q[coordinate_names.index("tool_beta")])
     return (
-        f"{family} branch: s={arclength:.2f} | "
-        f"tool_a={alpha:+.2f} rad | tool_b={beta:+.2f} rad"
+        f"{family} canonical local branch | param=s (not driven) | "
+        f"s={arclength:.2f} | tool_a={alpha:+.2f} rad | tool_b={beta:+.2f} rad"
     )
 
 

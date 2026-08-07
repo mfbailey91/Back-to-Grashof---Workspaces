@@ -127,6 +127,8 @@ canonical local branch animation
 
 not as a driven `tool_a` mechanism.
 
+Frame titles for mechanism-explorer GIFs must lead with that label and state `param=s (not driven)`, then report `tool_a` / `tool_b` only as chart readouts.
+
 Future task-derived fiber animations should visibly include:
 
 - the tool point and virtual `S_v` center;
@@ -135,6 +137,13 @@ Future task-derived fiber animations should visibly include:
 - the pointing-slice definition / curve;
 - `alpha(s)` and `beta(s)` readouts;
 - a clear statement that continuation arclength `s`, not `tool_a`, is the branch parameter unless an input is explicitly prescribed.
+
+### Acceptance by provenance
+
+| Provenance | Required on branch animations |
+| --- | --- |
+| `mechanism_explorer_only` (V03-style) | Label **canonical local branch**; `param=s (not driven)`; may highlight chart axes `tool_a`/`tool_b` as readouts; must not claim a driven `tool_a` input or a validated `S_v -> U_v` fiber. |
+| `task_derived` (V05+ research evidence) | All six future elements above: tool point / `S_v`, pointing direction `d`, derived `R_a`/`R_b`, slice definition or curve, `alpha(s)`/`beta(s)` readouts, and an explicit branch-parameter statement (`s` unless an input is prescribed). |
 
 ## V05 evidence gate
 

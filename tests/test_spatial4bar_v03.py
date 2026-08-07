@@ -128,5 +128,7 @@ def test_branch_frame_title_reports_tool_a_and_tool_b() -> None:
         (0.12, -0.34, 0.0, 0.0, 0.0, 0.0, 0.0),
         ("tool_alpha", "tool_beta", "j2_u1", "j2_u2", "j3_u1", "j3_u2", "j4_r1"),
     )
+    assert "canonical local branch" in title
+    assert "param=s (not driven)" in title
     assert "tool_a=+0.12 rad" in title
     assert "tool_b=-0.34 rad" in title

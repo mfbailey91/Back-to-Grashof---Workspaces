@@ -74,7 +74,7 @@ For every family publish:
 - minimum singularity-margin distributions;
 - representative 3D crank, rocker, and near-boundary mechanisms;
 - representative unresolved/open cases;
-- selected branch GIFs showing the tool point, pointing direction `d`, and derived `R_a` / `R_b` axes;
+- selected branch GIFs that satisfy the task-derived animation contract in [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md): tool point and virtual `S_v` center; pointing direction `d`; derived `R_a` / `R_b` axes; pointing-slice definition / curve; `alpha(s)` and `beta(s)` readouts; and an explicit statement that continuation arclength `s` (not `tool_a`) is the branch parameter unless an input is prescribed;
 - geometry cards with the most important physical descriptors.
 
 ## Dataset contract
