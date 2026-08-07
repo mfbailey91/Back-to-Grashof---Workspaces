@@ -22,6 +22,7 @@ from .geometry import PhysicalGeometrySample
 from .geometry_descriptors import generate_physical_geometry_samples
 from .geometry_plots import plot_physical_geometry_3d
 from .geometry_readouts import write_sprint02b_html
+from .models import OrderedFamily
 from .plots import (
     plot_case_schematic,
     plot_classification_counts,
@@ -36,6 +37,13 @@ from .readouts import (
     write_sprint01_html,
     write_sprint02_html,
 )
+from .winding import classify_physical_sample, select_crank_and_rocker_examples
+from .winding_plots import (
+    plot_classification_cards,
+    plot_unwrapped_tool_angles,
+    plot_winding_summary,
+)
+from .winding_readouts import write_sprint04_html
 
 
 def build_readouts(outdir: Path, sample_count: int) -> None:
@@ -161,6 +169,51 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
         trace_json=str(trace_json.relative_to(outdir)),
     )
 
+    # Sprint V04: UUUR-first true winding from returned continued cycles.
+    uuur_samples = [
+        sample for sample in physical_samples if sample.family is OrderedFamily.UUUR
+    ]
+    # Prefer a slightly denser UUUR corpus so crank and rocker examples coexist.
+    if len(uuur_samples) < 6:
+        uuur_samples = generate_physical_geometry_samples(
+            OrderedFamily.UUUR, count=max(6, physical_count), seed=202
+        )
+    v04_classifications = [
+        classify_physical_sample(sample, step_size=0.05, max_steps=1200)
+        for sample in uuur_samples
+    ]
+    cycle_json = data_dir / "v04_uuur_cycle_traces.json"
+    results_json = data_dir / "v04_uuur_winding_results.json"
+    write_json(cycle_json, [item.cycle for item in v04_classifications])
+    write_json(results_json, v04_classifications)
+    winding_summary_plot = figures_dir / "v04_uuur_winding_summary.png"
+    classification_plot_v04 = figures_dir / "v04_uuur_classification_counts.png"
+    plot_winding_summary(v04_classifications, winding_summary_plot)
+    plot_classification_cards(v04_classifications, classification_plot_v04)
+    crank_example, rocker_example = select_crank_and_rocker_examples(v04_classifications)
+    crank_angle_plot = figures_dir / "v04_uuur_crank_unwrapped.png"
+    rocker_angle_plot = figures_dir / "v04_uuur_rocker_unwrapped.png"
+    crank_rel: str | None = None
+    rocker_rel: str | None = None
+    if crank_example is not None:
+        plot_unwrapped_tool_angles(crank_example, crank_angle_plot)
+        crank_rel = str(crank_angle_plot.relative_to(outdir))
+    if rocker_example is not None:
+        plot_unwrapped_tool_angles(rocker_example, rocker_angle_plot)
+        rocker_rel = str(rocker_angle_plot.relative_to(outdir))
+    write_sprint04_html(
+        outdir,
+        classifications=v04_classifications,
+        crank_example=crank_example,
+        rocker_example=rocker_example,
+        winding_summary_plot=str(winding_summary_plot.relative_to(outdir)),
+        classification_plot=str(classification_plot_v04.relative_to(outdir)),
+        crank_angle_plot=crank_rel,
+        rocker_angle_plot=rocker_rel,
+        results_json=str(results_json.relative_to(outdir)),
+        traces_json=str(cycle_json.relative_to(outdir)),
+    )
+
     write_index_html(
         outdir,
         sprint_pages=[
@@ -169,6 +222,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             "sprint_02_mock_branch_results.html",
             "sprint_02b_physical_geometry.html",
             "sprint_03_closure_and_continuation.html",
+            "sprint_04_winding_and_crank.html",
         ],
         image_files=[
             str(family_plot.relative_to(outdir)),
@@ -184,9 +238,12 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             str(phase_plot.relative_to(outdir)),
             *[path for _, path in animation_relpaths],
             *snapshot_relpaths,
+            str(winding_summary_plot.relative_to(outdir)),
+            str(classification_plot_v04.relative_to(outdir)),
+            *([crank_rel] if crank_rel else []),
+            *([rocker_rel] if rocker_rel else []),
         ],
     )
-
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build spatial 4-bar explorer readouts.")

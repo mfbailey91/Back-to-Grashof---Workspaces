@@ -218,18 +218,28 @@ Each physical mechanism is solved once. The two tool-U coordinates are read from
 ## Sprint V04 — true winding and crank atlas
 
 ### Goal
-Compute actual winding numbers for the two tool coordinates and generate the first crank atlas.
+Compute actual winding numbers for the two tool coordinates from continued one-DOF closure branches and generate the first UUUR crank atlas.
+
+See [`docs/SPRINT_V04_WINDING_AND_CRANK_ATLAS.md`](SPRINT_V04_WINDING_AND_CRANK_ATLAS.md) for the full research definition.
+
+### Conventions
+- **Angle unwrap:** continuous nearest-`2π` accumulation of each scalar coordinate along the continuation trace.
+- **Branch return:** after leaving a neighborhood of `q_0`, re-enter a wrapped tolerance ball of the reference assembly with small closure residual.
+- **Winding:** `w_i = round(Δθ̃_i / 2π)` for `i ∈ {tool_alpha, tool_beta}` on a returned cycle.
+- **Classification (link-specific, not planar Grashof):** `crank` if `|w_i| ≥ 1`, `rocker` if returned and `w_i = 0`, `open_branch` if no return within budget.
 
 ### Deliverables
 - angle unwrapping;
-- branch return detection;
+- branch return detection (`continue_until_return`);
 - winding calculation `W = (w_alpha, w_beta)`;
 - branch-classification plots;
-- representative crank and rocker cases rendered as plots and HTML cards.
+- representative crank and rocker cases rendered as plots and HTML cards;
+- `sprint_04_winding_and_crank.html`.
 
 ### Acceptance
 - winding is computed from continued branches, not inferred heuristically;
-- at least one crank and one rocker example are visualized.
+- at least one crank and one rocker example are visualized;
+- UUUR-first; other families remain V03 diagnostics until winding is verified on UUUR.
 
 ## Sprint V05 — descriptor trend mining
 

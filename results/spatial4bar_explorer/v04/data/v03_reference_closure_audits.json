@@ -1,0 +1,104 @@
+[
+  {
+    "family": "UUUR",
+    "coordinate_count": 7,
+    "closure_norm": 0.0,
+    "jacobian_rank": 6,
+    "jacobian_nullity": 1,
+    "singular_values": [
+      3.082846272233767,
+      2.3256811089765295,
+      1.52721531440215,
+      0.9652158233840774,
+      0.34948212678631924,
+      0.19311828911666595
+    ],
+    "smallest_nonzero_singular_value": 0.19311828911666595,
+    "status": "PASS"
+  },
+  {
+    "family": "UURU",
+    "coordinate_count": 7,
+    "closure_norm": 0.0,
+    "jacobian_rank": 6,
+    "jacobian_nullity": 1,
+    "singular_values": [
+      2.8149231479470087,
+      1.839808539032293,
+      1.1825251086623405,
+      1.0615691424233011,
+      0.6973233525572251,
+      0.06474286536822561
+    ],
+    "smallest_nonzero_singular_value": 0.06474286536822561,
+    "status": "PASS"
+  },
+  {
+    "family": "URUU",
+    "coordinate_count": 7,
+    "closure_norm": 0.0,
+    "jacobian_rank": 6,
+    "jacobian_nullity": 1,
+    "singular_values": [
+      3.0245015368172217,
+      2.4923982196553847,
+      1.563877992340496,
+      0.9781502354431441,
+      0.8818072834103001,
+      0.4507218548113889
+    ],
+    "smallest_nonzero_singular_value": 0.4507218548113889,
+    "status": "PASS"
+  },
+  {
+    "family": "USRR",
+    "coordinate_count": 7,
+    "closure_norm": 0.0,
+    "jacobian_rank": 6,
+    "jacobian_nullity": 1,
+    "singular_values": [
+      2.5639273440214385,
+      2.254993693898095,
+      1.4569005203964573,
+      0.8117979857918243,
+      0.6008649308592331,
+      0.2111599907711465
+    ],
+    "smallest_nonzero_singular_value": 0.2111599907711465,
+    "status": "PASS"
+  },
+  {
+    "family": "URSR",
+    "coordinate_count": 7,
+    "closure_norm": 0.0,
+    "jacobian_rank": 6,
+    "jacobian_nullity": 1,
+    "singular_values": [
+      3.3024854699931807,
+      2.5615771853014504,
+      1.4349155988777123,
+      0.9269553864706708,
+      0.6348459528596085,
+      0.3817548390698942
+    ],
+    "smallest_nonzero_singular_value": 0.3817548390698942,
+    "status": "PASS"
+  },
+  {
+    "family": "URRS",
+    "coordinate_count": 7,
+    "closure_norm": 0.0,
+    "jacobian_rank": 6,
+    "jacobian_nullity": 1,
+    "singular_values": [
+      2.453930851911195,
+      2.225400823334748,
+      1.5449272684965718,
+      1.1685411776545296,
+      0.9405072759848544,
+      0.25164615034674526
+    ],
+    "smallest_nonzero_singular_value": 0.25164615034674526,
+    "status": "PASS"
+  }
+]
