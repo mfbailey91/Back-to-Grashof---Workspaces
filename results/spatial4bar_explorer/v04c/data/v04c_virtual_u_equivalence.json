@@ -1,0 +1,619 @@
+{
+  "sample_id": "uuur_physical_000",
+  "axis_order_shift_deg": 90.0,
+  "axis_order_equivalent_on_tested_geometry": true,
+  "half_turn_periodic_on_tested_geometry": true,
+  "provisional_axis_order_decision": "canonicalize_to_ab",
+  "provisional_phi_domain": "[0,180)",
+  "axis_order_symmetry": [
+    {
+      "ba_phi_deg": 0.0,
+      "matched_ab_phi_deg": 90.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 30.0,
+      "matched_ab_phi_deg": 120.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 60.0,
+      "matched_ab_phi_deg": 150.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 90.0,
+      "matched_ab_phi_deg": 180.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 120.0,
+      "matched_ab_phi_deg": 210.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 150.0,
+      "matched_ab_phi_deg": 240.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 180.0,
+      "matched_ab_phi_deg": 270.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 210.0,
+      "matched_ab_phi_deg": 300.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 240.0,
+      "matched_ab_phi_deg": 330.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 270.0,
+      "matched_ab_phi_deg": 0.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 300.0,
+      "matched_ab_phi_deg": 30.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "ba_phi_deg": 330.0,
+      "matched_ab_phi_deg": 60.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_match": true,
+      "coverage_match": true,
+      "passed": true
+    }
+  ],
+  "half_turn_periodicity": [
+    {
+      "phi_deg": 0.0,
+      "matched_phi_deg": 180.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_magnitude_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "phi_deg": 30.0,
+      "matched_phi_deg": 210.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_magnitude_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "phi_deg": 60.0,
+      "matched_phi_deg": 240.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_magnitude_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "phi_deg": 90.0,
+      "matched_phi_deg": 270.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_magnitude_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "phi_deg": 120.0,
+      "matched_phi_deg": 300.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_magnitude_match": true,
+      "coverage_match": true,
+      "passed": true
+    },
+    {
+      "phi_deg": 150.0,
+      "matched_phi_deg": 330.0,
+      "status_match": true,
+      "class_match": true,
+      "winding_magnitude_match": true,
+      "coverage_match": true,
+      "passed": true
+    }
+  ],
+  "budget_resolution": {
+    "ab_phi_120": {
+      "resolution": "budget_limited_return",
+      "runs": [
+        {
+          "phi_deg": 120.0,
+          "axis_order": "ab",
+          "max_steps": 1600,
+          "returned": false,
+          "status": "open_branch",
+          "w_alpha": null,
+          "w_beta": null,
+          "class_alpha": "open_branch",
+          "class_beta": "open_branch",
+          "points": 1601
+        },
+        {
+          "phi_deg": 120.0,
+          "axis_order": "ab",
+          "max_steps": 3200,
+          "returned": true,
+          "status": "returned",
+          "w_alpha": 0,
+          "w_beta": 0,
+          "class_alpha": "rocker",
+          "class_beta": "rocker",
+          "points": 1685
+        }
+      ]
+    },
+    "ab_phi_300": {
+      "resolution": "budget_limited_return",
+      "runs": [
+        {
+          "phi_deg": 300.0,
+          "axis_order": "ab",
+          "max_steps": 1600,
+          "returned": false,
+          "status": "open_branch",
+          "w_alpha": null,
+          "w_beta": null,
+          "class_alpha": "open_branch",
+          "class_beta": "open_branch",
+          "points": 1601
+        },
+        {
+          "phi_deg": 300.0,
+          "axis_order": "ab",
+          "max_steps": 3200,
+          "returned": true,
+          "status": "returned",
+          "w_alpha": 0,
+          "w_beta": 0,
+          "class_alpha": "rocker",
+          "class_beta": "rocker",
+          "points": 1685
+        }
+      ]
+    }
+  },
+  "transition_intervals": [
+    [
+      0.0,
+      30.0
+    ],
+    [
+      30.0,
+      60.0
+    ],
+    [
+      60.0,
+      90.0
+    ],
+    [
+      120.0,
+      150.0
+    ]
+  ],
+  "transition_probes": [
+    {
+      "phi_deg": 0.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": -1,
+      "w_beta": 0,
+      "class_alpha": "crank",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.9939984758830308,
+      "coverage_beta": 0.3036462499335799,
+      "min_singular_value": 0.10793573119269198,
+      "points": 466
+    },
+    {
+      "phi_deg": 5.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": -1,
+      "w_beta": 0,
+      "class_alpha": "crank",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.9912774373771632,
+      "coverage_beta": 0.3047849341728672,
+      "min_singular_value": 0.10696897143762346,
+      "points": 458
+    },
+    {
+      "phi_deg": 10.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": -1,
+      "w_beta": 0,
+      "class_alpha": "crank",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.9930315544390723,
+      "coverage_beta": 0.31428258275468196,
+      "min_singular_value": 0.03575748067073494,
+      "points": 467
+    },
+    {
+      "phi_deg": 15.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.5630718189536457,
+      "coverage_beta": 0.2626814893609956,
+      "min_singular_value": 0.10204405332526151,
+      "points": 306
+    },
+    {
+      "phi_deg": 20.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.4638674422968347,
+      "coverage_beta": 0.2815173001327738,
+      "min_singular_value": 0.17637764501099182,
+      "points": 284
+    },
+    {
+      "phi_deg": 25.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.41246293611085955,
+      "coverage_beta": 0.30526259299611425,
+      "min_singular_value": 0.1716824917793026,
+      "points": 277
+    },
+    {
+      "phi_deg": 30.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.3787879755396111,
+      "coverage_beta": 0.33461123020063266,
+      "min_singular_value": 0.16667481156849778,
+      "points": 276
+    },
+    {
+      "phi_deg": 35.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.3543669385957663,
+      "coverage_beta": 0.37149574486048176,
+      "min_singular_value": 0.1609634778799194,
+      "points": 278
+    },
+    {
+      "phi_deg": 40.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.33557549458301866,
+      "coverage_beta": 0.4202037739114834,
+      "min_singular_value": 0.1541227746559648,
+      "points": 284
+    },
+    {
+      "phi_deg": 45.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.3207031255048854,
+      "coverage_beta": 0.49344762895806155,
+      "min_singular_value": 0.13643454156373333,
+      "points": 297
+    },
+    {
+      "phi_deg": 50.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.30884275945596074,
+      "coverage_beta": 0.8558668302556057,
+      "min_singular_value": 0.03855851407241201,
+      "points": 404
+    },
+    {
+      "phi_deg": 55.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": -1,
+      "class_alpha": "rocker",
+      "class_beta": "crank",
+      "coverage_alpha": 0.3512977829310618,
+      "coverage_beta": 1.0,
+      "min_singular_value": 0.041506202101617755,
+      "points": 734
+    },
+    {
+      "phi_deg": 60.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": -1,
+      "class_alpha": "rocker",
+      "class_beta": "crank",
+      "coverage_alpha": 0.33759805005707,
+      "coverage_beta": 1.0,
+      "min_singular_value": 0.07239819738987076,
+      "points": 732
+    },
+    {
+      "phi_deg": 65.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": -1,
+      "class_alpha": "rocker",
+      "class_beta": "crank",
+      "coverage_alpha": 0.32650181174027315,
+      "coverage_beta": 1.0,
+      "min_singular_value": 0.06210353882287116,
+      "points": 739
+    },
+    {
+      "phi_deg": 70.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.2242731137182538,
+      "coverage_beta": 0.8721276691470105,
+      "min_singular_value": 0.011072983258515377,
+      "points": 533
+    },
+    {
+      "phi_deg": 75.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.19992084997089024,
+      "coverage_beta": 0.7907292381120834,
+      "min_singular_value": 0.07187258010578033,
+      "points": 476
+    },
+    {
+      "phi_deg": 80.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.18807960333667412,
+      "coverage_beta": 0.7659690728330942,
+      "min_singular_value": 0.06470838067544135,
+      "points": 464
+    },
+    {
+      "phi_deg": 85.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.18488987489033776,
+      "coverage_beta": 0.7440270604986916,
+      "min_singular_value": 0.058125103800306374,
+      "points": 459
+    },
+    {
+      "phi_deg": 90.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.19654659056918122,
+      "coverage_beta": 0.7261838796068246,
+      "min_singular_value": 0.05156803963969256,
+      "points": 460
+    },
+    {
+      "phi_deg": 120.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.7989388092874484,
+      "coverage_beta": 0.9072843417021892,
+      "min_singular_value": 0.014421711995690745,
+      "points": 1685
+    },
+    {
+      "phi_deg": 125.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.8696885594031479,
+      "coverage_beta": 0.6289092389233762,
+      "min_singular_value": 0.01593360963402454,
+      "points": 1200
+    },
+    {
+      "phi_deg": 130.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.9683635310343385,
+      "coverage_beta": 0.5960801006524101,
+      "min_singular_value": 0.02178560845413919,
+      "points": 1226
+    },
+    {
+      "phi_deg": 135.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 1.0,
+      "coverage_beta": 0.5692840743279453,
+      "min_singular_value": 0.023560236602376564,
+      "points": 1273
+    },
+    {
+      "phi_deg": 140.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": 0,
+      "w_beta": 0,
+      "class_alpha": "rocker",
+      "class_beta": "rocker",
+      "coverage_alpha": 1.0,
+      "coverage_beta": 0.5465495506078395,
+      "min_singular_value": 0.02747844093082558,
+      "points": 1346
+    },
+    {
+      "phi_deg": 145.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": -1,
+      "w_beta": 0,
+      "class_alpha": "crank",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.9939020115476265,
+      "coverage_beta": 0.35739034918069806,
+      "min_singular_value": 0.09789293309615292,
+      "points": 561
+    },
+    {
+      "phi_deg": 150.0,
+      "audit_status": "PASS",
+      "status": "returned",
+      "returned": true,
+      "w_alpha": -1,
+      "w_beta": 0,
+      "class_alpha": "crank",
+      "class_beta": "rocker",
+      "coverage_alpha": 0.9934665861060897,
+      "coverage_beta": 0.34642442562173786,
+      "min_singular_value": 0.09867732500352766,
+      "points": 544
+    }
+  ],
+  "guardrail": "Canonicalization is provisional for canonical UUUR only; repeat across the physical geometry corpus before removing dimensions globally."
+}
