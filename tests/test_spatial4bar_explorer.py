@@ -4,9 +4,17 @@ from grashof_workspace.spatial4bar_explorer.analysis import (
     summarize_class_counts,
     summarize_winding_pairs,
 )
-from grashof_workspace.spatial4bar_explorer.descriptors import generate_geometry_samples, grouped_descriptor_inventory
+from grashof_workspace.spatial4bar_explorer.descriptors import (
+    generate_geometry_samples,
+    grouped_descriptor_inventory,
+)
 from grashof_workspace.spatial4bar_explorer.families import FAMILY_AXIS_CASES, ORDERED_FAMILIES
-from grashof_workspace.spatial4bar_explorer.models import BranchClass, OrderedFamily, ToolAxis, dataclass_to_jsonable
+from grashof_workspace.spatial4bar_explorer.models import (
+    BranchClass,
+    OrderedFamily,
+    ToolAxis,
+    dataclass_to_jsonable,
+)
 from grashof_workspace.spatial4bar_explorer.readouts import (
     BRANCH_RESULT_SCHEMA_FIELDS,
     write_sprint00_html,

@@ -1,0 +1,480 @@
+[
+  {
+    "sample_id": "uuur_000",
+    "case": {
+      "family": "UUUR",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.097959762857469,
+    "tool_range_beta": 1.3054322785314738,
+    "notes": [
+      "mock_placeholder",
+      "near-planar center geometry"
+    ]
+  },
+  {
+    "sample_id": "uuur_001",
+    "case": {
+      "family": "UUUR",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 1,
+    "w_beta": 0,
+    "class_alpha": "crank",
+    "class_beta": "rocker",
+    "tool_range_alpha": 6.283185307179586,
+    "tool_range_beta": 1.1275678688558337,
+    "notes": [
+      "mock_placeholder"
+    ]
+  },
+  {
+    "sample_id": "uuur_000",
+    "case": {
+      "family": "UUUR",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.097959762857469,
+    "tool_range_beta": 1.3054322785314738,
+    "notes": [
+      "mock_placeholder",
+      "near-planar center geometry"
+    ]
+  },
+  {
+    "sample_id": "uuur_001",
+    "case": {
+      "family": "UUUR",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 1,
+    "class_alpha": "rocker",
+    "class_beta": "crank",
+    "tool_range_alpha": 2.331845052731921,
+    "tool_range_beta": 6.283185307179586,
+    "notes": [
+      "mock_placeholder"
+    ]
+  },
+  {
+    "sample_id": "uuru_000",
+    "case": {
+      "family": "UURU",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 1,
+    "w_beta": 0,
+    "class_alpha": "crank",
+    "class_beta": "rocker",
+    "tool_range_alpha": 6.283185307179586,
+    "tool_range_beta": 2.0653070960136075,
+    "notes": [
+      "mock_placeholder"
+    ]
+  },
+  {
+    "sample_id": "uuru_001",
+    "case": {
+      "family": "UURU",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 1,
+    "w_beta": 0,
+    "class_alpha": "crank",
+    "class_beta": "rocker",
+    "tool_range_alpha": 6.283185307179586,
+    "tool_range_beta": 1.5109636475097277,
+    "notes": [
+      "mock_placeholder"
+    ]
+  },
+  {
+    "sample_id": "uuru_000",
+    "case": {
+      "family": "UURU",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.827433388230814,
+    "tool_range_beta": 2.0653070960136075,
+    "notes": [
+      "mock_placeholder"
+    ]
+  },
+  {
+    "sample_id": "uuru_001",
+    "case": {
+      "family": "UURU",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 1,
+    "class_alpha": "rocker",
+    "class_beta": "crank",
+    "tool_range_alpha": 2.715240831385815,
+    "tool_range_beta": 6.283185307179586,
+    "notes": [
+      "mock_placeholder"
+    ]
+  },
+  {
+    "sample_id": "uruu_000",
+    "case": {
+      "family": "URUU",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.781057197478521,
+    "tool_range_beta": 1.576780013602434,
+    "notes": [
+      "mock_placeholder"
+    ]
+  },
+  {
+    "sample_id": "uruu_001",
+    "case": {
+      "family": "URUU",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 1,
+    "w_beta": 0,
+    "class_alpha": "crank",
+    "class_beta": "rocker",
+    "tool_range_alpha": 6.283185307179586,
+    "tool_range_beta": 1.7064879966887465,
+    "notes": [
+      "mock_placeholder",
+      "near-planar center geometry"
+    ]
+  },
+  {
+    "sample_id": "uruu_000",
+    "case": {
+      "family": "URUU",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.781057197478521,
+    "tool_range_beta": 1.576780013602434,
+    "notes": [
+      "mock_placeholder"
+    ]
+  },
+  {
+    "sample_id": "uruu_001",
+    "case": {
+      "family": "URUU",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.827433388230814,
+    "tool_range_beta": 1.7064879966887465,
+    "notes": [
+      "mock_placeholder",
+      "near-planar center geometry"
+    ]
+  },
+  {
+    "sample_id": "usrr_000",
+    "case": {
+      "family": "USRR",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.827433388230814,
+    "tool_range_beta": 2.670353755551324,
+    "notes": [
+      "mock_placeholder",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "usrr_001",
+    "case": {
+      "family": "USRR",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 1.5968778290049992,
+    "tool_range_beta": 1.8065142123839435,
+    "notes": [
+      "mock_placeholder",
+      "near-planar center geometry",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "usrr_000",
+    "case": {
+      "family": "USRR",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.827433388230814,
+    "tool_range_beta": 2.670353755551324,
+    "notes": [
+      "mock_placeholder",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "usrr_001",
+    "case": {
+      "family": "USRR",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 1,
+    "class_alpha": "rocker",
+    "class_beta": "crank",
+    "tool_range_alpha": 1.5968778290049992,
+    "tool_range_beta": 6.283185307179586,
+    "notes": [
+      "mock_placeholder",
+      "near-planar center geometry",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "ursr_000",
+    "case": {
+      "family": "URSR",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 1.716897140347641,
+    "tool_range_beta": 1.6864949010413017,
+    "notes": [
+      "mock_placeholder",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "ursr_001",
+    "case": {
+      "family": "URSR",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 1,
+    "w_beta": 0,
+    "class_alpha": "crank",
+    "class_beta": "rocker",
+    "tool_range_alpha": 6.283185307179586,
+    "tool_range_beta": 2.1263964123602124,
+    "notes": [
+      "mock_placeholder",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "ursr_000",
+    "case": {
+      "family": "URSR",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 1,
+    "class_alpha": "rocker",
+    "class_beta": "crank",
+    "tool_range_alpha": 1.716897140347641,
+    "tool_range_beta": 6.283185307179586,
+    "notes": [
+      "mock_placeholder",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "ursr_001",
+    "case": {
+      "family": "URSR",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.827433388230814,
+    "tool_range_beta": 2.1263964123602124,
+    "notes": [
+      "mock_placeholder",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "urrs_000",
+    "case": {
+      "family": "URRS",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.1681848306407128,
+    "tool_range_beta": 1.23520721074823,
+    "notes": [
+      "mock_placeholder",
+      "mirror-symmetric candidate",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "urrs_001",
+    "case": {
+      "family": "URRS",
+      "tool_axis": "a"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 1,
+    "w_beta": 0,
+    "class_alpha": "crank",
+    "class_beta": "rocker",
+    "tool_range_alpha": 6.283185307179586,
+    "tool_range_beta": 1.2241404270271845,
+    "notes": [
+      "mock_placeholder",
+      "near-planar center geometry",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "urrs_000",
+    "case": {
+      "family": "URRS",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 0,
+    "class_alpha": "rocker",
+    "class_beta": "rocker",
+    "tool_range_alpha": 2.1681848306407128,
+    "tool_range_beta": 1.23520721074823,
+    "notes": [
+      "mock_placeholder",
+      "mirror-symmetric candidate",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  },
+  {
+    "sample_id": "urrs_001",
+    "case": {
+      "family": "URRS",
+      "tool_axis": "b"
+    },
+    "branch_id": "branch_00",
+    "branch_closed": true,
+    "singularity_count": 0,
+    "w_alpha": 0,
+    "w_beta": 1,
+    "class_alpha": "rocker",
+    "class_beta": "crank",
+    "tool_range_alpha": 2.1792516143617577,
+    "tool_range_beta": 6.283185307179586,
+    "notes": [
+      "mock_placeholder",
+      "near-planar center geometry",
+      "RRUS-like family; expect S-joint descriptors to matter strongly"
+    ]
+  }
+]

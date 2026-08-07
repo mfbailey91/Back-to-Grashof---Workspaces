@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 import random
-from typing import Iterable
+from collections.abc import Iterable
 
 from .models import GeometryDescriptor, GeometrySample, OrderedFamily
 

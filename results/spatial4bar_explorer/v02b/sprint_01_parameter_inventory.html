@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Sprint 01</title></head>
+<body>
+<h1>Sprint 01 — parameter inventory and first sampled geometries</h1>
+<p>Focus: list a broad parameter inventory, generate initial synthetic geometry instances, and graph several descriptor distributions.</p>
+<h2>Synthetic corpus summary</h2>
+<p>Total samples: 12</p>
+<ul><li>URRS: 2</li><li>URSR: 2</li><li>URUU: 2</li><li>USRR: 2</li><li>UURU: 2</li><li>UUUR: 2</li></ul>
+<h2>Descriptor inventory</h2>
+<h3>distances</h3><ul><li><code>center_distance_12</code> — Normalized adjacent joint-center distance L12/Lref</li><li><code>center_distance_23</code> — Normalized adjacent joint-center distance L23/Lref</li><li><code>center_distance_34</code> — Normalized adjacent joint-center distance L34/Lref</li></ul><h3>angles</h3><ul><li><code>twist_12_deg</code> — Angle between consecutive axes near joints 1 and 2</li><li><code>twist_23_deg</code> — Angle between consecutive axes near joints 2 and 3</li><li><code>twist_34_deg</code> — Angle between consecutive axes near joints 3 and 4</li></ul><h3>offsets</h3><ul><li><code>common_normal_13</code> — Shortest separation between selected nonadjacent axes 1 and 3</li><li><code>common_normal_24</code> — Shortest separation between selected nonadjacent axes 2 and 4</li><li><code>offset_1</code> — Signed offset along axis 1 to a common-normal construction</li><li><code>offset_2</code> — Signed offset along axis 2 to a common-normal construction</li></ul><h3>axis-center descriptors</h3><ul><li><code>axis_to_center_1</code> — Distance from selected revolute axis 1 to an opposite joint center</li><li><code>axis_to_center_2</code> — Distance from selected revolute axis 2 to an opposite joint center</li></ul><h3>shape descriptors</h3><ul><li><code>tetra_volume</code> — Signed normalized tetrahedral volume built from four reference points</li><li><code>coplanarity_residual</code> — Near-zero indicates nearly planar center geometry</li></ul><h3>flags</h3><ul><li><code>chirality</code> — Right- or left-handed center geometry flag</li><li><code>has_intersection_pair</code> — Boolean flag for exact pairwise axis intersection</li><li><code>has_mirror_symmetry</code> — Boolean flag for mirror-symmetric construction</li></ul>
+<h2>Descriptor histograms</h2>
+<img src="figures/hist_center_distance_12.png" alt="figures/hist_center_distance_12.png" style="max-width: 480px; margin: 8px;">
+<img src="figures/hist_twist_23_deg.png" alt="figures/hist_twist_23_deg.png" style="max-width: 480px; margin: 8px;">
+<img src="figures/hist_tetra_volume.png" alt="figures/hist_tetra_volume.png" style="max-width: 480px; margin: 8px;">
+<h2>Representative samples</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<tr><th>Sample</th><th>Family</th><th>Seed</th><th>L12</th><th>L23</th><th>twist23</th><th>tetra volume</th></tr>
+<tr><td>uuur_000</td><td>UUUR</td><td>9587378</td><td>0.999</td><td>0.851</td><td>24.2</td><td>0.038</td></tr><tr><td>uuur_001</td><td>UUUR</td><td>4327934</td><td>2.358</td><td>2.339</td><td>80.3</td><td>0.913</td></tr><tr><td>uuru_000</td><td>UURU</td><td>3239680</td><td>1.480</td><td>1.728</td><td>105.1</td><td>0.893</td></tr><tr><td>uuru_001</td><td>UURU</td><td>3824339</td><td>1.755</td><td>1.838</td><td>138.2</td><td>0.529</td></tr><tr><td>uruu_000</td><td>URUU</td><td>786770</td><td>1.294</td><td>2.047</td><td>18.8</td><td>0.314</td></tr><tr><td>uruu_001</td><td>URUU</td><td>1034363</td><td>1.328</td><td>0.606</td><td>60.4</td><td>0.100</td></tr><tr><td>usrr_000</td><td>USRR</td><td>2492346</td><td>2.090</td><td>1.246</td><td>13.9</td><td>0.209</td></tr><tr><td>usrr_001</td><td>USRR</td><td>2801858</td><td>0.683</td><td>0.960</td><td>111.5</td><td>0.061</td></tr><tr><td>ursr_000</td><td>URSR</td><td>7347430</td><td>1.447</td><td>2.111</td><td>116.6</td><td>0.502</td></tr><tr><td>ursr_001</td><td>URSR</td><td>569278</td><td>1.488</td><td>1.624</td><td>56.6</td><td>0.712</td></tr><tr><td>urrs_000</td><td>URRS</td><td>8041345</td><td>1.476</td><td>2.043</td><td>28.2</td><td>0.341</td></tr><tr><td>urrs_001</td><td>URRS</td><td>6782793</td><td>0.813</td><td>0.911</td><td>70.3</td><td>0.114</td></tr>
+</table>
+<h2>Representative edge cases by descriptor</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<tr><th>Criterion</th><th>Sample</th><th>Family</th><th>L12</th><th>twist23</th><th>tetra volume</th></tr>
+<tr><td>min center_distance_12</td><td>usrr_001</td><td>USRR</td><td>0.683</td><td>111.5</td><td>0.061</td></tr><tr><td>max center_distance_12</td><td>uuur_001</td><td>UUUR</td><td>2.358</td><td>80.3</td><td>0.913</td></tr><tr><td>min twist_23_deg</td><td>usrr_000</td><td>USRR</td><td>2.090</td><td>13.9</td><td>0.209</td></tr><tr><td>max twist_23_deg</td><td>uuru_001</td><td>UURU</td><td>1.755</td><td>138.2</td><td>0.529</td></tr><tr><td>min tetra_volume</td><td>uuur_000</td><td>UUUR</td><td>0.999</td><td>24.2</td><td>0.038</td></tr><tr><td>max tetra_volume</td><td>uuur_001</td><td>UUUR</td><td>2.358</td><td>80.3</td><td>0.913</td></tr>
+</table>
+</body></html>

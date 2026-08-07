@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Sprint V03 — closure and continuation</title></head>
+<body>
+<h1>Sprint V03 — closure and continuation</h1>
+<p><strong>STATUS:</strong> local one-dimensional closure branches only. No crank, winding, or dexterity classification is made in V03.</p>
+<p>
+V03 uses only V02B physical geometry. Every R/U/S family is expanded internally into seven ordered revolute solver coordinates.
+The same six-constraint closure kernel is used for all six ordered families.
+</p>
+<h2>V03A — reference closure and mobility audit</h2>
+<p>Expected regular result: 7 scalar coordinates, closure Jacobian rank 6, nullity 1.</p>
+<img src="figures/v03_reference_mobility_audit.png" alt="V03A mobility audit" style="max-width: 900px;">
+<table border="1" cellpadding="6" cellspacing="0">
+<tr><th>Family</th><th>Coordinates</th><th>||r(0)||</th><th>Rank</th><th>Nullity</th><th>sigma_min+</th><th>Status</th></tr>
+<tr><td>UUUR</td><td>7</td><td>0.000e+00</td><td>6</td><td>1</td><td>1.931e-01</td><td>PASS</td></tr><tr><td>UURU</td><td>7</td><td>0.000e+00</td><td>6</td><td>1</td><td>6.474e-02</td><td>PASS</td></tr><tr><td>URUU</td><td>7</td><td>0.000e+00</td><td>6</td><td>1</td><td>4.507e-01</td><td>PASS</td></tr><tr><td>USRR</td><td>7</td><td>0.000e+00</td><td>6</td><td>1</td><td>2.112e-01</td><td>PASS</td></tr><tr><td>URSR</td><td>7</td><td>0.000e+00</td><td>6</td><td>1</td><td>3.818e-01</td><td>PASS</td></tr><tr><td>URRS</td><td>7</td><td>0.000e+00</td><td>6</td><td>1</td><td>2.516e-01</td><td>PASS</td></tr>
+</table>
+<p><a href="data/v03_reference_closure_audits.json">Closure-audit JSON</a></p>
+<h2>V03B — detailed UUUR branch proof</h2>
+<p>
+Pseudo-arclength predictor/corrector continuation follows the local null direction of the closure Jacobian.
+The plots below are diagnostics of a real closure branch segment; they are not yet a full-cycle continuation.
+</p>
+<img src="figures/v03_uuur_coordinates.png" alt="seven joint coordinate traces" style="max-width: 900px;">
+<img src="figures/v03_uuur_closure_residual.png" alt="closure residual" style="max-width: 760px;">
+<img src="figures/v03_uuur_singularity_margin.png" alt="singularity margin" style="max-width: 760px;">
+<img src="figures/v03_uuur_tool_phase.png" alt="tool U coordinate path" style="max-width: 620px;">
+<h3>Driven branch animation</h3>
+<p>
+The GIF advances along continuation arclength on the local one-DOF closure manifold.
+This is local branch motion only; it is not a crank, winding, or full-cycle proof.
+</p>
+<img src="figures/v03_uuur_branch.gif" alt="UUUR driven branch animation" style="max-width: 640px;">
+<h3>3D branch snapshots</h3>
+<img src="figures/v03_uuur_snapshots/uuur_branch_000.png" alt="UUUR continued mechanism snapshot" style="max-width: 430px; margin: 6px;"><img src="figures/v03_uuur_snapshots/uuur_branch_015.png" alt="UUUR continued mechanism snapshot" style="max-width: 430px; margin: 6px;"><img src="figures/v03_uuur_snapshots/uuur_branch_030.png" alt="UUUR continued mechanism snapshot" style="max-width: 430px; margin: 6px;"><img src="figures/v03_uuur_snapshots/uuur_branch_045.png" alt="UUUR continued mechanism snapshot" style="max-width: 430px; margin: 6px;"><img src="figures/v03_uuur_snapshots/uuur_branch_060.png" alt="UUUR continued mechanism snapshot" style="max-width: 430px; margin: 6px;">
+<h2>V03C — same kernel across all six families</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<tr><th>Family</th><th>Points</th><th>Final arclength</th><th>Converged fraction</th><th>Max closure residual</th><th>Min sigma_min+</th></tr>
+<tr><td>UUUR</td><td>61</td><td>2.400</td><td>1.000</td><td>8.854e-15</td><td>1.913e-01</td></tr><tr><td>UURU</td><td>61</td><td>2.400</td><td>1.000</td><td>8.930e-11</td><td>5.161e-02</td></tr><tr><td>URUU</td><td>61</td><td>2.400</td><td>1.000</td><td>4.886e-15</td><td>4.507e-01</td></tr><tr><td>USRR</td><td>61</td><td>2.400</td><td>1.000</td><td>2.159e-12</td><td>1.078e-01</td></tr><tr><td>URSR</td><td>61</td><td>2.400</td><td>1.000</td><td>1.978e-12</td><td>1.537e-01</td></tr><tr><td>URRS</td><td>61</td><td>2.400</td><td>1.000</td><td>1.573e-14</td><td>2.516e-01</td></tr>
+</table>
+<p><a href="data/v03_continuation_traces.json">Continuation-trace JSON</a></p>
+<h3>Driven branch animations (all families)</h3>
+<p>
+Each GIF uses the same seven-coordinate closure/continuation kernel on that family's V02B reference geometry.
+Motion is along local continuation arclength only; not a crank or winding classification.
+</p>
+<figure style="display:inline-block; margin: 8px; vertical-align: top;"><img src="figures/v03_uuur_branch.gif" alt="UUUR driven branch animation" style="max-width: 420px;"><figcaption>UUUR</figcaption></figure><figure style="display:inline-block; margin: 8px; vertical-align: top;"><img src="figures/v03_uuru_branch.gif" alt="UURU driven branch animation" style="max-width: 420px;"><figcaption>UURU</figcaption></figure><figure style="display:inline-block; margin: 8px; vertical-align: top;"><img src="figures/v03_uruu_branch.gif" alt="URUU driven branch animation" style="max-width: 420px;"><figcaption>URUU</figcaption></figure><figure style="display:inline-block; margin: 8px; vertical-align: top;"><img src="figures/v03_usrr_branch.gif" alt="USRR driven branch animation" style="max-width: 420px;"><figcaption>USRR</figcaption></figure><figure style="display:inline-block; margin: 8px; vertical-align: top;"><img src="figures/v03_ursr_branch.gif" alt="URSR driven branch animation" style="max-width: 420px;"><figcaption>URSR</figcaption></figure><figure style="display:inline-block; margin: 8px; vertical-align: top;"><img src="figures/v03_urrs_branch.gif" alt="URRS driven branch animation" style="max-width: 420px;"><figcaption>URRS</figcaption></figure>
+<h2>Interpretation guardrails</h2>
+<ul>
+<li>V03 establishes local closure motion, not a crank condition.</li>
+<li><code>tool_alpha</code> and <code>tool_beta</code> are both recorded from one mechanism solve; the mechanism is not solved twice.</li>
+<li>S-joint x/y/z coordinates are solver-chart coordinates only. They must not be promoted to invariant Grashof descriptors.</li>
+<li>Closed-loop winding and branch return belong to V04.</li>
+</ul>
+</body>
+</html>

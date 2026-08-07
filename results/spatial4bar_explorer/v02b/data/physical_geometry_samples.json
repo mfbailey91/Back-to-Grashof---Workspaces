@@ -1,0 +1,3434 @@
+[
+  {
+    "sample_id": "uuur_physical_000",
+    "family": "UUUR",
+    "inversion": "tool_to_ground",
+    "seed": 204656,
+    "geometry": {
+      "family": "UUUR",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.9407340841122839,
+              0.2582383190409061,
+              0.2198462043528375
+            ],
+            [
+              -0.29679386268099306,
+              0.9405425479409895,
+              0.16520629100481535
+            ],
+            [
+              -0.1641121143131069,
+              -0.22066419304363596,
+              0.9614439806062975
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "U",
+          "center": [
+            1.35,
+            0.18,
+            0.24
+          ],
+          "frame": [
+            [
+              0.8928607358263638,
+              -0.34811185436449216,
+              -0.2856883674049736
+            ],
+            [
+              0.450127095209096,
+              0.7090513979937902,
+              0.542799883162914
+            ],
+            [
+              0.013612662422388427,
+              -0.6132407780423333,
+              0.7897787307643881
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "U",
+          "center": [
+            1.92,
+            1.12,
+            0.61
+          ],
+          "frame": [
+            [
+              0.7099142302969095,
+              0.41069561127581367,
+              -0.5721458734455163
+            ],
+            [
+              -0.6486225340082085,
+              0.6978004495253411,
+              -0.3039133774926703
+            ],
+            [
+              0.27442775734010083,
+              0.5868591377162135,
+              0.7617648971173883
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "R",
+          "center": [
+            0.28,
+            1.41,
+            -0.17
+          ],
+          "frame": [
+            [
+              0.5644158367487738,
+              0.7599865688976201,
+              0.3222656952305111
+            ],
+            [
+              -0.6632310683839614,
+              0.18505453651960602,
+              0.7251754052943212
+            ],
+            [
+              0.4914868392515213,
+              -0.6230371045200573,
+              0.6084944151212995
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.948928728670603,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.79590014677755,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2619033559471668,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9932677686046801,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5816074206230615,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1534831847183977,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 46.58787900321233,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 49.13022793490862,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 104.78026159207957,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 64.19933463718449,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 64.19933463718449,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.4004499490200719,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.20824779173981034,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5298492466004279,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.8689723311558858,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.401302025469641,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.7585582015334109,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.040610892542481646,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.24366535525488986,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "uuur_physical_001",
+    "family": "UUUR",
+    "inversion": "tool_to_ground",
+    "seed": 1007302177,
+    "geometry": {
+      "family": "UUUR",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.9207601130660981,
+              0.3806029794904177,
+              0.08568655781114656
+            ],
+            [
+              -0.38929766394345283,
+              0.9106949406321231,
+              0.1381378078413891
+            ],
+            [
+              -0.02545865343408564,
+              -0.1605493603539753,
+              0.9866994273106945
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "U",
+          "center": [
+            1.426151174672129,
+            0.23032633868851704,
+            0.1384631772375512
+          ],
+          "frame": [
+            [
+              0.8361633844934664,
+              -0.4731410645007068,
+              -0.27743166278485515
+            ],
+            [
+              0.5456449447293468,
+              0.6662121361026841,
+              0.5083630435041544
+            ],
+            [
+              -0.05569909086995682,
+              -0.576453747314246,
+              0.8152292245029147
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "U",
+          "center": [
+            1.9787369485785962,
+            1.051487099687094,
+            0.7203689620163122
+          ],
+          "frame": [
+            [
+              0.7628998156587867,
+              0.3284241189231144,
+              -0.5568855083204854
+            ],
+            [
+              -0.6073833597911903,
+              0.6592163204253351,
+              -0.4433049707973594
+            ],
+            [
+              0.2215159712448631,
+              0.6764402715646504,
+              0.7023953541197344
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "R",
+          "center": [
+            0.3679331806546817,
+            1.3408281225983119,
+            -0.19057753459749352
+          ],
+          "frame": [
+            [
+              0.5693163881890146,
+              0.7616186270428573,
+              0.30954146261974064
+            ],
+            [
+              -0.7179722733187676,
+              0.2771872381047639,
+              0.6385006262936114
+            ],
+            [
+              0.4004930272612699,
+              -0.585751058021414,
+              0.7046282943097714
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.9879459333957222,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.7816150156875769,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2750720012456163,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9553670496710843,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.6022999682888235,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.068005698367185,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 55.524427352788415,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 50.430359405646875,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 106.21461236103914,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 78.10044531463625,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 78.10044531463625,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.15383011687791534,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.11539416171232514,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5547532712686283,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.8979023936677513,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.38743703211988234,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.5782797447520546,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.06317981382061508,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.37907888292369046,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "uuru_physical_000",
+    "family": "UURU",
+    "inversion": "tool_to_ground",
+    "seed": 204659,
+    "geometry": {
+      "family": "UURU",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.9407340841122839,
+              0.2582383190409061,
+              0.2198462043528375
+            ],
+            [
+              -0.29679386268099306,
+              0.9405425479409895,
+              0.16520629100481535
+            ],
+            [
+              -0.1641121143131069,
+              -0.22066419304363596,
+              0.9614439806062975
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "U",
+          "center": [
+            1.35,
+            0.18,
+            0.24
+          ],
+          "frame": [
+            [
+              0.8928607358263638,
+              -0.34811185436449216,
+              -0.2856883674049736
+            ],
+            [
+              0.450127095209096,
+              0.7090513979937902,
+              0.542799883162914
+            ],
+            [
+              0.013612662422388427,
+              -0.6132407780423333,
+              0.7897787307643881
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "R",
+          "center": [
+            1.92,
+            1.12,
+            0.61
+          ],
+          "frame": [
+            [
+              0.7099142302969095,
+              0.41069561127581367,
+              -0.5721458734455163
+            ],
+            [
+              -0.6486225340082085,
+              0.6978004495253411,
+              -0.3039133774926703
+            ],
+            [
+              0.27442775734010083,
+              0.5868591377162135,
+              0.7617648971173883
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "U",
+          "center": [
+            0.28,
+            1.41,
+            -0.17
+          ],
+          "frame": [
+            [
+              0.5644158367487738,
+              0.7599865688976201,
+              0.3222656952305111
+            ],
+            [
+              -0.6632310683839614,
+              0.18505453651960602,
+              0.7251754052943212
+            ],
+            [
+              0.4914868392515213,
+              -0.6230371045200573,
+              0.6084944151212995
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.948928728670603,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.79590014677755,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2619033559471668,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9932677686046801,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5816074206230615,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1534831847183977,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 46.58787900321233,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 100.18890907409079,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 32.179138749646235,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 37.05363857221507,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 37.05363857221507,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.2617606981650349,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.7099048255993242,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5298492466004279,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.8689723311558858,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.401302025469641,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.7585582015334109,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.040610892542481646,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.24366535525488986,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "uuru_physical_001",
+    "family": "UURU",
+    "inversion": "tool_to_ground",
+    "seed": 43807693,
+    "geometry": {
+      "family": "UURU",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.912884473831434,
+              0.37858622550277127,
+              0.15269056060238564
+            ],
+            [
+              -0.3978874327071833,
+              0.9088102556404358,
+              0.1254970523018468
+            ],
+            [
+              -0.0912552920722555,
+              -0.1753179657146712,
+              0.9802734733565306
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "U",
+          "center": [
+            1.2717485782572793,
+            0.07210231461375631,
+            0.15992169426818886
+          ],
+          "frame": [
+            [
+              0.9574026898151633,
+              -0.2461289439597418,
+              -0.15099878304129638
+            ],
+            [
+              0.28861393741282604,
+              0.7992583510004532,
+              0.5271509114922422
+            ],
+            [
+              -0.009060058816339133,
+              -0.5482760539192815,
+              0.8362483387325478
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "R",
+          "center": [
+            1.84284964396561,
+            1.2139646812961675,
+            0.529619414615902
+          ],
+          "frame": [
+            [
+              0.6752823011988609,
+              0.36366833756923894,
+              -0.6416690376955999
+            ],
+            [
+              -0.6654408150283554,
+              0.6756101687683868,
+              -0.3173947409002711
+            ],
+            [
+              0.31809170907455164,
+              0.6413238184461716,
+              0.6982273444313483
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "U",
+          "center": [
+            0.21809860107294043,
+            1.3791949388809368,
+            -0.06988389581014534
+          ],
+          "frame": [
+            [
+              0.5251498290948462,
+              0.7214205447110937,
+              0.4514089660943861
+            ],
+            [
+              -0.7082179800541013,
+              0.076375653879851,
+              0.7018504486160237
+            ],
+            [
+              0.4718526779936113,
+              -0.6882725892865224,
+              0.5510316625268312
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.8929587403812647,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.9245203523074983,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2100660707175475,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9724548365936894,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5785326227639869,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1786642788999055,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 40.732797585494026,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 87.6351887864196,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 19.10925071289361,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 34.770103176621,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 34.770103176621,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.14648319948568497,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.6151619495552397,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5460771702262892,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.9012983811939279,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.3184503490894963,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.7595463846348287,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.03674244358388583,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.22045466150331497,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "uruu_physical_000",
+    "family": "URUU",
+    "inversion": "tool_to_ground",
+    "seed": 204662,
+    "geometry": {
+      "family": "URUU",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.9407340841122839,
+              0.2582383190409061,
+              0.2198462043528375
+            ],
+            [
+              -0.29679386268099306,
+              0.9405425479409895,
+              0.16520629100481535
+            ],
+            [
+              -0.1641121143131069,
+              -0.22066419304363596,
+              0.9614439806062975
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "R",
+          "center": [
+            1.35,
+            0.18,
+            0.24
+          ],
+          "frame": [
+            [
+              0.8928607358263638,
+              -0.34811185436449216,
+              -0.2856883674049736
+            ],
+            [
+              0.450127095209096,
+              0.7090513979937902,
+              0.542799883162914
+            ],
+            [
+              0.013612662422388427,
+              -0.6132407780423333,
+              0.7897787307643881
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "U",
+          "center": [
+            1.92,
+            1.12,
+            0.61
+          ],
+          "frame": [
+            [
+              0.7099142302969095,
+              0.41069561127581367,
+              -0.5721458734455163
+            ],
+            [
+              -0.6486225340082085,
+              0.6978004495253411,
+              -0.3039133774926703
+            ],
+            [
+              0.27442775734010083,
+              0.5868591377162135,
+              0.7617648971173883
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "U",
+          "center": [
+            0.28,
+            1.41,
+            -0.17
+          ],
+          "frame": [
+            [
+              0.5644158367487738,
+              0.7599865688976201,
+              0.3222656952305111
+            ],
+            [
+              -0.6632310683839614,
+              0.18505453651960602,
+              0.7251754052943212
+            ],
+            [
+              0.4914868392515213,
+              -0.6230371045200573,
+              0.6084944151212995
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.948928728670603,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.79590014677755,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2619033559471668,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9932677686046801,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5816074206230615,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1534831847183977,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 88.39129649097222,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 133.95236777786315,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 58.10076528972901,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 37.05363857221507,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 37.05363857221507,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.4004499490200719,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.8764190721702989,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5298492466004279,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.7497531680616942,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.401302025469641,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.876580654822789,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.040610892542481646,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.24366535525488986,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "uruu_physical_001",
+    "family": "URUU",
+    "inversion": "tool_to_ground",
+    "seed": 2028379120,
+    "geometry": {
+      "family": "URUU",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.9370632890558885,
+              0.27732451379323664,
+              0.21214029874850662
+            ],
+            [
+              -0.3233982967942006,
+              0.9184080487400016,
+              0.22790392195000284
+            ],
+            [
+              -0.13162801348638062,
+              -0.2821662099878861,
+              0.950292742267719
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "R",
+          "center": [
+            1.4461888183669396,
+            0.07722906888605606,
+            0.3309115662503209
+          ],
+          "frame": [
+            [
+              0.914396077391507,
+              -0.2930907970770832,
+              -0.27924469255429946
+            ],
+            [
+              0.40420863099811283,
+              0.6989413703640702,
+              0.5899969011954445
+            ],
+            [
+              0.02225300603641362,
+              -0.6523639670171212,
+              0.7575790772322237
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "U",
+          "center": [
+            1.9244711536164498,
+            1.1837147497179354,
+            0.49373746833235876
+          ],
+          "frame": [
+            [
+              0.703898004978528,
+              0.3298911239867669,
+              -0.6290464568710296
+            ],
+            [
+              -0.6449411267815673,
+              0.667910581297307,
+              -0.37141136005353387
+            ],
+            [
+              0.2976214736422267,
+              0.6671336460603985,
+              0.6829012788984865
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "U",
+          "center": [
+            0.21226171857201104,
+            1.3715809586174568,
+            -0.07191601814244589
+          ],
+          "frame": [
+            [
+              0.5717327053739839,
+              0.7729062609741539,
+              0.2752046971850205
+            ],
+            [
+              -0.6377222165127375,
+              0.20762097651800773,
+              0.7417573084748071
+            ],
+            [
+              0.5161705998716185,
+              -0.5995910621887741,
+              0.6116031965020386
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 1.0063654013032848,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.8240058365059021,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2281630018664085,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9414657603244047,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5666768130634208,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.2417770705727502,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 89.96281464525426,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 132.5394487048809,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 61.03338696333089,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 36.05254667065672,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 36.05254667065672,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.39652484360927714,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.9461363379323939,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5149713095029895,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.7973439271566256,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.3991718526817175,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.9519731901827334,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.015200177299630468,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.09120106379778281,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "usrr_physical_000",
+    "family": "USRR",
+    "inversion": "tool_to_ground",
+    "seed": 204643,
+    "geometry": {
+      "family": "USRR",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.944818029471471,
+              0.2531632279912453,
+              0.20791169081775934
+            ],
+            [
+              -0.28424999011377144,
+              0.9490363884893027,
+              0.13613183479077168
+            ],
+            [
+              -0.1628521854503882,
+              -0.18771870795483836,
+              0.9686283355228664
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "S",
+          "center": [
+            1.35,
+            0.18,
+            0.24
+          ],
+          "frame": [
+            [
+              0.8818042466894012,
+              -0.3562720417153323,
+              -0.3090169943749474
+            ],
+            [
+              0.4686669490631823,
+              0.7351309754907164,
+              0.48983031728331855
+            ],
+            [
+              0.05265511728546737,
+              -0.5767605059000281,
+              0.8152145468878713
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "R",
+          "center": [
+            1.92,
+            1.12,
+            0.61
+          ],
+          "frame": [
+            [
+              0.6985023559086853,
+              0.38718617834126784,
+              -0.6018150231520484
+            ],
+            [
+              -0.6709306468813314,
+              0.6468330034690547,
+              -0.36257293431611837
+            ],
+            [
+              0.2488905901504007,
+              0.6570341915948408,
+              0.7115894499006428
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "R",
+          "center": [
+            0.28,
+            1.41,
+            -0.17
+          ],
+          "frame": [
+            [
+              0.5918117938954297,
+              0.7574845534296302,
+              0.2756373558169991
+            ],
+            [
+              -0.6920492266452815,
+              0.3021327083996625,
+              0.6555789002208295
+            ],
+            [
+              0.4133118296225518,
+              -0.5787339439073866,
+              0.703022299549211
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.948928728670603,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.79590014677755,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2619033559471668,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9932677686046801,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5816074206230615,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1534831847183977,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 47.25775685167322,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 103.56234975198036,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 77.12147870354745,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 67.03573933761449,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 67.03573933761449,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.22272246936770057,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.22840423609156604,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5263340020341836,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.8611786887963997,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.41447140698032076,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.7673947637239981,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.040610892542481646,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.24366535525488986,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "usrr_physical_001",
+    "family": "USRR",
+    "inversion": "tool_to_ground",
+    "seed": 835072421,
+    "geometry": {
+      "family": "USRR",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.9082120386398794,
+              0.28733854610709003,
+              0.3042818640515038
+            ],
+            [
+              -0.2907520999707753,
+              0.9561549484304354,
+              -0.03508462561544607
+            ],
+            [
+              -0.3010217753455362,
+              -0.05660631160087551,
+              0.9519357206528003
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "S",
+          "center": [
+            1.2762041675129292,
+            0.13960386191315893,
+            0.2599128250549887
+          ],
+          "frame": [
+            [
+              0.8379228797142653,
+              -0.4088229732511071,
+              -0.3615923453192525
+            ],
+            [
+              0.5391129100664022,
+              0.7232726435228776,
+              0.43154832096900086
+            ],
+            [
+              0.0851029837966229,
+              -0.5565433133849989,
+              0.8264484390906421
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "R",
+          "center": [
+            1.8022519198267215,
+            1.1757214415451718,
+            0.6566408232103788
+          ],
+          "frame": [
+            [
+              0.6111393869368623,
+              0.36529915086676634,
+              -0.7021860010783864
+            ],
+            [
+              -0.7577639542791663,
+              0.5263420315267755,
+              -0.38569139923450213
+            ],
+            [
+              0.22869726568028184,
+              0.7678024460916275,
+              0.598478875521999
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "R",
+          "center": [
+            0.3413254573444465,
+            1.3848624243851997,
+            -0.1341878418575654
+          ],
+          "frame": [
+            [
+              0.6571843019795585,
+              0.7323755999447217,
+              0.17814256604542775
+            ],
+            [
+              -0.6348030648510404,
+              0.4103847130562205,
+              0.6546827141031674
+            ],
+            [
+              0.4063666596650942,
+              -0.5433326493920393,
+              0.7346126666599623
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.9282094989143213,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.8701050801949999,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.18649802958726,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 1.0151873913034184,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5942795931276097,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1382260440854295,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 57.7567379454292,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 109.7958632381512,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 83.37255494509849,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 64.12074931205126,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 64.12074931205126,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.22691142533447634,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.2754033976532389,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5408903747025615,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.8148851008010638,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.40912623261303716,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.7946828297672011,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.044623696010611585,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.2677421760636695,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "ursr_physical_000",
+    "family": "URSR",
+    "inversion": "tool_to_ground",
+    "seed": 204644,
+    "geometry": {
+      "family": "URSR",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.944818029471471,
+              0.2531632279912453,
+              0.20791169081775934
+            ],
+            [
+              -0.28424999011377144,
+              0.9490363884893027,
+              0.13613183479077168
+            ],
+            [
+              -0.1628521854503882,
+              -0.18771870795483836,
+              0.9686283355228664
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "R",
+          "center": [
+            1.35,
+            0.18,
+            0.24
+          ],
+          "frame": [
+            [
+              0.8818042466894012,
+              -0.3562720417153323,
+              -0.3090169943749474
+            ],
+            [
+              0.4686669490631823,
+              0.7351309754907164,
+              0.48983031728331855
+            ],
+            [
+              0.05265511728546737,
+              -0.5767605059000281,
+              0.8152145468878713
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "S",
+          "center": [
+            1.92,
+            1.12,
+            0.61
+          ],
+          "frame": [
+            [
+              0.6985023559086853,
+              0.38718617834126784,
+              -0.6018150231520484
+            ],
+            [
+              -0.6709306468813314,
+              0.6468330034690547,
+              -0.36257293431611837
+            ],
+            [
+              0.2488905901504007,
+              0.6570341915948408,
+              0.7115894499006428
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "R",
+          "center": [
+            0.28,
+            1.41,
+            -0.17
+          ],
+          "frame": [
+            [
+              0.5918117938954297,
+              0.7574845534296302,
+              0.2756373558169991
+            ],
+            [
+              -0.6920492266452815,
+              0.3021327083996625,
+              0.6555789002208295
+            ],
+            [
+              0.4133118296225518,
+              -0.5787339439073866,
+              0.703022299549211
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.948928728670603,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.79590014677755,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2619033559471668,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9932677686046801,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5816074206230615,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1534831847183977,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 85.80060952201954,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 132.620736521872,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 111.00613299180931,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 67.03573933761449,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 67.03573933761449,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.41447140258026793,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.39348608660154005,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5263340020341836,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.7547851243557687,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.41447140698032076,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.872251611336628,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.040610892542481646,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.24366535525488986,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "ursr_physical_001",
+    "family": "URSR",
+    "inversion": "tool_to_ground",
+    "seed": 60514291,
+    "geometry": {
+      "family": "URSR",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.9276706026798747,
+              0.19821130559126532,
+              0.3164483074048024
+            ],
+            [
+              -0.2620950286625084,
+              0.9492728517087375,
+              0.17374478109906064
+            ],
+            [
+              -0.26595760728724654,
+              -0.24411745399411233,
+              0.9325627162724636
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "R",
+          "center": [
+            1.4445174997196308,
+            0.2410427135685456,
+            0.27583780094926197
+          ],
+          "frame": [
+            [
+              0.8862050315659264,
+              -0.4065384029218746,
+              -0.22218723855560835
+            ],
+            [
+              0.4488839939759369,
+              0.63477879339432,
+              0.6289348483023199
+            ],
+            [
+              -0.11464642157279167,
+              -0.6571015221459943,
+              0.745032742645564
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "S",
+          "center": [
+            1.9179134772395703,
+            1.022928629468124,
+            0.5558469372010066
+          ],
+          "frame": [
+            [
+              0.757742493270633,
+              0.33826529719038323,
+              -0.5580348578796007
+            ],
+            [
+              -0.628889604537812,
+              0.6067521028450139,
+              -0.4861581543051894
+            ],
+            [
+              0.17413839093169314,
+              0.7193250130572797,
+              0.672493380185906
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "R",
+          "center": [
+            0.1658856485295871,
+            1.4649974466554936,
+            -0.1336549196394753
+          ],
+          "frame": [
+            [
+              0.6323434940344526,
+              0.7183214723044501,
+              0.2900964804658402
+            ],
+            [
+              -0.6019681049818342,
+              0.21990109623601511,
+              0.7676443893228024
+            ],
+            [
+              0.48762291387595796,
+              -0.6600437639282459,
+              0.5714596429867591
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 1.017120993486815,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.6524610087665056,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.320010374893626,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 1.0104076228530536,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5313042078016923,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.239982942443247,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 90.04782566559972,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 136.4606417402603,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 99.94319370682739,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 59.84355868128778,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 59.84355868128778,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.3801572817558695,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.2454038371137463,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.4727744826849025,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.6571022115663763,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.41931837544208095,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 1.0515580731014287,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.029756484471512763,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.17853890682907658,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "urrs_physical_000",
+    "family": "URRS",
+    "inversion": "tool_to_ground",
+    "seed": 204645,
+    "geometry": {
+      "family": "URRS",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.944818029471471,
+              0.2531632279912453,
+              0.20791169081775934
+            ],
+            [
+              -0.28424999011377144,
+              0.9490363884893027,
+              0.13613183479077168
+            ],
+            [
+              -0.1628521854503882,
+              -0.18771870795483836,
+              0.9686283355228664
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "R",
+          "center": [
+            1.35,
+            0.18,
+            0.24
+          ],
+          "frame": [
+            [
+              0.8818042466894012,
+              -0.3562720417153323,
+              -0.3090169943749474
+            ],
+            [
+              0.4686669490631823,
+              0.7351309754907164,
+              0.48983031728331855
+            ],
+            [
+              0.05265511728546737,
+              -0.5767605059000281,
+              0.8152145468878713
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "R",
+          "center": [
+            1.92,
+            1.12,
+            0.61
+          ],
+          "frame": [
+            [
+              0.6985023559086853,
+              0.38718617834126784,
+              -0.6018150231520484
+            ],
+            [
+              -0.6709306468813314,
+              0.6468330034690547,
+              -0.36257293431611837
+            ],
+            [
+              0.2488905901504007,
+              0.6570341915948408,
+              0.7115894499006428
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "S",
+          "center": [
+            0.28,
+            1.41,
+            -0.17
+          ],
+          "frame": [
+            [
+              0.5918117938954297,
+              0.7574845534296302,
+              0.2756373558169991
+            ],
+            [
+              -0.6920492266452815,
+              0.3021327083996625,
+              0.6555789002208295
+            ],
+            [
+              0.4133118296225518,
+              -0.5787339439073866,
+              0.703022299549211
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.948928728670603,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.79590014677755,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2619033559471668,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 0.9932677686046801,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5816074206230615,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1534831847183977,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 85.80060952201954,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 77.62834889634472,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 32.74033326365643,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 36.07665177473275,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 36.07665177473275,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.22272246936770057,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.872199490974578,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.5263340020341836,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.7547851243557687,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.41447140698032076,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.872251611336628,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.040610892542481646,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.24366535525488986,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  },
+  {
+    "sample_id": "urrs_physical_001",
+    "family": "URRS",
+    "inversion": "tool_to_ground",
+    "seed": 800960546,
+    "geometry": {
+      "family": "URRS",
+      "joints": [
+        {
+          "name": "J1",
+          "kind": "U",
+          "center": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "frame": [
+            [
+              0.9364270647934643,
+              0.11839298758423705,
+              0.3302838972962139
+            ],
+            [
+              -0.1731270347556045,
+              0.974686444330556,
+              0.14146860102153327
+            ],
+            [
+              -0.3051743471509834,
+              -0.1896560985814502,
+              0.9332197930347568
+            ]
+          ]
+        },
+        {
+          "name": "J2",
+          "kind": "R",
+          "center": [
+            1.4382156169812195,
+            0.2723426914985237,
+            0.18829505523140772
+          ],
+          "frame": [
+            [
+              0.9151479710726336,
+              -0.35194402423391596,
+              -0.1965695674505062
+            ],
+            [
+              0.398901084871745,
+              0.7202688863711743,
+              0.5675303126827442
+            ],
+            [
+              -0.0581559586782581,
+              -0.597786027882607,
+              0.7995434630703622
+            ]
+          ]
+        },
+        {
+          "name": "J3",
+          "kind": "R",
+          "center": [
+            1.857466679633612,
+            1.0533634797196005,
+            0.6781001529442348
+          ],
+          "frame": [
+            [
+              0.6420215198688471,
+              0.43753420631687767,
+              -0.6295809609001494
+            ],
+            [
+              -0.6638439222214633,
+              0.7280623890532898,
+              -0.17098656255869965
+            ],
+            [
+              0.3835617485554566,
+              0.5277205472109988,
+              0.757886145206788
+            ]
+          ]
+        },
+        {
+          "name": "J4",
+          "kind": "S",
+          "center": [
+            0.36356711761509297,
+            1.5062802165669908,
+            -0.09726197807717363
+          ],
+          "frame": [
+            [
+              0.5889241901907067,
+              0.7768595426997464,
+              0.22283973865664355
+            ],
+            [
+              -0.6015755175228786,
+              0.2372454721022963,
+              0.7627722351292288
+            ],
+            [
+              0.5396991707658084,
+              -0.5832699519804698,
+              0.6070592789764434
+            ]
+          ]
+        }
+      ],
+      "links": [
+        {
+          "name": "L12",
+          "joint_a": 0,
+          "joint_b": 1
+        },
+        {
+          "name": "L23",
+          "joint_a": 1,
+          "joint_b": 2
+        },
+        {
+          "name": "L34",
+          "joint_a": 2,
+          "joint_b": 3
+        },
+        {
+          "name": "L41_ground",
+          "joint_a": 3,
+          "joint_b": 0
+        }
+      ],
+      "ground_link": 3,
+      "tool_joint": 0
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 1.0206015291457633,
+        "group": "distances",
+        "description": "L12 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.7003626795602091,
+        "group": "distances",
+        "description": "L23 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.2053584360129141,
+        "group": "distances",
+        "description": "L34 divided by mean loop-link center distance"
+      },
+      {
+        "name": "center_distance_41",
+        "value": 1.0736773552811136,
+        "group": "distances",
+        "description": "L41 divided by mean loop-link center distance"
+      },
+      {
+        "name": "diagonal_distance_13",
+        "value": 1.5493583862181552,
+        "group": "distances",
+        "description": "J1-J3 center distance divided by reference length"
+      },
+      {
+        "name": "diagonal_distance_24",
+        "value": 1.1486700184870702,
+        "group": "distances",
+        "description": "J2-J4 center distance divided by reference length"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 82.01905001135653,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J1 and J2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 74.44325915201023,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J2 and J3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 36.41478065401914,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J3 and J4"
+      },
+      {
+        "name": "twist_41_deg",
+        "value": 44.18774973550638,
+        "group": "angles",
+        "description": "Angle between the primary motion axes at J4 and J1"
+      },
+      {
+        "name": "tool_u_internal_angle_deg",
+        "value": 90.0,
+        "group": "angles",
+        "description": "Angle between the two tool-U axes; should be 90 degrees"
+      },
+      {
+        "name": "tool_to_ground_axis_angle_deg",
+        "value": 44.18774973550638,
+        "group": "angles",
+        "description": "Angle between tool-U primary axis and ground-joint primary axis"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.43599828237133437,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J1/J3, normalized"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.9636910925645661,
+        "group": "offsets",
+        "description": "Shortest distance between primary axes J2/J4, normalized"
+      },
+      {
+        "name": "offset_1",
+        "value": 1.4439793716458977,
+        "group": "offsets",
+        "description": "Signed J1-axis projection toward J3, normalized"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.6247723596741538,
+        "group": "offsets",
+        "description": "Signed J2-axis projection toward J4, normalized"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.5616359881681777,
+        "group": "axis-center descriptors",
+        "description": "Distance from J1 primary axis to J3 center, normalized"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 0.9638995331248358,
+        "group": "axis-center descriptors",
+        "description": "Distance from J2 primary axis to J4 center, normalized"
+      },
+      {
+        "name": "tetra_volume",
+        "value": -0.05761608475070156,
+        "group": "shape descriptors",
+        "description": "Signed J1-J2-J3-J4 tetrahedral volume normalized by Lref^3"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.34569650850420935,
+        "group": "shape descriptors",
+        "description": "Absolute normalized scalar triple product; zero is coplanar"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Sign of the center tetrahedron: right, left, or planar"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Whether adjacent primary joint axes intersect within numerical tolerance"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Whether opposite center-distance pairs are approximately equal"
+      },
+      {
+        "name": "reference_geometry_valid",
+        "value": true,
+        "group": "flags",
+        "description": "Geometry object passes V02B structural validation"
+      }
+    ],
+    "provenance": "physical_geometry_v02b"
+  }
+]

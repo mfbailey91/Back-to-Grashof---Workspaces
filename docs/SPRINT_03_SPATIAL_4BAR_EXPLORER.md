@@ -103,20 +103,117 @@ Stand up the data model for branch closure, tool coordinate range, and winding c
 - result schema matches the intended later closure/continuation output;
 - figures and HTML pages can be regenerated from code.
 
-## Sprint V03 — closure solver for one-DOF families
+## Sprint V02B — physical geometry hardening
+
+### Why this sprint exists
+V01 and V02 passed their software-scaffold acceptance criteria, but the V01 sample corpus is not yet a mechanism corpus. It samples descriptor-like scalar values directly rather than constructing joint centers, joint frames, compound-joint axes, and rigid links first. V02B hardens the geometry layer before any continuation solver is allowed to consume it.
+
+The research-data direction becomes:
+
+```text
+physical four-bar reference assembly
+    -> derive descriptors
+    -> solve closure / continue branch
+    -> compute W
+```
+
+not:
+
+```text
+random descriptor vector
+    -> infer mechanism
+```
 
 ### Goal
-Replace mock branch outputs with actual loop-closure solving and continuation.
+Create physically structured reference geometries for all six ordered families and derive every atlas descriptor from those objects. Publish 3D mechanism readouts so geometry can be inspected before V03.
 
 ### Deliverables
-- family-specific closure equations or a general transform-based closure formulation;
-- local solver for valid seed assemblies;
-- continuation driver for connected one-DOF branches;
-- singularity detection hooks.
+- explicit `R`, `U`, and `S` joint geometry objects;
+- four joint centers and a complete orthonormal frame at each joint;
+- exact compound-joint internal axis structure (`U`: two perpendicular intersecting axes; `S`: three concurrent orthogonal axes);
+- four-link loop adjacency with an explicit ground link and tool `U`;
+- one canonical reference assembly for each ordered family;
+- topology-preserving perturbations of canonical geometries;
+- descriptors derived from the physical geometry, including the fourth loop-center distance `L41` and the two center diagonals;
+- deterministic sampling independent of Python's randomized `hash()`;
+- 3D PNG mechanism views showing links, joint centers, and all motion axes;
+- `physical_geometry_samples.json`;
+- `sprint_02b_physical_geometry.html`;
+- tests for topology, U/S internal orthogonality, deterministic perturbation, descriptor consistency, and JSON serialization.
+
+### Data status
+The V01/V02 random descriptor corpus remains **scaffold/test data only**. It must not be used as crank evidence or included in the future surrogate atlas. V02B physical samples become the accepted geometry input for V03 and later research experiments.
 
 ### Acceptance
-- at least one family runs end-to-end with a closed or well-characterized branch;
-- branch trajectories are exportable.
+- all six canonical geometries pass structural validation;
+- family letters exactly match the four joint kinds in every canonical mechanism;
+- tool joint is always `U` with two perpendicular axes;
+- every `U` and `S` preserves its exact internal axis constraints after perturbation;
+- normalized center distances and shape descriptors can be recomputed directly from stored geometry;
+- at least one canonical and one perturbed 3D mechanism are rendered per family;
+- the V02B HTML readout explicitly states `PHYSICAL GEOMETRY / NO CLOSURE SOLVE YET`;
+- V03 is blocked from using the legacy V01 descriptor-only corpus.
+
+## Sprint V03 — closure and continuation proof
+
+### Goal
+Establish that the V02B physical mechanisms possess the expected regular one-dimensional closure manifolds before any crank interpretation. Use one general seven-coordinate closure kernel for all six ordered families.
+
+### V03A — reference closure and mobility audit
+Expand compound joints only as solver coordinates:
+
+```text
+R -> 1 revolute coordinate
+U -> 2 ordered intersecting revolute coordinates
+S -> 3 ordered concurrent revolute coordinates
+```
+
+Every ordered family therefore contains seven scalar rotational coordinates and six spatial closure constraints. At each canonical V02B reference assembly:
+
+- verify `||r(0)||` is numerically zero;
+- compute the `6 x 7` closure Jacobian;
+- require rank 6 and nullity 1 at a regular reference state;
+- record all singular values and the smallest nonzero singular value.
+
+### V03B — first detailed branch proof on `UUUR`
+Use the closure-Jacobian null vector as the predictor direction and a pseudo-arclength corrector to remain on the six-constraint closure manifold. Publish:
+
+- all seven scalar coordinates versus continuation arclength;
+- closure-residual norm;
+- smallest nonzero closure-Jacobian singular value;
+- the local `tool_alpha` versus `tool_beta` path;
+- five 3D mechanism snapshots using a fixed camera/scale.
+
+This sprint follows a branch segment only. It does not yet require full-cycle return or compute winding.
+
+### V03C — generalize the same kernel to all six families
+Run the same solver on:
+
+```text
+UUUR, UURU, URUU,
+USRR, URSR, URRS.
+```
+
+Each physical mechanism is solved once. The two tool-U coordinates are read from that single branch; the 12 eventual tool-axis crank questions are not 12 separate closure solves.
+
+### Deliverables
+- general transform/product-of-exponentials closure residual;
+- seven-coordinate expansion metadata with semantic coordinate names;
+- finite-difference `6 x 7` closure Jacobian and SVD mobility audit;
+- pseudo-arclength predictor/corrector continuation;
+- `v03_reference_closure_audits.json`;
+- `v03_continuation_traces.json`;
+- V03 mobility, coordinate, residual, singularity-margin, and tool-U phase plots;
+- fixed-view 3D `UUUR` branch snapshots;
+- `sprint_03_closure_and_continuation.html`.
+
+### Acceptance
+- all six canonical V02B reference geometries close at the stored zero state;
+- all six regular reference Jacobians have rank 6 / nullity 1;
+- `UUUR` continuation produces a well-conditioned branch segment with closure residual near numerical precision;
+- the same continuation kernel produces a nontrivial converged segment for all six families;
+- V03 readouts explicitly state that no crank/winding/dexterity classification is made yet;
+- S-joint x/y/z variables are labeled solver-chart coordinates and are excluded from invariant Grashof-descriptor claims.
 
 ## Sprint V04 — true winding and crank atlas
 
