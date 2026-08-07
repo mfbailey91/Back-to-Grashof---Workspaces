@@ -3,6 +3,7 @@ from pathlib import Path
 from grashof_workspace.spatial4bar_explorer.closure import audit_reference_geometry, scalar_axes
 from grashof_workspace.spatial4bar_explorer.continuation import continue_branch
 from grashof_workspace.spatial4bar_explorer.continuation_plots import (
+    animate_branch,
     plot_branch_snapshots,
     plot_closure_residual,
     plot_continuation_coordinates,
@@ -68,6 +69,19 @@ def test_v03_visuals_and_html_are_generated(tmp_path: Path) -> None:
     plot_singularity_margin(detailed, singularity)
     plot_tool_coordinate_phase(detailed, phase)
     snapshots = plot_branch_snapshots(geometry, detailed, tmp_path / "snapshots", count=3)
+    animation_paths: list[tuple[str, str]] = []
+    for family, trace in zip(OrderedFamily, traces, strict=True):
+        path = animate_branch(
+            canonical_geometry(family),
+            trace,
+            tmp_path / f"{family.value.lower()}_branch.gif",
+            stride=1,
+            fps=8,
+            dpi=70,
+        )
+        assert path.exists()
+        assert path.stat().st_size > 0
+        animation_paths.append((family.value, path.name))
     for path in (mobility, coordinates, residual, singularity, phase, *snapshots):
         assert path.exists()
         assert path.stat().st_size > 0
@@ -82,6 +96,7 @@ def test_v03_visuals_and_html_are_generated(tmp_path: Path) -> None:
         residual_plot=residual.name,
         singularity_plot=singularity.name,
         phase_plot=phase.name,
+        animation_paths=animation_paths,
         snapshot_paths=[str(path.relative_to(tmp_path)) for path in snapshots],
         audit_json="data/audit.json",
         trace_json="data/traces.json",
@@ -92,3 +107,9 @@ def test_v03_visuals_and_html_are_generated(tmp_path: Path) -> None:
     assert "V03C" in html
     assert "No crank, winding, or dexterity classification" in html
     assert "S-joint x/y/z" in html
+    assert "Driven branch animation" in html
+    assert "Driven branch animations (all families)" in html
+    assert "local branch motion only" in html
+    for family, path_name in animation_paths:
+        assert path_name in html
+        assert family in html

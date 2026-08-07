@@ -17,6 +17,7 @@ def write_sprint03_html(
     residual_plot: str,
     singularity_plot: str,
     phase_plot: str,
+    animation_paths: list[tuple[str, str]],
     snapshot_paths: list[str],
     audit_json: str,
     trace_json: str,
@@ -38,6 +39,16 @@ def write_sprint03_html(
     snapshots = "".join(
         f'<img src="{path}" alt="{detailed_family} continued mechanism snapshot" style="max-width: 430px; margin: 6px;">'
         for path in snapshot_paths
+    )
+    detailed_animation = next(
+        (path for family, path in animation_paths if family == detailed_family),
+        animation_paths[0][1] if animation_paths else "",
+    )
+    family_animations = "".join(
+        f'<figure style="display:inline-block; margin: 8px; vertical-align: top;">'
+        f'<img src="{path}" alt="{family} driven branch animation" style="max-width: 420px;">'
+        f"<figcaption>{family}</figcaption></figure>"
+        for family, path in animation_paths
     )
     html = f"""<!doctype html>
 <html lang="en">
@@ -66,6 +77,12 @@ The plots below are diagnostics of a real closure branch segment; they are not y
 <img src="{residual_plot}" alt="closure residual" style="max-width: 760px;">
 <img src="{singularity_plot}" alt="singularity margin" style="max-width: 760px;">
 <img src="{phase_plot}" alt="tool U coordinate path" style="max-width: 620px;">
+<h3>Driven branch animation</h3>
+<p>
+The GIF advances along continuation arclength on the local one-DOF closure manifold.
+This is local branch motion only; it is not a crank, winding, or full-cycle proof.
+</p>
+<img src="{detailed_animation}" alt="{detailed_family} driven branch animation" style="max-width: 640px;">
 <h3>3D branch snapshots</h3>
 {snapshots}
 <h2>V03C — same kernel across all six families</h2>
@@ -74,6 +91,12 @@ The plots below are diagnostics of a real closure branch segment; they are not y
 {trace_rows}
 </table>
 <p><a href="{trace_json}">Continuation-trace JSON</a></p>
+<h3>Driven branch animations (all families)</h3>
+<p>
+Each GIF uses the same seven-coordinate closure/continuation kernel on that family's V02B reference geometry.
+Motion is along local continuation arclength only; not a crank or winding classification.
+</p>
+{family_animations}
 <h2>Interpretation guardrails</h2>
 <ul>
 <li>V03 establishes local closure motion, not a crank condition.</li>

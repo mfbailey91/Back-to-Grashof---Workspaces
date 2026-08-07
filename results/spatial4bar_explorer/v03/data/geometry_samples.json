@@ -3,107 +3,107 @@
     "sample_id": "uuur_000",
     "family": "UUUR",
     "inversion": "tool_to_ground",
-    "seed": 2728782,
+    "seed": 2685933,
     "raw_parameters": {
-      "l12": 0.782182,
-      "l23": 0.786639,
-      "l34": 1.287761,
-      "twist12": 99.114261,
-      "twist23": 73.107041,
-      "twist34": 85.72735,
-      "offset1": -0.212502,
-      "offset2": 0.730515,
-      "common13": 0.964523,
-      "common24": 0.944476
+      "l12": 1.975802,
+      "l23": 1.325665,
+      "l34": 0.886843,
+      "twist12": 129.090101,
+      "twist23": 119.662094,
+      "twist34": 157.99821,
+      "offset1": -0.117311,
+      "offset2": 0.604669,
+      "common13": 0.224893,
+      "common24": 0.673402
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 0.782182,
+        "value": 1.975802,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 0.786639,
+        "value": 1.325665,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 1.287761,
+        "value": 0.886843,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 99.114261,
+        "value": 129.090101,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 73.107041,
+        "value": 119.662094,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 85.72735,
+        "value": 157.99821,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 0.964523,
+        "value": 0.224893,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 0.944476,
+        "value": 0.673402,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": -0.212502,
+        "value": -0.117311,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": 0.730515,
+        "value": 0.604669,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 1.177025,
+        "value": 0.342204,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 1.674991,
+        "value": 1.278071,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 0.12636035965471348,
+        "value": 0.33641243824812067,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 0.12636035965471348,
+        "value": 0.33641243824812067,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
       {
         "name": "chirality",
-        "value": "left",
+        "value": "right",
         "group": "flags",
         "description": "Right- or left-handed center geometry flag"
       },
@@ -125,345 +125,101 @@
     "sample_id": "uuur_001",
     "family": "UUUR",
     "inversion": "tool_to_ground",
-    "seed": 4273991,
+    "seed": 4838509,
     "raw_parameters": {
-      "l12": 1.544205,
-      "l23": 2.298854,
-      "l34": 1.712385,
-      "twist12": 62.787109,
-      "twist23": 13.831231,
-      "twist34": 114.788003,
-      "offset1": -0.50618,
-      "offset2": -0.415148,
-      "common13": 0.474005,
-      "common24": 1.339394
+      "l12": 1.686811,
+      "l23": 1.986744,
+      "l34": 1.326391,
+      "twist12": 55.035636,
+      "twist23": 112.341319,
+      "twist34": 23.30834,
+      "offset1": 0.859418,
+      "offset2": -0.606261,
+      "common13": 0.70847,
+      "common24": 0.312009
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 1.544205,
+        "value": 1.686811,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 2.298854,
+        "value": 1.986744,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 1.712385,
+        "value": 1.326391,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 62.787109,
+        "value": 55.035636,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 13.831231,
+        "value": 112.341319,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 114.788003,
+        "value": 23.30834,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 0.474005,
+        "value": 0.70847,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 1.339394,
+        "value": 0.312009,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": -0.50618,
+        "value": 0.859418,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": -0.415148,
+        "value": -0.606261,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 0.980185,
+        "value": 1.567888,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 1.754542,
+        "value": 0.91827,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 0.2422024095004727,
+        "value": 0.6852361320037362,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 0.2422024095004727,
-        "group": "shape",
-        "description": "Near-zero indicates nearly planar center geometry"
-      },
-      {
-        "name": "chirality",
-        "value": "right",
-        "group": "flags",
-        "description": "Right- or left-handed center geometry flag"
-      },
-      {
-        "name": "has_intersection_pair",
-        "value": false,
-        "group": "flags",
-        "description": "Boolean flag for exact pairwise axis intersection"
-      },
-      {
-        "name": "has_mirror_symmetry",
-        "value": false,
-        "group": "flags",
-        "description": "Boolean flag for mirror-symmetric construction"
-      }
-    ]
-  },
-  {
-    "sample_id": "uuru_000",
-    "family": "UURU",
-    "inversion": "tool_to_ground",
-    "seed": 9288692,
-    "raw_parameters": {
-      "l12": 1.975555,
-      "l23": 1.348285,
-      "l34": 1.065007,
-      "twist12": 107.374879,
-      "twist23": 99.84027,
-      "twist34": 35.408729,
-      "offset1": -0.727982,
-      "offset2": 0.912751,
-      "common13": 0.929256,
-      "common24": 1.429378
-    },
-    "descriptors": [
-      {
-        "name": "center_distance_12",
-        "value": 1.975555,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L12/Lref"
-      },
-      {
-        "name": "center_distance_23",
-        "value": 1.348285,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L23/Lref"
-      },
-      {
-        "name": "center_distance_34",
-        "value": 1.065007,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L34/Lref"
-      },
-      {
-        "name": "twist_12_deg",
-        "value": 107.374879,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 1 and 2"
-      },
-      {
-        "name": "twist_23_deg",
-        "value": 99.84027,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 2 and 3"
-      },
-      {
-        "name": "twist_34_deg",
-        "value": 35.408729,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 3 and 4"
-      },
-      {
-        "name": "common_normal_13",
-        "value": 0.929256,
-        "group": "offsets",
-        "description": "Shortest separation between selected nonadjacent axes 1 and 3"
-      },
-      {
-        "name": "common_normal_24",
-        "value": 1.429378,
-        "group": "offsets",
-        "description": "Shortest separation between selected nonadjacent axes 2 and 4"
-      },
-      {
-        "name": "offset_1",
-        "value": -0.727982,
-        "group": "offsets",
-        "description": "Signed offset along axis 1 to a common-normal construction"
-      },
-      {
-        "name": "offset_2",
-        "value": 0.912751,
-        "group": "offsets",
-        "description": "Signed offset along axis 2 to a common-normal construction"
-      },
-      {
-        "name": "axis_to_center_1",
-        "value": 1.657238,
-        "group": "axis-center",
-        "description": "Distance from selected revolute axis 1 to an opposite joint center"
-      },
-      {
-        "name": "axis_to_center_2",
-        "value": 2.342129,
-        "group": "axis-center",
-        "description": "Distance from selected revolute axis 2 to an opposite joint center"
-      },
-      {
-        "name": "tetra_volume",
-        "value": 0.46583835563956205,
-        "group": "shape",
-        "description": "Signed normalized tetrahedral volume built from four reference points"
-      },
-      {
-        "name": "coplanarity_residual",
-        "value": 0.46583835563956205,
-        "group": "shape",
-        "description": "Near-zero indicates nearly planar center geometry"
-      },
-      {
-        "name": "chirality",
-        "value": "right",
-        "group": "flags",
-        "description": "Right- or left-handed center geometry flag"
-      },
-      {
-        "name": "has_intersection_pair",
-        "value": false,
-        "group": "flags",
-        "description": "Boolean flag for exact pairwise axis intersection"
-      },
-      {
-        "name": "has_mirror_symmetry",
-        "value": false,
-        "group": "flags",
-        "description": "Boolean flag for mirror-symmetric construction"
-      }
-    ]
-  },
-  {
-    "sample_id": "uuru_001",
-    "family": "UURU",
-    "inversion": "tool_to_ground",
-    "seed": 4472182,
-    "raw_parameters": {
-      "l12": 1.047014,
-      "l23": 2.126767,
-      "l34": 2.051676,
-      "twist12": 158.422188,
-      "twist23": 69.249136,
-      "twist34": 94.926366,
-      "offset1": 0.326524,
-      "offset2": 0.776193,
-      "common13": 1.472121,
-      "common24": 1.498512
-    },
-    "descriptors": [
-      {
-        "name": "center_distance_12",
-        "value": 1.047014,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L12/Lref"
-      },
-      {
-        "name": "center_distance_23",
-        "value": 2.126767,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L23/Lref"
-      },
-      {
-        "name": "center_distance_34",
-        "value": 2.051676,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L34/Lref"
-      },
-      {
-        "name": "twist_12_deg",
-        "value": 158.422188,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 1 and 2"
-      },
-      {
-        "name": "twist_23_deg",
-        "value": 69.249136,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 2 and 3"
-      },
-      {
-        "name": "twist_34_deg",
-        "value": 94.926366,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 3 and 4"
-      },
-      {
-        "name": "common_normal_13",
-        "value": 1.472121,
-        "group": "offsets",
-        "description": "Shortest separation between selected nonadjacent axes 1 and 3"
-      },
-      {
-        "name": "common_normal_24",
-        "value": 1.498512,
-        "group": "offsets",
-        "description": "Shortest separation between selected nonadjacent axes 2 and 4"
-      },
-      {
-        "name": "offset_1",
-        "value": 0.326524,
-        "group": "offsets",
-        "description": "Signed offset along axis 1 to a common-normal construction"
-      },
-      {
-        "name": "offset_2",
-        "value": 0.776193,
-        "group": "offsets",
-        "description": "Signed offset along axis 2 to a common-normal construction"
-      },
-      {
-        "name": "axis_to_center_1",
-        "value": 1.798645,
-        "group": "axis-center",
-        "description": "Distance from selected revolute axis 1 to an opposite joint center"
-      },
-      {
-        "name": "axis_to_center_2",
-        "value": 2.274705,
-        "group": "axis-center",
-        "description": "Distance from selected revolute axis 2 to an opposite joint center"
-      },
-      {
-        "name": "tetra_volume",
-        "value": 0.712035845750606,
-        "group": "shape",
-        "description": "Signed normalized tetrahedral volume built from four reference points"
-      },
-      {
-        "name": "coplanarity_residual",
-        "value": 0.712035845750606,
+        "value": 0.6852361320037362,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
@@ -488,104 +244,348 @@
     ]
   },
   {
-    "sample_id": "uruu_000",
-    "family": "URUU",
+    "sample_id": "uuru_000",
+    "family": "UURU",
     "inversion": "tool_to_ground",
-    "seed": 9800342,
+    "seed": 8425246,
     "raw_parameters": {
-      "l12": 1.879686,
-      "l23": 1.286063,
-      "l34": 0.994123,
-      "twist12": 29.74076,
-      "twist23": 107.29313,
-      "twist34": 112.610234,
-      "offset1": 0.814593,
-      "offset2": -0.987397,
-      "common13": 0.763108,
-      "common24": 1.277717
+      "l12": 1.121874,
+      "l23": 1.354056,
+      "l34": 2.487976,
+      "twist12": 30.426828,
+      "twist23": 62.29319,
+      "twist34": 19.830338,
+      "offset1": -0.909214,
+      "offset2": 0.961988,
+      "common13": 0.182856,
+      "common24": 1.28597
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 1.879686,
+        "value": 1.121874,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 1.286063,
+        "value": 1.354056,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 0.994123,
+        "value": 2.487976,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 29.74076,
+        "value": 30.426828,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 107.29313,
+        "value": 62.29319,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 112.610234,
+        "value": 19.830338,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 0.763108,
+        "value": 0.182856,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 1.277717,
+        "value": 1.28597,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": 0.814593,
+        "value": -0.909214,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": -0.987397,
+        "value": 0.961988,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 1.577701,
+        "value": 1.0920699999999999,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 2.265114,
+        "value": 2.247958,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 0.3824258292713335,
+        "value": 0.5576798230599654,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 0.3824258292713335,
+        "value": 0.5576798230599654,
+        "group": "shape",
+        "description": "Near-zero indicates nearly planar center geometry"
+      },
+      {
+        "name": "chirality",
+        "value": "left",
+        "group": "flags",
+        "description": "Right- or left-handed center geometry flag"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Boolean flag for exact pairwise axis intersection"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Boolean flag for mirror-symmetric construction"
+      }
+    ]
+  },
+  {
+    "sample_id": "uuru_001",
+    "family": "UURU",
+    "inversion": "tool_to_ground",
+    "seed": 428679,
+    "raw_parameters": {
+      "l12": 1.286277,
+      "l23": 0.520983,
+      "l34": 0.941632,
+      "twist12": 108.867907,
+      "twist23": 111.850404,
+      "twist34": 75.218883,
+      "offset1": -0.084924,
+      "offset2": 0.250342,
+      "common13": 0.219795,
+      "common24": 0.879141
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 1.286277,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L12/Lref"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 0.520983,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L23/Lref"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 0.941632,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L34/Lref"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 108.867907,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 1 and 2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 111.850404,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 2 and 3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 75.218883,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 3 and 4"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.219795,
+        "group": "offsets",
+        "description": "Shortest separation between selected nonadjacent axes 1 and 3"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 0.879141,
+        "group": "offsets",
+        "description": "Shortest separation between selected nonadjacent axes 2 and 4"
+      },
+      {
+        "name": "offset_1",
+        "value": -0.084924,
+        "group": "offsets",
+        "description": "Signed offset along axis 1 to a common-normal construction"
+      },
+      {
+        "name": "offset_2",
+        "value": 0.250342,
+        "group": "offsets",
+        "description": "Signed offset along axis 2 to a common-normal construction"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 0.30471899999999996,
+        "group": "axis-center",
+        "description": "Distance from selected revolute axis 1 to an opposite joint center"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 1.129483,
+        "group": "axis-center",
+        "description": "Distance from selected revolute axis 2 to an opposite joint center"
+      },
+      {
+        "name": "tetra_volume",
+        "value": 0.0976135904101368,
+        "group": "shape",
+        "description": "Signed normalized tetrahedral volume built from four reference points"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.0976135904101368,
+        "group": "shape",
+        "description": "Near-zero indicates nearly planar center geometry"
+      },
+      {
+        "name": "chirality",
+        "value": "right",
+        "group": "flags",
+        "description": "Right- or left-handed center geometry flag"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Boolean flag for exact pairwise axis intersection"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Boolean flag for mirror-symmetric construction"
+      }
+    ]
+  },
+  {
+    "sample_id": "uruu_000",
+    "family": "URUU",
+    "inversion": "tool_to_ground",
+    "seed": 2137579,
+    "raw_parameters": {
+      "l12": 0.986824,
+      "l23": 2.320725,
+      "l34": 1.655824,
+      "twist12": 38.365526,
+      "twist23": 73.45404,
+      "twist34": 77.296594,
+      "offset1": -0.556128,
+      "offset2": -0.242814,
+      "common13": 0.445017,
+      "common24": 1.345781
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 0.986824,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L12/Lref"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 2.320725,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L23/Lref"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 1.655824,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L34/Lref"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 38.365526,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 1 and 2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 73.45404,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 2 and 3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 77.296594,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 3 and 4"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.445017,
+        "group": "offsets",
+        "description": "Shortest separation between selected nonadjacent axes 1 and 3"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 1.345781,
+        "group": "offsets",
+        "description": "Shortest separation between selected nonadjacent axes 2 and 4"
+      },
+      {
+        "name": "offset_1",
+        "value": -0.556128,
+        "group": "offsets",
+        "description": "Signed offset along axis 1 to a common-normal construction"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.242814,
+        "group": "offsets",
+        "description": "Signed offset along axis 2 to a common-normal construction"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 1.001145,
+        "group": "axis-center",
+        "description": "Distance from selected revolute axis 1 to an opposite joint center"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 1.588595,
+        "group": "axis-center",
+        "description": "Distance from selected revolute axis 2 to an opposite joint center"
+      },
+      {
+        "name": "tetra_volume",
+        "value": 0.605842766238837,
+        "group": "shape",
+        "description": "Signed normalized tetrahedral volume built from four reference points"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 0.605842766238837,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
@@ -613,101 +613,101 @@
     "sample_id": "uruu_001",
     "family": "URUU",
     "inversion": "tool_to_ground",
-    "seed": 9366386,
+    "seed": 1938255,
     "raw_parameters": {
-      "l12": 1.618442,
-      "l23": 2.224005,
-      "l34": 1.152207,
-      "twist12": 52.296525,
-      "twist23": 130.989684,
-      "twist34": 19.017096,
-      "offset1": -0.866535,
-      "offset2": -0.255142,
-      "common13": 0.379695,
-      "common24": 0.097072
+      "l12": 1.052908,
+      "l23": 1.968846,
+      "l34": 0.624944,
+      "twist12": 68.931261,
+      "twist23": 118.439871,
+      "twist34": 149.739957,
+      "offset1": 0.091014,
+      "offset2": 0.424073,
+      "common13": 0.975377,
+      "common24": 0.369924
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 1.618442,
+        "value": 1.052908,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 2.224005,
+        "value": 1.968846,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 1.152207,
+        "value": 0.624944,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 52.296525,
+        "value": 68.931261,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 130.989684,
+        "value": 118.439871,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 19.017096,
+        "value": 149.739957,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 0.379695,
+        "value": 0.975377,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 0.097072,
+        "value": 0.369924,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": -0.866535,
+        "value": 0.091014,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": -0.255142,
+        "value": 0.424073,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 1.2462300000000002,
+        "value": 1.066391,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 0.35221399999999997,
+        "value": 0.793997,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 0.5217470257439761,
+        "value": 0.18986183936351303,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 0.5217470257439761,
+        "value": 0.18986183936351303,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
@@ -719,7 +719,7 @@
       },
       {
         "name": "has_intersection_pair",
-        "value": true,
+        "value": false,
         "group": "flags",
         "description": "Boolean flag for exact pairwise axis intersection"
       },
@@ -735,107 +735,107 @@
     "sample_id": "usrr_000",
     "family": "USRR",
     "inversion": "tool_to_ground",
-    "seed": 3552473,
+    "seed": 6055546,
     "raw_parameters": {
-      "l12": 2.332474,
-      "l23": 0.916673,
-      "l34": 1.685908,
-      "twist12": 111.832674,
-      "twist23": 19.191625,
-      "twist34": 10.516195,
-      "offset1": -0.10898,
-      "offset2": 0.16019,
-      "common13": 0.840791,
-      "common24": 1.243165
+      "l12": 0.541518,
+      "l23": 2.024191,
+      "l34": 1.883153,
+      "twist12": 135.78822,
+      "twist23": 111.542523,
+      "twist34": 87.676824,
+      "offset1": 0.019826,
+      "offset2": -0.120081,
+      "common13": 1.118826,
+      "common24": 1.363902
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 2.332474,
+        "value": 0.541518,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 0.916673,
+        "value": 2.024191,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 1.685908,
+        "value": 1.883153,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 111.832674,
+        "value": 135.78822,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 19.191625,
+        "value": 111.542523,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 10.516195,
+        "value": 87.676824,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 0.840791,
+        "value": 1.118826,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 1.243165,
+        "value": 1.363902,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": -0.10898,
+        "value": 0.019826,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": 0.16019,
+        "value": -0.120081,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 0.9497709999999999,
+        "value": 1.138652,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 1.4033550000000001,
+        "value": 1.4839829999999998,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 0.19749284475946455,
+        "value": 0.3199996784133231,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 0.19749284475946455,
+        "value": 0.3199996784133231,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
       {
         "name": "chirality",
-        "value": "left",
+        "value": "right",
         "group": "flags",
         "description": "Right- or left-handed center geometry flag"
       },
@@ -857,101 +857,101 @@
     "sample_id": "usrr_001",
     "family": "USRR",
     "inversion": "tool_to_ground",
-    "seed": 5853657,
+    "seed": 8616504,
     "raw_parameters": {
-      "l12": 1.473601,
-      "l23": 1.681665,
-      "l34": 1.252323,
-      "twist12": 18.118219,
-      "twist23": 23.514254,
-      "twist34": 65.916952,
-      "offset1": -0.925642,
-      "offset2": -0.31671,
-      "common13": 0.963434,
-      "common24": 1.318235
+      "l12": 2.310769,
+      "l23": 0.520068,
+      "l34": 1.21675,
+      "twist12": 152.320562,
+      "twist23": 167.110195,
+      "twist34": 64.795344,
+      "offset1": 0.313784,
+      "offset2": 0.423302,
+      "common13": 1.108222,
+      "common24": 0.386092
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 1.473601,
+        "value": 2.310769,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 1.681665,
+        "value": 0.520068,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 1.252323,
+        "value": 1.21675,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 18.118219,
+        "value": 152.320562,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 23.514254,
+        "value": 167.110195,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 65.916952,
+        "value": 64.795344,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 0.963434,
+        "value": 1.108222,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 1.318235,
+        "value": 0.386092,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": -0.925642,
+        "value": 0.313784,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": -0.31671,
+        "value": 0.423302,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 1.889076,
+        "value": 1.422006,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 1.634945,
+        "value": 0.809394,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 0.20636335499303127,
+        "value": 0.05436519080782202,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 0.20636335499303127,
+        "value": 0.05436519080782202,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
@@ -979,223 +979,101 @@
     "sample_id": "ursr_000",
     "family": "URSR",
     "inversion": "tool_to_ground",
-    "seed": 23493,
+    "seed": 5631890,
     "raw_parameters": {
-      "l12": 1.772437,
-      "l23": 1.878439,
-      "l34": 1.815735,
-      "twist12": 78.041677,
-      "twist23": 92.333757,
-      "twist34": 161.674757,
-      "offset1": -0.709384,
-      "offset2": 0.220908,
-      "common13": 0.072858,
-      "common24": 0.058513
+      "l12": 1.372661,
+      "l23": 1.835074,
+      "l34": 2.102783,
+      "twist12": 99.402987,
+      "twist23": 46.197309,
+      "twist34": 107.935613,
+      "offset1": -0.254734,
+      "offset2": -0.979817,
+      "common13": 0.481974,
+      "common24": 0.883433
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 1.772437,
+        "value": 1.372661,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 1.878439,
+        "value": 1.835074,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 1.815735,
+        "value": 2.102783,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 78.041677,
+        "value": 99.402987,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 92.333757,
+        "value": 46.197309,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 161.674757,
+        "value": 107.935613,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 0.072858,
+        "value": 0.481974,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 0.058513,
+        "value": 0.883433,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": -0.709384,
+        "value": -0.254734,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": 0.220908,
+        "value": -0.979817,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 0.782242,
+        "value": 0.736708,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 0.279421,
+        "value": 1.86325,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 1.0067201362688931,
+        "value": 0.6371379433166497,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 1.0067201362688931,
-        "group": "shape",
-        "description": "Near-zero indicates nearly planar center geometry"
-      },
-      {
-        "name": "chirality",
-        "value": "right",
-        "group": "flags",
-        "description": "Right- or left-handed center geometry flag"
-      },
-      {
-        "name": "has_intersection_pair",
-        "value": true,
-        "group": "flags",
-        "description": "Boolean flag for exact pairwise axis intersection"
-      },
-      {
-        "name": "has_mirror_symmetry",
-        "value": true,
-        "group": "flags",
-        "description": "Boolean flag for mirror-symmetric construction"
-      }
-    ]
-  },
-  {
-    "sample_id": "ursr_001",
-    "family": "URSR",
-    "inversion": "tool_to_ground",
-    "seed": 7075773,
-    "raw_parameters": {
-      "l12": 1.556824,
-      "l23": 0.554041,
-      "l34": 0.733441,
-      "twist12": 126.870579,
-      "twist23": 101.771274,
-      "twist34": 29.240784,
-      "offset1": -0.127808,
-      "offset2": 0.013049,
-      "common13": 1.324169,
-      "common24": 0.929359
-    },
-    "descriptors": [
-      {
-        "name": "center_distance_12",
-        "value": 1.556824,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L12/Lref"
-      },
-      {
-        "name": "center_distance_23",
-        "value": 0.554041,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L23/Lref"
-      },
-      {
-        "name": "center_distance_34",
-        "value": 0.733441,
-        "group": "distances",
-        "description": "Normalized adjacent joint-center distance L34/Lref"
-      },
-      {
-        "name": "twist_12_deg",
-        "value": 126.870579,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 1 and 2"
-      },
-      {
-        "name": "twist_23_deg",
-        "value": 101.771274,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 2 and 3"
-      },
-      {
-        "name": "twist_34_deg",
-        "value": 29.240784,
-        "group": "angles",
-        "description": "Angle between consecutive axes near joints 3 and 4"
-      },
-      {
-        "name": "common_normal_13",
-        "value": 1.324169,
-        "group": "offsets",
-        "description": "Shortest separation between selected nonadjacent axes 1 and 3"
-      },
-      {
-        "name": "common_normal_24",
-        "value": 0.929359,
-        "group": "offsets",
-        "description": "Shortest separation between selected nonadjacent axes 2 and 4"
-      },
-      {
-        "name": "offset_1",
-        "value": -0.127808,
-        "group": "offsets",
-        "description": "Signed offset along axis 1 to a common-normal construction"
-      },
-      {
-        "name": "offset_2",
-        "value": 0.013049,
-        "group": "offsets",
-        "description": "Signed offset along axis 2 to a common-normal construction"
-      },
-      {
-        "name": "axis_to_center_1",
-        "value": 1.4519769999999999,
-        "group": "axis-center",
-        "description": "Distance from selected revolute axis 1 to an opposite joint center"
-      },
-      {
-        "name": "axis_to_center_2",
-        "value": 0.942408,
-        "group": "axis-center",
-        "description": "Distance from selected revolute axis 2 to an opposite joint center"
-      },
-      {
-        "name": "tetra_volume",
-        "value": 0.10322018833556094,
-        "group": "shape",
-        "description": "Signed normalized tetrahedral volume built from four reference points"
-      },
-      {
-        "name": "coplanarity_residual",
-        "value": 0.10322018833556094,
+        "value": 0.6371379433166497,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
@@ -1220,104 +1098,226 @@
     ]
   },
   {
-    "sample_id": "urrs_000",
-    "family": "URRS",
+    "sample_id": "ursr_001",
+    "family": "URSR",
     "inversion": "tool_to_ground",
-    "seed": 3628606,
+    "seed": 9419026,
     "raw_parameters": {
-      "l12": 2.131027,
-      "l23": 2.122104,
-      "l34": 1.531554,
-      "twist12": 86.504641,
-      "twist23": 155.210979,
-      "twist34": 135.008481,
-      "offset1": 0.942366,
-      "offset2": 0.782077,
-      "common13": 0.616738,
-      "common24": 1.427117
+      "l12": 1.285624,
+      "l23": 1.76869,
+      "l34": 1.990613,
+      "twist12": 125.11726,
+      "twist23": 20.337561,
+      "twist34": 24.743167,
+      "offset1": 0.083237,
+      "offset2": -0.817209,
+      "common13": 0.260165,
+      "common24": 0.100519
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 2.131027,
+        "value": 1.285624,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 2.122104,
+        "value": 1.76869,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 1.531554,
+        "value": 1.990613,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 86.504641,
+        "value": 125.11726,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 155.210979,
+        "value": 20.337561,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 135.008481,
+        "value": 24.743167,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 0.616738,
+        "value": 0.260165,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 1.427117,
+        "value": 0.100519,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": 0.942366,
+        "value": 0.083237,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": 0.782077,
+        "value": -0.817209,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 1.559104,
+        "value": 0.343402,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 2.209194,
+        "value": 0.917728,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 0.48399278330512957,
+        "value": 0.26219179561534306,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 0.48399278330512957,
+        "value": 0.26219179561534306,
+        "group": "shape",
+        "description": "Near-zero indicates nearly planar center geometry"
+      },
+      {
+        "name": "chirality",
+        "value": "right",
+        "group": "flags",
+        "description": "Right- or left-handed center geometry flag"
+      },
+      {
+        "name": "has_intersection_pair",
+        "value": false,
+        "group": "flags",
+        "description": "Boolean flag for exact pairwise axis intersection"
+      },
+      {
+        "name": "has_mirror_symmetry",
+        "value": false,
+        "group": "flags",
+        "description": "Boolean flag for mirror-symmetric construction"
+      }
+    ]
+  },
+  {
+    "sample_id": "urrs_000",
+    "family": "URRS",
+    "inversion": "tool_to_ground",
+    "seed": 2578007,
+    "raw_parameters": {
+      "l12": 2.180566,
+      "l23": 1.893504,
+      "l34": 2.027154,
+      "twist12": 109.577828,
+      "twist23": 62.538308,
+      "twist34": 63.602796,
+      "offset1": 0.974715,
+      "offset2": -0.993566,
+      "common13": 0.98364,
+      "common24": 1.459976
+    },
+    "descriptors": [
+      {
+        "name": "center_distance_12",
+        "value": 2.180566,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L12/Lref"
+      },
+      {
+        "name": "center_distance_23",
+        "value": 1.893504,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L23/Lref"
+      },
+      {
+        "name": "center_distance_34",
+        "value": 2.027154,
+        "group": "distances",
+        "description": "Normalized adjacent joint-center distance L34/Lref"
+      },
+      {
+        "name": "twist_12_deg",
+        "value": 109.577828,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 1 and 2"
+      },
+      {
+        "name": "twist_23_deg",
+        "value": 62.538308,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 2 and 3"
+      },
+      {
+        "name": "twist_34_deg",
+        "value": 63.602796,
+        "group": "angles",
+        "description": "Angle between consecutive axes near joints 3 and 4"
+      },
+      {
+        "name": "common_normal_13",
+        "value": 0.98364,
+        "group": "offsets",
+        "description": "Shortest separation between selected nonadjacent axes 1 and 3"
+      },
+      {
+        "name": "common_normal_24",
+        "value": 1.459976,
+        "group": "offsets",
+        "description": "Shortest separation between selected nonadjacent axes 2 and 4"
+      },
+      {
+        "name": "offset_1",
+        "value": 0.974715,
+        "group": "offsets",
+        "description": "Signed offset along axis 1 to a common-normal construction"
+      },
+      {
+        "name": "offset_2",
+        "value": -0.993566,
+        "group": "offsets",
+        "description": "Signed offset along axis 2 to a common-normal construction"
+      },
+      {
+        "name": "axis_to_center_1",
+        "value": 1.958355,
+        "group": "axis-center",
+        "description": "Distance from selected revolute axis 1 to an opposite joint center"
+      },
+      {
+        "name": "axis_to_center_2",
+        "value": 2.4535419999999997,
+        "group": "axis-center",
+        "description": "Distance from selected revolute axis 2 to an opposite joint center"
+      },
+      {
+        "name": "tetra_volume",
+        "value": 1.2378012382714538,
+        "group": "shape",
+        "description": "Signed normalized tetrahedral volume built from four reference points"
+      },
+      {
+        "name": "coplanarity_residual",
+        "value": 1.2378012382714538,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
@@ -1345,113 +1345,113 @@
     "sample_id": "urrs_001",
     "family": "URRS",
     "inversion": "tool_to_ground",
-    "seed": 8422163,
+    "seed": 473603,
     "raw_parameters": {
-      "l12": 0.766181,
-      "l23": 1.954759,
-      "l34": 1.518205,
-      "twist12": 164.110757,
-      "twist23": 159.211138,
-      "twist34": 118.674966,
-      "offset1": -0.894186,
-      "offset2": 0.556801,
-      "common13": 1.087389,
-      "common24": 0.30641
+      "l12": 2.167607,
+      "l23": 0.519737,
+      "l34": 1.533718,
+      "twist12": 36.537501,
+      "twist23": 167.317119,
+      "twist34": 90.007925,
+      "offset1": 0.747938,
+      "offset2": -0.446377,
+      "common13": 0.974227,
+      "common24": 0.072529
     },
     "descriptors": [
       {
         "name": "center_distance_12",
-        "value": 0.766181,
+        "value": 2.167607,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L12/Lref"
       },
       {
         "name": "center_distance_23",
-        "value": 1.954759,
+        "value": 0.519737,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L23/Lref"
       },
       {
         "name": "center_distance_34",
-        "value": 1.518205,
+        "value": 1.533718,
         "group": "distances",
         "description": "Normalized adjacent joint-center distance L34/Lref"
       },
       {
         "name": "twist_12_deg",
-        "value": 164.110757,
+        "value": 36.537501,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 1 and 2"
       },
       {
         "name": "twist_23_deg",
-        "value": 159.211138,
+        "value": 167.317119,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 2 and 3"
       },
       {
         "name": "twist_34_deg",
-        "value": 118.674966,
+        "value": 90.007925,
         "group": "angles",
         "description": "Angle between consecutive axes near joints 3 and 4"
       },
       {
         "name": "common_normal_13",
-        "value": 1.087389,
+        "value": 0.974227,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 1 and 3"
       },
       {
         "name": "common_normal_24",
-        "value": 0.30641,
+        "value": 0.072529,
         "group": "offsets",
         "description": "Shortest separation between selected nonadjacent axes 2 and 4"
       },
       {
         "name": "offset_1",
-        "value": -0.894186,
+        "value": 0.747938,
         "group": "offsets",
         "description": "Signed offset along axis 1 to a common-normal construction"
       },
       {
         "name": "offset_2",
-        "value": 0.556801,
+        "value": -0.446377,
         "group": "offsets",
         "description": "Signed offset along axis 2 to a common-normal construction"
       },
       {
         "name": "axis_to_center_1",
-        "value": 1.9815749999999999,
+        "value": 1.722165,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 1 to an opposite joint center"
       },
       {
         "name": "axis_to_center_2",
-        "value": 0.863211,
+        "value": 0.518906,
         "group": "axis-center",
         "description": "Distance from selected revolute axis 2 to an opposite joint center"
       },
       {
         "name": "tetra_volume",
-        "value": 0.13450568463714654,
+        "value": 0.06322680337522465,
         "group": "shape",
         "description": "Signed normalized tetrahedral volume built from four reference points"
       },
       {
         "name": "coplanarity_residual",
-        "value": 0.13450568463714654,
+        "value": 0.06322680337522465,
         "group": "shape",
         "description": "Near-zero indicates nearly planar center geometry"
       },
       {
         "name": "chirality",
-        "value": "left",
+        "value": "right",
         "group": "flags",
         "description": "Right- or left-handed center geometry flag"
       },
       {
         "name": "has_intersection_pair",
-        "value": false,
+        "value": true,
         "group": "flags",
         "description": "Boolean flag for exact pairwise axis intersection"
       },

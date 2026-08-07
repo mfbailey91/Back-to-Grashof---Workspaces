@@ -7,6 +7,7 @@ from .analysis import classify_mock_branch
 from .closure import audit_reference_geometry
 from .continuation import continue_branch
 from .continuation_plots import (
+    animate_branch,
     plot_branch_snapshots,
     plot_closure_residual,
     plot_continuation_coordinates,
@@ -136,6 +137,11 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
     snapshot_dir = figures_dir / "v03_uuur_snapshots"
     snapshot_files = plot_branch_snapshots(detailed_geometry, detailed_trace, snapshot_dir, count=5)
     snapshot_relpaths = [str(path.relative_to(outdir)) for path in snapshot_files]
+    animation_relpaths: list[tuple[str, str]] = []
+    for family, trace in zip(ORDERED_FAMILIES, traces, strict=True):
+        animation_plot = figures_dir / f"v03_{family.value.lower()}_branch.gif"
+        animate_branch(canonical_by_family[family], trace, animation_plot)
+        animation_relpaths.append((family.value, str(animation_plot.relative_to(outdir))))
     write_sprint03_html(
         outdir,
         audits=audits,
@@ -146,6 +152,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
         residual_plot=str(residual_plot.relative_to(outdir)),
         singularity_plot=str(singularity_plot.relative_to(outdir)),
         phase_plot=str(phase_plot.relative_to(outdir)),
+        animation_paths=animation_relpaths,
         snapshot_paths=snapshot_relpaths,
         audit_json=str(audit_json.relative_to(outdir)),
         trace_json=str(trace_json.relative_to(outdir)),
@@ -172,6 +179,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             str(residual_plot.relative_to(outdir)),
             str(singularity_plot.relative_to(outdir)),
             str(phase_plot.relative_to(outdir)),
+            *[path for _, path in animation_relpaths],
             *snapshot_relpaths,
         ],
     )

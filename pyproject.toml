@@ -11,6 +11,7 @@ requires-python = ">=3.11"
 dependencies = [
   "matplotlib>=3.8",
   "numpy>=1.26",
+  "pillow>=10.0",
   "scipy>=1.11",
 ]
 
@@ -45,5 +46,5 @@ strict = true
 packages = ["grashof_workspace"]
 
 [[tool.mypy.overrides]]
-module = ["matplotlib.*", "mpl_toolkits.*", "numpy.*", "scipy.*", "scipy.*.*"]
+module = ["matplotlib.*", "mpl_toolkits.*", "numpy.*", "PIL.*", "scipy.*", "scipy.*.*"]
 ignore_missing_imports = true
