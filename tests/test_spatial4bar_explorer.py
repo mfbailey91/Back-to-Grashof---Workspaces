@@ -1,8 +1,8 @@
 from grashof_workspace.spatial4bar_explorer.analysis import classify_mock_branch
-from grashof_workspace.spatial4bar_explorer.descriptors import generate_geometry_samples
+from grashof_workspace.spatial4bar_explorer.descriptors import generate_geometry_samples, grouped_descriptor_inventory
 from grashof_workspace.spatial4bar_explorer.families import FAMILY_AXIS_CASES, ORDERED_FAMILIES
 from grashof_workspace.spatial4bar_explorer.models import BranchClass, OrderedFamily, ToolAxis
-from grashof_workspace.spatial4bar_explorer.readouts import write_sprint00_html
+from grashof_workspace.spatial4bar_explorer.readouts import write_sprint00_html, write_sprint01_html
 
 
 def test_family_enumeration() -> None:
@@ -45,3 +45,38 @@ def test_sprint00_html_contains_family_and_case_inventory(tmp_path) -> None:
     assert "Tool-axis case inventory (12 total)" in html
     assert "uuur_tool_a" in html
     assert "urrs_tool_b" in html
+
+
+def test_grouped_descriptor_inventory_matches_v01_groups() -> None:
+    grouped = grouped_descriptor_inventory()
+    assert list(grouped.keys()) == [
+        "distances",
+        "angles",
+        "offsets",
+        "axis-center descriptors",
+        "shape descriptors",
+        "flags",
+    ]
+    assert len(grouped["distances"]) >= 3
+    assert len(grouped["angles"]) >= 3
+    assert len(grouped["shape descriptors"]) >= 2
+
+
+def test_sprint01_html_contains_inventory_and_representative_cases(tmp_path) -> None:
+    samples = []
+    for family in ORDERED_FAMILIES:
+        samples.extend(generate_geometry_samples(family, count=2, seed=7))
+    write_sprint01_html(
+        tmp_path,
+        samples=samples,
+        histogram_files=[
+            "figures/hist_center_distance_12.png",
+            "figures/hist_twist_23_deg.png",
+            "figures/hist_tetra_volume.png",
+        ],
+    )
+    html = (tmp_path / "sprint_01_parameter_inventory.html").read_text(encoding="utf-8")
+    assert "Descriptor inventory" in html
+    assert "Synthetic corpus summary" in html
+    assert "Representative edge cases by descriptor" in html
+    assert "axis-center descriptors" in html

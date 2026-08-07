@@ -72,20 +72,47 @@ def write_sprint01_html(outdir: Path, samples: list[GeometrySample], histogram_f
     for group_name, items in grouped.items():
         li = "".join(f"<li><code>{name}</code> — {description}</li>" for name, description in items)
         sections.append(f"<h3>{group_name}</h3><ul>{li}</ul>")
+    family_counts: dict[str, int] = {}
+    for sample in samples:
+        key = sample.family.value
+        family_counts[key] = family_counts.get(key, 0) + 1
+    family_count_html = "".join(f"<li>{family}: {count}</li>" for family, count in sorted(family_counts.items()))
     image_html = "\n".join(f'<img src="{img}" alt="{img}" style="max-width: 480px; margin: 8px;">' for img in histogram_files)
     sample_rows = []
-    for sample in samples[:8]:
+    for sample in samples[:12]:
         desc_map = sample.descriptor_map()
         sample_rows.append(
             f"<tr><td>{sample.sample_id}</td><td>{sample.family.value}</td><td>{sample.seed}</td>"
             f"<td>{desc_map['center_distance_12']:.3f}</td><td>{desc_map['center_distance_23']:.3f}</td>"
             f"<td>{desc_map['twist_23_deg']:.1f}</td><td>{desc_map['tetra_volume']:.3f}</td></tr>"
         )
+    representative_by_metric: list[tuple[str, GeometrySample]] = []
+    if samples:
+        representative_by_metric = [
+            ("min center_distance_12", min(samples, key=lambda s: float(s.descriptor_map()["center_distance_12"]))),
+            ("max center_distance_12", max(samples, key=lambda s: float(s.descriptor_map()["center_distance_12"]))),
+            ("min twist_23_deg", min(samples, key=lambda s: float(s.descriptor_map()["twist_23_deg"]))),
+            ("max twist_23_deg", max(samples, key=lambda s: float(s.descriptor_map()["twist_23_deg"]))),
+            ("min tetra_volume", min(samples, key=lambda s: float(s.descriptor_map()["tetra_volume"]))),
+            ("max tetra_volume", max(samples, key=lambda s: float(s.descriptor_map()["tetra_volume"]))),
+        ]
+    representative_rows = []
+    for label, sample in representative_by_metric:
+        desc_map = sample.descriptor_map()
+        representative_rows.append(
+            f"<tr><td>{label}</td><td>{sample.sample_id}</td><td>{sample.family.value}</td>"
+            f"<td>{desc_map['center_distance_12']:.3f}</td><td>{desc_map['twist_23_deg']:.1f}</td>"
+            f"<td>{desc_map['tetra_volume']:.3f}</td></tr>"
+        )
     html = f"""<!doctype html>
 <html lang=\"en\"><head><meta charset=\"utf-8\"><title>Sprint 01</title></head>
 <body>
 <h1>Sprint 01 — parameter inventory and first sampled geometries</h1>
 <p>Focus: list a broad parameter inventory, generate initial synthetic geometry instances, and graph several descriptor distributions.</p>
+<h2>Synthetic corpus summary</h2>
+<p>Total samples: {len(samples)}</p>
+<ul>{family_count_html}</ul>
+<h2>Descriptor inventory</h2>
 {''.join(sections)}
 <h2>Descriptor histograms</h2>
 {image_html}
@@ -93,6 +120,11 @@ def write_sprint01_html(outdir: Path, samples: list[GeometrySample], histogram_f
 <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
 <tr><th>Sample</th><th>Family</th><th>Seed</th><th>L12</th><th>L23</th><th>twist23</th><th>tetra volume</th></tr>
 {''.join(sample_rows)}
+</table>
+<h2>Representative edge cases by descriptor</h2>
+<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
+<tr><th>Criterion</th><th>Sample</th><th>Family</th><th>L12</th><th>twist23</th><th>tetra volume</th></tr>
+{''.join(representative_rows)}
 </table>
 </body></html>
 """

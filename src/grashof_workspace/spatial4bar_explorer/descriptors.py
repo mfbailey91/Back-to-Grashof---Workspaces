@@ -6,24 +6,32 @@ from typing import Iterable
 
 from .models import GeometryDescriptor, GeometrySample, OrderedFamily
 
-PARAMETER_INVENTORY: tuple[tuple[str, str], ...] = (
-    ("center_distance_12", "Normalized adjacent joint-center distance L12/Lref"),
-    ("center_distance_23", "Normalized adjacent joint-center distance L23/Lref"),
-    ("center_distance_34", "Normalized adjacent joint-center distance L34/Lref"),
-    ("twist_12_deg", "Angle between consecutive axes near joints 1 and 2"),
-    ("twist_23_deg", "Angle between consecutive axes near joints 2 and 3"),
-    ("twist_34_deg", "Angle between consecutive axes near joints 3 and 4"),
-    ("common_normal_13", "Shortest separation between selected nonadjacent axes 1 and 3"),
-    ("common_normal_24", "Shortest separation between selected nonadjacent axes 2 and 4"),
-    ("offset_1", "Signed offset along axis 1 to a common-normal construction"),
-    ("offset_2", "Signed offset along axis 2 to a common-normal construction"),
-    ("axis_to_center_1", "Distance from selected revolute axis 1 to an opposite joint center"),
-    ("axis_to_center_2", "Distance from selected revolute axis 2 to an opposite joint center"),
-    ("tetra_volume", "Signed normalized tetrahedral volume built from four reference points"),
-    ("coplanarity_residual", "Near-zero indicates nearly planar center geometry"),
-    ("chirality", "Right- or left-handed center geometry flag"),
-    ("has_intersection_pair", "Boolean flag for exact pairwise axis intersection"),
-    ("has_mirror_symmetry", "Boolean flag for mirror-symmetric construction"),
+PARAMETER_INVENTORY: tuple[tuple[str, str, str], ...] = (
+    ("center_distance_12", "distances", "Normalized adjacent joint-center distance L12/Lref"),
+    ("center_distance_23", "distances", "Normalized adjacent joint-center distance L23/Lref"),
+    ("center_distance_34", "distances", "Normalized adjacent joint-center distance L34/Lref"),
+    ("twist_12_deg", "angles", "Angle between consecutive axes near joints 1 and 2"),
+    ("twist_23_deg", "angles", "Angle between consecutive axes near joints 2 and 3"),
+    ("twist_34_deg", "angles", "Angle between consecutive axes near joints 3 and 4"),
+    ("common_normal_13", "offsets", "Shortest separation between selected nonadjacent axes 1 and 3"),
+    ("common_normal_24", "offsets", "Shortest separation between selected nonadjacent axes 2 and 4"),
+    ("offset_1", "offsets", "Signed offset along axis 1 to a common-normal construction"),
+    ("offset_2", "offsets", "Signed offset along axis 2 to a common-normal construction"),
+    (
+        "axis_to_center_1",
+        "axis-center descriptors",
+        "Distance from selected revolute axis 1 to an opposite joint center",
+    ),
+    (
+        "axis_to_center_2",
+        "axis-center descriptors",
+        "Distance from selected revolute axis 2 to an opposite joint center",
+    ),
+    ("tetra_volume", "shape descriptors", "Signed normalized tetrahedral volume built from four reference points"),
+    ("coplanarity_residual", "shape descriptors", "Near-zero indicates nearly planar center geometry"),
+    ("chirality", "flags", "Right- or left-handed center geometry flag"),
+    ("has_intersection_pair", "flags", "Boolean flag for exact pairwise axis intersection"),
+    ("has_mirror_symmetry", "flags", "Boolean flag for mirror-symmetric construction"),
 )
 
 
@@ -86,7 +94,7 @@ def generate_geometry_samples(
 
 
 def descriptor_names() -> list[str]:
-    return [name for name, _ in PARAMETER_INVENTORY]
+    return [name for name, _, _ in PARAMETER_INVENTORY]
 
 
 def grouped_descriptor_inventory() -> dict[str, list[tuple[str, str]]]:
@@ -94,23 +102,12 @@ def grouped_descriptor_inventory() -> dict[str, list[tuple[str, str]]]:
         "distances": [],
         "angles": [],
         "offsets": [],
-        "axis-center": [],
-        "shape": [],
+        "axis-center descriptors": [],
+        "shape descriptors": [],
         "flags": [],
     }
-    for name, description in PARAMETER_INVENTORY:
-        if name.startswith("center_distance"):
-            grouped["distances"].append((name, description))
-        elif name.startswith("twist"):
-            grouped["angles"].append((name, description))
-        elif name.startswith("common_normal") or name.startswith("offset"):
-            grouped["offsets"].append((name, description))
-        elif name.startswith("axis_to_center"):
-            grouped["axis-center"].append((name, description))
-        elif name in {"tetra_volume", "coplanarity_residual"}:
-            grouped["shape"].append((name, description))
-        else:
-            grouped["flags"].append((name, description))
+    for name, group_name, description in PARAMETER_INVENTORY:
+        grouped[group_name].append((name, description))
     return grouped
 
 
