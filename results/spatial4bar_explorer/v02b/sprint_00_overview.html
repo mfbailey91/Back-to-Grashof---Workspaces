@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Sprint 00</title></head>
+<body>
+<h1>Sprint 00 — family inventory and explorer shell</h1>
+<p>Focus: enumerate the six ordered one-DOF families and the twelve virtual-tool-axis test cases.</p>
+<img src="figures/family_case_counts.png" alt="family case counts" style="max-width: 900px;">
+<h2>Ordered family inventory</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<tr><th>Family</th><th>Origin</th><th>Note</th></tr>
+<tr><td>UUUR</td><td>SUUR -> UUUR fiber</td><td>Two universal joints plus one revolute after tool-U slicing.</td></tr><tr><td>UURU</td><td>SURU -> UURU fiber</td><td>Mixed placement of the single revolute between universal joints.</td></tr><tr><td>URUU</td><td>SRUU -> URUU fiber</td><td>Single revolute nearest ground when loop is read from tool U.</td></tr><tr><td>USRR</td><td>SSRR -> USRR fiber</td><td>Equivalent multiset to RRUS; order preserved for inversion-sensitive analysis.</td></tr><tr><td>URSR</td><td>SRSR -> URSR fiber</td><td>Alternating U-R-S-R order in the one-DOF fiber.</td></tr><tr><td>URRS</td><td>SRRS -> URRS fiber</td><td>S joint is deepest in the chain away from the tool U.</td></tr>
+</table>
+<h2>Tool-axis case inventory (12 total)</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+<tr><th>Family</th><th>Tool axis</th><th>Case slug</th></tr>
+<tr><td>UUUR</td><td>a</td><td>uuur_tool_a</td></tr><tr><td>UUUR</td><td>b</td><td>uuur_tool_b</td></tr><tr><td>UURU</td><td>a</td><td>uuru_tool_a</td></tr><tr><td>UURU</td><td>b</td><td>uuru_tool_b</td></tr><tr><td>URUU</td><td>a</td><td>uruu_tool_a</td></tr><tr><td>URUU</td><td>b</td><td>uruu_tool_b</td></tr><tr><td>USRR</td><td>a</td><td>usrr_tool_a</td></tr><tr><td>USRR</td><td>b</td><td>usrr_tool_b</td></tr><tr><td>URSR</td><td>a</td><td>ursr_tool_a</td></tr><tr><td>URSR</td><td>b</td><td>ursr_tool_b</td></tr><tr><td>URRS</td><td>a</td><td>urrs_tool_a</td></tr><tr><td>URRS</td><td>b</td><td>urrs_tool_b</td></tr>
+</table>
+<h2>Family schematics</h2>
+<ul><li><a href="figures/schematic_uuur.png">figures/schematic_uuur.png</a></li>
+<li><a href="figures/schematic_uuru.png">figures/schematic_uuru.png</a></li>
+<li><a href="figures/schematic_uruu.png">figures/schematic_uruu.png</a></li>
+<li><a href="figures/schematic_usrr.png">figures/schematic_usrr.png</a></li>
+<li><a href="figures/schematic_ursr.png">figures/schematic_ursr.png</a></li>
+<li><a href="figures/schematic_urrs.png">figures/schematic_urrs.png</a></li></ul>
+</body></html>

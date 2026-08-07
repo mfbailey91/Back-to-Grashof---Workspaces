@@ -6,6 +6,9 @@ from pathlib import Path
 from .analysis import classify_mock_branch
 from .descriptors import generate_geometry_samples
 from .families import FAMILY_AXIS_CASES, ORDERED_FAMILIES
+from .geometry_descriptors import generate_physical_geometry_samples
+from .geometry_plots import plot_physical_geometry_3d
+from .geometry_readouts import write_sprint02b_html
 from .plots import (
     plot_case_schematic,
     plot_classification_counts,
@@ -66,12 +69,34 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
         winding_pair_plot=str(winding_pair_plot.relative_to(outdir)),
     )
 
+    # Sprint V02B: physical geometry objects replace the V01 random-descriptor
+    # corpus as the input source for all future kinematic experiments.
+    physical_samples = []
+    image_by_sample: dict[str, str] = {}
+    physical_count = max(2, sample_count)
+    for family in ORDERED_FAMILIES:
+        family_samples = generate_physical_geometry_samples(family, count=physical_count, seed=202)
+        physical_samples.extend(family_samples)
+        for sample in family_samples[:2]:
+            path = figures_dir / f"physical_{sample.sample_id}.png"
+            plot_physical_geometry_3d(sample.geometry, path)
+            image_by_sample[sample.sample_id] = str(path.relative_to(outdir))
+    physical_json = data_dir / "physical_geometry_samples.json"
+    write_json(physical_json, physical_samples)
+    write_sprint02b_html(
+        outdir,
+        physical_samples,
+        image_by_sample=image_by_sample,
+        json_path=str(physical_json.relative_to(outdir)),
+    )
+
     write_index_html(
         outdir,
         sprint_pages=[
             "sprint_00_overview.html",
             "sprint_01_parameter_inventory.html",
             "sprint_02_mock_branch_results.html",
+            "sprint_02b_physical_geometry.html",
         ],
         image_files=[
             str(family_plot.relative_to(outdir)),
@@ -79,6 +104,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             *histogram_paths,
             str(classification_plot.relative_to(outdir)),
             str(winding_pair_plot.relative_to(outdir)),
+            *image_by_sample.values(),
         ],
     )
 

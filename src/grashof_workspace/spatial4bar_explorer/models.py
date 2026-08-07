@@ -99,7 +99,7 @@ def dataclass_to_jsonable(value: Any) -> Any:
         return str(value)
     if hasattr(value, "value"):
         return getattr(value, "value")
-    if isinstance(value, list):
+    if isinstance(value, (list, tuple)):
         return [dataclass_to_jsonable(item) for item in value]
     if isinstance(value, dict):
         return {key: dataclass_to_jsonable(item) for key, item in value.items()}
