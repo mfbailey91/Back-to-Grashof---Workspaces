@@ -5,6 +5,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
+from .analysis import summarize_winding_pairs
 from .descriptors import sample_descriptor_values
 from .families import ORDERED_FAMILIES
 from .models import BranchResult, GeometrySample
@@ -47,6 +48,21 @@ def plot_classification_counts(results: list[BranchResult], outpath: Path) -> No
     plt.xlabel("Classification")
     plt.ylabel("count")
     plt.title("Mock branch classifications across sampled mechanisms")
+    plt.xticks(rotation=20)
+    plt.tight_layout()
+    plt.savefig(outpath, dpi=160)
+    plt.close()
+
+
+def plot_winding_pair_counts(results: list[BranchResult], outpath: Path) -> None:
+    pair_counts = summarize_winding_pairs(results)
+    labels = list(pair_counts.keys())
+    values = [pair_counts[label] for label in labels]
+    plt.figure(figsize=(8, 4.5))
+    plt.bar(labels, values)
+    plt.xlabel("Mock winding pair (w_alpha, w_beta)")
+    plt.ylabel("count")
+    plt.title("Mock winding-pair counts (placeholder until true continuation)")
     plt.xticks(rotation=20)
     plt.tight_layout()
     plt.savefig(outpath, dpi=160)

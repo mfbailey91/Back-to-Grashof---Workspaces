@@ -2,11 +2,26 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Iterable
 
+from .analysis import summarize_class_counts, summarize_winding_pairs
 from .descriptors import grouped_descriptor_inventory
 from .families import FAMILY_AXIS_CASES, FAMILY_NOTES, FAMILY_PARENT_MAP, ORDERED_FAMILIES
-from .models import BranchResult, GeometrySample, dataclass_to_jsonable
+from .models import BranchClass, BranchResult, GeometrySample, dataclass_to_jsonable
+
+BRANCH_RESULT_SCHEMA_FIELDS: tuple[tuple[str, str], ...] = (
+    ("sample_id", "Geometry sample identifier"),
+    ("case", "ExplorerCase with family and tool-axis choice"),
+    ("branch_id", "Branch label within a sample/case"),
+    ("branch_closed", "Whether the continued branch returned to its seed"),
+    ("singularity_count", "Counted singularity encounters on the branch"),
+    ("w_alpha", "Integer winding of tool coordinate alpha (None if undefined)"),
+    ("w_beta", "Integer winding of tool coordinate beta (None if undefined)"),
+    ("class_alpha", "Crank/rocker/... label for alpha"),
+    ("class_beta", "Crank/rocker/... label for beta"),
+    ("tool_range_alpha", "Observed tool alpha range in radians (None if undefined)"),
+    ("tool_range_beta", "Observed tool beta range in radians (None if undefined)"),
+    ("notes", "Human-readable flags; includes mock_placeholder for Sprint V02"),
+)
 
 
 def write_json(path: Path, payload: object) -> None:
@@ -131,22 +146,93 @@ def write_sprint01_html(outdir: Path, samples: list[GeometrySample], histogram_f
     (outdir / "sprint_01_parameter_inventory.html").write_text(html, encoding="utf-8")
 
 
-def write_sprint02_html(outdir: Path, results: list[BranchResult], classification_plot: str) -> None:
+def write_sprint02_html(
+    outdir: Path,
+    results: list[BranchResult],
+    classification_plot: str,
+    winding_pair_plot: str | None = None,
+) -> None:
+    class_counts = summarize_class_counts(results)
+    winding_counts = summarize_winding_pairs(results)
+    schema_rows = "".join(
+        f"<tr><td><code>{name}</code></td><td>{description}</td></tr>"
+        for name, description in BRANCH_RESULT_SCHEMA_FIELDS
+    )
+    label_rows = "".join(
+        f"<tr><td><code>{label.value}</code></td><td>{class_counts.get(label.value, 0)}</td></tr>"
+        for label in BranchClass
+    )
+    winding_rows = "".join(
+        f"<tr><td><code>{pair}</code></td><td>{count}</td></tr>" for pair, count in winding_counts.items()
+    )
+    winding_img = (
+        f'<img src="{winding_pair_plot}" alt="winding pair counts" style="max-width: 900px;">'
+        if winding_pair_plot
+        else ""
+    )
+
+    def _fmt_range(value: float | None) -> str:
+        return "—" if value is None else f"{value:.3f}"
+
+    def _fmt_winding(value: int | None) -> str:
+        return "—" if value is None else str(value)
+
     rows = []
-    for result in results[:20]:
+    for result in results[:24]:
         rows.append(
             f"<tr><td>{result.sample_id}</td><td>{result.case.family.value}</td><td>{result.case.tool_axis.value}</td>"
-            f"<td>{result.w_alpha}</td><td>{result.w_beta}</td><td>{result.class_alpha.value}</td><td>{result.class_beta.value}</td>"
+            f"<td>{result.branch_id}</td><td>{result.branch_closed}</td>"
+            f"<td>{_fmt_winding(result.w_alpha)}</td><td>{_fmt_winding(result.w_beta)}</td>"
+            f"<td>{result.class_alpha.value}</td><td>{result.class_beta.value}</td>"
+            f"<td>{_fmt_range(result.tool_range_alpha)}</td><td>{_fmt_range(result.tool_range_beta)}</td>"
             f"<td>{', '.join(result.notes)}</td></tr>"
         )
+
+    representative_rows: list[str] = []
+    seen_classes: set[str] = set()
+    for result in results:
+        for cls in (result.class_alpha, result.class_beta):
+            if cls.value in seen_classes:
+                continue
+            seen_classes.add(cls.value)
+            representative_rows.append(
+                f"<tr><td>{cls.value}</td><td>{result.sample_id}</td><td>{result.case.slug}</td>"
+                f"<td>{result.branch_id}</td><td>{_fmt_winding(result.w_alpha)}</td>"
+                f"<td>{_fmt_winding(result.w_beta)}</td></tr>"
+            )
+
     html = f"""<!doctype html>
 <html lang=\"en\"><head><meta charset=\"utf-8\"><title>Sprint 02</title></head>
 <body>
 <h1>Sprint 02 — mock branch classification and winding scaffold</h1>
+<p><strong>MOCK / PLACEHOLDER:</strong> windings and classifications below are heuristic stand-ins.
+True loop-closure continuation arrives in Sprint V03; true winding arrives in Sprint V04.</p>
 <p>Focus: stand up the branch-result data model and generate first readouts that will later be filled by closure continuation and true winding calculations.</p>
-<img src=\"{classification_plot}\" alt=\"classification counts\" style=\"max-width: 900px;\">
+<h2>BranchResult schema</h2>
 <table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
-<tr><th>Sample</th><th>Family</th><th>Tool axis</th><th>w_alpha</th><th>w_beta</th><th>class_alpha</th><th>class_beta</th><th>notes</th></tr>
+<tr><th>Field</th><th>Meaning</th></tr>
+{schema_rows}
+</table>
+<h2>Classification label inventory</h2>
+<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
+<tr><th>Label</th><th>Count (alpha+beta)</th></tr>
+{label_rows}
+</table>
+<h2>Mock winding-pair summary</h2>
+<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
+<tr><th>Pair (w_alpha, w_beta)</th><th>Count</th></tr>
+{winding_rows}
+</table>
+<img src=\"{classification_plot}\" alt=\"classification counts\" style=\"max-width: 900px;\">
+{winding_img}
+<h2>Representative class examples</h2>
+<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
+<tr><th>Class</th><th>Sample</th><th>Case</th><th>Branch</th><th>w_alpha</th><th>w_beta</th></tr>
+{''.join(representative_rows)}
+</table>
+<h2>Mock branch results</h2>
+<table border=\"1\" cellpadding=\"6\" cellspacing=\"0\">
+<tr><th>Sample</th><th>Family</th><th>Tool axis</th><th>Branch</th><th>Closed</th><th>w_alpha</th><th>w_beta</th><th>class_alpha</th><th>class_beta</th><th>range_alpha</th><th>range_beta</th><th>notes</th></tr>
 {''.join(rows)}
 </table>
 </body></html>

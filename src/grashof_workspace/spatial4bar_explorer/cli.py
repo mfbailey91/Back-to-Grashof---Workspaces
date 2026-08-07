@@ -11,6 +11,7 @@ from .plots import (
     plot_classification_counts,
     plot_descriptor_histogram,
     plot_family_case_counts,
+    plot_winding_pair_counts,
 )
 from .readouts import (
     write_index_html,
@@ -49,15 +50,21 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
     write_sprint01_html(outdir, all_samples, histogram_paths)
 
     results = []
-    sample_lookup = {sample.sample_id: sample for sample in all_samples}
     for case in FAMILY_AXIS_CASES:
         family_samples = [sample for sample in all_samples if sample.family is case.family][: min(sample_count, 4)]
         for sample in family_samples:
             results.append(classify_mock_branch(sample, case))
     write_json(data_dir / "mock_branch_results.json", results)
     classification_plot = figures_dir / "classification_counts.png"
+    winding_pair_plot = figures_dir / "winding_pair_counts.png"
     plot_classification_counts(results, classification_plot)
-    write_sprint02_html(outdir, results, str(classification_plot.relative_to(outdir)))
+    plot_winding_pair_counts(results, winding_pair_plot)
+    write_sprint02_html(
+        outdir,
+        results,
+        str(classification_plot.relative_to(outdir)),
+        winding_pair_plot=str(winding_pair_plot.relative_to(outdir)),
+    )
 
     write_index_html(
         outdir,
@@ -71,6 +78,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             *schematic_files,
             *histogram_paths,
             str(classification_plot.relative_to(outdir)),
+            str(winding_pair_plot.relative_to(outdir)),
         ],
     )
 
