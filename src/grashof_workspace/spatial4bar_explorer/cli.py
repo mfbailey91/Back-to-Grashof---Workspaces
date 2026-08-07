@@ -4,15 +4,23 @@ import argparse
 from pathlib import Path
 
 from .analysis import classify_mock_branch
-from .continuation import ContinuationConfig, continue_physical_uuur_sample
+from .closure import audit_reference_geometry
+from .continuation import continue_branch
+from .continuation_plots import (
+    plot_branch_snapshots,
+    plot_closure_residual,
+    plot_continuation_coordinates,
+    plot_reference_mobility_audit,
+    plot_singularity_margin,
+    plot_tool_coordinate_phase,
+)
+from .continuation_readouts import write_sprint03_html
 from .descriptors import generate_geometry_samples
 from .families import FAMILY_AXIS_CASES, ORDERED_FAMILIES
 from .geometry_descriptors import generate_physical_geometry_samples
 from .geometry_plots import plot_physical_geometry_3d
 from .geometry_readouts import write_sprint02b_html
-from .models import ExplorerCase, OrderedFamily, ToolAxis
 from .plots import (
-    plot_branch_trajectory,
     plot_case_schematic,
     plot_classification_counts,
     plot_descriptor_histogram,
@@ -25,7 +33,6 @@ from .readouts import (
     write_sprint00_html,
     write_sprint01_html,
     write_sprint02_html,
-    write_sprint03_html,
 )
 
 
@@ -58,7 +65,9 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
 
     results = []
     for case in FAMILY_AXIS_CASES:
-        family_samples = [sample for sample in all_samples if sample.family is case.family][: min(sample_count, 4)]
+        family_samples = [sample for sample in all_samples if sample.family is case.family][
+            : min(sample_count, 4)
+        ]
         for sample in family_samples:
             results.append(classify_mock_branch(sample, case))
     write_json(data_dir / "mock_branch_results.json", results)
@@ -94,31 +103,52 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
         json_path=str(physical_json.relative_to(outdir)),
     )
 
-    # Sprint V03: SE(3) closure + continuation on V02B physical UUUR samples only.
-    uuur_samples = [sample for sample in physical_samples if sample.family is OrderedFamily.UUUR][:2]
-    closure_results = []
-    trajectories = []
-    for sample in uuur_samples:
-        for tool_axis in (ToolAxis.A, ToolAxis.B):
-            case = ExplorerCase(family=OrderedFamily.UUUR, tool_axis=tool_axis)
-            trajectory, result = continue_physical_uuur_sample(
-                sample,
-                case,
-                config=ContinuationConfig(step=0.08, max_steps=120),
-            )
-            trajectories.append(trajectory)
-            closure_results.append(result)
-    trajectory_json = data_dir / "branch_trajectories.json"
-    write_json(trajectory_json, trajectories)
-    write_json(data_dir / "uuur_closure_branch_results.json", closure_results)
-    trajectory_plot = figures_dir / "uuur_branch_trajectory.png"
-    plot_branch_trajectory(trajectories[0], trajectory_plot)
+    # Sprint V03: one general seven-coordinate closure kernel. Each physical
+    # mechanism is solved once; tool_alpha and tool_beta are read from the same
+    # continued branch rather than treated as two separate mechanism solves.
+    canonical_by_family = {
+        sample.family: sample.geometry
+        for sample in physical_samples
+        if sample.sample_id.endswith("_000")
+    }
+    audits = [audit_reference_geometry(canonical_by_family[family]) for family in ORDERED_FAMILIES]
+    audit_json = data_dir / "v03_reference_closure_audits.json"
+    write_json(audit_json, audits)
+    mobility_plot = figures_dir / "v03_reference_mobility_audit.png"
+    plot_reference_mobility_audit(audits, mobility_plot)
+
+    traces = [
+        continue_branch(canonical_by_family[family], steps=60, step_size=0.04)
+        for family in ORDERED_FAMILIES
+    ]
+    trace_json = data_dir / "v03_continuation_traces.json"
+    write_json(trace_json, traces)
+    detailed_trace = next(trace for trace in traces if trace.family == "UUUR")
+    detailed_geometry = canonical_by_family[next(f for f in ORDERED_FAMILIES if f.value == "UUUR")]
+    coordinate_plot = figures_dir / "v03_uuur_coordinates.png"
+    residual_plot = figures_dir / "v03_uuur_closure_residual.png"
+    singularity_plot = figures_dir / "v03_uuur_singularity_margin.png"
+    phase_plot = figures_dir / "v03_uuur_tool_phase.png"
+    plot_continuation_coordinates(detailed_trace, coordinate_plot)
+    plot_closure_residual(detailed_trace, residual_plot)
+    plot_singularity_margin(detailed_trace, singularity_plot)
+    plot_tool_coordinate_phase(detailed_trace, phase_plot)
+    snapshot_dir = figures_dir / "v03_uuur_snapshots"
+    snapshot_files = plot_branch_snapshots(detailed_geometry, detailed_trace, snapshot_dir, count=5)
+    snapshot_relpaths = [str(path.relative_to(outdir)) for path in snapshot_files]
     write_sprint03_html(
         outdir,
-        results=closure_results,
-        trajectories=trajectories,
-        trajectory_plot=str(trajectory_plot.relative_to(outdir)),
-        trajectory_json=str(trajectory_json.relative_to(outdir)),
+        audits=audits,
+        traces=traces,
+        detailed_family="UUUR",
+        mobility_plot=str(mobility_plot.relative_to(outdir)),
+        coordinate_plot=str(coordinate_plot.relative_to(outdir)),
+        residual_plot=str(residual_plot.relative_to(outdir)),
+        singularity_plot=str(singularity_plot.relative_to(outdir)),
+        phase_plot=str(phase_plot.relative_to(outdir)),
+        snapshot_paths=snapshot_relpaths,
+        audit_json=str(audit_json.relative_to(outdir)),
+        trace_json=str(trace_json.relative_to(outdir)),
     )
 
     write_index_html(
@@ -128,7 +158,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             "sprint_01_parameter_inventory.html",
             "sprint_02_mock_branch_results.html",
             "sprint_02b_physical_geometry.html",
-            "sprint_03_closure.html",
+            "sprint_03_closure_and_continuation.html",
         ],
         image_files=[
             str(family_plot.relative_to(outdir)),
@@ -137,7 +167,12 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             str(classification_plot.relative_to(outdir)),
             str(winding_pair_plot.relative_to(outdir)),
             *image_by_sample.values(),
-            str(trajectory_plot.relative_to(outdir)),
+            str(mobility_plot.relative_to(outdir)),
+            str(coordinate_plot.relative_to(outdir)),
+            str(residual_plot.relative_to(outdir)),
+            str(singularity_plot.relative_to(outdir)),
+            str(phase_plot.relative_to(outdir)),
+            *snapshot_relpaths,
         ],
     )
 

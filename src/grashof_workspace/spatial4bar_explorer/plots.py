@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from .analysis import summarize_winding_pairs
 from .descriptors import sample_descriptor_values
 from .families import ORDERED_FAMILIES
-from .models import BranchResult, BranchTrajectory, GeometrySample
+from .models import BranchResult, GeometrySample
 
 
 def plot_family_case_counts(outpath: Path) -> None:
@@ -80,36 +80,6 @@ def plot_case_schematic(case_name: str, outpath: Path) -> None:
     plt.yticks([])
     plt.xticks(x, [f"J{i+1}" for i in x])
     plt.title(f"Ordered family schematic: {case_name}")
-    plt.tight_layout()
-    plt.savefig(outpath, dpi=160)
-    plt.close()
-
-
-def plot_branch_trajectory(trajectory: BranchTrajectory, outpath: Path) -> None:
-    if not trajectory.samples:
-        plt.figure(figsize=(8, 4.5))
-        plt.title(f"Empty trajectory: {trajectory.sample_id} / {trajectory.case.slug}")
-        plt.tight_layout()
-        plt.savefig(outpath, dpi=160)
-        plt.close()
-        return
-    parameters = [sample.parameter for sample in trajectory.samples]
-    residuals = [sample.residual_norm for sample in trajectory.samples]
-    alpha = [sample.joint_angles[0] for sample in trajectory.samples]
-    beta = [sample.joint_angles[1] for sample in trajectory.samples]
-    plt.figure(figsize=(9, 4.8))
-    plt.subplot(1, 2, 1)
-    plt.plot(parameters, alpha, label="u0_alpha")
-    plt.plot(parameters, beta, label="u0_beta")
-    plt.xlabel(trajectory.free_parameter)
-    plt.ylabel("tool joint angles (rad)")
-    plt.title("Tool angles along continued branch")
-    plt.legend()
-    plt.subplot(1, 2, 2)
-    plt.semilogy(parameters, [max(value, 1e-16) for value in residuals])
-    plt.xlabel(trajectory.free_parameter)
-    plt.ylabel("||SE(3) residual||")
-    plt.title("Closure residual along branch")
     plt.tight_layout()
     plt.savefig(outpath, dpi=160)
     plt.close()
