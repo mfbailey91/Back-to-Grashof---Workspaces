@@ -5,17 +5,49 @@ alwaysApply: true
 
 # Research-code rules
 
-1. Treat equations in `docs/MATH_NOTES.md` as the current source of mathematical truth.
-2. Do not replace an analytical predicate with a sampled approximation.
-3. Every new equation requires:
-   - a named implementation;
-   - at least one interior test;
-   - at least one exterior test;
-   - at least one equality or boundary test.
-4. Keep conventional Grashof classification separate from link-specific full-rotation tests.
-5. State coordinate, link-order, and joint-angle conventions in docstrings.
-6. Do not add joint limits, collision, dynamics, or capability metrics to Sprint 01.
-7. Before refactoring a mathematical function, add regression tests that lock its behavior.
-8. Prefer small pure functions and immutable dataclasses.
-9. Any generated plot must be reproducible from a committed script or CLI command.
-10. When uncertain about a mechanism theorem, mark the code path as unverified and add a research note instead of inventing a generalization.
+1. Treat `docs/MATH_NOTES.md` and `docs/KINEMATIC_DECOMPOSITION_FIXED_POSITION_ORIENTATION_FRAMEWORK.md` as the current mathematical and conceptual sources of truth. Resolve conflicts explicitly in `docs/DECISIONS.md`.
+2. Preserve the evidence chain:
+   ```text
+   source chain -> fixed-position problem -> virtual closure -> source image
+   -> decomposition certificate -> mechanism predicate -> reconstruction -> validation
+   ```
+3. Do not replace an analytical predicate with a sampled approximation. When a predicate is numerical, label its resolution, confidence, unresolved policy, and exact fallback.
+4. Do not infer global coverage from mobility or dimension alone. Dimension matching is necessary, not sufficient.
+5. Keep these data objects separate:
+   - fixed-position fiber/parent;
+   - connected component;
+   - orientation image;
+   - pointing image;
+   - coverage target;
+   - workspace classification.
+6. Treat the virtual spherical closure as the exact fixed-position representation. Record axis aggregation, symmetry quotient, task slice, mechanism factorization, predicate application, and coverage reconstruction as separate operations.
+7. Every proposed decomposition must produce a `DecompositionCertificate` with one of:
+   ```text
+   EXACT_GLOBAL
+   EXACT_ON_COMPONENT
+   LOCAL_ONLY
+   APPROXIMATE
+   REJECTED
+   UNRESOLVED
+   ```
+8. A visually plausible topology, matching joint-letter string, or matching DOF count is not proof of equivalence. Compare coordinate maps, closure residuals, tangent spaces, task maps, components, trajectories, and limits.
+9. Store both `joint_kind_sequence` and `joint_role_sequence`. Distinguish `S_v`, `U_v`, `S_phys`, `U_phys`, and `R_phys`; choose designated winding/task coordinates by role rather than array position or cyclic family string.
+10. Never promote `mechanism_explorer_only` data to manipulator-workspace evidence without certified source/task provenance.
+11. Distinguish **spatial 4R serial manipulator** from **spatial four-bar linkage** in code, docs, CLI labels, and plots.
+12. A continuation trace represents one component unless component completeness is established. Preserve branch, return, singularity, and unresolved status.
+13. Reserve `dexterous_workspace` for full `SO(2)` or `SO(3)` coverage. Use `pointing_image` and `pointing_complete_workspace` for an explicit `S^2` task.
+14. Factor terminal roll only after testing position invariance, pointing invariance, range, quotient/reconstruction, component correspondence, and limits.
+15. Keep conventional Grashof classification separate from link-specific full-rotation, winding, and task-coverage tests.
+16. Every new equation or predicate requires:
+    - a named implementation;
+    - interior and exterior tests when meaningful;
+    - equality/boundary tests;
+    - singular/component tests when relevant;
+    - an independent validation path.
+17. State coordinate, link-order, joint-angle, tool-frame, selected-tool-axis, and cyclic-order conventions in docstrings and exports.
+18. Before refactoring a mathematical function, add regression tests that lock its behavior.
+19. Prefer small pure functions, immutable dataclasses, explicit enums, and machine-readable provenance.
+20. Any generated plot, GIF, JSON, or HTML readout must be reproducible from a committed script or CLI command.
+21. During decomposition visualizations, keep the physical source manipulator visible as a transparent reference and show each reduction operation separately.
+22. When uncertain about a mechanism theorem, mark the result unverified or unresolved and add a research note instead of inventing a generalization.
+23. The historical spatial-four-bar V05–V09 files are deferred V10–V14 specifications. The active sequence is `docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`.

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Spatial 4-Bar Explorer — project printout through V04C</title>
+<title>Spatial 4-Bar Explorer — project printout through V05A</title>
 <style>
   body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
   h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 1.2; }
@@ -31,13 +31,14 @@
 
 <h1>Spatial 4-Bar Explorer</h1>
 <p class="meta">
-  <strong>Project printout through Sprint V04C</strong> · aligned-terminal 6R → one-DOF spatial four-bar track<br>
+  <strong>Project printout through Sprint V05A</strong> · aligned-terminal 6R → one-DOF spatial four-bar track<br>
   Artifact root: <code>results/spatial4bar_explorer/</code> · Status date: 2026-08-07
 </p>
 
 <div class="note">
-  This page is the cumulative index and narrative for sprints <strong>V00–V04C</strong>.
-  Later work (V05–V09) is planned but not executed here. Open linked HTML pages for figures, tables, and JSON.
+  This page is the cumulative index and narrative for sprints <strong>V00–V05A</strong>.
+  V05A delivers the parent-first SUUR→UUUR pointing-fiber MVP; V05B–V09 remain ahead.
+  Open linked HTML pages for figures, tables, and JSON.
 </div>
 
 <h2>Contents</h2>
@@ -48,7 +49,8 @@
   <li><a href="#sprints">Sprint-by-sprint printout</a></li>
   <li><a href="#findings">Findings locked so far</a></li>
   <li><a href="#contract">V04C provisional contract</a></li>
-  <li><a href="#next">Next: V05 Gate A</a></li>
+  <li><a href="#v05a">Sprint V05A</a></li>
+  <li><a href="#next">Next: V05B Gate A</a></li>
   <li><a href="#links">Full sprint link index</a></li>
 </ul>
 
@@ -246,6 +248,11 @@ Canonical readout: <a href="v04c/sprint_04c_virtual_u_equivalence.html">v04c/spr
     <td>provisional convention</td>
     <td>V04C</td>
   </tr>
+  <tr>
+    <td>One SUUR→UUUR task-derived pointing fiber passes the fiber-equivalence contract (<code>h=n·d</code>, U-lift tangent).</td>
+    <td>numerical mechanism</td>
+    <td>V05A</td>
+  </tr>
 </table>
 
 <h2 id="contract">V04C provisional experiment contract (for V05)</h2>
@@ -259,23 +266,42 @@ Canonical readout: <a href="v04c/sprint_04c_virtual_u_equivalence.html">v04c/spr
       arbitrary <code>φ</code> sweeps remain diagnostic-only until mapped to legitimate pointing fibers.</li>
 </ul>
 
-<h2 id="next">Next — Sprint V05 (not started)</h2>
+<h2 id="v05a">Sprint V05A — parent-first pointing fiber (MVP)</h2>
+<p class="status pass">DONE — SUUR → UUUR worked fiber PASS</p>
 <p>
-<strong>V05 = all-family winding atlas on validated pointing fibers</strong> (not descriptor mining).
-Descriptor trend mining is deferred to <strong>V06</strong> after Gate A.
-V05A must construct parent-first <code>S_v →</code> explicit slice <code>→ U_v</code> children before admitting atlas rows;
-standalone V02B–V04 <code>UXXX</code> mechanisms remain mechanism-explorer fixtures.
+Restored the aligned-terminal fiber kernel and constructed one task-derived
+<code>UUUR</code> child from an intersecting-pairs <code>SUUR</code> parent with explicit
+<code>h(d)=n·d=c</code>. Fiber-equivalence status <strong>PASS</strong>; provenance
+<code>task_derived</code>. SSRR-line parents and the V05B winding atlas are deferred.
 </p>
-<pre>Pointing-slice contract  →  V05 all-family winding atlas → Gate A
-V06  descriptor trend mining
-V07  candidate spatial Grashof-like rules → Gate B
-V08  fast crank evaluator
-V09  6R dexterity reconstruction         → Gate C</pre>
+<p>
+Canonical readout:
+<a href="v05a/sprint_05a_pointing_slice_fibers.html">v05a/sprint_05a_pointing_slice_fibers.html</a>
+· JSON: <a href="v05a/data/v05a_pointing_slice_fibers.json">v05a/data/v05a_pointing_slice_fibers.json</a>
+</p>
+
+<h2 id="next">Next — active V05 (source-chain program)</h2>
+<p>
+The spatial-four-bar-first V05–V09 sequence is remapped to deferred <strong>V10–V14</strong>.
+Active program (docs only in the kinematic-decomposition handoff; implementation next):
+</p>
+<pre>V05  spatial 4R fixed-position fiber and one-DOF decomposition baseline
+V06  spatial 5R fixed-position parent and pointing image
+V07  generic spatial 6R orientation reference
+V08  aligned-roll quotient and task-derived four-bar fibers
+V09  validated mechanism predicates and coverage reconstruction
+V10+ deferred family atlas / mining / rules / evaluator / broad validation</pre>
+<p>
+The explorer “V05A” SUUR→UUUR MVP above is preparatory pointing-slice evidence for deferred V10,
+not a substitute for active source-chain V05. Standalone V02B–V04 <code>UXXX</code> rows remain
+<code>mechanism_explorer_only</code>.
+</p>
 <p>
 Plan docs:
-<a href="../../docs/SPATIAL_POINTING_SLICE_CONTRACT.md">SPATIAL_POINTING_SLICE_CONTRACT.md</a>
-· <a href="../../docs/SPRINT_V05_ALL_FAMILY_WINDING_ATLAS.md">SPRINT_V05_ALL_FAMILY_WINDING_ATLAS.md</a>
-· <a href="../../docs/SPATIAL_4BAR_V05_V09_PROGRAM.md">SPATIAL_4BAR_V05_V09_PROGRAM.md</a>
+<a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+· <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
+· <a href="../../docs/SPATIAL_POINTING_SLICE_CONTRACT.md">SPATIAL_POINTING_SLICE_CONTRACT.md</a>
+· <a href="../../docs/SPRINT_V05_ALL_FAMILY_WINDING_ATLAS.md">SPRINT_V05_ALL_FAMILY_WINDING_ATLAS.md</a> (historical → V10)
 </p>
 
 <h2 id="links">Full sprint link index</h2>
@@ -320,6 +346,11 @@ Plan docs:
     <td>V04C</td>
     <td><a href="v04c/sprint_04c_virtual_u_equivalence.html">sprint_04c_virtual_u_equivalence.html</a></td>
     <td><a href="v04c/">v04c/</a> · provisional ab / φ mod 180°</td>
+  </tr>
+  <tr>
+    <td>V05A</td>
+    <td><a href="v05a/sprint_05a_pointing_slice_fibers.html">sprint_05a_pointing_slice_fibers.html</a></td>
+    <td><a href="v05a/">v05a/</a> · SUUR→UUUR pointing fiber MVP</td>
   </tr>
 </table>
 

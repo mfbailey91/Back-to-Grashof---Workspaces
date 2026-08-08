@@ -1,6 +1,10 @@
 # Sprint V06 — Descriptor Trend Mining
 
-**Status:** planned after V05 Gate A  
+> **Superseded sprint number:** retained as deferred **V11 descriptor
+> discovery**. Active V06 constructs the complete spatial 5R fixed-position
+> parent and pointing image before one-dimensional factor analysis.
+
+**Historical status:** planned after V05 Gate A
 **Purpose:** identify interpretable physical geometry quantities associated with the winding/crank outcomes in the all-family atlas.
 
 ## Research question

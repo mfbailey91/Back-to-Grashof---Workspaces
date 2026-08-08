@@ -1,0 +1,20 @@
+{
+  "fiber_equivalence_status": "PASS",
+  "slice_provenance": "task_derived",
+  "slice_id": "suur_ip_primary_n",
+  "residuals": {
+    "parent_rank": 4,
+    "parent_nullity": 1,
+    "dh_dq6": 0.0,
+    "h_residual_max": 2.220446049250313e-16,
+    "tangent_pointing_residual": 4.161284716149319e-17,
+    "child_tool_tangent_residual": 0.17249865594495903,
+    "pointing_curve_residual": 2.7194799110210365e-16,
+    "child_closure_norm": 0.0,
+    "child_rank": 6,
+    "child_nullity": 1,
+    "branch_sample_count": 17,
+    "lifted_alpha_dot": 0.2575490204088519,
+    "lifted_beta_dot": -5.030079355867091e-17
+  }
+}

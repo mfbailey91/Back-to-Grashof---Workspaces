@@ -1,0 +1,145 @@
+{
+  "sprint": "V05A",
+  "gate_note": "SUUR\u2192UUUR V05A MVP status recorded below; SSRR and full V05B deferred.",
+  "fibers": [
+    {
+      "slice_id": "suur_ip_primary_n",
+      "family": "UUUR",
+      "parent_line": "SUUR",
+      "slice_definition": {
+        "n": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "c": 0.780498929255855,
+        "formula": "h(d)=n\u00b7d",
+        "architecture": "IntersectingPairsAligned6R",
+        "q0": [
+          0.35,
+          -0.42,
+          0.55,
+          0.28,
+          -0.33,
+          0.7
+        ],
+        "p0": [
+          0.5441359424128817,
+          0.5138528280063298,
+          0.5725963328880095
+        ],
+        "d0": [
+          0.24431607121610832,
+          0.780498929255855,
+          0.5754399002293719
+        ],
+        "q6_star": 0.7
+      },
+      "virtual_u": {
+        "r_a": [
+          0.30502481164823797,
+          -0.6251571173956704,
+          0.7184277575709982
+        ],
+        "r_b": [
+          0.9204724447936953,
+          0.0,
+          -0.39080746970281616
+        ],
+        "d": [
+          0.24431607121610832,
+          0.780498929255855,
+          0.5754399002293719
+        ],
+        "n": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "convention": "R_b=normalize(n\u00d7d); R_a=normalize(R_b\u00d7d); frame=(R_a,R_b,d)"
+      },
+      "independence": {
+        "n": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "c": 0.780498929255855,
+        "n_dot_d": 0.780498929255855,
+        "n_cross_d_norm": 0.6251571173956704,
+        "grad_h": [
+          0.24431607121610832,
+          -0.4562228860243628,
+          0.006618619416244087,
+          0.14816670694162715,
+          -0.5971714452668998,
+          0.0
+        ],
+        "dh_dq6": 0.0,
+        "singular_values": [
+          1.053279340797606,
+          0.6201651978049255,
+          0.3074140053196661,
+          0.07196527401983498
+        ],
+        "rank": 4,
+        "nullity": 1,
+        "threshold": 1.053279340797606e-09,
+        "independent": true,
+        "dh_dq6_vanishes": true
+      },
+      "fiber_segment_accepted": 17,
+      "equivalence_residuals": {
+        "parent_rank": 4,
+        "parent_nullity": 1,
+        "dh_dq6": 0.0,
+        "h_residual_max": 2.220446049250313e-16,
+        "tangent_pointing_residual": 4.161284716149319e-17,
+        "child_tool_tangent_residual": 0.17249865594495903,
+        "pointing_curve_residual": 2.7194799110210365e-16,
+        "child_closure_norm": 0.0,
+        "child_rank": 6,
+        "child_nullity": 1,
+        "branch_sample_count": 17,
+        "lifted_alpha_dot": 0.2575490204088519,
+        "lifted_beta_dot": -5.030079355867091e-17
+      },
+      "fiber_equivalence_status": "PASS",
+      "slice_provenance": "task_derived",
+      "notes": [
+        "Compound UA/UB frames are orthonormalized charts of intersecting pairs.",
+        "Exact free-SUUR mechanism identity beyond this seed chart is unverified.",
+        "PASS uses S_v\u2192U_v pointing-lift tangent agreement; child nullspace match is diagnostic-only."
+      ],
+      "geometry_centers": [
+        [
+          0.5441359424128817,
+          0.5138528280063298,
+          0.5725963328880095
+        ],
+        [
+          0.0,
+          0.0,
+          0.28
+        ],
+        [
+          0.23082667696234402,
+          0.24026085640314232,
+          0.5093333078358884
+        ],
+        [
+          0.48983423832779754,
+          0.23579384877906487,
+          0.5701208805659069
+        ]
+      ],
+      "geometry_joint_kinds": [
+        "U",
+        "U",
+        "U",
+        "R"
+      ]
+    }
+  ],
+  "standalone_v02b_v04_policy": "mechanism_explorer_only"
+}

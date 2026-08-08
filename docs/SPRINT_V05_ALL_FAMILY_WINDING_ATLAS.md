@@ -1,6 +1,10 @@
 # Sprint V05 — All-Family Winding Atlas
 
-**Status:** planned after V04C  
+> **Superseded sprint number:** retained as the deferred **V10 validated-family
+> winding atlas**. Active V05 is the spatial 4R fixed-position source-fiber
+> sprint in `KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`.
+
+**Historical status:** planned after V04C; explorer V05A MVP (SUUR→UUUR) recorded below
 **Purpose:** generalize the verified winding workflow to all six ordered families **only after** each one-DOF `UXXX` mechanism is derived as a validated pointing fiber of its two-DOF virtual-`S_v` parent.
 
 ## Research question
@@ -40,6 +44,18 @@ For each candidate parent / slice:
 7. record `slice_provenance`, the constraint definition, and equivalence residuals.
 
 Only a child with `fiber_equivalence_status = PASS` is admitted to the dexterity-derived V05 atlas. Existing V02B/V03/V04 standalone `UXXX` mechanisms remain valuable regression / mechanism-explorer fixtures.
+
+### Historical explorer V05A status (2026-08-07)
+
+Under the old spatial-four-bar-first numbering this was “V05A”; after the kinematic-decomposition restructure it is preparatory / deferred-**V10** explorer evidence, not the active source-chain V05.
+
+- Restored minimal ATR fiber kernel under `src/grashof_workspace/spatial_experiments/` from `spherical_framework`.
+- Bridge: `spatial4bar_explorer/pointing_slice.py` + runner `spatial4bar_explorer/v05a.py`.
+- Worked MVP: intersecting-pairs **SUUR → UUUR** with explicit `h(d)=n·d=c`, virtual-`U` chart `(R_a,R_b,d)`, and fiber-equivalence **PASS**.
+- Readout: [`results/spatial4bar_explorer/v05a/sprint_05a_pointing_slice_fibers.html`](../results/spatial4bar_explorer/v05a/sprint_05a_pointing_slice_fibers.html).
+- Deferred: SSRR-line parents; family winding atlas (now V10); promoting diagnostic `phi` to a fiber parameter.
+- Note: compound UA/UB frames are orthonormalized seed charts; exact free-SUUR identity beyond the seed remains **unverified**. PASS uses `S_v→U_v` pointing-lift tangent agreement; V03 child nullspace match is diagnostic-only.
+- Standalone / explorer rows remain `mechanism_explorer_only` until certified against the active V05–V09 source-chain program.
 
 ## Phase V05B — family-wide winding generalization
 

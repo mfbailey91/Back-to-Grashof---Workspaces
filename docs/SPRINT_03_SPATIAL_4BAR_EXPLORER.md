@@ -1,5 +1,11 @@
 # Sprint Plan — Spatial 4-Bar Explorer
 
+> **Current role:** mechanism laboratory through V04C. Geometry, closure,
+> continuation, winding, visualization, and HTML infrastructure remain active.
+> Any V05+ sections in this historical file are superseded by
+> `KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`; standalone mechanism results
+> remain `mechanism_explorer_only` until a source-chain decomposition passes.
+
 **Status:** approved pivot from spherical-candidate enumeration toward direct spatial four-bar family exploration  
 **Purpose:** start a visual/numerical explorer for the one-DOF spatial four-bar families induced by aligned-terminal 6R pointing fibers.
 

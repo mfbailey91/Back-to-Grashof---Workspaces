@@ -1,6 +1,10 @@
 # Sprint V08 — Fast Crank Evaluator
 
-**Status:** planned after V07 Gate B  
+> **Superseded sprint number:** retained as deferred **V13 conservative fast
+> evaluator**. Active V08 verifies the aligned terminal-roll quotient and
+> constructs task-derived one-dimensional four-bar children.
+
+**Historical status:** planned after V07 Gate B
 **Purpose:** provide a computationally efficient and conservative crank-capability evaluator whether the underlying family is governed by a compact candidate rule or requires a numerical surrogate atlas.
 
 ## Research question

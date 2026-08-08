@@ -120,3 +120,337 @@ The Grashof margin remains \(P+Q-S-L\) on the sorted lengths. Exported labels us
 6. conventional `double-crank`, `crank-rocker`, or `double-rocker`.
 
 A separate `grashof_class` field reports `non-assemblable`, `grashof`, `change-point`, or `non-grashof`. Exact terminal-link rotatability is still decided by loop-closure interval containment and never by the textual inversion label alone.
+
+---
+
+## 6. Fixed-position fibers for general manipulators
+
+Let
+
+\[
+g(q)=\bigl(p(q),R(q)\bigr),
+\qquad q\in Q,
+\]
+
+where \(p(q)\) is tool position and \(R(q)\) is tool orientation.
+
+At a selected position \(p^*\), define the fixed-position fiber
+
+\[
+\mathcal F_{p^*}
+=
+\{q\in Q:p(q)=p^*\}
+=
+p^{-1}(p^*).
+\]
+
+The full fiber may contain multiple connected components and singular points. A numerical continuation trace usually represents one connected component
+
+\[
+\mathcal C_{p^*,k}\subseteq\mathcal F_{p^*},
+\]
+
+not automatically the full fiber.
+
+At a regular configuration,
+
+\[
+\dim\mathcal F_{p^*}
+=
+ n-\operatorname{rank}J_p(q).
+\]
+
+For full translational rank:
+
+- planar position constraints: \(\dim\mathcal F_{p^*}=n-2\);
+- spatial position constraints: \(\dim\mathcal F_{p^*}=n-3\).
+
+The count is local and generic. Singularities, dependent constraints, special overconstraints, joint limits, and disconnected components affect the global result.
+
+## 7. Exact virtual closure
+
+Fixing position can be represented by closing the tool point back to ground:
+
+- planar: a virtual revolute closure at \(p^*\);
+- spatial: a virtual spherical closure \(S_v\) at \(p^*\).
+
+Thus:
+
+\[
+\text{planar }nR
+\longrightarrow
+(nR+R_v),
+\qquad M=n-2,
+\]
+
+and
+
+\[
+\text{spatial }nR
+\longrightarrow
+(nR+S_v),
+\qquad M=n-3.
+\]
+
+Examples:
+
+\[
+\begin{aligned}
+\text{planar }2R &: M=0,\\
+\text{planar }3R &: M=1,\\
+\text{spatial }4R &: M=1,\\
+\text{spatial }5R &: M=2,\\
+\text{spatial }6R &: M=3.
+\end{aligned}
+\]
+
+The virtual closure is an exact representation of the fixed-position constraint. It is not by itself a proof that the result is a planar or spatial four-bar.
+
+## 8. Orientation image, pointing image, and coverage target
+
+The orientation image at \(p^*\) is
+
+\[
+\mathcal O(p^*)
+=
+\{R(q):q\in\mathcal F_{p^*}\}
+\subseteq SO(3).
+\]
+
+For a selected tool axis \(\hat z_T\), the pointing projection is
+
+\[
+\pi(R)=R\hat z_T,
+\]
+
+and the pointing image is
+
+\[
+\mathcal P(p^*)
+=
+\{R(q)\hat z_T:q\in\mathcal F_{p^*}\}
+\subseteq S^2.
+\]
+
+These should remain distinct from the coverage target \(Y\), which is imposed by the task.
+
+Examples:
+
+- planar full orientation: \(Y=SO(2)\);
+- specified one-parameter spatial task: \(Y=Y_1\subset SO(3)\);
+- arbitrary pointing with roll ignored: \(Y=S^2\);
+- full spatial orientation: \(Y=SO(3)\).
+
+A point is conventionally dexterous only when
+
+\[
+\mathcal O(p^*)=SO(2)
+\]
+
+in the planar case or
+
+\[
+\mathcal O(p^*)=SO(3)
+\]
+
+in the spatial case.
+
+For a pointing task, define a separate pointing-complete condition
+
+\[
+\mathcal P(p^*)=S^2.
+\]
+
+## 9. Dimensional ladder
+
+A necessary regularity-level condition for covering a target \(Y\) while holding position fixed is
+
+\[
+n-d_p\geq\dim Y,
+\]
+
+where \(d_p=2\) for planar position and \(d_p=3\) for spatial position.
+
+| Source chain | Fixed-position mobility | Maximum-dimensional orientation image | Appropriate coverage question |
+|---|---:|---|---|
+| planar 2R | 0 | zero-dimensional subset of \(SO(2)\) | no continuous orientation sweep |
+| planar 3R | 1 | one-dimensional subset of \(SO(2)\) | does it cover all \(SO(2)\)? |
+| spatial 4R | 1 | curve in \(SO(3)\) | does it cover a specified one-parameter orientation family? |
+| spatial 5R | 2 | surface-like subset of \(SO(3)\), pointing projection in \(S^2\) | does pointing cover all \(S^2\)? |
+| spatial 6R | 3 | three-dimensional subset of \(SO(3)\) | does it cover all \(SO(3)\)? |
+| spatial 7R | 4 | potentially all \(SO(3)\) plus self-motion | can full orientation coexist with redundancy? |
+
+Dimension matching does not prove coverage, connectivity, nonsingularity, or correct mechanism factorization.
+
+## 10. Why planar 3R produces a Grashof-relevant four-bar
+
+For planar 3R,
+
+\[
+\dim\mathcal F_{p^*}=3-2=1
+=
+\dim SO(2).
+\]
+
+The exact virtual closure is a planar 4R. Tool orientation is the rotation of a designated virtual link up to a fixed offset. Therefore complete planar orientation becomes a complete link-rotation problem.
+
+This is the structural reason four-bar rotatability and Grashof-type classification are relevant in the planar case.
+
+## 11. Spatial 4R as the first spatial decomposition test
+
+For a regular spatial 4R,
+
+\[
+4R+S_v,
+\qquad M=1.
+\]
+
+Its orientation image is generically a curve
+
+\[
+C_{p^*}=R(\mathcal F_{p^*})\subset SO(3).
+\]
+
+There is no general reason for this curve to be rotation about one fixed axis.
+
+If two consecutive physical revolute axes intersect orthogonally, they may be exactly regrouped as a universal joint:
+
+\[
+RR\longleftrightarrow U.
+\]
+
+Then the source closure may admit a role-aware representation such as
+
+\[
+S_v U_{\mathrm{phys}} R R
+\]
+
+with the virtual closure retained as the semantic origin. Depending on which physical pair is aggregated, use `S_v-U_phys-R-R`, `S_v-R-U_phys-R`, or `S_v-R-R-U_phys`. These topologies may be cyclically isomorphic to existing `USRR`-class solver strings, but the compound-joint roles differ. The physical universal joint must not inherit virtual tool-joint winding semantics. The aggregation must preserve source forward kinematics, components, tangent spaces, limits, and the full continued branch over the claimed scope.
+
+## 12. Spatial 5R and the two-dimensional pointing parent
+
+For a regular spatial 5R,
+
+\[
+5R+S_v,
+\qquad M=2.
+\]
+
+The source orientation image is at most two-dimensional in \(SO(3)\). Its pointing projection may be compared with \(S^2\), but a generic 5R does not automatically produce a pure pointing task or complete pointing coverage.
+
+Exact physical axis aggregation may yield parent topologies such as
+
+\[
+S_v U_{\mathrm{phys}} U_{\mathrm{phys}} R
+\]
+
+or
+
+\[
+S_v S_{\mathrm{phys}} R R
+\]
+
+up to cyclic ordering. These are still two-degree-of-freedom parents.
+
+A one-dimensional child requires an additional regular scalar task constraint
+
+\[
+\mathcal G_{p^*,c}
+=
+\{q\in\mathcal F_{p^*}:h(R(q)\hat z_T)=c\}.
+\]
+
+The function \(h\), value \(c\), parent component, and task provenance must be recorded.
+
+## 13. Aligned terminal-roll quotient
+
+For a generic spatial 6R,
+
+\[
+6R+S_v,
+\qquad M=3.
+\]
+
+Let the selected tool pointing direction be \(R\hat z_T\). Orientations with the same pointing direction differ by an \(SO(2)\cong S^1\) roll fiber.
+
+A terminal revolute joint \(R_6\) can parameterize this roll fiber only if:
+
+1. its axis is coincident with the selected tool-roll axis;
+2. the tool origin lies on the axis;
+3. changing \(q_6\) leaves tool position unchanged;
+4. changing \(q_6\) leaves pointing unchanged;
+5. the required roll range is available;
+6. quotient and reconstruction preserve the relevant components;
+7. limits, coupling, and singularities do not defeat the separation.
+
+Then
+
+\[
+(6R+S_v)/R_6
+\longrightarrow
+5R+S_v,
+\qquad M:3\rightarrow2.
+\]
+
+Full orientation coverage requires both complete pointing coverage and complete roll coverage over every required pointing direction.
+
+The bundle should not be treated globally as the Cartesian product \(S^2\times S^1\); the software uses explicit quotient/reconstruction maps rather than assuming a global product chart.
+
+## 14. Kinematic-decomposition operations
+
+Use the following operation types:
+
+1. **axis aggregation** — exact regrouping of physical axes, with no mobility change;
+2. **symmetry quotient** — remove a verified group action and separately retain its task coordinate;
+3. **task slice** — impose an explicit additional level-set constraint;
+4. **mechanism factorization** — represent a parent through coupled lower-dimensional mechanisms;
+5. **predicate application** — evaluate a property without changing geometry;
+6. **coverage reconstruction** — infer source coverage through a stated compatibility law.
+
+Each operation has separate proof obligations. Equal DOF counts or matching joint-letter strings are not sufficient. A mechanism identity must include both `joint_kind_sequence` and `joint_role_sequence`; cyclically identical kind strings can represent different task semantics.
+
+## 15. Decomposition certificate
+
+A proposed reduction receives one status:
+
+```text
+EXACT_GLOBAL
+EXACT_ON_COMPONENT
+LOCAL_ONLY
+APPROXIMATE
+REJECTED
+UNRESOLVED
+```
+
+At minimum the certificate records:
+
+- source and reduced topology;
+- coordinate and reconstruction maps;
+- source component scope;
+- rank/nullity checks;
+- closure residuals;
+- tangent-subspace error;
+- trajectory reconstruction error;
+- task-map error;
+- joint-limit correspondence;
+- failure or scope reason.
+
+## 16. Analytical and numerical status
+
+The structural reduction and coverage criterion may be analytical even when a family-specific mechanism predicate is numerical.
+
+A careful description is:
+
+> a mechanism-based orientation-coverage criterion evaluated with an exact numerical continuation solver or a conservative numerical atlas.
+
+`Semi-analytical` is appropriate only when the analytical reduction, numerical predicate, uncertainty policy, and exact fallback are stated separately.
+
+Finite numerical sampling should use qualified labels such as
+
+```text
+COVERED_AT_DECLARED_RESOLUTION
+PARTIAL_COVERAGE
+UNRESOLVED
+```
+
+rather than an unqualified exact theorem.

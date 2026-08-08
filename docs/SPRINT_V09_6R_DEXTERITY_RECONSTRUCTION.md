@@ -1,6 +1,10 @@
 # Sprint V09 — 6R Dexterity Reconstruction and Validation
 
-**Status:** planned after V08  
+> **Superseded sprint number:** retained as deferred **V14 broad
+> architecture/workspace validation**. Active V09 validates certified
+> mechanism predicates and coverage reconstruction against source-chain truth.
+
+**Historical status:** planned after V08
 **Purpose:** reconnect the spatial-four-bar machinery to an aligned-terminal 6R manipulator and test the central workspace hypothesis against independently computed orientation truth.
 
 ## Central research gate

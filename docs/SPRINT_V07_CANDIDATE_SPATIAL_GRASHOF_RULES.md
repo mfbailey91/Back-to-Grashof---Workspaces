@@ -1,6 +1,10 @@
 # Sprint V07 — Candidate Spatial Grashof-Like Rules
 
-**Status:** planned after V06  
+> **Superseded sprint number:** retained as deferred **V12 candidate-rule
+> testing**. Active V07 builds the decomposition-free spatial 6R orientation
+> reference used for later validation.
+
+**Historical status:** planned after V06
 **Purpose:** convert the strongest V06 empirical structures into explicit, family-specific, falsifiable crank hypotheses and determine whether any deserve analytical follow-up.
 
 ## Research question
