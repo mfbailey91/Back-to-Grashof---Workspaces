@@ -327,6 +327,8 @@ Note: ± rays from one seed do not certify full multi-component completeness. V0
 
 ### V05C — orientation-curve truth
 
+**Status (2026-08-08):** MVP implemented on V05B fixed-position fibers.
+
 Render and export:
 
 - the physical open chain and all joint axes;
@@ -338,6 +340,10 @@ Render and export:
 - singular and near-singular locations.
 
 Do not reduce the orientation curve to a single angle unless the architecture proves a one-parameter subgroup or another valid scalar coordinate.
+
+Software: `src/grashof_workspace/spatial_experiments/{orientation_image,v05c}.py`.
+Readout: [`results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
+These exports are orientation-curve / pointing-curve truth, not coverage certificates. V05D–E remain open.
 
 ### V05D — exact axis aggregation and candidate spatial four-bar
 

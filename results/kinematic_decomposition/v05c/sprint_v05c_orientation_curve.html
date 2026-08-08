@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Active V05C — Orientation-Curve Truth</title>
+<style>
+  body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
+  h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  table { border-collapse: collapse; width: 100%; margin: 0.75rem 0 1rem; }
+  th, td { border: 1px solid #bbb; padding: 0.4rem 0.55rem; text-align: left; }
+  th { background: #f3f3f3; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
+  .note { background: #f7f4ea; border-left: 3px solid #c4a35a; padding: 0.65rem 0.85rem; margin: 1rem 0; }
+</style>
+</head>
+<body>
+<h1>Active V05C — Orientation-Curve Truth</h1>
+<p>
+Exports the orientation image and pointing projection of continued spatial
+<code>4R + S_v</code> fixed-position fibers from V05B. Representations are
+rotation matrices, sign-stabilized quaternions, and rotation vectors — not a
+single scalar angle.
+</p>
+<div class="note">
+<strong>Gate note.</strong>
+These plots are <strong>orientation-curve truth</strong>, not coverage of
+<code>SO(3)</code> or <code>S²</code>. Singular / near-singular markers are
+reported along the continued component. V05D aggregation certificates and V05E
+rejection tests remain deferred.
+</div>
+<h2>Corpus orientation images</h2>
+<table>
+<tr><th>Architecture</th><th>Orientation</th><th>Samples</th><th>Pointing</th><th>Points</th><th>Near-sing.</th><th>d-mult. pairs</th></tr>
+<tr><td><code>generic_4r</code></td><td>PASS</td><td>81</td><td>PASS</td><td>81</td><td>0</td><td>3200</td></tr><tr><td><code>exact_u_pair_4r</code></td><td>PASS</td><td>81</td><td>PASS</td><td>81</td><td>0</td><td>3200</td></tr><tr><td><code>singular_4r_parallel</code></td><td>FAIL</td><td>0</td><td>FAIL</td><td>0</td><td>0</td><td>0</td></tr>
+</table>
+<h2>Figures</h2>
+<h3>generic_4r orientation charts</h3><p><img src="figures/v05c_generic_4r_orientation_charts.png" alt="generic_4r orientation charts" style="max-width: 720px;"></p><h3>generic_4r orientation curve animation</h3><p><img src="figures/v05c_generic_4r_orientation_curve.gif" alt="generic_4r orientation curve animation" style="max-width: 720px;"></p><h3>exact_u_pair_4r orientation charts</h3><p><img src="figures/v05c_exact_u_pair_4r_orientation_charts.png" alt="exact_u_pair_4r orientation charts" style="max-width: 720px;"></p><h3>exact_u_pair_4r orientation curve animation</h3><p><img src="figures/v05c_exact_u_pair_4r_orientation_curve.gif" alt="exact_u_pair_4r orientation curve animation" style="max-width: 720px;"></p><h3>singular_4r_parallel orientation charts</h3><p><img src="figures/v05c_singular_4r_parallel_orientation_charts.png" alt="singular_4r_parallel orientation charts" style="max-width: 720px;"></p><h3>singular_4r_parallel orientation curve view</h3><p><img src="figures/v05c_singular_4r_parallel_orientation_curve.png" alt="singular_4r_parallel orientation curve view" style="max-width: 720px;"></p>
+<h2>Deferred</h2>
+<ul>
+<li>V05D exact <code>RR→U</code> aggregation + DecompositionCertificate</li>
+<li>V05E near-aligned rejection</li>
+<li>Any claim that the orientation curve fills a coverage target</li>
+</ul>
+</body>
+</html>
