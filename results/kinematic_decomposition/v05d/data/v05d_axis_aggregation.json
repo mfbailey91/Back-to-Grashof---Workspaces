@@ -2,7 +2,7 @@
   "sprint": "V05D",
   "program": "kinematic_decomposition",
   "operation": "axis_aggregation",
-  "gate_note": "Active V05D exact RR\u2192U aggregation; EXACT_ON_COMPONENT on scoped fiber; V05E near-aligned rejection remains open.",
+  "gate_note": "Active V05D exact RR\u2192U aggregation; EXACT_ON_COMPONENT on scoped fiber; V05E near-aligned rejection implemented.",
   "certificates": [
     {
       "source_chain_id": "exact_u_pair_4r",

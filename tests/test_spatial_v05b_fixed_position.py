@@ -72,7 +72,7 @@ def test_rejected_seed_fiber_has_no_accepted_samples() -> None:
 
 def test_v05b_html_and_readout(tmp_path) -> None:
     fibers = build_v05b_readout(tmp_path, n_steps=12, step_size=0.05)
-    assert len(fibers) == 3
+    assert len(fibers) == 4
     assert any(f.seed_audit.status == "PASS" for f in fibers)
     assert any(f.seed_audit.status == "FAIL" for f in fibers)
     html = render_v05b_html(fibers, figures={"demo": "figures/demo.png"})

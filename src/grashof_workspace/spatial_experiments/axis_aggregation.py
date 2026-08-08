@@ -274,3 +274,161 @@ def fk_identity_residuals(
         "pointing_residual": d_res,
         "joint_map_residual": float(np.linalg.norm(np.asarray(q_source) - np.asarray(q_emb))),
     }
+
+
+@dataclass(frozen=True, slots=True)
+class FalseUTaskErrorReport:
+    """Diagnostic residuals from treating a non-exact pair as exact U.
+
+    This is **not** a DecompositionCertificate status. Label:
+    ``false_u_surrogate`` under operation ``axis_aggregation``.
+    """
+
+    architecture_id: str
+    pair_index: int
+    label: str
+    distance_tol_m: float
+    orthogonality_tol: float
+    parallel_tol: float
+    source_distance_m: float
+    source_orthogonality_abs_dot: float
+    source_parallelism_residual: float
+    exceeds_distance_tol: bool
+    exceeds_orthogonality_tol: bool
+    surrogate_center: tuple[float, float, float]
+    surrogate_w_a: tuple[float, float, float]
+    surrogate_w_b: tuple[float, float, float]
+    seed_position_residual_m: float
+    seed_rotation_frobenius: float
+    seed_pointing_residual: float
+    fiber_max_position_residual_m: float
+    fiber_max_rotation_frobenius: float
+    fiber_max_pointing_residual: float
+    fiber_samples_compared: int
+    notes: tuple[str, ...] = ()
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+def force_exact_u_surrogate_axes(
+    axes: tuple[AxisLine, ...],
+    pair_index: int = 0,
+) -> tuple[AxisLine, ...]:
+    """Project a consecutive pair onto intersecting orthogonal axes at the midpoint.
+
+    Keeps all other axes unchanged. Raises if the pair is parallel (no unique U chart).
+    """
+    if pair_index < 0 or pair_index >= len(axes) - 1:
+        raise ValueError("pair_index out of range")
+    a = axes[pair_index]
+    b = axes[pair_index + 1]
+    pa, pb = line_closest_points(a, b)
+    center = 0.5 * (pa + pb)
+    w_a = np.asarray(a.w, dtype=float)
+    w_b = np.asarray(b.w, dtype=float)
+    # Orthogonalize w_b against w_a in the plane of the two directions when possible.
+    w_b_orth = w_b - float(np.dot(w_b, w_a)) * w_a
+    n = float(np.linalg.norm(w_b_orth))
+    if n <= PARALLEL_CROSS_TOL:
+        raise ValueError("cannot force exact U surrogate for parallel axes")
+    w_b_orth = w_b_orth / n
+    center_t = tuple(float(x) for x in center)
+    forced_a = AxisLine(center_t, tuple(float(x) for x in w_a))
+    forced_b = AxisLine(center_t, tuple(float(x) for x in w_b_orth))
+    out = list(axes)
+    out[pair_index] = forced_a
+    out[pair_index + 1] = forced_b
+    return tuple(out)
+
+
+def _pose_residuals(chain_a: SerialRevoluteChain, chain_b: SerialRevoluteChain, q: tuple[float, ...]) -> tuple[float, float, float]:
+    sa = chain_a.evaluate(q)
+    sb = chain_b.evaluate(q)
+    return (
+        float(np.linalg.norm(sa.p - sb.p)),
+        float(np.linalg.norm(sa.R - sb.R, ord="fro")),
+        float(np.linalg.norm(sa.d - sb.d)),
+    )
+
+
+def measure_false_u_task_error(
+    model: OpenChainModel,
+    q0: tuple[float, ...],
+    *,
+    pair_index: int = 0,
+    n_fiber_steps: int = 16,
+    fiber_step_size: float = 0.04,
+    distance_tol_m: float = PAIR_DISTANCE_TOL_M,
+    parallel_tol: float = PARALLEL_CROSS_TOL,
+    orthogonality_tol: float = ORTHOGONALITY_DOT_TOL,
+) -> FalseUTaskErrorReport:
+    """Compare source FK to a forced exact-U surrogate at seed and along the source fiber."""
+    from .fixed_position_continuation import continue_fixed_position_fiber
+
+    cand = assess_consecutive_pair(
+        model.chain,
+        pair_index,
+        q=None,
+        distance_tol_m=distance_tol_m,
+        parallel_tol=parallel_tol,
+        orthogonality_tol=orthogonality_tol,
+    )
+    surrogate_axes = force_exact_u_surrogate_axes(model.chain.home_axes, pair_index=pair_index)
+    # Preserve the source home tool pose (same p0/d0/R0); only pair screws change.
+    surrogate_chain = SerialRevoluteChain(
+        home_axes=surrogate_axes,
+        p0=model.chain.p0,
+        d0=model.chain.d0,
+        R0=model.chain.R0,
+    )
+    seed_p, seed_r, seed_d = _pose_residuals(model.chain, surrogate_chain, q0)
+
+    fiber = continue_fixed_position_fiber(
+        model,
+        q0,
+        n_steps=n_fiber_steps,
+        step_size=fiber_step_size,
+        component_id=f"{model.architecture_id}_false_u_diag",
+    )
+    max_p = seed_p
+    max_r = seed_r
+    max_d = seed_d
+    n_compared = 0
+    for step in fiber.accepted_samples:
+        if step.q is None:
+            continue
+        p_res, r_res, d_res = _pose_residuals(model.chain, surrogate_chain, step.q)
+        max_p = max(max_p, p_res)
+        max_r = max(max_r, r_res)
+        max_d = max(max_d, d_res)
+        n_compared += 1
+
+    return FalseUTaskErrorReport(
+        architecture_id=model.architecture_id,
+        pair_index=pair_index,
+        label="false_u_surrogate",
+        distance_tol_m=distance_tol_m,
+        orthogonality_tol=orthogonality_tol,
+        parallel_tol=parallel_tol,
+        source_distance_m=cand.distance_m,
+        source_orthogonality_abs_dot=cand.orthogonality_abs_dot,
+        source_parallelism_residual=cand.parallelism_residual,
+        exceeds_distance_tol=cand.distance_m > distance_tol_m,
+        exceeds_orthogonality_tol=cand.orthogonality_abs_dot > orthogonality_tol,
+        surrogate_center=tuple(float(x) for x in surrogate_axes[pair_index].r),
+        surrogate_w_a=tuple(float(x) for x in surrogate_axes[pair_index].w),
+        surrogate_w_b=tuple(float(x) for x in surrogate_axes[pair_index + 1].w),
+        seed_position_residual_m=seed_p,
+        seed_rotation_frobenius=seed_r,
+        seed_pointing_residual=seed_d,
+        fiber_max_position_residual_m=max_p,
+        fiber_max_rotation_frobenius=max_r,
+        fiber_max_pointing_residual=max_d,
+        fiber_samples_compared=n_compared,
+        notes=(
+            "Forced exact-U surrogate replaces the consecutive pair with intersecting orthogonal axes.",
+            "Residuals quantify task error of treating a non-exact pair as U_phys.",
+            "Diagnostic only — not an APPROXIMATE DecompositionCertificate.",
+        ),
+    )

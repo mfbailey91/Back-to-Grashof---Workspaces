@@ -26,20 +26,19 @@ single scalar angle.
 These plots are <strong>orientation-curve truth</strong>, not coverage of
 <code>SO(3)</code> or <code>S²</code>. Singular / near-singular markers are
 reported along the continued component. V05D aggregation certificates and V05E
-rejection tests remain deferred.
+near-aligned rejection are implemented on this corpus.
 </div>
 <h2>Corpus orientation images</h2>
 <table>
 <tr><th>Architecture</th><th>Orientation</th><th>Samples</th><th>Pointing</th><th>Points</th><th>Near-sing.</th><th>d-mult. pairs</th></tr>
-<tr><td><code>generic_4r</code></td><td>PASS</td><td>81</td><td>PASS</td><td>81</td><td>0</td><td>3200</td></tr><tr><td><code>exact_u_pair_4r</code></td><td>PASS</td><td>81</td><td>PASS</td><td>81</td><td>0</td><td>3200</td></tr><tr><td><code>singular_4r_parallel</code></td><td>FAIL</td><td>0</td><td>FAIL</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td><code>generic_4r</code></td><td>PASS</td><td>81</td><td>PASS</td><td>81</td><td>0</td><td>3200</td></tr><tr><td><code>exact_u_pair_4r</code></td><td>PASS</td><td>81</td><td>PASS</td><td>81</td><td>0</td><td>3200</td></tr><tr><td><code>near_aligned_u_pair_4r</code></td><td>PASS</td><td>81</td><td>PASS</td><td>81</td><td>0</td><td>3200</td></tr><tr><td><code>singular_4r_parallel</code></td><td>FAIL</td><td>0</td><td>FAIL</td><td>0</td><td>0</td><td>0</td></tr>
 </table>
 <h2>Figures</h2>
-<h3>generic_4r orientation charts</h3><p><img src="figures/v05c_generic_4r_orientation_charts.png" alt="generic_4r orientation charts" style="max-width: 720px;"></p><h3>generic_4r orientation curve animation</h3><p><img src="figures/v05c_generic_4r_orientation_curve.gif" alt="generic_4r orientation curve animation" style="max-width: 720px;"></p><h3>exact_u_pair_4r orientation charts</h3><p><img src="figures/v05c_exact_u_pair_4r_orientation_charts.png" alt="exact_u_pair_4r orientation charts" style="max-width: 720px;"></p><h3>exact_u_pair_4r orientation curve animation</h3><p><img src="figures/v05c_exact_u_pair_4r_orientation_curve.gif" alt="exact_u_pair_4r orientation curve animation" style="max-width: 720px;"></p><h3>singular_4r_parallel orientation charts</h3><p><img src="figures/v05c_singular_4r_parallel_orientation_charts.png" alt="singular_4r_parallel orientation charts" style="max-width: 720px;"></p><h3>singular_4r_parallel orientation curve view</h3><p><img src="figures/v05c_singular_4r_parallel_orientation_curve.png" alt="singular_4r_parallel orientation curve view" style="max-width: 720px;"></p>
+<h3>generic_4r orientation charts</h3><p><img src="figures/v05c_generic_4r_orientation_charts.png" alt="generic_4r orientation charts" style="max-width: 720px;"></p><h3>generic_4r orientation curve animation</h3><p><img src="figures/v05c_generic_4r_orientation_curve.gif" alt="generic_4r orientation curve animation" style="max-width: 720px;"></p><h3>exact_u_pair_4r orientation charts</h3><p><img src="figures/v05c_exact_u_pair_4r_orientation_charts.png" alt="exact_u_pair_4r orientation charts" style="max-width: 720px;"></p><h3>exact_u_pair_4r orientation curve animation</h3><p><img src="figures/v05c_exact_u_pair_4r_orientation_curve.gif" alt="exact_u_pair_4r orientation curve animation" style="max-width: 720px;"></p><h3>near_aligned_u_pair_4r orientation charts</h3><p><img src="figures/v05c_near_aligned_u_pair_4r_orientation_charts.png" alt="near_aligned_u_pair_4r orientation charts" style="max-width: 720px;"></p><h3>near_aligned_u_pair_4r orientation curve animation</h3><p><img src="figures/v05c_near_aligned_u_pair_4r_orientation_curve.gif" alt="near_aligned_u_pair_4r orientation curve animation" style="max-width: 720px;"></p><h3>singular_4r_parallel orientation charts</h3><p><img src="figures/v05c_singular_4r_parallel_orientation_charts.png" alt="singular_4r_parallel orientation charts" style="max-width: 720px;"></p><h3>singular_4r_parallel orientation curve view</h3><p><img src="figures/v05c_singular_4r_parallel_orientation_curve.png" alt="singular_4r_parallel orientation curve view" style="max-width: 720px;"></p>
 <h2>Deferred</h2>
 <ul>
-<li>V05D exact <code>RR→U</code> aggregation + DecompositionCertificate</li>
-<li>V05E near-aligned rejection</li>
 <li>Any claim that the orientation curve fills a coverage target</li>
+<li>V06 spatial 5R parent</li>
 </ul>
 </body>
 </html>

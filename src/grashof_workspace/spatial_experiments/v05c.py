@@ -241,7 +241,7 @@ single scalar angle.
 These plots are <strong>orientation-curve truth</strong>, not coverage of
 <code>SO(3)</code> or <code>S²</code>. Singular / near-singular markers are
 reported along the continued component. V05D aggregation certificates and V05E
-rejection tests remain deferred.
+near-aligned rejection are implemented on this corpus.
 </div>
 <h2>Corpus orientation images</h2>
 <table>
@@ -252,9 +252,8 @@ rejection tests remain deferred.
 {''.join(figure_blocks)}
 <h2>Deferred</h2>
 <ul>
-<li>V05D exact <code>RR→U</code> aggregation + DecompositionCertificate</li>
-<li>V05E near-aligned rejection</li>
 <li>Any claim that the orientation curve fills a coverage target</li>
+<li>V06 spatial 5R parent</li>
 </ul>
 </body>
 </html>
@@ -316,7 +315,7 @@ def build_v05c_readout(
                 "program": "kinematic_decomposition",
                 "gate_note": (
                     "Orientation-curve truth only; not SO(3)/S^2 coverage. "
-                    "V05D–E deferred."
+                    "V05D–E implemented on this corpus."
                 ),
                 "fibers": payload_fibers,
             },

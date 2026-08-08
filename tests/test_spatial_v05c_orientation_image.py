@@ -69,7 +69,7 @@ def test_boundary_quaternion_round_trip_and_sign_stability() -> None:
 
 def test_v05c_html_and_readout(tmp_path) -> None:
     rows = build_v05c_readout(tmp_path, n_steps=10, step_size=0.05)
-    assert len(rows) == 3
+    assert len(rows) == 4
     assert any(o.status == "PASS" for o, _ in rows)
     assert any(o.status == "FAIL" for o, _ in rows)
     html = render_v05c_html(rows, figures={"demo": "figures/demo.png"})

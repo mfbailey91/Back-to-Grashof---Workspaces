@@ -186,7 +186,8 @@ This is the kinematic-decomposition ladder V05B, not the deferred explorer famil
 <strong>Gate note.</strong>
 At least one regular fixed-position component is continued with explicit rank/nullity and branch status.
 Orientation samples along the fiber are stored for later V05C and are <em>not</em> coverage claims.
-V05D axis-aggregation certificates, V05E near-aligned rejection, and historical V10 atlas work remain deferred.
+V05D axis-aggregation certificates and V05E near-aligned rejection are implemented on this corpus.
+Historical V10 atlas work remains deferred.
 Explorer <code>spatial4bar_explorer/v05a</code> pointing-slice MVP remains <code>mechanism_explorer_only</code>.
 </div>
 <h2>Corpus fibers</h2>
@@ -196,11 +197,9 @@ Explorer <code>spatial4bar_explorer/v05a</code> pointing-slice MVP remains <code
 </table>
 <h2>Figures</h2>
 {''.join(figure_blocks)}
-<h2>Deferred</h2>
+<h2>Next</h2>
 <ul>
-<li>V05C orientation-curve truth gallery</li>
-<li>V05D exact <code>RR→U</code> aggregation + DecompositionCertificate</li>
-<li>V05E near-aligned rejection tests</li>
+<li>V06 spatial 5R fixed-position parent</li>
 <li>Historical all-family winding atlas (V10)</li>
 </ul>
 </body>
@@ -242,8 +241,8 @@ def build_v05b_readout(outdir: Path, *, n_steps: int = 40, step_size: float = 0.
         "sprint": "V05B",
         "program": "kinematic_decomposition",
         "gate_note": (
-            "Active V05B spatial 4R fixed-position fiber MVP; "
-            "V05C–E and deferred V10 atlas remain open."
+            "Active V05B spatial 4R fixed-position fiber MVP on the V05A corpus; "
+            "V05C–E implemented; deferred V10 atlas remains open."
         ),
         "fibers": [fiber.to_json_dict() for fiber in fibers],
         "explorer_v05a_policy": "mechanism_explorer_only",

@@ -323,7 +323,7 @@ For a regular seed \(q_0\):
 
 Software: `src/grashof_workspace/spatial_experiments/{open_chain,fixed_position,fixed_position_continuation,v05_corpus,v05b}.py`.
 Readout: [`results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html`](../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html).
-Note: ± rays from one seed do not certify full multi-component completeness. V05C–E remain open. Explorer `spatial4bar_explorer/v05a` is not this work package.
+Note: ± rays from one seed do not certify full multi-component completeness. V05C–E are implemented on this corpus. Explorer `spatial4bar_explorer/v05a` is not this work package.
 
 ### V05C — orientation-curve truth
 
@@ -343,7 +343,7 @@ Do not reduce the orientation curve to a single angle unless the architecture pr
 
 Software: `src/grashof_workspace/spatial_experiments/{orientation_image,v05c}.py`.
 Readout: [`results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
-These exports are orientation-curve / pointing-curve truth, not coverage certificates. V05D aggregation certificates are implemented; V05E near-aligned rejection remains open.
+These exports are orientation-curve / pointing-curve truth, not coverage certificates. V05D aggregation certificates and V05E near-aligned rejection are implemented.
 
 ### V05D — exact axis aggregation and candidate spatial four-bar
 
@@ -362,11 +362,17 @@ The existing generic `U/S/R` closure and continuation kernel may be reused, but 
 
 Software: `src/grashof_workspace/spatial_experiments/{axis_aggregation,decomposition_certificate,v05d}.py`.
 Readout: [`results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
-Non-proximal pair embeddings and multi-component `EXACT_GLOBAL` remain unverified. V05E remains open.
+Non-proximal pair embeddings and multi-component `EXACT_GLOBAL` remain unverified. V05E near-aligned rejection is implemented.
 
 ### V05E — rejection tests
 
+**Status:** MVP complete for `near_aligned_u_pair_4r` (`REJECTED` as exact aggregation) with declared geometric tolerances and a diagnostic `false_u_surrogate` task-error report.
+
 The near-aligned perturbation must be rejected as exact aggregation. The software should show the geometric tolerance and the task error caused by treating it as a universal joint.
+
+Software: `src/grashof_workspace/spatial_experiments/{axis_aggregation,decomposition_certificate,v05_corpus,v05e}.py`.
+Readout: [`results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
+The forced exact-U surrogate is diagnostic-only and is **not** an `APPROXIMATE` DecompositionCertificate.
 
 ## Deliverables
 

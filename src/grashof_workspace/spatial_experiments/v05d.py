@@ -186,7 +186,7 @@ Exact consecutive <code>RR→U</code> aggregation on the spatial-4R corpus, issu
 <strong>Gate note.</strong>
 <code>exact_u_pair_4r</code> should certify on the scoped fiber component
 (<code>EXACT_ON_COMPONENT</code>); <code>generic_4r</code> is rejected.
-Multi-component completeness remains unverified. V05E near-aligned rejection suite remains open.
+Multi-component completeness remains unverified. V05E near-aligned rejection is implemented.
 </div>
 <h2>Certificates</h2>
 <table>
@@ -197,7 +197,6 @@ Multi-component completeness remains unverified. V05E near-aligned rejection sui
 {''.join(figure_blocks)}
 <h2>Deferred</h2>
 <ul>
-<li>V05E near-aligned rejection corpus</li>
 <li>Non-proximal <code>S_v-R-U_phys-R</code> / <code>S_v-R-R-U_phys</code> embedding certificates</li>
 <li>Historical all-family winding atlas (V10)</li>
 </ul>
@@ -249,7 +248,7 @@ def build_v05d_readout(
         "operation": "axis_aggregation",
         "gate_note": (
             "Active V05D exact RR→U aggregation; EXACT_ON_COMPONENT on scoped fiber; "
-            "V05E near-aligned rejection remains open."
+            "V05E near-aligned rejection implemented."
         ),
         "certificates": [c.to_json_dict() for c in certificates],
         "explorer_policy": "mechanism_explorer_only for spatial4bar_explorer/v05a",
