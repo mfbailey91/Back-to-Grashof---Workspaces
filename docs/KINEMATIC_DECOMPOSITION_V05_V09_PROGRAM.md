@@ -343,9 +343,11 @@ Do not reduce the orientation curve to a single angle unless the architecture pr
 
 Software: `src/grashof_workspace/spatial_experiments/{orientation_image,v05c}.py`.
 Readout: [`results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
-These exports are orientation-curve / pointing-curve truth, not coverage certificates. V05D–E remain open.
+These exports are orientation-curve / pointing-curve truth, not coverage certificates. V05D aggregation certificates are implemented; V05E near-aligned rejection remains open.
 
 ### V05D — exact axis aggregation and candidate spatial four-bar
+
+**Status:** MVP complete for proximal exact `RR→U` on `exact_u_pair_4r` (`EXACT_ON_COMPONENT`); `generic_4r` rejected.
 
 For architectures with an exact \(RR\rightarrow U\) pair:
 
@@ -357,6 +359,10 @@ For architectures with an exact \(RR\rightarrow U\) pair:
 6. issue a decomposition certificate.
 
 The existing generic `U/S/R` closure and continuation kernel may be reused, but V05 introduces role-aware source families `S_v-U_phys-R-R`, `S_v-R-U_phys-R`, and `S_v-R-R-U_phys`. Existing `tool_a`/`tool_b` winding semantics must not be reused because the universal joint is physical and the virtual tool closure is spherical.
+
+Software: `src/grashof_workspace/spatial_experiments/{axis_aggregation,decomposition_certificate,v05d}.py`.
+Readout: [`results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
+Non-proximal pair embeddings and multi-component `EXACT_GLOBAL` remain unverified. V05E remains open.
 
 ### V05E — rejection tests
 

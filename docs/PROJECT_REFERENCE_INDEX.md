@@ -57,6 +57,7 @@ V09  validated mechanism predicates and coverage reconstruction
 
 **V05B MVP readout:** [`../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html`](../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html).
 **V05C MVP readout:** [`../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
+**V05D MVP readout:** [`../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
 Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 

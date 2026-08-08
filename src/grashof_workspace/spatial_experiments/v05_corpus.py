@@ -4,9 +4,8 @@ Conventions
 -----------
 All models are ``SerialRevoluteChain`` instances with four home axes in world
 frame ``W``. Task point ``p0`` and pointing ``d0`` are expressed in ``W``.
-No URDF import. Exact ``RR→U`` aggregation is deferred to V05D; the
-``exact_u_pair_4r`` architecture only plants an exact consecutive intersecting
-orthogonal pair for later aggregation tests.
+No URDF import. The ``exact_u_pair_4r`` architecture plants an exact consecutive
+intersecting orthogonal pair for V05D aggregation certificates.
 """
 
 from __future__ import annotations
@@ -107,7 +106,7 @@ def build_exact_u_pair_4r() -> Spatial4RCorpusEntry:
         joint_role_sequence=_r_phys_roles(4),
         notes=(
             "Exact consecutive orthogonal intersecting RR at J1/J2 (U_phys candidate).",
-            "Aggregation certificate deferred to V05D.",
+            "Aggregation certificate issued by active V05D.",
             f"pair_distance={dist:.3e}, pair_parallelism={par:.3e}",
         ),
     )
