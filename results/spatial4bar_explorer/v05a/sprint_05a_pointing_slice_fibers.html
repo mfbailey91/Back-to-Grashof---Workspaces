@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sprint V05A — Parent-First Pointing Fiber</title>
+<style>
+  body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
+  h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  table { border-collapse: collapse; width: 100%; margin: 0.75rem 0 1rem; }
+  th, td { border: 1px solid #bbb; padding: 0.4rem 0.55rem; text-align: left; }
+  th { background: #f3f3f3; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
+  .pass { color: #0a5; font-weight: bold; }
+  .fail { color: #a20; font-weight: bold; }
+  .review { color: #a60; font-weight: bold; }
+  .note { background: #f7f4ea; border-left: 3px solid #c4a35a; padding: 0.65rem 0.85rem; margin: 1rem 0; }
+  ul.checklist li { margin: 0.25rem 0; }
+</style>
+</head>
+<body>
+<h1>Sprint V05A — Parent-First Pointing Fiber</h1>
+<p>SUUR → UUUR MVP on the intersecting-pairs aligned-terminal architecture.
+SSRR-line parents and the full V05B winding atlas are deferred.</p>
+
+<div class="note">
+<strong>Gate note.</strong>
+Fiber-equivalence status for the worked child:
+<span class="pass">PASS</span>
+with <code>slice_provenance=task_derived</code>.
+Only <code>PASS</code> rows are atlas-admissible. Standalone V02B–V04 geometries remain
+<code>mechanism_explorer_only</code>.
+</div>
+
+<h2>Worked fiber</h2>
+<table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>slice_id</td><td><code>suur_ip_primary_n</code></td></tr>
+<tr><td>family</td><td>UUUR</td></tr>
+<tr><td>parent_line</td><td>SUUR</td></tr>
+<tr><td>slice</td><td><code>h(d)=n·d = 0.78049893</code></td></tr>
+<tr><td>n</td><td><code>(0.0, 1.0, 0.0)</code></td></tr>
+<tr><td>architecture</td><td>IntersectingPairsAligned6R</td></tr>
+<tr><td>parent rank / nullity</td><td>4 / 1</td></tr>
+<tr><td>dh/dq6</td><td>0.000e+00</td></tr>
+<tr><td>accepted fiber samples</td><td>17</td></tr>
+<tr><td>child rank / nullity</td><td>6 / 1</td></tr>
+<tr><td>U-lift tangent residual</td><td>4.161285e-17</td></tr>
+<tr><td>child-tool tangent diagnostic</td><td>1.724987e-01</td></tr>
+<tr><td>lifted (α′, β′)</td><td>(2.575490e-01, -5.030079e-17)</td></tr>
+<tr><td>pointing-curve residual</td><td>2.719480e-16</td></tr>
+<tr><td>fiber_equivalence_status</td><td class="pass">PASS</td></tr>
+</table>
+
+<h2>Task-derived animation contract checklist</h2>
+<ul class="checklist">
+<li>tool point / virtual <code>S_v</code> center</li>
+<li>tool pointing direction <code>d</code></li>
+<li>derived <code>R_a</code> / <code>R_b</code> axes</li>
+<li>pointing-slice definition <code>h(d)=n·d=c</code></li>
+<li><code>α(s)</code> / <code>β(s)</code> readouts</li>
+<li>explicit branch parameter <code>param=s (not driven)</code></li>
+</ul>
+<p>The first GIF may be partial (short child branch) but must name these elements.</p>
+
+<h2>Figures</h2>
+<h3>Parent fiber diagnostics</h3><p><img src="figures/v05a_parent_fiber_diagnostics.png" alt="Parent fiber diagnostics" style="max-width: 720px;"></p><h3>Task-derived UUUR child geometry</h3><p><img src="figures/v05a_uuur_child_geometry.png" alt="Task-derived UUUR child geometry" style="max-width: 720px;"></p><h3>Task-derived fiber animation (partial OK)</h3><p><img src="figures/v05a_task_derived_fiber.gif" alt="Task-derived fiber animation (partial OK)" style="max-width: 720px;"></p>
+
+<h2>Notes</h2>
+<ul><li>Compound UA/UB frames are orthonormalized charts of intersecting pairs.</li><li>Exact free-SUUR mechanism identity beyond this seed chart is unverified.</li><li>PASS uses S_v→U_v pointing-lift tangent agreement; child nullspace match is diagnostic-only.</li></ul>
+
+<h2>Deferred</h2>
+<ul>
+<li>V05B–V05D all-family winding atlas / Gate A mining decision</li>
+<li>SSRR → USRR / URSR / URRS parent construction</li>
+<li>Promoting diagnostic <code>phi</code> to a fiber parameter</li>
+</ul>
+</body>
+</html>

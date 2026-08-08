@@ -68,6 +68,10 @@ def with_tool_u_orientation(
     All joint centers and all non-tool joint frames are unchanged.  ``axis_order``
     selects the ordered solver chart ``ab`` or ``ba`` for the same perpendicular
     axis lines.
+
+    DIAGNOSTIC ONLY: this arbitrary reorientation is a sensitivity experiment.
+    It is not a task-derived pointing-fiber parameter and must not be promoted
+    into a dexterity atlas without separate geometric justification.
     """
     if axis_order not in {"ab", "ba"}:
         raise ValueError("axis_order must be 'ab' or 'ba'")
@@ -319,6 +323,11 @@ def _write_html(
 <body>
 <h1>Sprint V04B — virtual-U robustness and orientation sweep</h1>
 <p><strong>Purpose:</strong> validate V04 winding before V05 descriptor mining.</p>
+<p><strong>DIAGNOSTIC ONLY:</strong> the <code>phi</code> sweep rotates an arbitrary
+standalone virtual-U coordinate frame to test sensitivity.  It is not a
+task-derived pointing-fiber sweep and <code>phi</code> is not a dexterity-atlas
+parameter unless a later <code>S_v -&gt; U_v</code> construction proves that
+interpretation.</p>
 <p><code>tool_a</code> and <code>tool_b</code> are the two perpendicular revolute coordinates inside one virtual tool U. They are two classifications read from the same mechanism cycle, not two closure solves.</p>
 <h2>Step-size convergence</h2>
 <img src="figures/v04b_step_size_winding.png" alt="step-size winding convergence" style="max-width:850px;">
@@ -335,7 +344,7 @@ def _write_html(
 <img src="figures/v04b_orientation_coverage_ba.png" alt="orientation coverage ba" style="max-width:900px;">
 <table border="1" cellpadding="5"><tr><th>phi</th><th>order</th><th>audit</th><th>rank</th><th>nullity</th><th>Status</th><th>w_alpha</th><th>w_beta</th><th>class alpha</th><th>class beta</th><th>coverage alpha</th><th>coverage beta</th><th>points</th></tr>{orientation_table(ba_rows)}</table>
 <h2>Guardrail for V05</h2>
-<p>Do not remove tool-U orientation or axis order from the parameterization unless these sweeps show the crank/coverage result is invariant to them.</p>
+<p>Do not treat <code>phi</code> or axis order as dexterity-atlas parameters. Their observed sensitivity means the virtual-U convention must be derived from the pointing task/fiber before V05 uses the resulting UXXX mechanisms as dexterity evidence.</p>
 </body></html>"""
     (outdir / "sprint_04b_virtual_u_robustness.html").write_text(html, encoding="utf-8")
 
@@ -356,6 +365,7 @@ def build_v04b_readout(outdir: Path) -> None:
 
     payload = {
         "sample_id": sample.sample_id,
+        "experiment_role": "diagnostic_sensitivity_only",
         "step_size_sweep": [asdict(row) for row in step_rows],
         "direction_reversal": [asdict(row) for row in direction_rows],
         "orientation_sweep_ab": [asdict(row) for row in ab_rows],

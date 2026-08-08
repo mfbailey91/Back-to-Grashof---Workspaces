@@ -3,6 +3,14 @@
 **Status:** insertion sprint before V05 descriptor mining  
 **Purpose:** verify that V04 crank/rocker labels are stable numerical properties of the continued mechanism branch and are not artifacts of continuation direction, step size, or one arbitrary virtual-tool `U` coordinate convention.
 
+> **DIAGNOSTIC ONLY — `phi` is not a dexterity-atlas parameter.**
+>
+> The `phi` sweep deliberately rotates an otherwise arbitrary standalone virtual-U
+> coordinate frame to test sensitivity.  Its non-invariant result means the U axes
+> cannot be selected arbitrarily.  Do not promote `phi` into the dexterity
+> parameterization unless a task-derived `S_v -> U_v` pointing-fiber construction
+> proves that changing `phi` represents a different legitimate pointing fiber.
+
 ## Why V04B exists
 
 V04 established a real numerical result for `UUUR`: one physical mechanism solve produces a returned one-DOF cycle and both tool-`U` coordinates on that same branch,
@@ -21,6 +29,25 @@ U_t(alpha, beta) = R_a(alpha) R_b(beta).
 `tool_b` asks whether the `beta` coordinate winds on that same returned branch.
 
 Before V05 correlates geometry descriptors with crank labels, V04B checks that the label survives reasonable numerical and virtual-coordinate choices.
+
+## Interpretation correction
+
+The `phi` sweep below is a **diagnostic sensitivity experiment**, not proof that arbitrary in-plane rotations of the provisional `U` are physically distinct pointing fibers. The original pointing hierarchy retains the virtual spherical closure `S_v`; a research-evidence `U_v` must be induced by an explicit one-dimensional pointing slice of that two-DOF parent.
+
+Therefore V04B establishes:
+
+```text
+winding is numerically robust,
+but winding depends on how the provisional U is constructed.
+```
+
+It does **not** establish:
+
+```text
+phi is automatically a physical atlas parameter.
+```
+
+See [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md).
 
 ## V04B tests
 
@@ -57,6 +84,9 @@ Hold all joint centers and all non-tool joint frames fixed. Rotate only the virt
 phi = 0 ... 360 deg.
 ```
 
+This sweep has experiment role `diagnostic_sensitivity_only`.  It is a
+falsification/sensitivity check on coordinate choice, not a physical fiber sweep.
+
 For each `phi`:
 
 1. rebuild only the tool-`U` axes;
@@ -76,7 +106,12 @@ R_a(alpha) R_b(beta)
 R_b(beta) R_a(alpha)
 ```
 
-The two perpendicular axis lines are unchanged; only their serial coordinate order is changed. If the resulting winding classifications differ, axis order becomes an explicit virtual-mechanism parameter rather than a hidden implementation convention.
+The two perpendicular axis lines are unchanged; only their serial coordinate
+order is changed. Differences diagnose coordinate sensitivity. They do not by
+themselves establish a new physical mechanism parameter. For dexterity, the order
+and axes must be fixed by the task-derived pointing-slice construction; this
+diagnostic does not by itself promote axis order or `phi` to physical atlas
+parameters. See [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md).
 
 ### E. Winding versus angular coverage
 
@@ -109,4 +144,5 @@ V04B is complete when:
 2. a returned branch satisfies `W_minus = -W_plus` for both defined tool windings;
 3. a controlled tool-`U` orientation sweep reports closure audit + winding/coverage at each sampled `phi`;
 4. both `ab` and `ba` tool-axis orders are explicitly evaluated;
-5. V05 is blocked from treating tool-frame orientation/order as irrelevant unless V04B data supports that simplification.
+5. V05 is blocked from treating tool-frame orientation/order as irrelevant unless V04B data supports that simplification;
+6. arbitrary `phi` variants remain diagnostic-only until a task-derived pointing slice proves what physical fiber, if any, they represent.

@@ -21,6 +21,8 @@ def write_sprint03_html(
     snapshot_paths: list[str],
     audit_json: str,
     trace_json: str,
+    axis_drive_cards: list[tuple[str, str, str, str, str, str, str, bool, bool]],
+    axis_drive_json: str,
 ) -> None:
     audit_rows = "".join(
         f"<tr><td>{audit.family}</td><td>{audit.coordinate_count}</td>"
@@ -46,9 +48,36 @@ def write_sprint03_html(
     )
     family_animations = "".join(
         f'<figure style="display:inline-block; margin: 8px; vertical-align: top;">'
-        f'<img src="{path}" alt="{family} driven branch animation" style="max-width: 420px;">'
-        f"<figcaption>{family}</figcaption></figure>"
+        f'<img src="{path}" alt="{family} canonical local branch animation with tool_a and tool_b" '
+        f'style="max-width: 420px;">'
+        f"<figcaption>{family}: highlighted <code>tool_a</code> (blue) / "
+        f"<code>tool_b</code> (orange); live angles in the frame title; "
+        f"parameter is continuation arclength <code>s</code></figcaption></figure>"
         for family, path in animation_paths
+    )
+    axis_drive_html = "".join(
+        f"<section><h4>{family}</h4>"
+        f'<div style="display:flex; gap:12px; flex-wrap:wrap;">'
+        f'<figure><img src="{a_gif}" alt="{family} prescribed tool-A drive" style="max-width:420px;">'
+        f"<figcaption>tool-A / alpha — {a_status}; full 2π input turn: {a_full}</figcaption></figure>"
+        f'<figure><img src="{b_gif}" alt="{family} prescribed tool-B drive" style="max-width:420px;">'
+        f"<figcaption>tool-B / beta — {b_status}; full 2π input turn: {b_full}</figcaption></figure>"
+        f"</div>"
+        f'<div style="display:flex; gap:12px; flex-wrap:wrap;">'
+        f'<img src="{a_plot}" alt="{family} tool-A solved coordinates" style="max-width:460px;">'
+        f'<img src="{b_plot}" alt="{family} tool-B solved coordinates" style="max-width:460px;">'
+        f"</div></section>"
+        for (
+            family,
+            a_gif,
+            b_gif,
+            a_plot,
+            b_plot,
+            a_status,
+            b_status,
+            a_full,
+            b_full,
+        ) in axis_drive_cards
     )
     html = f"""<!doctype html>
 <html lang="en">
@@ -77,12 +106,16 @@ The plots below are diagnostics of a real closure branch segment; they are not y
 <img src="{residual_plot}" alt="closure residual" style="max-width: 760px;">
 <img src="{singularity_plot}" alt="singularity margin" style="max-width: 760px;">
 <img src="{phase_plot}" alt="tool U coordinate path" style="max-width: 620px;">
-<h3>Driven branch animation</h3>
+<h3>Canonical local branch animation</h3>
 <p>
 The GIF advances along continuation arclength on the local one-DOF closure manifold.
-This is local branch motion only; it is not a crank, winding, or full-cycle proof.
+It is not driven by <code>tool_a</code> or <code>tool_b</code>; continuation arclength <code>s</code> is the branch parameter.
+Highlighted axes are the virtual tool coordinates <code>tool_a</code> (blue) and
+<code>tool_b</code> (orange); each frame title reports their current angles.
+The canonical reference branch may be visually dominated by <code>tool_alpha</code>, but that does not make <code>tool_a</code> the physical input.
+This is local branch motion only; it is not a crank, winding, full-cycle, or validated <code>S_v -&gt; U_v</code> pointing-fiber proof.
 </p>
-<img src="{detailed_animation}" alt="{detailed_family} driven branch animation" style="max-width: 640px;">
+<img src="{detailed_animation}" alt="{detailed_family} canonical local branch animation with tool_a and tool_b" style="max-width: 640px;">
 <h3>3D branch snapshots</h3>
 {snapshots}
 <h2>V03C — same kernel across all six families</h2>
@@ -91,16 +124,34 @@ This is local branch motion only; it is not a crank, winding, or full-cycle proo
 {trace_rows}
 </table>
 <p><a href="{trace_json}">Continuation-trace JSON</a></p>
-<h3>Driven branch animations (all families)</h3>
+<h3>Canonical local branch animations (all families)</h3>
 <p>
-Each GIF uses the same seven-coordinate closure/continuation kernel on that family's V02B reference geometry.
-Motion is along local continuation arclength only; not a crank or winding classification.
+Each GIF uses the same seven-coordinate closure/continuation kernel on that family's V02B reference geometry and the provisional canonical tool-<code>U</code> frame.
+<code>tool_a</code> / <code>tool_b</code> are the two perpendicular tool-U chart axes (solver names
+<code>tool_alpha</code> / <code>tool_beta</code>), read from the same continued branch; neither is the driven input.
+These are mechanism-explorer closure demonstrations, not proof that the displayed <code>U</code> was induced by a valid pointing slice of the original virtual <code>S_v</code>. Motion is along local continuation arclength only; not a crank or winding classification.
+These legacy V03 animations do <strong>not</strong> prescribe tool-A or tool-B and
+must not be read as though tool-A were the mechanism input.
 </p>
 {family_animations}
+<h3>Prescribed tool-A and tool-B drive diagnostics (all families)</h3>
+<p>
+This section restores the explicit Sprint-V02 A/B questions visually. For
+<code>tool-A</code>, <code>tool_alpha</code> is prescribed from 0 toward
+2π while the remaining six scalar coordinates solve the six closure
+constraints. The <code>tool-B</code> panel repeats the same experiment with
+<code>tool_beta</code> prescribed. A stopped trace is shown as a turning/blocking
+result rather than being hidden. These are two designated-input views of the
+same physical family, not two unrelated mechanism families.
+</p>
+{axis_drive_html}
+<p><a href="{axis_drive_json}">Prescribed A/B drive JSON</a></p>
 <h2>Interpretation guardrails</h2>
 <ul>
-<li>V03 establishes local closure motion, not a crank condition.</li>
-<li><code>tool_alpha</code> and <code>tool_beta</code> are both recorded from one mechanism solve; the mechanism is not solved twice.</li>
+<li>V03 establishes local closure motion, not a crank condition or a validated dexterity-derived pointing fiber.</li>
+<li><code>tool_a</code> and <code>tool_b</code> (<code>tool_alpha</code> / <code>tool_beta</code>) are both recorded from one mechanism solve; neither is designated as the driven input by the continuation algorithm.</li>
+<li>The new A/B drive panels deliberately prescribe each tool coordinate so both rotatability questions are directly visible. They do not replace returned-cycle winding in V04.</li>
+<li>A research-evidence <code>U_v</code> must later be derived from an explicit pointing slice of the two-DOF <code>S_v</code> parent; arbitrary standalone <code>UXXX</code> geometry is mechanism-explorer evidence only.</li>
 <li>S-joint x/y/z coordinates are solver-chart coordinates only. They must not be promoted to invariant Grashof descriptors.</li>
 <li>Closed-loop winding and branch return belong to V04.</li>
 </ul>

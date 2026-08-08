@@ -1,5 +1,6 @@
 {
   "sample_id": "uuur_physical_000",
+  "experiment_role": "diagnostic_sensitivity_only",
   "step_size_sweep": [
     {
       "label": "step_0.1",

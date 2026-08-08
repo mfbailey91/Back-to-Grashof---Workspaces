@@ -1,5 +1,11 @@
 # Sprint Plan — Spatial 4-Bar Explorer
 
+> **Current role:** mechanism laboratory through V04C. Geometry, closure,
+> continuation, winding, visualization, and HTML infrastructure remain active.
+> Any V05+ sections in this historical file are superseded by
+> `KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`; standalone mechanism results
+> remain `mechanism_explorer_only` until a source-chain decomposition passes.
+
 **Status:** approved pivot from spherical-candidate enumeration toward direct spatial four-bar family exploration  
 **Purpose:** start a visual/numerical explorer for the one-DOF spatial four-bar families induced by aligned-terminal 6R pointing fibers.
 
@@ -43,6 +49,11 @@ U_t(alpha, beta) = R_a(alpha) R_b(beta)
 ```
 
 so the first explorer contains **12 family–axis cases**.
+
+These are **12 rotatability/classification questions, not 12 unrelated physical
+mechanisms or 12 required closure solves**.  A physical UXXX branch carries both
+`alpha(s)` and `beta(s)`; A and B remain separate designated-axis questions and
+must both remain visible in the readouts.
 
 ## Required outputs
 
@@ -249,46 +260,127 @@ Verify that V04 crank/rocker labels are stable under continuation step size, tan
 See [`docs/SPRINT_V04B_VIRTUAL_U_ROBUSTNESS.md`](SPRINT_V04B_VIRTUAL_U_ROBUSTNESS.md).
 
 ### Guardrail for V05
-Do not treat tool-frame orientation or axis order as irrelevant parameters unless V04B sweeps support that simplification.
+V04B `phi` is a **diagnostic sensitivity experiment only**.  Rotating an
+arbitrarily chosen standalone virtual-U frame and observing different answers
+shows that the U axes cannot be chosen arbitrarily.  It does not establish
+`phi` as a dexterity-atlas parameter.
+
+Before V05 uses UXXX results as dexterity evidence, the `S_v -> U_v` reduction
+must derive the A/B axes from an explicit pointing slice/fiber.  Standalone
+`phi` sweeps remain mechanism-laboratory diagnostics. See
+[`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md) and
+[`AUDIT_TOOL_AXIS_AND_PHI.md`](AUDIT_TOOL_AXIS_AND_PHI.md).
 
 ### Deliverables
 - standalone runner `spatial4bar_explorer.v04b`;
 - step-size / direction-reversal / orientation-sweep JSON and plots;
 - `sprint_04b_virtual_u_robustness.html`.
 
-## Sprint V05 — descriptor trend mining
+## Sprint V04C — virtual-U equivalence and fiber interpretation
 
 ### Goal
-Correlate crank classifications with the descriptor atlas.
+Determine whether tool-`U` axis order is a removable coordinate symmetry, resolve budget-limited open cases, and densify only the observed orientation-transition intervals before V05 descriptor mining.
+
+See [`docs/SPRINT_V04C_VIRTUAL_U_EQUIVALENCE.md`](SPRINT_V04C_VIRTUAL_U_EQUIVALENCE.md).
+
+### Guardrail for V05
+Any removal of `axis_order` or reduction of the `phi` domain is provisional until V04C supports the symmetry on the tested geometry and later corpus validation repeats it.
 
 ### Deliverables
+- standalone runner `spatial4bar_explorer.v04c`;
+- shifted `ab`/`ba` equivalence check;
+- 180-degree periodicity check;
+- extended-budget resolution of the V04B open cases;
+- adaptive transition-state and singularity-margin plots;
+- `sprint_04c_virtual_u_equivalence.html`.
+
+## Sprint V05 — all-family winding atlas
+
+### Goal
+Generalize true returned-cycle winding, coverage, and branch-status evaluation from `UUUR` to all six ordered spatial four-bar families before attempting descriptor mining.
+
+See [`docs/SPRINT_V05_ALL_FAMILY_WINDING_ATLAS.md`](SPRINT_V05_ALL_FAMILY_WINDING_ATLAS.md).
+
+### Deliverables
+- true winding results for `UUUR`, `UURU`, `URUU`, `USRR`, `URSR`, and `URRS`;
+- modest physical geometry corpus per family;
+- canonical virtual-`U` sweep according to V04C;
+- family-specific winding / coverage / class-distribution plots;
+- representative crank, rocker, boundary, and unresolved mechanism gallery;
+- `sprint_05_all_family_winding_atlas.html`.
+
+### Gate A
+Do not begin cross-family descriptor mining until the true outcome distribution and unresolved fraction are characterized for all six families.
+
+## Sprint V06 — descriptor trend mining
+
+### Goal
+Identify interpretable invariant physical descriptors and retained virtual parameters that organize crank / rocker / boundary behavior within each viable family.
+
+See [`docs/SPRINT_V06_DESCRIPTOR_TREND_MINING.md`](SPRINT_V06_DESCRIPTOR_TREND_MINING.md).
+
+### Deliverables
+- frozen discovery / holdout split;
 - univariate and bivariate classification plots;
-- dimensionless ratio analysis;
-- first candidate trend statements;
-- extracted "interesting geometries" gallery.
+- dimensionless ratio and trigonometric descriptor analysis;
+- shallow interpretable baseline models;
+- counterexample and interesting-geometry gallery;
+- `sprint_06_descriptor_trend_mining.html`.
 
-### Acceptance
-- at least a few descriptors show visible structure;
-- HTML readout explains the emerging patterns.
-
-## Sprint V06 — candidate Grashof-like rules
+## Sprint V07 — candidate spatial Grashof-like rules
 
 ### Goal
-Use the numerical atlas to nominate family-specific Grashof-like candidate rules.
+Convert the strongest V06 empirical structures into explicit, family-specific, falsifiable crank hypotheses and test them on held-out, fresh, and near-boundary mechanisms.
+
+See [`docs/SPRINT_V07_CANDIDATE_SPATIAL_GRASHOF_RULES.md`](SPRINT_V07_CANDIDATE_SPATIAL_GRASHOF_RULES.md).
 
 ### Deliverables
-- simple interpretable classifiers;
-- candidate inequality or threshold hypotheses;
-- fail/pass counterexamples gallery;
-- readout separating robust patterns from weak or misleading ones.
+- candidate-rule registry by family;
+- held-out metrics and counterexample gallery;
+- near-boundary campaigns and singularity comparisons;
+- analytical follow-up notes for the strongest candidates;
+- `sprint_07_candidate_spatial_grashof_rules.html`.
 
-### Acceptance
-- candidate rules are explicit and tied to observed evidence;
-- no analytical claim is made without clearly marking it as a hypothesis.
+### Gate B
+Choose rule-backed or numerical-atlas evaluation paths family by family. A messy analytical boundary is allowed to route to V08 rather than block the project.
+
+## Sprint V08 — fast crank evaluator
+
+### Goal
+Create a conservative fast evaluator using direct rules where justified and a sparse adaptive numerical atlas elsewhere, with exact continuation as fallback.
+
+See [`docs/SPRINT_V08_FAST_CRANK_EVALUATOR.md`](SPRINT_V08_FAST_CRANK_EVALUATOR.md).
+
+### Deliverables
+- common crank-evaluator query/result API;
+- rule-backed and atlas-backed family adapters;
+- uncertainty / OOD handling and exact fallback;
+- held-out speed / agreement benchmark;
+- `sprint_08_fast_crank_evaluator.html`.
+
+## Sprint V09 — 6R dexterity reconstruction and validation
+
+### Goal
+Return to a synthetic aligned-terminal 6R manipulator and test whether extracted virtual spatial-four-bar crank / coverage fields predict independent numerical orientation capability and dexterous-workspace structure.
+
+See [`docs/SPRINT_V09_6R_DEXTERITY_RECONSTRUCTION.md`](SPRINT_V09_6R_DEXTERITY_RECONSTRUCTION.md).
+
+### Deliverables
+- deterministic robot-to-virtual-four-bar extraction;
+- fiber winding / coverage fields at Cartesian points;
+- independent numerical orientation-capability reference;
+- pointwise prediction-vs-reference validation;
+- dexterous / non-dexterous / unresolved workspace reconstruction;
+- runtime comparison and failure gallery;
+- `sprint_09_6r_dexterity_reconstruction.html`.
+
+### Gate C
+Do not claim a dexterous-workspace characterization method unless the virtual-mechanism predictions agree with independent manipulator orientation truth under explicitly stated assumptions.
 
 ## Guardrails
 
 - keep this effort separate from the trusted planar kernel;
 - prefer synthetic exact geometries before any URDF or industrial robot import;
 - make visual inspection a first-class output, not a side effect;
-- always preserve the distinction between: full geometry parameters, derived descriptors, and final candidate rules.
+- always preserve the distinction between: full geometry parameters, derived descriptors, empirical trends, candidate rules, analytical derivations, and robot-workspace validation;
+- unresolved / OOD cases must remain explicit rather than being forced into binary classifications.

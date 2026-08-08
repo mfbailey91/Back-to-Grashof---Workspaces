@@ -4,6 +4,11 @@ import argparse
 from pathlib import Path
 
 from .analysis import classify_mock_branch
+from .axis_drive import (
+    animate_axis_drive,
+    drive_tool_axis,
+    plot_axis_drive_coordinates,
+)
 from .closure import audit_reference_geometry
 from .continuation import continue_branch
 from .continuation_plots import (
@@ -22,7 +27,7 @@ from .geometry import PhysicalGeometrySample
 from .geometry_descriptors import generate_physical_geometry_samples
 from .geometry_plots import plot_physical_geometry_3d
 from .geometry_readouts import write_sprint02b_html
-from .models import OrderedFamily
+from .models import OrderedFamily, ToolAxis
 from .plots import (
     plot_case_schematic,
     plot_classification_counts,
@@ -153,6 +158,37 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
         animation_plot = figures_dir / f"v03_{family.value.lower()}_branch.gif"
         animate_branch(canonical_by_family[family], trace, animation_plot)
         animation_relpaths.append((family.value, str(animation_plot.relative_to(outdir))))
+
+    axis_drive_cards: list[tuple[str, str, str, str, str, str, str, bool, bool]] = []
+    axis_drive_traces = []
+    for family in ORDERED_FAMILIES:
+        geometry = canonical_by_family[family]
+        trace_a = drive_tool_axis(geometry, ToolAxis.A)
+        trace_b = drive_tool_axis(geometry, ToolAxis.B)
+        axis_drive_traces.extend((trace_a, trace_b))
+        a_gif = figures_dir / f"v03_{family.value.lower()}_tool_a_drive.gif"
+        b_gif = figures_dir / f"v03_{family.value.lower()}_tool_b_drive.gif"
+        a_plot = figures_dir / f"v03_{family.value.lower()}_tool_a_drive.png"
+        b_plot = figures_dir / f"v03_{family.value.lower()}_tool_b_drive.png"
+        animate_axis_drive(geometry, trace_a, a_gif)
+        animate_axis_drive(geometry, trace_b, b_gif)
+        plot_axis_drive_coordinates(trace_a, a_plot)
+        plot_axis_drive_coordinates(trace_b, b_plot)
+        axis_drive_cards.append(
+            (
+                family.value,
+                str(a_gif.relative_to(outdir)),
+                str(b_gif.relative_to(outdir)),
+                str(a_plot.relative_to(outdir)),
+                str(b_plot.relative_to(outdir)),
+                trace_a.status,
+                trace_b.status,
+                trace_a.full_input_turn,
+                trace_b.full_input_turn,
+            )
+        )
+    axis_drive_json = data_dir / "v03_tool_axis_drive_traces.json"
+    write_json(axis_drive_json, axis_drive_traces)
     write_sprint03_html(
         outdir,
         audits=audits,
@@ -167,6 +203,8 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
         snapshot_paths=snapshot_relpaths,
         audit_json=str(audit_json.relative_to(outdir)),
         trace_json=str(trace_json.relative_to(outdir)),
+        axis_drive_cards=axis_drive_cards,
+        axis_drive_json=str(axis_drive_json.relative_to(outdir)),
     )
 
     # Sprint V04: UUUR-first true winding from returned continued cycles.
@@ -238,6 +276,10 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
             str(phase_plot.relative_to(outdir)),
             *[path for _, path in animation_relpaths],
             *snapshot_relpaths,
+            *[card[1] for card in axis_drive_cards],
+            *[card[2] for card in axis_drive_cards],
+            *[card[3] for card in axis_drive_cards],
+            *[card[4] for card in axis_drive_cards],
             str(winding_summary_plot.relative_to(outdir)),
             str(classification_plot_v04.relative_to(outdir)),
             *([crank_rel] if crank_rel else []),
