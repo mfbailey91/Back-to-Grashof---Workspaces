@@ -310,6 +310,8 @@ Use explicit screw axes and home transforms. Do not begin with URDF import.
 
 ### V05B — fixed-position source mechanism
 
+**Status (2026-08-08):** MVP implemented on the minimal V05A spatial-4R corpus.
+
 For a regular seed \(q_0\):
 
 1. set \(p^*=p(q_0)\);
@@ -318,6 +320,10 @@ For a regular seed \(q_0\):
 4. continue each discovered component using pseudo-arclength methods;
 5. preserve closure residual, tangent, singular values, return status, and component identity;
 6. distinguish a returned cycle from an open or budget-limited branch.
+
+Software: `src/grashof_workspace/spatial_experiments/{open_chain,fixed_position,fixed_position_continuation,v05_corpus,v05b}.py`.
+Readout: [`results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html`](../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html).
+Note: ± rays from one seed do not certify full multi-component completeness. V05C–E remain open. Explorer `spatial4bar_explorer/v05a` is not this work package.
 
 ### V05C — orientation-curve truth
 

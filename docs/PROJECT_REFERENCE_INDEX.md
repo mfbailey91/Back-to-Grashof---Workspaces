@@ -55,6 +55,8 @@ V08  aligned-roll quotient and task-derived four-bar fibers
 V09  validated mechanism predicates and coverage reconstruction
 ```
 
+**V05B MVP readout:** [`../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html`](../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html).
+Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 
 Repository-level phase order, program gates, and downstream V10–V14 mapping.

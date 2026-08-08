@@ -1,8 +1,8 @@
-"""Isolated spatial experiment kernel for aligned-terminal fiber studies.
+"""Isolated spatial experiment kernel for fixed-position and ATR fiber studies.
 
-Restored for Sprint V05A from the ``spherical_framework`` ATR stack. This
-package is intentionally separate from the planar Grashof kernel and from the
-standalone spatial-4bar explorer.
+Includes the aligned-terminal pointing-fiber stack and the active V05 spatial
+4R fixed-position source-fiber tools. Separate from the planar Grashof kernel
+and from the standalone spatial-4bar explorer.
 
 Conventions
 -----------
@@ -20,6 +20,8 @@ from .fiber_constraints import (
     reduced_fiber_jacobian,
     reduced_fiber_tangent,
 )
+from .fixed_position import FixedPositionProblem, FixedPositionSeedAudit, audit_fixed_position_seed
+from .open_chain import OpenChainModel
 from .rotations import (
     axis_angle_from_rotation,
     rotate_point_about_axis,
@@ -31,8 +33,12 @@ from .serial_chain import SerialRevoluteChain
 __all__ = [
     "AxisLine",
     "FiberIndependenceReport",
+    "FixedPositionProblem",
+    "FixedPositionSeedAudit",
     "GenericAligned6R",
+    "OpenChainModel",
     "SerialRevoluteChain",
+    "audit_fixed_position_seed",
     "axis_angle_from_rotation",
     "fiber_independence_report",
     "frame_from_pointing",
