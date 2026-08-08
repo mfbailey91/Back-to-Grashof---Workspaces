@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kinematic Decomposition — active V05B–E hub</title>
+<style>
+
+  body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
+  h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 1.2; }
+  h1 { font-size: 1.75rem; margin-bottom: 0.35rem; }
+  h2 { margin-top: 2rem; border-bottom: 1px solid #ccc; padding-bottom: 0.25rem; }
+  h3 { margin-top: 1.25rem; }
+  .meta { color: #444; margin-bottom: 1.5rem; }
+  table { border-collapse: collapse; width: 100%; margin: 0.75rem 0 1rem; font-size: 0.95rem; }
+  th, td { border: 1px solid #bbb; padding: 0.4rem 0.55rem; text-align: left; vertical-align: top; }
+  th { background: #f3f3f3; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; }
+  pre { background: #f6f6f6; padding: 0.75rem 1rem; overflow-x: auto; border: 1px solid #ddd; }
+  ul.toc { columns: 2; column-gap: 2rem; }
+  .status { font-weight: bold; }
+  .pass { color: #0a5; }
+  .note { background: #faf7f0; border-left: 3px solid #c4a35a; padding: 0.6rem 0.85rem; margin: 1rem 0; }
+  @media print {
+    body { max-width: none; margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; }
+    ul.toc { columns: 1; }
+  }
+
+</style>
+</head>
+<body>
+
+<h1>Kinematic Decomposition</h1>
+<p class="meta">
+  <strong>Active source-chain program hub (V05B–E)</strong><br>
+  Artifact root: <code>results/kinematic_decomposition/</code> · Status date: 2026-08-08
+</p>
+
+<div class="note">
+  This track builds independent source-chain truth before mechanism reconstruction.
+  Exports are <strong>not</strong> coverage certificates for <code>SO(3)</code> or <code>S²</code>.
+  Explorer <code>spatial4bar_explorer/v05a</code> remains <code>mechanism_explorer_only</code>
+  and is <strong>not</strong> this ladder.
+</div>
+
+<h2>Thesis</h2>
+<pre>OpenChainModel (spatial 4R)
+  → FixedPositionProblem + S_v
+  → FixedPositionFiberResult (V05B)
+  → OrientationImageResult / PointingImageResult (V05C)
+  → DecompositionCertificate via axis_aggregation (V05D)
+  → near-aligned REJECTED + false_u_surrogate diagnostic (V05E)
+  → V06 spatial 5R parent …</pre>
+<p>
+Docs:
+<a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+· <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
+· <a href="../../docs/DECISIONS.md">DECISIONS.md</a>
+</p>
+
+<h2>V05A corpus</h2>
+<p>Synthetic spatial-4R members used by the active ladder:</p>
+<table>
+  <tr><th>Architecture</th><th>Role</th></tr>
+  <tr><td><code>generic_4r</code></td><td>No intentional consecutive intersecting pairs (exterior for aggregation)</td></tr>
+  <tr><td><code>exact_u_pair_4r</code></td><td>Exact proximal orthogonal intersecting RR → U_phys (V05D pass)</td></tr>
+  <tr><td><code>near_aligned_u_pair_4r</code></td><td>Near-miss pair; must reject as exact U (V05E)</td></tr>
+  <tr><td><code>singular_4r_parallel</code></td><td>Rank-deficient exterior for fixed-position regularity</td></tr>
+</table>
+
+<h2>Sprint readouts</h2>
+<table>
+  <tr><th>Sprint</th><th>Status</th><th>Primary HTML</th><th>JSON</th></tr>
+  <tr>
+    <td>V05B</td>
+    <td class="status pass">DONE</td>
+    <td><a href="v05b/sprint_v05b_fixed_position_fiber.html">sprint_v05b_fixed_position_fiber.html</a></td>
+    <td><a href="v05b/data/v05b_fixed_position_fibers.json">v05b_fixed_position_fibers.json</a></td>
+  </tr>
+  <tr>
+    <td>V05C</td>
+    <td class="status pass">DONE</td>
+    <td><a href="v05c/sprint_v05c_orientation_curve.html">sprint_v05c_orientation_curve.html</a></td>
+    <td><a href="v05c/data/v05c_orientation_curves.json">v05c_orientation_curves.json</a></td>
+  </tr>
+  <tr>
+    <td>V05D</td>
+    <td class="status pass">DONE</td>
+    <td><a href="v05d/sprint_v05d_axis_aggregation.html">sprint_v05d_axis_aggregation.html</a></td>
+    <td><a href="v05d/data/v05d_axis_aggregation.json">v05d_axis_aggregation.json</a></td>
+  </tr>
+  <tr>
+    <td>V05E</td>
+    <td class="status pass">DONE</td>
+    <td><a href="v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a></td>
+    <td><a href="v05e/data/v05e_near_aligned_rejection.json">v05e_near_aligned_rejection.json</a></td>
+  </tr>
+</table>
+
+<h2>Reproduce</h2>
+<pre>PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05b --outdir results/kinematic_decomposition/v05b
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05c --outdir results/kinematic_decomposition/v05c
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05d --outdir results/kinematic_decomposition/v05d
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir results/kinematic_decomposition/v05e
+PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
+
+<h2>Next</h2>
+<p><strong>V06</strong> — spatial 5R fixed-position parent and pointing image (M = 2 at regular seeds).</p>
+
+<p class="meta" style="margin-top:2rem;">
+  Project dashboard (explorer + ladder):
+  <a href="../spatial4bar_explorer/index.html">../spatial4bar_explorer/index.html</a>
+</p>
+
+</body>
+</html>

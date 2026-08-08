@@ -1,10 +1,24 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Spatial 4-Bar Explorer — project printout through active V05E</title>
-<style>
+"""Reproducible project HTML dashboard generator.
 
+Writes:
+
+- ``results/spatial4bar_explorer/index.html`` — cumulative explorer + active ladder
+- ``results/kinematic_decomposition/index.html`` — active-program hub (V05B–E)
+
+Reproducible command::
+
+    PYTHONPATH=src python -m grashof_workspace.project_dashboard \\
+      --results-root results
+"""
+
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+STATUS_DATE = "2026-08-08"
+
+_SHARED_CSS = """
   body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
   h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 1.2; }
   h1 { font-size: 1.75rem; margin-bottom: 0.35rem; }
@@ -26,7 +40,18 @@
     a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; }
     ul.toc { columns: 1; }
   }
+"""
 
+
+def render_explorer_index_html(*, status_date: str = STATUS_DATE) -> str:
+    """Return the cumulative project dashboard HTML for the explorer tree."""
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spatial 4-Bar Explorer — project printout through active V05E</title>
+<style>
+{_SHARED_CSS}
 </style>
 </head>
 <body>
@@ -35,7 +60,7 @@
 <p class="meta">
   <strong>Project printout through active V05E</strong> · explorer V00–V05A + kinematic-decomposition ladder<br>
   Artifact roots: <code>results/spatial4bar_explorer/</code> ·
-  <code>results/kinematic_decomposition/</code> · Status date: 2026-08-08
+  <code>results/kinematic_decomposition/</code> · Status date: {status_date}
 </p>
 
 <div class="note">
@@ -439,3 +464,149 @@ to manipulator evidence without certificates.
 
 </body>
 </html>
+"""
+
+
+def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE) -> str:
+    """Return the active kinematic-decomposition hub HTML."""
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kinematic Decomposition — active V05B–E hub</title>
+<style>
+{_SHARED_CSS}
+</style>
+</head>
+<body>
+
+<h1>Kinematic Decomposition</h1>
+<p class="meta">
+  <strong>Active source-chain program hub (V05B–E)</strong><br>
+  Artifact root: <code>results/kinematic_decomposition/</code> · Status date: {status_date}
+</p>
+
+<div class="note">
+  This track builds independent source-chain truth before mechanism reconstruction.
+  Exports are <strong>not</strong> coverage certificates for <code>SO(3)</code> or <code>S²</code>.
+  Explorer <code>spatial4bar_explorer/v05a</code> remains <code>mechanism_explorer_only</code>
+  and is <strong>not</strong> this ladder.
+</div>
+
+<h2>Thesis</h2>
+<pre>OpenChainModel (spatial 4R)
+  → FixedPositionProblem + S_v
+  → FixedPositionFiberResult (V05B)
+  → OrientationImageResult / PointingImageResult (V05C)
+  → DecompositionCertificate via axis_aggregation (V05D)
+  → near-aligned REJECTED + false_u_surrogate diagnostic (V05E)
+  → V06 spatial 5R parent …</pre>
+<p>
+Docs:
+<a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+· <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
+· <a href="../../docs/DECISIONS.md">DECISIONS.md</a>
+</p>
+
+<h2>V05A corpus</h2>
+<p>Synthetic spatial-4R members used by the active ladder:</p>
+<table>
+  <tr><th>Architecture</th><th>Role</th></tr>
+  <tr><td><code>generic_4r</code></td><td>No intentional consecutive intersecting pairs (exterior for aggregation)</td></tr>
+  <tr><td><code>exact_u_pair_4r</code></td><td>Exact proximal orthogonal intersecting RR → U_phys (V05D pass)</td></tr>
+  <tr><td><code>near_aligned_u_pair_4r</code></td><td>Near-miss pair; must reject as exact U (V05E)</td></tr>
+  <tr><td><code>singular_4r_parallel</code></td><td>Rank-deficient exterior for fixed-position regularity</td></tr>
+</table>
+
+<h2>Sprint readouts</h2>
+<table>
+  <tr><th>Sprint</th><th>Status</th><th>Primary HTML</th><th>JSON</th></tr>
+  <tr>
+    <td>V05B</td>
+    <td class="status pass">DONE</td>
+    <td><a href="v05b/sprint_v05b_fixed_position_fiber.html">sprint_v05b_fixed_position_fiber.html</a></td>
+    <td><a href="v05b/data/v05b_fixed_position_fibers.json">v05b_fixed_position_fibers.json</a></td>
+  </tr>
+  <tr>
+    <td>V05C</td>
+    <td class="status pass">DONE</td>
+    <td><a href="v05c/sprint_v05c_orientation_curve.html">sprint_v05c_orientation_curve.html</a></td>
+    <td><a href="v05c/data/v05c_orientation_curves.json">v05c_orientation_curves.json</a></td>
+  </tr>
+  <tr>
+    <td>V05D</td>
+    <td class="status pass">DONE</td>
+    <td><a href="v05d/sprint_v05d_axis_aggregation.html">sprint_v05d_axis_aggregation.html</a></td>
+    <td><a href="v05d/data/v05d_axis_aggregation.json">v05d_axis_aggregation.json</a></td>
+  </tr>
+  <tr>
+    <td>V05E</td>
+    <td class="status pass">DONE</td>
+    <td><a href="v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a></td>
+    <td><a href="v05e/data/v05e_near_aligned_rejection.json">v05e_near_aligned_rejection.json</a></td>
+  </tr>
+</table>
+
+<h2>Reproduce</h2>
+<pre>PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05b --outdir results/kinematic_decomposition/v05b
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05c --outdir results/kinematic_decomposition/v05c
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05d --outdir results/kinematic_decomposition/v05d
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir results/kinematic_decomposition/v05e
+PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
+
+<h2>Next</h2>
+<p><strong>V06</strong> — spatial 5R fixed-position parent and pointing image (M = 2 at regular seeds).</p>
+
+<p class="meta" style="margin-top:2rem;">
+  Project dashboard (explorer + ladder):
+  <a href="../spatial4bar_explorer/index.html">../spatial4bar_explorer/index.html</a>
+</p>
+
+</body>
+</html>
+"""
+
+
+def build_project_dashboard(
+    results_root: Path,
+    *,
+    status_date: str = STATUS_DATE,
+) -> tuple[Path, Path]:
+    """Write explorer and kinematic-decomposition dashboard HTML files."""
+    results_root = Path(results_root)
+    explorer_dir = results_root / "spatial4bar_explorer"
+    kd_dir = results_root / "kinematic_decomposition"
+    explorer_dir.mkdir(parents=True, exist_ok=True)
+    kd_dir.mkdir(parents=True, exist_ok=True)
+
+    explorer_path = explorer_dir / "index.html"
+    kd_path = kd_dir / "index.html"
+    explorer_path.write_text(render_explorer_index_html(status_date=status_date), encoding="utf-8")
+    kd_path.write_text(
+        render_kinematic_decomposition_index_html(status_date=status_date),
+        encoding="utf-8",
+    )
+    return explorer_path, kd_path
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Regenerate project HTML dashboards")
+    parser.add_argument(
+        "--results-root",
+        type=Path,
+        default=Path("results"),
+        help="Repository results/ directory (default: results)",
+    )
+    parser.add_argument("--status-date", default=STATUS_DATE)
+    args = parser.parse_args(argv)
+    explorer_path, kd_path = build_project_dashboard(
+        args.results_root,
+        status_date=args.status_date,
+    )
+    print(f"Wrote {explorer_path}")
+    print(f"Wrote {kd_path}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
