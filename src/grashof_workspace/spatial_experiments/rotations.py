@@ -40,7 +40,7 @@ def rotation_about_axis(w: Vec3 | tuple[float, float, float], angle: float) -> M
     c = math.cos(angle)
     s = math.sin(angle)
     I = np.eye(3)
-    return I + s * K + (1.0 - c) * (K @ K)
+    return np.asarray(I + s * K + (1.0 - c) * (K @ K), dtype=float)
 
 
 def rotate_vector_about_axis(
@@ -50,7 +50,7 @@ def rotate_vector_about_axis(
 ) -> Vec3:
     """Rotate free vector ``v`` about direction ``w`` by ``angle``."""
     R = rotation_about_axis(w, angle)
-    return R @ np.asarray(v, dtype=float).reshape(3)
+    return np.asarray(R @ np.asarray(v, dtype=float).reshape(3), dtype=float)
 
 
 def rotate_point_about_axis(
@@ -63,7 +63,7 @@ def rotate_point_about_axis(
     Implements ``r + R(w, angle)(x - r)``.
     """
     x_arr = np.asarray(x, dtype=float).reshape(3)
-    return axis.r_array + rotate_vector_about_axis(x_arr - axis.r_array, axis.w, angle)
+    return np.asarray(axis.r_array + rotate_vector_about_axis(x_arr - axis.r_array, axis.w, angle), dtype=float)
 
 
 def axis_angle_from_rotation(R: Mat3, *, tol: float = 1e-12) -> tuple[Vec3, float]:
@@ -108,4 +108,4 @@ def axis_angle_from_rotation(R: Mat3, *, tol: float = 1e-12) -> tuple[Vec3, floa
 
 def relative_rotation(R0: Mat3, R1: Mat3) -> Mat3:
     """Return ``R_rel = R0.T @ R1``."""
-    return np.asarray(R0, dtype=float).T @ np.asarray(R1, dtype=float)
+    return np.asarray(np.asarray(R0, dtype=float).T @ np.asarray(R1, dtype=float), dtype=float)

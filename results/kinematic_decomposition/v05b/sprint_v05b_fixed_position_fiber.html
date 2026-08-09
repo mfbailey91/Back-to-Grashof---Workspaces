@@ -1,43 +1,9 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Active V05B — Spatial 4R Fixed-Position Fiber</title>
-<style>
-  body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
-  h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
-  table { border-collapse: collapse; width: 100%; margin: 0.75rem 0 1rem; }
-  th, td { border: 1px solid #bbb; padding: 0.4rem 0.55rem; text-align: left; }
-  th { background: #f3f3f3; }
-  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
-  .note { background: #f7f4ea; border-left: 3px solid #c4a35a; padding: 0.65rem 0.85rem; margin: 1rem 0; }
-</style>
-</head>
-<body>
-<h1>Active V05B — Spatial 4R Fixed-Position Source Fiber</h1>
-<p>
-Source problem <code>4R + S_v</code>, <code>M = 1</code> at regular seeds.
-This is the kinematic-decomposition ladder V05B, not the deferred explorer family-winding atlas (V10).
-</p>
-<div class="note">
-<strong>Gate note.</strong>
-At least one regular fixed-position component is continued with explicit rank/nullity and branch status.
-Orientation samples along the fiber are stored for later V05C and are <em>not</em> coverage claims.
-V05D axis-aggregation certificates and V05E near-aligned rejection are implemented on this corpus.
-Historical V10 atlas work remains deferred.
-Explorer <code>spatial4bar_explorer/v05a</code> pointing-slice MVP remains <code>mechanism_explorer_only</code>.
-</div>
-<h2>Corpus fibers</h2>
-<table>
-<tr><th>Architecture</th><th>Seed</th><th>rank/nullity</th><th>Closure</th><th>Branch</th><th>Returned</th><th>Samples</th></tr>
-<tr><td><code>generic_4r</code></td><td>PASS</td><td>3/1</td><td>S_v</td><td>budget_limited</td><td>False</td><td>81</td></tr><tr><td><code>exact_u_pair_4r</code></td><td>PASS</td><td>3/1</td><td>S_v</td><td>budget_limited</td><td>False</td><td>81</td></tr><tr><td><code>near_aligned_u_pair_4r</code></td><td>PASS</td><td>3/1</td><td>S_v</td><td>budget_limited</td><td>False</td><td>81</td></tr><tr><td><code>singular_4r_parallel</code></td><td>FAIL</td><td>1/3</td><td>S_v</td><td>rejected_seed</td><td>False</td><td>0</td></tr>
-</table>
-<h2>Figures</h2>
-<h3>generic_4r diagnostics</h3><p><img src="figures/v05b_generic_4r_diagnostics.png" alt="generic_4r diagnostics" style="max-width: 720px;"></p><h3>generic_4r fiber animation</h3><p><img src="figures/v05b_generic_4r_fiber.gif" alt="generic_4r fiber animation" style="max-width: 720px;"></p><h3>exact_u_pair_4r diagnostics</h3><p><img src="figures/v05b_exact_u_pair_4r_diagnostics.png" alt="exact_u_pair_4r diagnostics" style="max-width: 720px;"></p><h3>exact_u_pair_4r fiber animation</h3><p><img src="figures/v05b_exact_u_pair_4r_fiber.gif" alt="exact_u_pair_4r fiber animation" style="max-width: 720px;"></p><h3>near_aligned_u_pair_4r diagnostics</h3><p><img src="figures/v05b_near_aligned_u_pair_4r_diagnostics.png" alt="near_aligned_u_pair_4r diagnostics" style="max-width: 720px;"></p><h3>near_aligned_u_pair_4r fiber animation</h3><p><img src="figures/v05b_near_aligned_u_pair_4r_fiber.gif" alt="near_aligned_u_pair_4r fiber animation" style="max-width: 720px;"></p><h3>singular_4r_parallel diagnostics</h3><p><img src="figures/v05b_singular_4r_parallel_diagnostics.png" alt="singular_4r_parallel diagnostics" style="max-width: 720px;"></p><h3>singular_4r_parallel seed view</h3><p><img src="figures/v05b_singular_4r_parallel_fiber.png" alt="singular_4r_parallel seed view" style="max-width: 720px;"></p>
-<h2>Next</h2>
-<ul>
-<li>V06 spatial 5R fixed-position parent</li>
-<li>Historical all-family winding atlas (V10)</li>
-</ul>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><title>V05B — Corrected Spatial-4R Fibers</title>
+<style>body{font-family:Georgia,serif;max-width:1000px;margin:2rem auto;line-height:1.45}table{border-collapse:collapse;width:100%}th,td{border:1px solid #bbb;padding:.4rem;text-align:left}code{font-family:ui-monospace,monospace}.note{background:#f7f4ea;border-left:3px solid #c4a35a;padding:.7rem}</style></head><body>
+<h1>Active V05B — Spatial-4R Fixed-Position Source Fibers</h1>
+<div class="note"><strong>Audit correction.</strong> Active regular sources place the tool point off R4 so the nullspace cannot collapse to terminal roll. The original on-axis geometry is retained as <code>terminal_roll_control_4r</code>. Continuation solves the augmented pseudo-arclength system for the exact fixed-position closure <code>4R + S_v</code>.</div>
+<table><tr><th>Source</th><th>Seed</th><th>rank/nullity</th><th>Motion signature</th><th>Tool-axis distance [m]</th><th>Branch</th><th>Returned</th><th>Samples</th></tr><tr><td><code>generic_4r</code></td><td>PASS</td><td>3/1</td><td><code>NONTRIVIAL_POINTING_CURVE</code></td><td>6.000e-02</td><td>budget_limited</td><td>False</td><td>161</td></tr><tr><td><code>terminal_roll_control_4r</code></td><td>PASS</td><td>3/1</td><td><code>PURE_TERMINAL_ROLL</code></td><td>9.047e-17</td><td>budget_limited</td><td>False</td><td>161</td></tr><tr><td><code>exact_u_pair_4r</code></td><td>PASS</td><td>3/1</td><td><code>NONTRIVIAL_POINTING_CURVE</code></td><td>6.000e-02</td><td>budget_limited</td><td>False</td><td>161</td></tr><tr><td><code>near_aligned_u_pair_4r</code></td><td>PASS</td><td>3/1</td><td><code>NONTRIVIAL_POINTING_CURVE</code></td><td>6.000e-02</td><td>budget_limited</td><td>False</td><td>161</td></tr><tr><td><code>singular_4r_parallel</code></td><td>FAIL</td><td>1/3</td><td><code>SINGULAR_OR_EMPTY</code></td><td>6.000e-02</td><td>rejected_seed</td><td>False</td><td>0</td></tr></table>
+<h2>Figures</h2><h3>generic_4r diagnostics</h3><p><img src="figures/v05b_generic_4r_diagnostics.png" alt="generic_4r diagnostics" style="max-width:760px"></p><h3>terminal_roll_control_4r diagnostics</h3><p><img src="figures/v05b_terminal_roll_control_4r_diagnostics.png" alt="terminal_roll_control_4r diagnostics" style="max-width:760px"></p><h3>exact_u_pair_4r diagnostics</h3><p><img src="figures/v05b_exact_u_pair_4r_diagnostics.png" alt="exact_u_pair_4r diagnostics" style="max-width:760px"></p><h3>near_aligned_u_pair_4r diagnostics</h3><p><img src="figures/v05b_near_aligned_u_pair_4r_diagnostics.png" alt="near_aligned_u_pair_4r diagnostics" style="max-width:760px"></p><h3>singular_4r_parallel diagnostics</h3><p><img src="figures/v05b_singular_4r_parallel_diagnostics.png" alt="singular_4r_parallel diagnostics" style="max-width:760px"></p>
+<p>This readout establishes source-fiber and orientation-curve inputs. It does not certify an independent reduced closed mechanism.</p>
+</body></html>

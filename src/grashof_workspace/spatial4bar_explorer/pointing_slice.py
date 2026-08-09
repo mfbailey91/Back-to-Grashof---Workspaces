@@ -1,38 +1,17 @@
-"""Parent-first pointing-slice bridge: ``S_v`` fiber → task-derived ``U_v`` child.
+"""Parent-first pointing-slice prototype: ``S_v`` parent → task-derived ``U_v`` chart.
 
-Conventions
------------
-Parent (aligned-terminal 6R at fixed Cartesian ``p``)::
+This module is retained as a V08-oriented prototype, not active V05 source-chain
+evidence.  It distinguishes five separate checks:
 
-    p(q) = p0
-    q6 = q6*
-    h(q) = n · d(q) = c
+1. parent pointing-level-set regularity;
+2. local virtual-U chart validity;
+3. child reference closure/mobility;
+4. parent-child tangent agreement;
+5. parent-child branch equivalence.
 
-At a regular independent seed, ``rank(J_F)=4`` and ``nullity=1`` on ``q1…q5``.
-
-Virtual universal axes on that fiber (ab chart)::
-
-    R_b = normalize(n × d)
-    R_a = normalize(R_b × d)
-    frame_U = (R_a, R_b, d)
-
-so ``R_a × R_b = d`` and ``U_v(α, β) = R_a(α) R_b(β)`` uses tool motion axes
-``x=R_a``, ``y=R_b`` (same chart as V03 ``tool_alpha``, ``tool_beta``).
-
-Child ``UUUR`` joint order (tool → compound U → compound U → R)::
-
-    J0 = U_v at the tool point
-    J1 = orthonormalized UA = (R1, R2)
-    J2 = orthonormalized UB = (R3, R4)
-    J3 = R5
-
-Compound-U frames are Gram–Schmidt orthonormalizations of the intersecting
-pair directions at the seed. Exact identity with a free SUUR mechanism chart
-is **unverified**; V05A certifies the pointing-slice fiber and the task-derived
-tool ``U_v``, then runs the fiber-equivalence contract against the child.
-
-Slice provenance for research evidence is ``task_derived``. Standalone V02B–V04
-geometries remain ``mechanism_explorer_only``.
+The previous implementation collapsed these into one ``PASS`` even though the
+child-tool tangent residual was much larger than tolerance and no global branch
+comparison had been performed.  The statuses are now exported independently.
 """
 
 from __future__ import annotations
@@ -90,7 +69,7 @@ CHILD_CLOSURE_TOL = 1e-9
 
 @dataclass(frozen=True)
 class SliceDefinition:
-    """Explicit pointing-slice metadata recorded for atlas provenance."""
+    """Explicit pointing-slice metadata."""
 
     n: Vec3
     c: float
@@ -104,7 +83,7 @@ class SliceDefinition:
 
 @dataclass(frozen=True)
 class VirtualUAxes:
-    """Orthonormal tool-U chart on a pointing fiber seed."""
+    """Orthonormal local tool-U chart at a pointing-fiber seed."""
 
     r_a: Vec3
     r_b: Vec3
@@ -131,6 +110,17 @@ class FiberEquivalenceResiduals:
 
 
 @dataclass(frozen=True)
+class FiberEquivalenceStatuses:
+    parent_slice_status: str
+    virtual_u_chart_status: str
+    child_reference_closure_status: str
+    parent_child_tangent_status: str
+    parent_child_branch_status: str
+    overall_status: str
+    notes: tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class PointingSliceFiberResult:
     slice_id: str
     family: str
@@ -141,12 +131,14 @@ class PointingSliceFiberResult:
     independence: FiberIndependenceReport
     fiber_segment_accepted: int
     equivalence_residuals: FiberEquivalenceResiduals
+    equivalence_statuses: FiberEquivalenceStatuses
     fiber_equivalence_status: str
     slice_provenance: str
+    program_role: str
     notes: tuple[str, ...]
 
     def to_json_dict(self) -> dict[str, Any]:
-        payload = {
+        return {
             "slice_id": self.slice_id,
             "family": self.family,
             "parent_line": self.parent_line,
@@ -155,13 +147,14 @@ class PointingSliceFiberResult:
             "independence": asdict(self.independence),
             "fiber_segment_accepted": self.fiber_segment_accepted,
             "equivalence_residuals": asdict(self.equivalence_residuals),
+            "equivalence_statuses": asdict(self.equivalence_statuses),
             "fiber_equivalence_status": self.fiber_equivalence_status,
             "slice_provenance": self.slice_provenance,
+            "program_role": self.program_role,
             "notes": list(self.notes),
             "geometry_centers": [joint.center for joint in self.geometry.joints],
             "geometry_joint_kinds": [joint.kind.value for joint in self.geometry.joints],
         }
-        return payload
 
 
 def _as_vec3(values: Array | tuple[float, ...] | list[float]) -> Vec3:
@@ -170,10 +163,7 @@ def _as_vec3(values: Array | tuple[float, ...] | list[float]) -> Vec3:
 
 
 def derive_virtual_u_axes(n: Vec3 | Array, d: Vec3 | Array) -> VirtualUAxes:
-    """Return orthonormal ``(R_a, R_b, d)`` for the pointing-slice virtual U.
-
-    Requires ``n`` not parallel to ``d``. See module docstring for the chart.
-    """
+    """Return orthonormal ``(R_a, R_b, d)`` for a local pointing chart."""
     n_hat = normalize(_as_vec3(n))
     d_hat = normalize(_as_vec3(d))
     cross_nd = cross(n_hat, d_hat)
@@ -181,18 +171,16 @@ def derive_virtual_u_axes(n: Vec3 | Array, d: Vec3 | Array) -> VirtualUAxes:
         raise ValueError("cannot derive virtual U axes when n is parallel to d")
     r_b = normalize(cross_nd)
     r_a = normalize(cross(r_b, d_hat))
-    # Enforce right-handed triad (R_a, R_b, d).
     if dot(cross(r_a, r_b), d_hat) < 0.0:
         r_a = scale(r_a, -1.0)
     return VirtualUAxes(r_a=r_a, r_b=r_b, d=d_hat, n=n_hat)
 
 
 def _orthonormal_u_frame(w0: Vec3, w1: Vec3) -> Frame3:
-    """Build a U joint frame whose x/y span the plane of ``w0``, ``w1``."""
+    """Build a U frame whose x/y span the plane of ``w0``, ``w1``."""
     x_axis = normalize(w0)
     y_raw = cross(cross(x_axis, w1), x_axis)
     if math.sqrt(dot(y_raw, y_raw)) <= 1e-12:
-        # Degenerate pair directions: fall back to a stable completion.
         helper = (0.0, 0.0, 1.0) if abs(x_axis[2]) < 0.9 else (0.0, 1.0, 0.0)
         y_raw = cross(x_axis, helper)
     y_axis = normalize(y_raw)
@@ -213,11 +201,7 @@ def build_uuur_child_from_suur_seed(
     q0: tuple[float, ...],
     virtual_u: VirtualUAxes,
 ) -> SpatialFourBarGeometry:
-    """Emit a ``UUUR`` reference geometry from an intersecting-pairs SUUR seed.
-
-    Compound pair centers use the current-axis closest-point pair. Pair
-    concurrency is required within ``PAIR_DISTANCE_TOL_M``.
-    """
+    """Emit a candidate ``UUUR`` reference geometry from one SUUR seed chart."""
     q_t = tuple(float(x) for x in np.asarray(q0, dtype=float).reshape(6))
     state = chain.evaluate(q_t)
     axes = chain.current_axes(q_t)
@@ -226,7 +210,7 @@ def build_uuur_child_from_suur_seed(
     if dist_ua > PAIR_DISTANCE_TOL_M or dist_ub > PAIR_DISTANCE_TOL_M:
         raise ValueError(
             f"SUUR pairs are not concurrent at seed (UA={dist_ua}, UB={dist_ub}); "
-            "full free-SUUR extraction remains unverified"
+            "free-SUUR extraction remains unverified"
         )
     ua_center = _as_vec3(line_closest_points(axes[0], axes[1])[0])
     ub_center = _as_vec3(line_closest_points(axes[2], axes[3])[0])
@@ -282,12 +266,6 @@ def _tool_pointing_rate_from_child_tangent(
     virtual_u: VirtualUAxes,
     child_tangent: Array,
 ) -> Array:
-    """Map child null-tangent ``(α', β', …)`` to ``d'`` at the reference pose.
-
-    At ``q=0``, home-axis tool rotations act as::
-
-        d' = α' (R_a × d) + β' (R_b × d)
-    """
     alpha_dot = float(child_tangent[0])
     beta_dot = float(child_tangent[1])
     ra = np.asarray(virtual_u.r_a, dtype=float)
@@ -296,44 +274,28 @@ def _tool_pointing_rate_from_child_tangent(
     return alpha_dot * np.cross(ra, d) + beta_dot * np.cross(rb, d)
 
 
-def _pointing_curve_residual(
-    chain: SerialRevoluteChain,
+def _parent_level_set_residual(
     segment: FiberSegment,
     n: Vec3,
-    virtual_u: VirtualUAxes,
 ) -> float:
-    """Max distance from parent fiber pointing samples to the ``U_v`` cone chart.
-
-    For each accepted sample, project ``d(s)`` into the ``(R_a, R_b)`` chart at
-    the seed and rebuild ``d_hat = normalize(R_a α_proxy + …)`` via the small-circle
-    parameterization consistent with ``n·d=c``: compare ``d`` to its projection
-    onto the plane perpendicular to ``n`` plus the fixed polar part.
-    """
+    """Check only that the parent samples remain on their declared small circle."""
     n_arr = np.asarray(n, dtype=float)
     c = float(segment.c)
-    # Level set: d = c n + sqrt(1-c^2) u, u ⟂ n on the unit circle in that plane.
-    # Compare each fiber d to the nearest point on that small circle through d0.
-    d0 = np.asarray(segment.d0, dtype=float)
-    radial0 = d0 - c * n_arr
-    radial0_norm = float(np.linalg.norm(radial0))
-    if radial0_norm < 1e-12:
-        return 0.0
     residuals: list[float] = []
     for step in segment.accepted_samples:
         if step.d is None:
             continue
         d = np.asarray(step.d, dtype=float)
-        # Reconstruct the unique small-circle point with the same azimuth as d.
         radial = d - c * n_arr
-        radial = radial - float(np.dot(radial, n_arr)) * n_arr
-        rn = float(np.linalg.norm(radial))
-        if rn < 1e-14:
+        radial -= float(np.dot(radial, n_arr)) * n_arr
+        radial_norm = float(np.linalg.norm(radial))
+        if radial_norm < 1e-14:
             predicted = c * n_arr
         else:
-            predicted = c * n_arr + math.sqrt(max(0.0, 1.0 - c * c)) * (radial / rn)
+            predicted = c * n_arr + math.sqrt(max(0.0, 1.0 - c * c)) * (
+                radial / radial_norm
+            )
         residuals.append(float(np.linalg.norm(d - predicted)))
-        # Chart sanity: seed axes remain a valid U frame for the slice.
-        _ = virtual_u
     return max(residuals) if residuals else float("inf")
 
 
@@ -348,11 +310,8 @@ def evaluate_fiber_equivalence(
     segment: FiberSegment,
     tangent_tol: float = TANGENT_RESIDUAL_TOL,
     pointing_tol: float = POINTING_CURVE_TOL,
-) -> tuple[str, FiberEquivalenceResiduals]:
-    """Run the pointing-slice fiber-equivalence contract.
-
-    Returns status ``PASS``, ``FAIL``, or ``REVIEW`` plus residuals.
-    """
+) -> tuple[FiberEquivalenceStatuses, FiberEquivalenceResiduals]:
+    """Evaluate separate parent, chart, child, tangent, and branch statuses."""
     q_t = tuple(float(x) for x in np.asarray(q0, dtype=float).reshape(6))
     parent_tangent = reduced_fiber_tangent(chain, q_t, n)
     parent_dd = pointing_jacobian(chain, q_t) @ parent_tangent
@@ -362,17 +321,14 @@ def evaluate_fiber_equivalence(
     child_tangent, _ = null_tangent(child_jacobian)
     child_dd = _tool_pointing_rate_from_child_tangent(virtual_u, child_tangent)
 
-    # Lifted S_v -> U_v tangent: parent pointing rate must lie in span{R_a×d, R_b×d}.
     ra = np.asarray(virtual_u.r_a, dtype=float)
     rb = np.asarray(virtual_u.r_b, dtype=float)
     d = np.asarray(virtual_u.d, dtype=float)
     basis = np.column_stack((np.cross(ra, d), np.cross(rb, d)))
-    coeffs, *_ = np.linalg.lstsq(basis, parent_dd, rcond=None)
-    parent_dd_in_u = basis @ coeffs
-    tangent_residual = float(np.linalg.norm(parent_dd - parent_dd_in_u))
+    coefficients, *_ = np.linalg.lstsq(basis, parent_dd, rcond=None)
+    parent_dd_in_u = basis @ coefficients
+    chart_residual = float(np.linalg.norm(parent_dd - parent_dd_in_u))
 
-    # Diagnostic only: V03 child nullspace need not match the serial-6R fiber until
-    # a certified SUUR coordinate extraction exists (research-code unverified path).
     if float(np.dot(child_dd, parent_dd_in_u)) < 0.0:
         child_dd = -child_dd
     parent_speed = float(np.linalg.norm(parent_dd_in_u))
@@ -384,7 +340,7 @@ def evaluate_fiber_equivalence(
     else:
         child_tool_residual = float(np.linalg.norm(parent_dd_in_u - child_dd))
 
-    h_residuals = []
+    h_residuals: list[float] = []
     for step in segment.accepted_samples:
         if step.q is None:
             continue
@@ -392,22 +348,22 @@ def evaluate_fiber_equivalence(
         if step.h_residual is not None:
             h_residuals.append(abs(float(step.h_residual)))
     h_residual_max = max(h_residuals) if h_residuals else float("inf")
-    pointing_curve_residual = _pointing_curve_residual(chain, segment, n, virtual_u)
+    level_set_residual = _parent_level_set_residual(segment, n)
 
     residuals = FiberEquivalenceResiduals(
         parent_rank=independence.rank,
         parent_nullity=independence.nullity,
         dh_dq6=independence.dh_dq6,
         h_residual_max=h_residual_max,
-        tangent_pointing_residual=tangent_residual,
+        tangent_pointing_residual=chart_residual,
         child_tool_tangent_residual=child_tool_residual,
-        pointing_curve_residual=pointing_curve_residual,
+        pointing_curve_residual=level_set_residual,
         child_closure_norm=child_audit.closure_norm,
         child_rank=child_audit.jacobian_rank,
         child_nullity=child_audit.jacobian_nullity,
         branch_sample_count=len(segment.accepted_samples),
-        lifted_alpha_dot=float(coeffs[0]),
-        lifted_beta_dot=float(coeffs[1]),
+        lifted_alpha_dot=float(coefficients[0]),
+        lifted_beta_dot=float(coefficients[1]),
     )
 
     parent_ok = (
@@ -415,21 +371,45 @@ def evaluate_fiber_equivalence(
         and independence.rank == 4
         and independence.nullity == 1
         and independence.dh_dq6_vanishes
+        and h_residual_max <= H_RESIDUAL_TOL
+        and level_set_residual <= pointing_tol
+        and residuals.branch_sample_count >= 3
     )
-    slice_ok = h_residual_max <= H_RESIDUAL_TOL and pointing_curve_residual <= pointing_tol
-    child_ok = (
+    chart_ok = chart_residual <= tangent_tol
+    child_reference_ok = (
         child_audit.closure_norm <= CHILD_CLOSURE_TOL
         and child_audit.jacobian_rank == 6
         and child_audit.jacobian_nullity == 1
     )
-    tangent_ok = tangent_residual <= tangent_tol
-    branch_ok = residuals.branch_sample_count >= 3
+    tangent_ok = child_tool_residual <= tangent_tol
 
-    if parent_ok and slice_ok and child_ok and tangent_ok and branch_ok:
-        return "PASS", residuals
-    if not parent_ok or h_residual_max > 1e-6:
-        return "FAIL", residuals
-    return "REVIEW", residuals
+    parent_status = "PASS" if parent_ok else "FAIL"
+    chart_status = "PASS" if chart_ok else "FAIL"
+    child_reference_status = "PASS" if child_reference_ok else "FAIL"
+    tangent_status = "PASS" if tangent_ok else "FAIL"
+    branch_status = "UNRESOLVED"
+
+    if not parent_ok or not chart_ok or not child_reference_ok:
+        overall = "FAIL"
+    elif tangent_ok and branch_status == "PASS":
+        overall = "PASS"
+    else:
+        overall = "REVIEW"
+
+    statuses = FiberEquivalenceStatuses(
+        parent_slice_status=parent_status,
+        virtual_u_chart_status=chart_status,
+        child_reference_closure_status=child_reference_status,
+        parent_child_tangent_status=tangent_status,
+        parent_child_branch_status=branch_status,
+        overall_status=overall,
+        notes=(
+            "The local U_v chart spanning the S² tangent plane is not a child-mechanism equivalence proof.",
+            "pointing_curve_residual is a parent level-set check, not parent-child branch agreement.",
+            "Global child branch comparison has not been implemented.",
+        ),
+    )
+    return statuses, residuals
 
 
 def construct_suur_uuur_pointing_fiber(
@@ -440,7 +420,7 @@ def construct_suur_uuur_pointing_fiber(
     step_size: float = 0.025,
     slice_id: str = "suur_ip_primary_n",
 ) -> PointingSliceFiberResult:
-    """Worked V05A MVP: intersecting-pairs SUUR parent → UUUR child."""
+    """Worked pointing-slice prototype on the intersecting-pairs architecture."""
     architecture = IntersectingPairsAligned6R.aligned()
     chain = architecture.chain
     q_t = tuple(float(x) for x in q0)
@@ -448,13 +428,13 @@ def construct_suur_uuur_pointing_fiber(
     state0 = chain.evaluate(q_t)
     n_hat = independence.n
     notes: list[str] = [
+        "V08-oriented pointing-slice prototype; not active V05 source-chain evidence.",
         "Compound UA/UB frames are orthonormalized charts of intersecting pairs.",
         "Exact free-SUUR mechanism identity beyond this seed chart is unverified.",
-        "PASS uses S_v→U_v pointing-lift tangent agreement; child nullspace match is diagnostic-only.",
+        "Parent-child tangent and branch statuses are exported separately.",
     ]
 
     if not independence.independent:
-        notes.append("seed fails fiber independence; child derivation skipped")
         raise ValueError(
             f"pointing slice is not independent at seed (rank={independence.rank}, "
             f"nullity={independence.nullity}, n×d={independence.n_cross_d_norm})"
@@ -463,7 +443,7 @@ def construct_suur_uuur_pointing_fiber(
     virtual_u = derive_virtual_u_axes(n_hat, _as_vec3(state0.d))
     geometry = build_uuur_child_from_suur_seed(chain, q_t, virtual_u)
     segment = continue_fiber(chain, q_t, n_hat, n_steps=n_steps, step_size=step_size)
-    status, residuals = evaluate_fiber_equivalence(
+    statuses, residuals = evaluate_fiber_equivalence(
         chain,
         q_t,
         n_hat,
@@ -492,12 +472,19 @@ def construct_suur_uuur_pointing_fiber(
         independence=independence,
         fiber_segment_accepted=len(segment.accepted_samples),
         equivalence_residuals=residuals,
-        fiber_equivalence_status=status,
+        equivalence_statuses=statuses,
+        fiber_equivalence_status=statuses.overall_status,
         slice_provenance="task_derived",
+        program_role="V08_POINTING_SLICE_PROTOTYPE",
         notes=tuple(notes),
     )
 
 
-def child_branch_trace(geometry: SpatialFourBarGeometry, *, steps: int = 24, step_size: float = 0.03):
-    """Short child continuation used for V05A diagnostic plots."""
+def child_branch_trace(
+    geometry: SpatialFourBarGeometry,
+    *,
+    steps: int = 24,
+    step_size: float = 0.03,
+) -> object:
+    """Short child continuation used for prototype diagnostic plots."""
     return continue_branch(geometry, steps=steps, step_size=step_size, direction=1)

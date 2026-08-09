@@ -18,6 +18,8 @@ from pathlib import Path
 
 STATUS_DATE = "2026-08-08"
 
+# V05_AUDIT_CORRECTION_2026_08_08: V05B–E are audit-corrected MVPs; the V05 decomposition gate remains held.
+
 _SHARED_CSS = """
   body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
   h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 1.2; }
@@ -49,7 +51,7 @@ def render_explorer_index_html(*, status_date: str = STATUS_DATE) -> str:
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Spatial 4-Bar Explorer — project printout through active V05E</title>
+<title>Spatial 4-Bar Explorer — project printout through V05 audit correction</title>
 <style>
 {_SHARED_CSS}
 </style>
@@ -58,7 +60,7 @@ def render_explorer_index_html(*, status_date: str = STATUS_DATE) -> str:
 
 <h1>Spatial 4-Bar Explorer</h1>
 <p class="meta">
-  <strong>Project printout through active V05E</strong> · explorer V00–V05A + kinematic-decomposition ladder<br>
+  <strong>Project printout through V05 audit correction</strong> · explorer V00–V05A + kinematic-decomposition ladder<br>
   Artifact roots: <code>results/spatial4bar_explorer/</code> ·
   <code>results/kinematic_decomposition/</code> · Status date: {status_date}
 </p>
@@ -66,7 +68,7 @@ def render_explorer_index_html(*, status_date: str = STATUS_DATE) -> str:
 <div class="note">
   Explorer sprints <strong>V00–V05A</strong> remain a <code>mechanism_explorer_only</code> laboratory
   (deferred V10 prep). The <strong>active</strong> source-chain program is kinematic decomposition
-  <strong>V05B–E (done)</strong>; next gate is <strong>V06</strong>.
+  <strong>V05B–E (audit-corrected MVP; V05 gate held)</strong>; next gate is <strong>V06</strong>.
   Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>.
 </div>
 
@@ -79,7 +81,7 @@ def render_explorer_index_html(*, status_date: str = STATUS_DATE) -> str:
   <li><a href="#findings">Findings locked so far</a></li>
   <li><a href="#contract">V04C provisional contract</a></li>
   <li><a href="#v05a">Explorer V05A</a></li>
-  <li><a href="#active">Active V05B–E</a></li>
+  <li><a href="#active">V05B–E audit-corrected MVP</a></li>
   <li><a href="#next">Next: V06</a></li>
   <li><a href="#links">Full sprint link index</a></li>
 </ul>
@@ -100,12 +102,12 @@ not conventional planar Grashof class names.
 <p>
 The active scientific ladder is now source-chain first:
 </p>
-<pre>spatial 4R + S_v
+<pre>spatial 4R + S_v (off-axis tool)
   → fixed-position fiber (V05B)
-  → orientation-curve truth (V05C)
-  → exact RR→U aggregation + DecompositionCertificate (V05D)
+  → classified orientation-curve truth (V05C)
+  → exact RR→U aggregation certificate + closed-mechanism UNRESOLVED (V05D)
   → near-aligned rejection + false-U diagnostic (V05E)
-  → V06 spatial 5R parent …</pre>
+  → V06 scaffold only until V05 gate closes</pre>
 <p>
 Docs:
 <a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
@@ -294,23 +296,23 @@ Canonical readout: <a href="v04c/sprint_04c_virtual_u_equivalence.html">v04c/spr
     <td>V04C</td>
   </tr>
   <tr>
-    <td>One SUUR→UUUR task-derived pointing fiber passes the fiber-equivalence contract (<code>h=n·d</code>, U-lift tangent).</td>
+    <td>One SUUR→UUUR parent pointing slice and local virtual-U chart are valid; parent–child mechanism equivalence remains unresolved (split status).</td>
     <td>numerical mechanism / mechanism_explorer_only</td>
     <td>V05A</td>
   </tr>
   <tr>
-    <td>Regular spatial 4R fixed-position fibers continue with rank 3 / nullity 1; singular parallel exterior rejects.</td>
+    <td>Off-axis spatial 4R fixed-position fibers continue with rank 3 / nullity 1 and nontrivial pointing; singular parallel exterior rejects; terminal-roll retained as named control.</td>
     <td>source-chain</td>
     <td>V05B</td>
   </tr>
   <tr>
-    <td>Orientation-curve / pointing-curve exports along the fiber are truth objects, not SO(3)/S² coverage.</td>
+    <td>Orientation/pointing curve exports are classified (e.g. NONTRIVIAL_POINTING_CURVE vs PURE_TERMINAL_ROLL); not SO(3)/S² coverage.</td>
     <td>source-chain</td>
     <td>V05C</td>
   </tr>
   <tr>
-    <td>Exact proximal RR→U yields DecompositionCertificate EXACT_ON_COMPONENT on S_v-U_phys-R-R; generic rejects.</td>
-    <td>source-chain certificate</td>
+    <td>Exact proximal RR→U axis aggregation may be EXACT_GLOBAL as regrouping; closed-mechanism equivalence remains UNRESOLVED pending an independent reduced solve.</td>
+    <td>source-chain certificate / HOLD</td>
     <td>V05D</td>
   </tr>
   <tr>
@@ -332,11 +334,12 @@ Canonical readout: <a href="v04c/sprint_04c_virtual_u_equivalence.html">v04c/spr
 </ul>
 
 <h2 id="v05a">Explorer V05A — parent-first pointing fiber (historical / deferred V10 prep)</h2>
-<p class="status pass">DONE — SUUR → UUUR worked fiber PASS (mechanism_explorer_only)</p>
+<p class="status pass">SPLIT — parent slice / U_v chart PASS; child equivalence UNRESOLVED (mechanism_explorer_only)</p>
 <p>
 Restored the aligned-terminal fiber kernel and constructed one task-derived
 <code>UUUR</code> child from an intersecting-pairs <code>SUUR</code> parent with explicit
 <code>h(d)=n·d=c</code>. This is <strong>not</strong> active-program V05B.
+Parent–child mechanism equivalence is not claimed from the undifferentiated legacy PASS.
 </p>
 <p>
 Canonical readout:
@@ -345,26 +348,28 @@ Canonical readout:
 </p>
 
 <h2 id="active">Active kinematic decomposition — V05B–E</h2>
-<p class="status pass">DONE — spatial 4R source ladder through near-aligned rejection</p>
+<p class="status pass">AUDIT-CORRECTED MVP — V05 scientific gate HOLD</p>
 <p>
 Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>
+· corrections: <a href="../../docs/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
 </p>
-<pre>V05A corpus (inline) → V05B fixed-position fiber (done)
-V05C orientation-curve truth (done)
-V05D RR→U aggregation certificates (done)
-V05E near-aligned rejection (done)
-V06+ ladder / V10+ deferred atlas</pre>
+<pre>V05A corpus (off-axis + terminal-roll control) → V05B fixed-position fiber (audit-corrected MVP)
+V05C orientation-curve classification (audit-corrected MVP)
+V05D exact-axis certificates / closed-mechanism UNRESOLVED
+V05E near-aligned rejection (audit-corrected MVP)
+V05 overall gate HOLD · V06 scientific claims BLOCKED until independent reduced solve
+V10+ deferred atlas</pre>
 <ul>
   <li>V05B:
     <a href="../kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html">sprint_v05b_fixed_position_fiber.html</a>
   </li>
   <li>V05C:
     <a href="../kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html">sprint_v05c_orientation_curve.html</a>
-    (orientation-curve truth, not coverage)
+    (classified orientation-curve truth, not coverage)
   </li>
   <li>V05D:
     <a href="../kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">sprint_v05d_axis_aggregation.html</a>
-    (<code>DecompositionCertificate</code> / role-aware <code>S_v-U_phys-R-R</code>)
+    (<code>DecompositionCertificate</code>: axis aggregation vs closed-mechanism statuses)
   </li>
   <li>V05E:
     <a href="../kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a>
@@ -379,9 +384,10 @@ Program docs:
 
 <h2 id="next">Next: V06 — spatial 5R fixed-position parent</h2>
 <p>
-Establish the complete two-dimensional fixed-position parent and pointing image for spatial 5R
-before introducing one-dimensional slices or factors. Do not promote explorer four-bar atlases
-to manipulator evidence without certificates.
+Software scaffold work for a spatial 5R fixed-position parent may proceed, but
+<strong>V06 scientific claims are blocked</strong> until V05 closes the independent
+<code>S_v-U_phys-R-R</code> reduced closed-mechanism comparison. Do not promote explorer
+four-bar atlases to manipulator evidence without certificates.
 </p>
 
 <h2 id="links">Full sprint link index</h2>
@@ -491,20 +497,24 @@ def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE)
   Exports are <strong>not</strong> coverage certificates for <code>SO(3)</code> or <code>S²</code>.
   Explorer <code>spatial4bar_explorer/v05a</code> remains <code>mechanism_explorer_only</code>
   and is <strong>not</strong> this ladder.
+  <strong>V05 scientific gate: HOLD</strong> pending an independently instantiated and continued
+  reduced closed mechanism (exact axis aggregation alone is not closed-mechanism equivalence).
 </div>
 
 <h2>Thesis</h2>
-<pre>OpenChainModel (spatial 4R)
+<pre>OpenChainModel (spatial 4R, off-axis tool)
   → FixedPositionProblem + S_v
   → FixedPositionFiberResult (V05B)
-  → OrientationImageResult / PointingImageResult (V05C)
-  → DecompositionCertificate via axis_aggregation (V05D)
+  → classified OrientationImageResult / PointingImageResult (V05C)
+  → DecompositionCertificate: axis_aggregation vs closed_mechanism (V05D)
   → near-aligned REJECTED + false_u_surrogate diagnostic (V05E)
-  → V06 spatial 5R parent …</pre>
+  → V06 scaffold only until V05 gate closes</pre>
 <p>
 Docs:
 <a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
 · <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
+· <a href="../../docs/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
+· <a href="../../docs/JACOBIAN_AND_DERIVATIVE_POLICY.md">JACOBIAN_AND_DERIVATIVE_POLICY.md</a>
 · <a href="../../docs/DECISIONS.md">DECISIONS.md</a>
 </p>
 
@@ -512,9 +522,10 @@ Docs:
 <p>Synthetic spatial-4R members used by the active ladder:</p>
 <table>
   <tr><th>Architecture</th><th>Role</th></tr>
-  <tr><td><code>generic_4r</code></td><td>No intentional consecutive intersecting pairs (exterior for aggregation)</td></tr>
-  <tr><td><code>exact_u_pair_4r</code></td><td>Exact proximal orthogonal intersecting RR → U_phys (V05D pass)</td></tr>
-  <tr><td><code>near_aligned_u_pair_4r</code></td><td>Near-miss pair; must reject as exact U (V05E)</td></tr>
+  <tr><td><code>generic_4r</code></td><td>Off-axis active source; no intentional consecutive intersecting pairs</td></tr>
+  <tr><td><code>terminal_roll_control_4r</code></td><td>On-axis aligned terminal-roll control (PURE_TERMINAL_ROLL)</td></tr>
+  <tr><td><code>exact_u_pair_4r</code></td><td>Off-axis exact proximal RR→U_phys geometry</td></tr>
+  <tr><td><code>near_aligned_u_pair_4r</code></td><td>Off-axis near-miss pair; must reject as exact U</td></tr>
   <tr><td><code>singular_4r_parallel</code></td><td>Rank-deficient exterior for fixed-position regularity</td></tr>
 </table>
 
@@ -523,25 +534,25 @@ Docs:
   <tr><th>Sprint</th><th>Status</th><th>Primary HTML</th><th>JSON</th></tr>
   <tr>
     <td>V05B</td>
-    <td class="status pass">DONE</td>
+    <td class="status pass">AUDIT-CORRECTED MVP</td>
     <td><a href="v05b/sprint_v05b_fixed_position_fiber.html">sprint_v05b_fixed_position_fiber.html</a></td>
     <td><a href="v05b/data/v05b_fixed_position_fibers.json">v05b_fixed_position_fibers.json</a></td>
   </tr>
   <tr>
     <td>V05C</td>
-    <td class="status pass">DONE</td>
+    <td class="status pass">AUDIT-CORRECTED MVP</td>
     <td><a href="v05c/sprint_v05c_orientation_curve.html">sprint_v05c_orientation_curve.html</a></td>
     <td><a href="v05c/data/v05c_orientation_curves.json">v05c_orientation_curves.json</a></td>
   </tr>
   <tr>
     <td>V05D</td>
-    <td class="status pass">DONE</td>
+    <td class="status pass">AUDIT-CORRECTED MVP</td>
     <td><a href="v05d/sprint_v05d_axis_aggregation.html">sprint_v05d_axis_aggregation.html</a></td>
     <td><a href="v05d/data/v05d_axis_aggregation.json">v05d_axis_aggregation.json</a></td>
   </tr>
   <tr>
     <td>V05E</td>
-    <td class="status pass">DONE</td>
+    <td class="status pass">AUDIT-CORRECTED MVP</td>
     <td><a href="v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a></td>
     <td><a href="v05e/data/v05e_near_aligned_rejection.json">v05e_near_aligned_rejection.json</a></td>
   </tr>
@@ -555,7 +566,8 @@ PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir res
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V06</strong> — spatial 5R fixed-position parent and pointing image (M = 2 at regular seeds).</p>
+<p><strong>V06</strong> — spatial 5R fixed-position parent scaffold only until the V05 closed-mechanism gate closes.
+Scientific V06 claims remain <strong>BLOCKED</strong>.</p>
 
 <p class="meta" style="margin-top:2rem;">
   Project dashboard (explorer + ladder):

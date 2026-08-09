@@ -1,46 +1,12 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Active V05E — Near-Aligned Rejection</title>
-<style>
-  body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
-  h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
-  table { border-collapse: collapse; width: 100%; margin: 0.75rem 0 1rem; }
-  th, td { border: 1px solid #bbb; padding: 0.4rem 0.55rem; text-align: left; font-size: 0.88em; }
-  th { background: #f3f3f3; }
-  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; }
-  .note { background: #f7f4ea; border-left: 3px solid #c4a35a; padding: 0.65rem 0.85rem; margin: 1rem 0; }
-</style>
-</head>
-<body>
-<h1>Active V05E — Near-Aligned Rejection</h1>
-<p>
-Near-aligned consecutive RR pairs must be rejected as exact <code>U_phys</code> aggregation.
-Declared exact geometric tolerances:
-<code>distance ≤ 1e-12</code>,
-<code>|w·w'| ≤ 1e-09</code>,
-<code>||w×w'|| ≥ 1e-08</code>.
-</p>
-<div class="note">
-<strong>Gate note.</strong>
-<code>near_aligned_u_pair_4r</code> yields <code>DecompositionCertificate</code> status
-<code>REJECTED</code>. A forced exact-U surrogate quantifies source-versus-surrogate
-FK / fiber <em>task error</em> as diagnostic evidence only
-(<code>false_u_surrogate</code>), not an <code>APPROXIMATE</code> certificate.
-<code>exact_u_pair_4r</code> remains the V05D control that still certifies.
-</div>
-<h2>Certificates and false-U diagnostics</h2>
-<table>
-<tr><th>Architecture</th><th>Certificate</th><th>Closure / geometry residuals</th><th>False-U max ||Δp||</th></tr>
-<tr><td><code>near_aligned_u_pair_4r</code></td><td><code>REJECTED</code></td><td>{'best_pair_distance_m': 0.0001, 'best_pair_orthogonality_abs_dot': 0.0009999998333333417, 'best_pair_parallelism_residual': 0.9999995000000417}</td><td>2.521e-04</td></tr><tr><td><code>exact_u_pair_4r</code></td><td><code>EXACT_ON_COMPONENT</code></td><td>{'position_residual_m': 0.0, 'rotation_frobenius': 0.0, 'pointing_residual': 0.0, 'joint_map_residual': 0.0}</td><td>—</td></tr><tr><td><code>generic_4r</code></td><td><code>REJECTED</code></td><td>{'best_pair_distance_m': 0.02549509756796393, 'best_pair_orthogonality_abs_dot': 0.07820618870057751, 'best_pair_parallelism_residual': 0.9969372056699106}</td><td>—</td></tr>
-</table>
-<h2>Figures</h2>
-<h3>near_aligned_u_pair_4r geometry vs tol</h3><p><img src="figures/v05e_near_aligned_u_pair_4r_geometry_vs_tol.png" alt="near_aligned_u_pair_4r geometry vs tol" style="max-width: 720px;"></p><h3>near_aligned_u_pair_4r false-U task error</h3><p><img src="figures/v05e_near_aligned_u_pair_4r_false_u_task_error.png" alt="near_aligned_u_pair_4r false-U task error" style="max-width: 720px;"></p><h3>exact_u_pair_4r geometry vs tol</h3><p><img src="figures/v05e_exact_u_pair_4r_geometry_vs_tol.png" alt="exact_u_pair_4r geometry vs tol" style="max-width: 720px;"></p><h3>generic_4r geometry vs tol</h3><p><img src="figures/v05e_generic_4r_geometry_vs_tol.png" alt="generic_4r geometry vs tol" style="max-width: 720px;"></p>
-<h2>Deferred</h2>
-<ul>
-<li>Non-proximal near-aligned suites</li>
-<li>V06 spatial 5R parent</li>
-</ul>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><title>V05E — U Boundary Audit</title>
+<style>body{font-family:Georgia,serif;max-width:980px;margin:2rem auto;line-height:1.45}table{border-collapse:collapse;width:100%}th,td{border:1px solid #bbb;padding:.4rem;text-align:left}code{font-family:ui-monospace,monospace}.note{background:#f7f4ea;border-left:3px solid #c4a35a;padding:.7rem}</style>
+</head><body>
+<h1>V05E — Near-Aligned Rejection and Tolerance Boundary</h1>
+<div class="note"><strong>Audit correction.</strong> The original planted near miss remains an easy exterior regression. A tolerance-relative grid now tests 0, 0.5×, 1×, 2×, and 10× the declared distance and orthogonality tolerances. The false-U comparison is diagnostic only and does not become an approximate decomposition certificate.</div>
+<p>Exact tolerances: distance ≤ <code>1e-12 m</code>, |w·w'| ≤ <code>1e-09</code>, and ||w×w'|| ≥ <code>1e-08</code>.</p>
+<table><tr><th>Source</th><th>Axis aggregation</th><th>Closed mechanism</th><th>Overall</th><th>False-U max Δp [m]</th></tr><tr><td><code>near_aligned_u_pair_4r</code></td><td><code>REJECTED</code></td><td><code>UNRESOLVED</code></td><td><code>REJECTED</code></td><td>4.759e-04</td></tr><tr><td><code>exact_u_pair_4r</code></td><td><code>EXACT_GLOBAL</code></td><td><code>UNRESOLVED</code></td><td><code>UNRESOLVED</code></td><td>—</td></tr><tr><td><code>generic_4r</code></td><td><code>REJECTED</code></td><td><code>UNRESOLVED</code></td><td><code>REJECTED</code></td><td>—</td></tr></table>
+<p>Boundary suite: 9/25 accepted. Values at or below both exact thresholds should be accepted, subject to floating-point tolerance; values above either threshold should be rejected.</p>
+<h2>Figures</h2><h3>Tolerance-relative exact-U boundary</h3><p><img src="figures/v05e_tolerance_boundary.png" alt="Tolerance-relative exact-U boundary" style="max-width:720px"></p><h3>Near-miss forced-U task error</h3><p><img src="figures/v05e_false_u_task_error.png" alt="Near-miss forced-U task error" style="max-width:720px"></p>
+<h2>Remaining limitation</h2><p>The forced surrogate is compared at the source joint coordinates. An independently solved surrogate fixed-position component remains a later approximation study.</p>
+</body></html>

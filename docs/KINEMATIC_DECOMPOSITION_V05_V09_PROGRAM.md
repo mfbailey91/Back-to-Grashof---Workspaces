@@ -892,3 +892,25 @@ It is:
 > Fixing tool position produces an exact virtual closed mechanism whose mobility equals the residual configuration freedom available for orientation generation. The project walks from spatial 4R to 5R to 6R, establishes the source orientation image at each rung, and then tests whether architecture-dependent kinematic decomposition exposes lower-dimensional mechanisms whose intrinsic properties determine global coverage.
 
 That ordering makes spatial-four-bar classification a justified analytical or numerical tool rather than the premise of the workspace theory.
+
+---
+
+## V05 audit correction status
+
+<!-- V05_AUDIT_CORRECTION_2026_08_08 -->
+
+The initial V05A–E implementation is superseded by `V05_AUDIT_CORRECTIONS.md`.
+
+Current disposition:
+
+```text
+V05A source corpus                 CORRECTED: off-axis active cases + terminal-roll control
+V05B source continuation           CORRECTED MVP: augmented pseudo-arclength + FD Jacobian check
+V05C orientation image             CORRECTED MVP: explicit curve classification
+V05D exact axis aggregation        EXACT_GLOBAL where geometry permits
+V05D closed-mechanism equivalence  UNRESOLVED pending independent reduced solve
+V05E rejection/boundary            CORRECTED MVP: tolerance-relative suite
+V05 overall gate                   HOLD
+```
+
+V06 may proceed only as non-claiming software scaffold work until the independent reduced closed-mechanism comparison closes the V05 gate.

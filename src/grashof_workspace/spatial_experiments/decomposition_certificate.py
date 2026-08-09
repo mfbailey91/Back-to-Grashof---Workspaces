@@ -1,21 +1,22 @@
-"""DecompositionCertificate issuer for exact axis aggregation (V05D).
+"""Certificates for V05 axis aggregation and closed-mechanism decomposition.
 
-Statuses follow ADR-012 / ``docs/DECISIONS.md``::
+The audit requires two claims to remain separate:
 
-    EXACT_GLOBAL | EXACT_ON_COMPONENT | LOCAL_ONLY | APPROXIMATE | REJECTED | UNRESOLVED
+1. ``RR → U_phys`` may be an exact global regrouping of two consecutive
+   physical revolute coordinates;
+2. an independently instantiated ``S_v-U_phys-R-R`` closed mechanism may or
+   may not reproduce a complete fixed-position source component.
 
-This MVP issues ``EXACT_ON_COMPONENT`` for a proximal exact ``RR→U`` pair after
-FK/tangent/fiber checks on the scoped ±-ray component. Multi-component
-completeness remains **unverified**, so ``EXACT_GLOBAL`` is not claimed.
-``generic_4r`` yields ``REJECTED`` with geometric residuals recorded.
+V05 now certifies claim (1) and leaves claim (2) ``UNRESOLVED`` until the
+reduced closure is built and continued independently.  Identity comparisons of
+a serial chain with itself are retained only as coordinate-regrouping
+sanity diagnostics and cannot promote the closed-mechanism status.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any
-
-import numpy as np
 
 from .axis_aggregation import (
     ORTHOGONALITY_DOT_TOL,
@@ -27,8 +28,7 @@ from .axis_aggregation import (
     detect_exact_u_pairs,
     fk_identity_residuals,
 )
-from .fixed_position import fixed_position_tangent, pose_fixed_position_problem
-from .fixed_position_continuation import continue_fixed_position_fiber
+from .fixed_position import audit_fixed_position_seed, pose_fixed_position_problem
 from .open_chain import OpenChainModel
 
 CERTIFICATE_STATUSES = (
@@ -40,16 +40,14 @@ CERTIFICATE_STATUSES = (
     "UNRESOLVED",
 )
 
-FK_POSITION_TOL_M = 1e-12
-FK_ROTATION_TOL = 1e-12
-TANGENT_AGREEMENT_TOL = 1e-10
-FIBER_POSITION_TOL_M = 1e-9
-FIBER_POINTING_TOL = 1e-9
-
 
 @dataclass(frozen=True, slots=True)
 class DecompositionCertificate:
-    """Provenance record for one proposed source→reduced mapping."""
+    """Provenance record for source→reduced claims.
+
+    ``status`` is the overall closed-mechanism decomposition disposition.
+    ``axis_aggregation_status`` reports the narrower physical-axis regrouping.
+    """
 
     source_chain_id: str
     fixed_position_problem_id: str
@@ -65,11 +63,16 @@ class DecompositionCertificate:
     inverse_or_reconstruction_map: str
     task_map: str
     rank_and_nullity_checks: dict[str, Any]
+    coordinate_regrouping_residuals: dict[str, float]
     closure_residuals: dict[str, float]
-    tangent_subspace_error: float
-    trajectory_reconstruction_error: float
+    tangent_subspace_error: float | None
+    trajectory_position_error_m: float | None
+    trajectory_pointing_error: float | None
+    trajectory_joint_map_error_rad: float | None
     component_correspondence: str
     joint_limit_correspondence: str
+    axis_aggregation_status: str
+    closed_mechanism_status: str
     status: str
     failure_or_scope_reason: str
     candidates: tuple[AggregationCandidate, ...]
@@ -77,6 +80,7 @@ class DecompositionCertificate:
     evidence: dict[str, Any]
 
     def to_json_dict(self) -> dict[str, Any]:
+        """Return strict-JSON-compatible data; unresolved numbers use ``None``."""
         return {
             "source_chain_id": self.source_chain_id,
             "fixed_position_problem_id": self.fixed_position_problem_id,
@@ -92,14 +96,19 @@ class DecompositionCertificate:
             "inverse_or_reconstruction_map": self.inverse_or_reconstruction_map,
             "task_map": self.task_map,
             "rank_and_nullity_checks": self.rank_and_nullity_checks,
+            "coordinate_regrouping_residuals": self.coordinate_regrouping_residuals,
             "closure_residuals": self.closure_residuals,
             "tangent_subspace_error": self.tangent_subspace_error,
-            "trajectory_reconstruction_error": self.trajectory_reconstruction_error,
+            "trajectory_position_error_m": self.trajectory_position_error_m,
+            "trajectory_pointing_error": self.trajectory_pointing_error,
+            "trajectory_joint_map_error_rad": self.trajectory_joint_map_error_rad,
             "component_correspondence": self.component_correspondence,
             "joint_limit_correspondence": self.joint_limit_correspondence,
+            "axis_aggregation_status": self.axis_aggregation_status,
+            "closed_mechanism_status": self.closed_mechanism_status,
             "status": self.status,
             "failure_or_scope_reason": self.failure_or_scope_reason,
-            "candidates": [c.to_json_dict() for c in self.candidates],
+            "candidates": [candidate.to_json_dict() for candidate in self.candidates],
             "aggregated": None if self.aggregated is None else self.aggregated.to_json_dict(),
             "evidence": self.evidence,
         }
@@ -108,69 +117,11 @@ class DecompositionCertificate:
 def _best_exact_candidate(
     candidates: tuple[AggregationCandidate, ...],
 ) -> AggregationCandidate | None:
-    exact = [c for c in candidates if c.exact_u_candidate]
-    if not exact:
-        return None
-    exact.sort(key=lambda c: c.pair_index)
-    return exact[0]
-
-
-def _tangent_agreement(
-    aggregated: AggregatedMechanismModel,
-    q0: tuple[float, ...],
-) -> float:
-    """Identity chart: reduced and source share the same J_p null tangent."""
-    t_source = fixed_position_tangent(aggregated.chain, q0)
-    q_red = aggregated.lift_source_to_reduced(q0)
-    q_emb = aggregated.embed_reduced_to_source(q_red)
-    t_reduced = fixed_position_tangent(aggregated.chain, q_emb)
-    return float(min(np.linalg.norm(t_source - t_reduced), np.linalg.norm(t_source + t_reduced)))
-
-
-def _fiber_compare(
-    model: OpenChainModel,
-    aggregated: AggregatedMechanismModel,
-    q0: tuple[float, ...],
-    *,
-    n_steps: int,
-    step_size: float,
-) -> dict[str, Any]:
-    fiber = continue_fixed_position_fiber(
-        model,
-        q0,
-        n_steps=n_steps,
-        step_size=step_size,
-        component_id=f"{model.architecture_id}_agg_component0",
+    exact = sorted(
+        (candidate for candidate in candidates if candidate.exact_u_candidate),
+        key=lambda candidate: candidate.pair_index,
     )
-    p_star = np.asarray(fiber.p_star, dtype=float)
-    max_p = 0.0
-    max_pointing = 0.0
-    max_map = 0.0
-    n_ok = 0
-    for step in fiber.accepted_samples:
-        if step.q is None:
-            continue
-        q_s = step.q
-        q_r = aggregated.lift_source_to_reduced(q_s)
-        q_e = aggregated.embed_reduced_to_source(q_r)
-        max_map = max(max_map, float(np.linalg.norm(np.asarray(q_s) - np.asarray(q_e))))
-        state_s = aggregated.chain.evaluate(q_s)
-        state_r = aggregated.chain.evaluate(q_e)
-        max_p = max(max_p, float(np.linalg.norm(state_s.p - p_star)))
-        max_p = max(max_p, float(np.linalg.norm(state_r.p - p_star)))
-        max_pointing = max(max_pointing, float(np.linalg.norm(state_s.d - state_r.d)))
-        n_ok += 1
-    return {
-        "fiber": fiber,
-        "accepted_samples": n_ok,
-        "branch_status": fiber.branch_status,
-        "max_position_residual_m": max_p,
-        "max_pointing_residual": max_pointing,
-        "max_joint_map_residual": max_map,
-        "seed_rank": fiber.seed_audit.rank_jp,
-        "seed_nullity": fiber.seed_audit.nullity_jp,
-        "seed_regular": fiber.seed_audit.regular,
-    }
+    return exact[0] if exact else None
 
 
 def issue_axis_aggregation_certificate(
@@ -183,194 +134,148 @@ def issue_axis_aggregation_certificate(
     parallel_tol: float = PARALLEL_CROSS_TOL,
     orthogonality_tol: float = ORTHOGONALITY_DOT_TOL,
 ) -> DecompositionCertificate:
-    """Detect exact RR→U aggregation and certify the proximal chart when present."""
+    """Certify exact axis regrouping without overstating loop equivalence.
+
+    ``n_fiber_steps`` and ``fiber_step_size`` are accepted for API compatibility
+    but are not used to promote the certificate.  Independent reduced-closure
+    continuation is a separate implementation gate.
+    """
+    _ = (n_fiber_steps, fiber_step_size)
     problem = pose_fixed_position_problem(model, q0)
-    home_cands = detect_exact_u_pairs(
+    seed_audit = audit_fixed_position_seed(problem)
+    home_candidates = detect_exact_u_pairs(
         model,
         q=None,
         distance_tol_m=distance_tol_m,
         parallel_tol=parallel_tol,
         orthogonality_tol=orthogonality_tol,
     )
-    seed_cands = detect_exact_u_pairs(
+    seed_candidates = detect_exact_u_pairs(
         model,
         q=q0,
         distance_tol_m=distance_tol_m,
         parallel_tol=parallel_tol,
         orthogonality_tol=orthogonality_tol,
     )
-    candidate = _best_exact_candidate(home_cands) or _best_exact_candidate(seed_cands)
+    candidate = _best_exact_candidate(home_candidates)
 
     base_kinds = ("S_v",) + model.joint_kind_sequence
     base_roles = ("S_v",) + model.joint_role_sequence
     problem_id = f"{model.architecture_id}_pstar"
     component_id = f"{model.architecture_id}_component0"
+    rank_checks = {
+        "rank_jp": seed_audit.rank_jp,
+        "nullity_jp": seed_audit.nullity_jp,
+        "regular": seed_audit.regular,
+        "seed_status": seed_audit.status,
+        "motion_signature": seed_audit.motion_signature,
+        "finite_difference_jp_error_fro": seed_audit.finite_difference_jp_error_fro,
+        "finite_difference_verified": seed_audit.finite_difference_verified,
+        "p_star": list(problem.p_star),
+    }
 
     if candidate is None:
-        best = min(home_cands, key=lambda c: (c.distance_m, c.orthogonality_abs_dot))
+        best = min(
+            home_candidates,
+            key=lambda item: (item.distance_m, item.orthogonality_abs_dot),
+        )
         return DecompositionCertificate(
             source_chain_id=model.architecture_id,
             fixed_position_problem_id=problem_id,
             source_component_id=component_id,
-            source_mobility=1,
+            source_mobility=max(0, seed_audit.nullity_jp),
             joint_kind_sequence=base_kinds,
             joint_role_sequence=base_roles,
             cyclic_origin_role="S_v",
-            designated_task_joint_role="none",
+            designated_task_joint_role="tool_frame",
             reduction_operations=("axis_aggregation",),
             reduced_topology="none",
             coordinate_map="none",
             inverse_or_reconstruction_map="none",
-            task_map="p(q)=p*",
-            rank_and_nullity_checks={},
-            closure_residuals={
+            task_map="tool orientation R(q) on p(q)=p*",
+            rank_and_nullity_checks=rank_checks,
+            coordinate_regrouping_residuals={
                 "best_pair_distance_m": best.distance_m,
                 "best_pair_orthogonality_abs_dot": best.orthogonality_abs_dot,
                 "best_pair_parallelism_residual": best.parallelism_residual,
             },
-            tangent_subspace_error=float("nan"),
-            trajectory_reconstruction_error=float("nan"),
-            component_correspondence="none",
+            closure_residuals={},
+            tangent_subspace_error=None,
+            trajectory_position_error_m=None,
+            trajectory_pointing_error=None,
+            trajectory_joint_map_error_rad=None,
+            component_correspondence="not_applicable",
             joint_limit_correspondence="not_modeled",
+            axis_aggregation_status="REJECTED",
+            closed_mechanism_status="UNRESOLVED",
             status="REJECTED",
             failure_or_scope_reason=(
-                "No consecutive exact intersecting orthogonal RR pair "
-                f"(distance_tol={distance_tol_m}, orthogonality_tol={orthogonality_tol})."
+                "No consecutive exact intersecting orthogonal RR pair; "
+                "there is no exact U_phys aggregation candidate."
             ),
-            candidates=home_cands,
+            candidates=home_candidates,
             aggregated=None,
             evidence={
-                "home_candidates": [c.to_json_dict() for c in home_cands],
-                "seed_candidates": [c.to_json_dict() for c in seed_cands],
+                "home_candidates": [candidate.to_json_dict() for candidate in home_candidates],
+                "seed_candidates": [candidate.to_json_dict() for candidate in seed_candidates],
             },
-        )
-
-    if candidate.pair_index != 0:
-        return DecompositionCertificate(
-            source_chain_id=model.architecture_id,
-            fixed_position_problem_id=problem_id,
-            source_component_id=component_id,
-            source_mobility=1,
-            joint_kind_sequence=base_kinds,
-            joint_role_sequence=base_roles,
-            cyclic_origin_role="S_v",
-            designated_task_joint_role="none",
-            reduction_operations=("axis_aggregation",),
-            reduced_topology=f"pair_{candidate.pair_index}",
-            coordinate_map="unverified_non_proximal",
-            inverse_or_reconstruction_map="unverified_non_proximal",
-            task_map="p(q)=p*",
-            rank_and_nullity_checks={},
-            closure_residuals={
-                "pair_distance_m": candidate.distance_m,
-                "orthogonality_abs_dot": candidate.orthogonality_abs_dot,
-            },
-            tangent_subspace_error=float("nan"),
-            trajectory_reconstruction_error=float("nan"),
-            component_correspondence="unverified",
-            joint_limit_correspondence="not_modeled",
-            status="UNRESOLVED",
-            failure_or_scope_reason=(
-                "Exact U candidate found at non-proximal pair; "
-                "S_v-U_phys-R-R embedding MVP only supports pair_index=0."
-            ),
-            candidates=home_cands,
-            aggregated=None,
-            evidence={"candidate": candidate.to_json_dict()},
         )
 
     aggregated = build_aggregated_mechanism(model, candidate)
-    fk = fk_identity_residuals(aggregated, q0)
-    tangent_err = _tangent_agreement(aggregated, q0)
+    regrouping_residuals: dict[str, float] = {}
+    if candidate.pair_index == 0:
+        regrouping_residuals = fk_identity_residuals(aggregated, q0)
 
-    fiber_info = _fiber_compare(
-        model,
-        aggregated,
-        q0,
-        n_steps=n_fiber_steps,
-        step_size=fiber_step_size,
+    topology = aggregated.family_label
+    reason = (
+        "Exact global physical-axis regrouping is established for the consecutive RR pair. "
+        "Independent closed-loop construction, continuation, tangent comparison, and complete "
+        "component correspondence have not yet been performed; the closed-mechanism "
+        "decomposition therefore remains UNRESOLVED."
     )
-    fiber = fiber_info.pop("fiber")
-    traj_err = float(
-        max(
-            fiber_info["max_position_residual_m"],
-            fiber_info["max_pointing_residual"],
-            fiber_info["max_joint_map_residual"],
-        )
-    )
-
-    fk_ok = (
-        fk["position_residual_m"] <= FK_POSITION_TOL_M
-        and fk["rotation_frobenius"] <= FK_ROTATION_TOL
-        and fk["joint_map_residual"] <= FK_POSITION_TOL_M
-    )
-    tangent_ok = tangent_err <= TANGENT_AGREEMENT_TOL
-    fiber_ok = (
-        fiber_info["seed_regular"]
-        and fiber_info["accepted_samples"] >= 3
-        and fiber_info["max_position_residual_m"] <= FIBER_POSITION_TOL_M
-        and fiber_info["max_pointing_residual"] <= FIBER_POINTING_TOL
-        and fiber_info["max_joint_map_residual"] <= FK_POSITION_TOL_M
-    )
-
-    if fk_ok and tangent_ok and fiber_ok:
-        status = "EXACT_ON_COMPONENT"
-        reason = (
-            "Proximal exact RR→U aggregation certified on the scoped ±-ray fiber component. "
-            "Multi-component completeness and EXACT_GLOBAL remain unverified."
-        )
-    elif fk_ok and tangent_ok:
-        status = "LOCAL_ONLY"
-        reason = (
-            "FK/tangent identity holds at the seed, but scoped fiber comparison "
-            f"did not meet tolerances (branch={fiber_info['branch_status']})."
-        )
-    else:
-        status = "REJECTED"
-        reason = (
-            "Exact geometric U candidate failed FK/tangent/fiber residual gates "
-            f"(fk_ok={fk_ok}, tangent_ok={tangent_ok}, fiber_ok={fiber_ok})."
-        )
-
     return DecompositionCertificate(
         source_chain_id=model.architecture_id,
         fixed_position_problem_id=problem_id,
-        source_component_id=fiber.component_id,
-        source_mobility=1 if fiber_info["seed_nullity"] == 1 else fiber_info["seed_nullity"],
+        source_component_id=component_id,
+        source_mobility=max(0, seed_audit.nullity_jp),
         joint_kind_sequence=aggregated.joint_kind_sequence,
         joint_role_sequence=aggregated.joint_role_sequence,
         cyclic_origin_role="S_v",
-        designated_task_joint_role="U_phys",
-        reduction_operations=("axis_aggregation",),
-        reduced_topology=aggregated.family_label,
-        coordinate_map="q_source=(α,β,q3,q4)=q_reduced (identity proximal chart)",
-        inverse_or_reconstruction_map="identity",
-        task_map="p(q)=p*",
-        rank_and_nullity_checks={
-            "rank_jp": fiber_info["seed_rank"],
-            "nullity_jp": fiber_info["seed_nullity"],
-            "regular": fiber_info["seed_regular"],
-            "p_star": list(problem.p_star),
-        },
-        closure_residuals=fk,
-        tangent_subspace_error=tangent_err,
-        trajectory_reconstruction_error=traj_err,
-        component_correspondence="scoped_pm_ray_identity_chart",
-        joint_limit_correspondence="not_modeled",
-        status=status,
+        designated_task_joint_role="tool_frame",
+        reduction_operations=("axis_aggregation", "closed_mechanism_decomposition"),
+        reduced_topology=topology,
+        coordinate_map=(
+            "exact scalar regrouping of consecutive physical RR coordinates as ordered U_phys"
+        ),
+        inverse_or_reconstruction_map="identity scalar-coordinate expansion for axis regrouping",
+        task_map="tool orientation R(q) on p(q)=p*",
+        rank_and_nullity_checks=rank_checks,
+        coordinate_regrouping_residuals=regrouping_residuals,
+        closure_residuals={},
+        tangent_subspace_error=None,
+        trajectory_position_error_m=None,
+        trajectory_pointing_error=None,
+        trajectory_joint_map_error_rad=None,
+        component_correspondence="not_evaluated_with_independent_reduced_mechanism",
+        joint_limit_correspondence=(
+            "not_modeled; exact regrouping assumes original coordinate order and identical limits"
+        ),
+        axis_aggregation_status="EXACT_GLOBAL",
+        closed_mechanism_status="UNRESOLVED",
+        status="UNRESOLVED",
         failure_or_scope_reason=reason,
-        candidates=home_cands,
+        candidates=home_candidates,
         aggregated=aggregated,
         evidence={
-            "fk": fk,
-            "fiber_compare": fiber_info,
-            "home_candidates": [c.to_json_dict() for c in home_cands],
-            "seed_candidates": [c.to_json_dict() for c in seed_cands],
+            "home_candidates": [item.to_json_dict() for item in home_candidates],
+            "seed_candidates": [item.to_json_dict() for item in seed_candidates],
+            "coordinate_regrouping_diagnostic_only": regrouping_residuals,
+            "independent_reduced_solve_present": False,
             "roles_guard": {
                 "has_S_v": "S_v" in aggregated.joint_role_sequence,
                 "has_U_phys": "U_phys" in aggregated.joint_role_sequence,
                 "forbids_U_v": "U_v" not in aggregated.joint_role_sequence,
-                "forbids_tool_a": "tool_a" not in aggregated.joint_role_sequence,
+                "designated_task_is_not_U_phys": True,
             },
         },
     )

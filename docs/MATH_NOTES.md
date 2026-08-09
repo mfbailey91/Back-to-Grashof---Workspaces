@@ -454,3 +454,40 @@ UNRESOLVED
 ```
 
 rather than an unqualified exact theorem.
+
+---
+
+## 17. V05 pseudo-arclength correction and derivative policy
+
+<!-- V05_AUDIT_CORRECTION_2026_08_08 -->
+
+For a spatial-4R fixed-position fiber, solve
+
+\[
+G(q)=
+\begin{bmatrix}
+p(q)-p^*\\
+t_k^T(q-q_{\mathrm{pred}})
+\end{bmatrix}=0
+\]
+
+with Newton matrix
+
+\[
+DG(q)=
+\begin{bmatrix}
+J_p(q)\\
+t_k^T
+\end{bmatrix}.
+\]
+
+The arclength equation selects a unique corrected point from the one-dimensional position level set and avoids treating a single joint as a global parameter.
+
+The project does not require a hand-derived Jacobian as a matter of principle. Finite differences, automatic differentiation, secant/Broyden approximations, or derivative-free local solvers may be used. However, the following structural quantities require derivative information or an approximation:
+
+- local rank and fiber dimension;
+- null tangent;
+- pseudo-arclength correction;
+- singularity and conditioning diagnostics.
+
+The active implementation uses the analytical geometric Jacobian and independently checks it against a central finite-difference Jacobian.

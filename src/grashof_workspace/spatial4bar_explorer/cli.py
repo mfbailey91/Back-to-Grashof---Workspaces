@@ -160,7 +160,7 @@ def build_readouts(outdir: Path, sample_count: int) -> None:
         animation_relpaths.append((family.value, str(animation_plot.relative_to(outdir))))
 
     axis_drive_cards: list[tuple[str, str, str, str, str, str, str, bool, bool]] = []
-    axis_drive_traces = []
+    axis_drive_traces: list[object] = []
     for family in ORDERED_FAMILIES:
         geometry = canonical_by_family[family]
         trace_a = drive_tool_axis(geometry, ToolAxis.A)

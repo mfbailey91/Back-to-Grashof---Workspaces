@@ -39,6 +39,13 @@ markers = [
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+exclude = [
+  ".venv",
+  "v05_review_patch",
+  "kinematic_decomposition_project_handoff",
+  "build",
+  "outputs",
+]
 
 [tool.mypy]
 python_version = "3.12"

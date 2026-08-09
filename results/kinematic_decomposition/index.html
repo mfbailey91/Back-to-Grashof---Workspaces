@@ -42,20 +42,24 @@
   Exports are <strong>not</strong> coverage certificates for <code>SO(3)</code> or <code>S²</code>.
   Explorer <code>spatial4bar_explorer/v05a</code> remains <code>mechanism_explorer_only</code>
   and is <strong>not</strong> this ladder.
+  <strong>V05 scientific gate: HOLD</strong> pending an independently instantiated and continued
+  reduced closed mechanism (exact axis aggregation alone is not closed-mechanism equivalence).
 </div>
 
 <h2>Thesis</h2>
-<pre>OpenChainModel (spatial 4R)
+<pre>OpenChainModel (spatial 4R, off-axis tool)
   → FixedPositionProblem + S_v
   → FixedPositionFiberResult (V05B)
-  → OrientationImageResult / PointingImageResult (V05C)
-  → DecompositionCertificate via axis_aggregation (V05D)
+  → classified OrientationImageResult / PointingImageResult (V05C)
+  → DecompositionCertificate: axis_aggregation vs closed_mechanism (V05D)
   → near-aligned REJECTED + false_u_surrogate diagnostic (V05E)
-  → V06 spatial 5R parent …</pre>
+  → V06 scaffold only until V05 gate closes</pre>
 <p>
 Docs:
 <a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
 · <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
+· <a href="../../docs/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
+· <a href="../../docs/JACOBIAN_AND_DERIVATIVE_POLICY.md">JACOBIAN_AND_DERIVATIVE_POLICY.md</a>
 · <a href="../../docs/DECISIONS.md">DECISIONS.md</a>
 </p>
 
@@ -63,9 +67,10 @@ Docs:
 <p>Synthetic spatial-4R members used by the active ladder:</p>
 <table>
   <tr><th>Architecture</th><th>Role</th></tr>
-  <tr><td><code>generic_4r</code></td><td>No intentional consecutive intersecting pairs (exterior for aggregation)</td></tr>
-  <tr><td><code>exact_u_pair_4r</code></td><td>Exact proximal orthogonal intersecting RR → U_phys (V05D pass)</td></tr>
-  <tr><td><code>near_aligned_u_pair_4r</code></td><td>Near-miss pair; must reject as exact U (V05E)</td></tr>
+  <tr><td><code>generic_4r</code></td><td>Off-axis active source; no intentional consecutive intersecting pairs</td></tr>
+  <tr><td><code>terminal_roll_control_4r</code></td><td>On-axis aligned terminal-roll control (PURE_TERMINAL_ROLL)</td></tr>
+  <tr><td><code>exact_u_pair_4r</code></td><td>Off-axis exact proximal RR→U_phys geometry</td></tr>
+  <tr><td><code>near_aligned_u_pair_4r</code></td><td>Off-axis near-miss pair; must reject as exact U</td></tr>
   <tr><td><code>singular_4r_parallel</code></td><td>Rank-deficient exterior for fixed-position regularity</td></tr>
 </table>
 
@@ -74,25 +79,25 @@ Docs:
   <tr><th>Sprint</th><th>Status</th><th>Primary HTML</th><th>JSON</th></tr>
   <tr>
     <td>V05B</td>
-    <td class="status pass">DONE</td>
+    <td class="status pass">AUDIT-CORRECTED MVP</td>
     <td><a href="v05b/sprint_v05b_fixed_position_fiber.html">sprint_v05b_fixed_position_fiber.html</a></td>
     <td><a href="v05b/data/v05b_fixed_position_fibers.json">v05b_fixed_position_fibers.json</a></td>
   </tr>
   <tr>
     <td>V05C</td>
-    <td class="status pass">DONE</td>
+    <td class="status pass">AUDIT-CORRECTED MVP</td>
     <td><a href="v05c/sprint_v05c_orientation_curve.html">sprint_v05c_orientation_curve.html</a></td>
     <td><a href="v05c/data/v05c_orientation_curves.json">v05c_orientation_curves.json</a></td>
   </tr>
   <tr>
     <td>V05D</td>
-    <td class="status pass">DONE</td>
+    <td class="status pass">AUDIT-CORRECTED MVP</td>
     <td><a href="v05d/sprint_v05d_axis_aggregation.html">sprint_v05d_axis_aggregation.html</a></td>
     <td><a href="v05d/data/v05d_axis_aggregation.json">v05d_axis_aggregation.json</a></td>
   </tr>
   <tr>
     <td>V05E</td>
-    <td class="status pass">DONE</td>
+    <td class="status pass">AUDIT-CORRECTED MVP</td>
     <td><a href="v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a></td>
     <td><a href="v05e/data/v05e_near_aligned_rejection.json">v05e_near_aligned_rejection.json</a></td>
   </tr>
@@ -106,7 +111,8 @@ PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir res
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V06</strong> — spatial 5R fixed-position parent and pointing image (M = 2 at regular seeds).</p>
+<p><strong>V06</strong> — spatial 5R fixed-position parent scaffold only until the V05 closed-mechanism gate closes.
+Scientific V06 claims remain <strong>BLOCKED</strong>.</p>
 
 <p class="meta" style="margin-top:2rem;">
   Project dashboard (explorer + ladder):

@@ -16,7 +16,8 @@ def test_render_explorer_index_mentions_active_ladder() -> None:
     assert "near-aligned" in html.casefold() or "near_aligned" in html
     assert "V06" in html
     assert "mechanism_explorer_only" in html
-    assert "Active V05B–E" in html or "Active V05B" in html
+    assert "V05B–E audit-corrected MVP" in html or "Active V05B" in html or "audit-corrected MVP" in html
+    assert "V05 gate held" in html or "gate HOLD" in html or "HOLD" in html
 
 
 def test_render_kd_hub_mentions_certificate_and_next() -> None:

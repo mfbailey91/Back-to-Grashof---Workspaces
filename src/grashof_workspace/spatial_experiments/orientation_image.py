@@ -6,16 +6,19 @@ Conventions
 - Quaternions are ``(w, x, y, z)`` with unit norm; adjacent samples are
   sign-stabilized so ``q_k · q_{k-1} ≥ 0``.
 - Rotation vectors are ``θ u`` with ``θ ∈ [0, π]`` from the matrix logarithm.
-- Pointing ``d`` is the unit tool axis in world frame (third column of ``R``
-  when the home pointing is local ``z``, but here taken from fiber samples).
-- These objects are **orientation-curve / pointing-curve truth**, not coverage
-  certificates for ``SO(3)`` or ``S^2``.
+- Pointing ``d`` is the selected unit tool axis in world frame.
+- These objects are orientation/pointing *curve truth*, not coverage
+  certificates for ``SO(3)`` or ``S²``.
+
+V05 classifies the observed one-dimensional image so a pure terminal-roll orbit
+cannot be confused with a nontrivial spatial-4R pointing curve.
 """
 
 from __future__ import annotations
 
 import math
 from dataclasses import asdict, dataclass
+from itertools import pairwise
 from typing import Any
 
 import numpy as np
@@ -34,6 +37,18 @@ NEAR_SINGULAR_SIGMA_TOL = 1e-6
 POINTING_MATCH_TOL = 1e-6
 ORIENTATION_MATCH_TOL = 1e-6
 MULTIPLICITY_SCAN_CAP = 200
+CURVE_ZERO_TOL_RAD = 1e-8
+POINTING_CURVE_TOL_RAD = 1e-5
+FIXED_AXIS_DRIFT_TOL_RAD = 5e-3
+
+CURVE_TYPES = (
+    "PURE_TERMINAL_ROLL",
+    "FIXED_AXIS_ONE_PARAMETER_SUBGROUP",
+    "NONTRIVIAL_POINTING_CURVE",
+    "DEGENERATE_ORIENTATION_POINT",
+    "SINGULAR_OR_EMPTY",
+    "UNRESOLVED",
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -58,6 +73,17 @@ class MultiplicityReport:
 
 
 @dataclass(frozen=True, slots=True)
+class OrientationCurveMetrics:
+    curve_type: str
+    orientation_path_length_rad: float
+    pointing_path_length_rad: float
+    max_pointing_displacement_rad: float
+    incremental_axis_drift_rad: float | None
+    first_increment_axis_world: tuple[float, float, float] | None
+    notes: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class OrientationImageResult:
     architecture_id: str
     component_id: str
@@ -66,7 +92,12 @@ class OrientationImageResult:
     samples: tuple[OrientationSample, ...]
     multiplicity: MultiplicityReport
     near_singular_count: int
+    metrics: OrientationCurveMetrics
     notes: tuple[str, ...]
+
+    @property
+    def curve_type(self) -> str:
+        return self.metrics.curve_type
 
     def to_json_dict(self) -> dict[str, Any]:
         return {
@@ -74,8 +105,10 @@ class OrientationImageResult:
             "component_id": self.component_id,
             "p_star": self.p_star,
             "status": self.status,
+            "curve_type": self.curve_type,
             "sample_count": len(self.samples),
             "near_singular_count": self.near_singular_count,
+            "metrics": asdict(self.metrics),
             "multiplicity": asdict(self.multiplicity),
             "notes": list(self.notes),
             "samples": [asdict(sample) for sample in self.samples],
@@ -90,6 +123,8 @@ class PointingImageResult:
     status: str
     points: tuple[tuple[float, float, float], ...]
     sigma: tuple[float, ...]
+    path_length_rad: float
+    max_displacement_rad: float
     notes: tuple[str, ...]
 
     def to_json_dict(self) -> dict[str, Any]:
@@ -101,11 +136,19 @@ class PointingImageResult:
             "point_count": len(self.points),
             "points": [list(p) for p in self.points],
             "sigma": list(self.sigma),
+            "path_length_rad": self.path_length_rad,
+            "max_displacement_rad": self.max_displacement_rad,
             "notes": list(self.notes),
         }
 
 
-def rotation_matrix_to_quaternion(R: Mat | tuple[tuple[float, float, float], ...]) -> tuple[float, float, float, float]:
+def _clamped_acos(value: float) -> float:
+    return float(math.acos(max(-1.0, min(1.0, value))))
+
+
+def rotation_matrix_to_quaternion(
+    R: Mat | tuple[tuple[float, float, float], ...],
+) -> tuple[float, float, float, float]:
     """Convert ``R ∈ SO(3)`` to unit quaternion ``(w, x, y, z)``."""
     m = np.asarray(R, dtype=float).reshape(3, 3)
     trace = float(np.trace(m))
@@ -153,7 +196,9 @@ def quaternion_to_rotation_matrix(q: tuple[float, float, float, float] | Vec) ->
     )
 
 
-def rotation_matrix_to_rotvec(R: Mat | tuple[tuple[float, float, float], ...]) -> tuple[float, float, float]:
+def rotation_matrix_to_rotvec(
+    R: Mat | tuple[tuple[float, float, float], ...],
+) -> tuple[float, float, float]:
     """Return rotation vector ``θ u`` with ``θ ∈ [0, π]``."""
     axis, angle = axis_angle_from_rotation(np.asarray(R, dtype=float).reshape(3, 3))
     vec = axis * float(angle)
@@ -180,11 +225,19 @@ def _frobenius_rotation_distance(Ra: Mat, Rb: Mat) -> float:
     return float(np.linalg.norm(Ra - Rb, ord="fro"))
 
 
+def _rotation_geodesic(Ra: Mat, Rb: Mat) -> float:
+    relative = Rb @ Ra.T
+    return _clamped_acos((float(np.trace(relative)) - 1.0) * 0.5)
+
+
+def _pointing_geodesic(a: Vec, b: Vec) -> float:
+    return _clamped_acos(float(np.dot(a, b)))
+
+
 def _multiplicity_report(samples: tuple[OrientationSample, ...]) -> MultiplicityReport:
     n = len(samples)
     if n < 2:
         return MultiplicityReport(0, 0, ("Fewer than two samples; multiplicity not assessed.",))
-    # Cap pairwise scan for large fibers.
     idxs = list(range(n))
     if n > MULTIPLICITY_SCAN_CAP:
         step = max(1, n // MULTIPLICITY_SCAN_CAP)
@@ -205,12 +258,80 @@ def _multiplicity_report(samples: tuple[OrientationSample, ...]) -> Multiplicity
                 same_d_diff_r += 1
             if r_close and not d_close:
                 same_r_diff_d += 1
-    notes = (
-        "Pairwise scan over fiber samples (possibly subsampled).",
-        "same_pointing_distinct_orientation indicates roll-like multiplicity about d.",
-        "Not a coverage claim.",
+    return MultiplicityReport(
+        same_d_diff_r,
+        same_r_diff_d,
+        (
+            "Pairwise scan over fiber samples (possibly subsampled).",
+            "same_pointing_distinct_orientation indicates roll-like multiplicity about d.",
+            "Not a coverage claim.",
+        ),
     )
-    return MultiplicityReport(same_d_diff_r, same_r_diff_d, notes)
+
+
+def _curve_metrics(samples: tuple[OrientationSample, ...]) -> OrientationCurveMetrics:
+    if not samples:
+        return OrientationCurveMetrics(
+            curve_type="SINGULAR_OR_EMPTY",
+            orientation_path_length_rad=0.0,
+            pointing_path_length_rad=0.0,
+            max_pointing_displacement_rad=0.0,
+            incremental_axis_drift_rad=None,
+            first_increment_axis_world=None,
+            notes=("No regular orientation samples.",),
+        )
+
+    Rs = [np.asarray(sample.R, dtype=float) for sample in samples]
+    ds = [np.asarray(sample.d, dtype=float) for sample in samples]
+    orientation_length = sum(_rotation_geodesic(a, b) for a, b in pairwise(Rs))
+    pointing_length = sum(_pointing_geodesic(a, b) for a, b in pairwise(ds))
+    max_pointing = max((_pointing_geodesic(ds[0], d) for d in ds), default=0.0)
+
+    increment_axes: list[np.ndarray] = []
+    for Ra, Rb in pairwise(Rs):
+        relative_world = Rb @ Ra.T
+        axis, angle = axis_angle_from_rotation(relative_world)
+        if abs(float(angle)) <= CURVE_ZERO_TOL_RAD:
+            continue
+        axis_arr = np.asarray(axis, dtype=float)
+        if increment_axes and float(np.dot(increment_axes[-1], axis_arr)) < 0.0:
+            axis_arr = -axis_arr
+        increment_axes.append(axis_arr)
+
+    axis_drift: float | None = None
+    first_axis: tuple[float, float, float] | None = None
+    if increment_axes:
+        first = increment_axes[0]
+        first_axis = (float(first[0]), float(first[1]), float(first[2]))
+        axis_drift = max(
+            (_clamped_acos(abs(float(np.dot(first, axis)))) for axis in increment_axes),
+            default=0.0,
+        )
+
+    if orientation_length <= CURVE_ZERO_TOL_RAD:
+        curve_type = "DEGENERATE_ORIENTATION_POINT"
+    elif pointing_length <= POINTING_CURVE_TOL_RAD and max_pointing <= POINTING_CURVE_TOL_RAD:
+        curve_type = "PURE_TERMINAL_ROLL"
+    elif axis_drift is not None and axis_drift <= FIXED_AXIS_DRIFT_TOL_RAD:
+        curve_type = "FIXED_AXIS_ONE_PARAMETER_SUBGROUP"
+    elif pointing_length > POINTING_CURVE_TOL_RAD:
+        curve_type = "NONTRIVIAL_POINTING_CURVE"
+    else:
+        curve_type = "UNRESOLVED"
+
+    return OrientationCurveMetrics(
+        curve_type=curve_type,
+        orientation_path_length_rad=float(orientation_length),
+        pointing_path_length_rad=float(pointing_length),
+        max_pointing_displacement_rad=float(max_pointing),
+        incremental_axis_drift_rad=None if axis_drift is None else float(axis_drift),
+        first_increment_axis_world=first_axis,
+        notes=(
+            "Path lengths are sampled geodesic sums, not global coverage measures.",
+            "PURE_TERMINAL_ROLL means orientation changes while the selected pointing axis is fixed.",
+            "FIXED_AXIS_ONE_PARAMETER_SUBGROUP is a numerical diagnostic, not an analytical subgroup proof.",
+        ),
+    )
 
 
 def build_orientation_image(
@@ -222,7 +343,7 @@ def build_orientation_image(
     """Build orientation-curve truth from a fixed-position fiber result."""
     notes = [
         "Orientation-curve truth only; not an SO(3) coverage certificate.",
-        "Do not reduce the curve to a single scalar angle.",
+        "A scalar angle is used only when the curve type justifies it.",
         *fiber.notes,
     ]
     serial = None
@@ -233,6 +354,7 @@ def build_orientation_image(
 
     accepted = [step for step in fiber.accepted_samples if step.R is not None and step.d is not None]
     if fiber.seed_audit.status != "PASS" or not accepted:
+        metrics = _curve_metrics(())
         return OrientationImageResult(
             architecture_id=fiber.architecture_id,
             component_id=fiber.component_id,
@@ -241,6 +363,7 @@ def build_orientation_image(
             samples=(),
             multiplicity=MultiplicityReport(0, 0, ("No orientation samples.",)),
             near_singular_count=0,
+            metrics=metrics,
             notes=(*notes, "No accepted regular fiber samples for orientation export."),
         )
 
@@ -257,9 +380,7 @@ def build_orientation_image(
         assert step.R is not None and step.d is not None
         if serial is not None and step.q is not None:
             report = matrix_rank_report(position_jacobian(serial, step.q))
-            sigma_min = float(report.singular_values[-1]) if report.singular_values else 0.0
-            if report.rank >= 3 and len(report.singular_values) >= 3:
-                sigma_min = float(report.singular_values[2])
+            sigma_min = float(report.singular_values[2]) if report.rank >= 3 else 0.0
         else:
             sigma_min = 0.0 if step.rank_jp < 3 else float("nan")
         near = step.rank_jp < 3 or (not step.regular) or (
@@ -283,22 +404,24 @@ def build_orientation_image(
     sample_tuple = tuple(samples)
     multiplicity = _multiplicity_report(sample_tuple)
     near_count = sum(1 for sample in sample_tuple if sample.near_singular)
+    metrics = _curve_metrics(sample_tuple)
     return OrientationImageResult(
         architecture_id=fiber.architecture_id,
         component_id=fiber.component_id,
         p_star=fiber.p_star,
-        status="PASS",
+        status="EXPORTED",
         samples=sample_tuple,
         multiplicity=multiplicity,
         near_singular_count=near_count,
+        metrics=metrics,
         notes=tuple(notes),
     )
 
 
 def build_pointing_image(fiber: FixedPositionFiberResult) -> PointingImageResult:
-    """Build pointing-curve samples on ``S^2`` from the fiber (not coverage)."""
+    """Build pointing-curve samples on ``S²`` from the fiber (not coverage)."""
     notes = [
-        "Pointing-curve projection of the orientation image; not an S^2 coverage certificate.",
+        "Pointing-curve projection of the orientation image; not an S² coverage certificate.",
         *fiber.notes,
     ]
     accepted = [step for step in fiber.accepted_samples if step.d is not None]
@@ -310,16 +433,26 @@ def build_pointing_image(fiber: FixedPositionFiberResult) -> PointingImageResult
             status="FAIL" if fiber.seed_audit.status == "FAIL" else "EMPTY",
             points=(),
             sigma=(),
+            path_length_rad=0.0,
+            max_displacement_rad=0.0,
             notes=(*notes, "No accepted pointing samples."),
         )
     points = tuple(step.d for step in accepted if step.d is not None)
     sigma = tuple(step.sigma for step in accepted)
+    d_arrays = [np.asarray(point, dtype=float) for point in points]
+    path_length = sum(_pointing_geodesic(a, b) for a, b in pairwise(d_arrays))
+    max_displacement = max(
+        (_pointing_geodesic(d_arrays[0], d) for d in d_arrays),
+        default=0.0,
+    )
     return PointingImageResult(
         architecture_id=fiber.architecture_id,
         component_id=fiber.component_id,
         p_star=fiber.p_star,
-        status="PASS",
-        points=points,  # type: ignore[arg-type]
+        status="EXPORTED",
+        points=points,
         sigma=sigma,
+        path_length_rad=float(path_length),
+        max_displacement_rad=float(max_displacement),
         notes=tuple(notes),
     )

@@ -2,7 +2,6 @@ name: ci
 
 on:
   push:
-    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -24,11 +23,19 @@ jobs:
         run: ruff check .
       - name: Mypy
         run: mypy src
+      - name: V05 audit artifact smoke
+        env:
+          MPLBACKEND: Agg
+        run: |
+          python -m grashof_workspace.spatial_experiments.v05b --outdir outputs/v05b --n-steps 8 --step-size 0.03
+          python -m grashof_workspace.spatial_experiments.v05c --outdir outputs/v05c --n-steps 8 --step-size 0.03
+          python -m grashof_workspace.spatial_experiments.v05d --outdir outputs/v05d
+          python -m grashof_workspace.spatial_experiments.v05e --outdir outputs/v05e --n-fiber-steps 8 --fiber-step-size 0.03
       - name: Atlas generation
         run: grashof-workspace --atlas --output-dir outputs/atlas
-      - name: Upload atlas artifacts
+      - name: Upload diagnostic artifacts
         if: failure() || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
-          name: atlas-outputs
-          path: outputs/atlas
+          name: workspace-diagnostics
+          path: outputs/

@@ -22,6 +22,16 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
+from .axis_geometry import as_vec3
+
+
+def _as_int(value: object, default: int = 0) -> int:
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, (int, float)):
+        return int(value)
+    return default
+
 from .continuation import (
     MAX_CORRECTION_NORM_RAD,
     MAX_CORRECTOR_ITERS,
@@ -284,14 +294,14 @@ def sequential_fiber_step(
             step_index=step_index,
             q_pred=q_pred_tuple,
             q=q_corr,
-            d=tuple(float(x) for x in state.d),
+            d=as_vec3(state.d),
             p_residual_m=residual_p,
             h_residual=residual_h,
             corrector_iterations=iters_total,
             correction_norm=max_corr,
             step_reductions=reduction,
-            rank_jf=int(bundle.get("rank_jf", 0)),  # type: ignore[arg-type]
-            nullity_jf=int(bundle.get("nullity_jf", 0)),  # type: ignore[arg-type]
+            rank_jf=_as_int(bundle.get("rank_jf"), 0),
+            nullity_jf=_as_int(bundle.get("nullity_jf"), 0),
             tangent_dot=tangent_dot,
             regular=bool(bundle.get("regular", False)) and accepted,
             label=label,
@@ -351,14 +361,14 @@ def continue_fiber_ray(
             step_index=0,
             q_pred=q_cur,
             q=q_cur,
-            d=tuple(float(x) for x in state0.d),
+            d=as_vec3(state0.d),
             p_residual_m=seed_p,
             h_residual=seed_h,
             corrector_iterations=0,
             correction_norm=0.0,
             step_reductions=0,
-            rank_jf=int(seed_bundle["rank_jf"]),  # type: ignore[arg-type]
-            nullity_jf=int(seed_bundle["nullity_jf"]),  # type: ignore[arg-type]
+            rank_jf=_as_int(seed_bundle.get("rank_jf"), 0),
+            nullity_jf=_as_int(seed_bundle.get("nullity_jf"), 0),
             tangent_dot=1.0,
             regular=bool(seed_bundle["regular"]),
             label="seed" if seed_bundle["regular"] else str(seed_bundle["label"]),
@@ -392,10 +402,10 @@ def continue_fiber_ray(
     return (
         FiberPath(
             path_id=pid,
-            n=n_hat,
+            n=as_vec3(n_hat),
             c=c_val,
             q0=tuple(float(x) for x in q_arr),
-            p0=tuple(float(x) for x in p_target),
+            p0=as_vec3(p_target),
             q6_star=q6,
             steps=tuple(steps),
         ),
@@ -444,10 +454,10 @@ def continue_fiber(
     )
     return FiberSegment(
         q0=q0_t,
-        p0=tuple(float(x) for x in state0.p),
-        d0=tuple(float(x) for x in state0.d),
+        p0=as_vec3(state0.p),
+        d0=as_vec3(state0.d),
         q6_star=q0_t[-1],
-        n=n_hat,
+        n=as_vec3(n_hat),
         c=float(pointing_scalar(chain, q0_t, n_hat)),
         plus=plus,
         minus=minus,
@@ -530,7 +540,7 @@ def continue_joint_freeze_ray(
             step_index=0,
             q_pred=q_cur,
             q=q_cur,
-            d=tuple(float(x) for x in state0.d),
+            d=as_vec3(state0.d),
             p_residual_m=0.0,
             h_residual=0.0,
             corrector_iterations=0,
@@ -581,7 +591,7 @@ def continue_joint_freeze_ray(
             step_index=index,
             q_pred=tuple(float(x) for x in q_pred_full),
             q=q_corr,
-            d=tuple(float(x) for x in state.d),
+            d=as_vec3(state.d),
             p_residual_m=residual,
             h_residual=0.0,
             corrector_iterations=iters_total,
@@ -605,7 +615,7 @@ def continue_joint_freeze_ray(
         n=(float("nan"), float("nan"), float("nan")),
         c=float("nan"),
         q0=tuple(float(x) for x in q_arr),
-        p0=tuple(float(x) for x in p0),
+        p0=as_vec3(p0),
         q6_star=q6_star,
         steps=tuple(steps),
     )

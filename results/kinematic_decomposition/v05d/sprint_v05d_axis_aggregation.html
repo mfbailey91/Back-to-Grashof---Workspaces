@@ -1,42 +1,20 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Active V05D — Exact Axis Aggregation</title>
+<html lang="en"><head><meta charset="utf-8">
+<title>V05D — Exact Axis Aggregation Audit</title>
 <style>
-  body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
-  h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
-  table { border-collapse: collapse; width: 100%; margin: 0.75rem 0 1rem; }
-  th, td { border: 1px solid #bbb; padding: 0.4rem 0.55rem; text-align: left; font-size: 0.92em; }
-  th { background: #f3f3f3; }
-  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; }
-  .note { background: #f7f4ea; border-left: 3px solid #c4a35a; padding: 0.65rem 0.85rem; margin: 1rem 0; }
-</style>
-</head>
-<body>
-<h1>Active V05D — Exact Axis Aggregation</h1>
-<p>
-Exact consecutive <code>RR→U</code> aggregation on the spatial-4R corpus, issuing a
-<code>DecompositionCertificate</code> with role-aware <code>S_v-U_phys-R-R</code>
-(not explorer <code>U_v</code> / <code>tool_a</code> winding semantics).
-</p>
-<div class="note">
-<strong>Gate note.</strong>
-<code>exact_u_pair_4r</code> should certify on the scoped fiber component
-(<code>EXACT_ON_COMPONENT</code>); <code>generic_4r</code> is rejected.
-Multi-component completeness remains unverified. V05E near-aligned rejection is implemented.
-</div>
-<h2>Certificates</h2>
-<table>
-<tr><th>Architecture</th><th>Status</th><th>Topology</th><th>Roles</th><th>Tangent err</th><th>Trajectory err</th></tr>
-<tr><td><code>exact_u_pair_4r</code></td><td><code>EXACT_ON_COMPONENT</code></td><td><code>S_v-U_phys-R-R</code></td><td><code>S_v,U_phys,R_phys,R_phys</code></td><td>0.0</td><td>0.0</td></tr><tr><td><code>generic_4r</code></td><td><code>REJECTED</code></td><td><code>none</code></td><td><code>—</code></td><td>nan</td><td>nan</td></tr>
-</table>
-<h2>Figures</h2>
-<h3>exact_u_pair_4r pair geometry</h3><p><img src="figures/v05d_exact_u_pair_4r_pair_geometry.png" alt="exact_u_pair_4r pair geometry" style="max-width: 720px;"></p><h3>exact_u_pair_4r source vs reduced</h3><p><img src="figures/v05d_exact_u_pair_4r_source_reduced_residuals.png" alt="exact_u_pair_4r source vs reduced" style="max-width: 720px;"></p><h3>exact_u_pair_4r overlay</h3><p><img src="figures/v05d_exact_u_pair_4r_overlay.gif" alt="exact_u_pair_4r overlay" style="max-width: 720px;"></p><h3>generic_4r pair geometry</h3><p><img src="figures/v05d_generic_4r_pair_geometry.png" alt="generic_4r pair geometry" style="max-width: 720px;"></p><h3>generic_4r source vs reduced</h3><p><img src="figures/v05d_generic_4r_source_reduced_residuals.png" alt="generic_4r source vs reduced" style="max-width: 720px;"></p>
-<h2>Deferred</h2>
-<ul>
-<li>Non-proximal <code>S_v-R-U_phys-R</code> / <code>S_v-R-R-U_phys</code> embedding certificates</li>
-<li>Historical all-family winding atlas (V10)</li>
-</ul>
-</body>
-</html>
+body { font-family: Georgia, serif; max-width: 1000px; margin: 2rem auto; line-height: 1.45; }
+table { border-collapse: collapse; width: 100%; } th,td { border:1px solid #bbb; padding:.4rem; text-align:left; }
+code { font-family: ui-monospace, monospace; } .note { background:#f7f4ea; border-left:3px solid #c4a35a; padding:.7rem; }
+</style></head><body>
+<h1>V05D — Axis Aggregation and Decomposition Status</h1>
+<div class="note"><strong>Audit correction.</strong> Exact physical-axis regrouping and
+closed-mechanism equivalence are different claims. The exact proximal pair may receive
+<code>axis_aggregation_status=EXACT_GLOBAL</code>; the independently solved
+<code>S_v-U_phys-R-R</code> component remains <code>UNRESOLVED</code>.</div>
+<table><tr><th>Source</th><th>Axis aggregation</th><th>Closed mechanism</th><th>Overall</th><th>Topology</th><th>Roles</th><th>Source motion</th></tr><tr><td><code>exact_u_pair_4r</code></td><td><code>EXACT_GLOBAL</code></td><td><code>UNRESOLVED</code></td><td><code>UNRESOLVED</code></td><td><code>S_v-U_phys-R-R</code></td><td><code>S_v,U_phys,R_phys,R_phys</code></td><td><code>NONTRIVIAL_POINTING_CURVE</code></td></tr><tr><td><code>generic_4r</code></td><td><code>REJECTED</code></td><td><code>UNRESOLVED</code></td><td><code>REJECTED</code></td><td><code>none</code></td><td><code>—</code></td><td><code>NONTRIVIAL_POINTING_CURVE</code></td></tr></table>
+<h2>Diagnostics</h2><h3>exact_u_pair_4r pair geometry</h3><p><img src="figures/v05d_exact_u_pair_4r_pair_geometry.png" alt="exact_u_pair_4r pair geometry" style="max-width:720px"></p><h3>exact_u_pair_4r regrouping diagnostics</h3><p><img src="figures/v05d_exact_u_pair_4r_regrouping_diagnostics.png" alt="exact_u_pair_4r regrouping diagnostics" style="max-width:720px"></p><h3>generic_4r pair geometry</h3><p><img src="figures/v05d_generic_4r_pair_geometry.png" alt="generic_4r pair geometry" style="max-width:720px"></p><h3>generic_4r regrouping diagnostics</h3><p><img src="figures/v05d_generic_4r_regrouping_diagnostics.png" alt="generic_4r regrouping diagnostics" style="max-width:720px"></p>
+<h2>Next proof obligation</h2>
+<ol><li>Instantiate an independent expanded <code>S_v-U_phys-R-R</code> closure.</li>
+<li>Continue source and reduced components separately.</li>
+<li>Compare coordinate maps, tangent spaces, orientation task maps, complete component scope, and limits.</li></ol>
+</body></html>

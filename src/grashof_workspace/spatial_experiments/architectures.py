@@ -27,6 +27,7 @@ import numpy as np
 from .aligned_6r import frame_from_pointing
 from .axis_geometry import (
     AxisLine,
+    as_vec3,
     line_line_distance,
     parallelism_residual,
     point_axis_distance,
@@ -84,8 +85,8 @@ class IntersectingPairsAligned6R:
     def aligned(cls) -> IntersectingPairsAligned6R:
         axes = intersecting_pairs_home_axes()
         w6 = np.asarray(axes[5].w, dtype=float)
-        p0 = tuple(float(x) for x in (np.asarray(axes[5].r, dtype=float) + 0.05 * w6))
-        d0 = tuple(float(x) for x in w6)
+        p0 = as_vec3(np.asarray(axes[5].r, dtype=float) + 0.05 * w6)
+        d0 = as_vec3(w6)
         chain = SerialRevoluteChain(home_axes=axes, p0=p0, d0=d0, R0=frame_from_pointing(d0))
         return cls(chain=chain, task_point=p0, is_aligned=True)
 
@@ -110,8 +111,8 @@ class URLikeAligned6R:
     def aligned(cls) -> URLikeAligned6R:
         axes = urlike_home_axes()
         w6 = unit_vector(axes[5].w, name="w6")
-        p0 = tuple(float(x) for x in (np.asarray(WRIST, dtype=float) + TOOL_OFFSET_M * w6))
-        d0 = tuple(float(x) for x in w6)
+        p0 = as_vec3(np.asarray(WRIST, dtype=float) + TOOL_OFFSET_M * w6)
+        d0 = as_vec3(w6)
         chain = SerialRevoluteChain(home_axes=axes, p0=p0, d0=d0, R0=frame_from_pointing(d0))
         return cls(chain=chain, task_point=p0, is_aligned=True)
 

@@ -147,3 +147,10 @@ Use the following names consistently:
 - **pointing level-set fiber** for a one-dimensional child of a higher-dimensional pointing parent;
 - **dexterous workspace** only for full orientation coverage;
 - **pointing-complete workspace** for full `S^2` coverage when roll is excluded by task definition.
+
+## V05 audit correction references
+
+<!-- V05_AUDIT_CORRECTION_2026_08_08 -->
+
+- [`V05_AUDIT_CORRECTIONS.md`](V05_AUDIT_CORRECTIONS.md) — corrected source corpus, pseudo-arclength continuation, curve classification, certificate split, and boundary suite.
+- [`JACOBIAN_AND_DERIVATIVE_POLICY.md`](JACOBIAN_AND_DERIVATIVE_POLICY.md) — why derivative information is used and which derivative-free alternatives remain valid.

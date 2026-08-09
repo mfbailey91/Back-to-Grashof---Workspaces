@@ -141,3 +141,25 @@ with coordinate maps, reconstruction maps, component scope, rank checks, tangent
 **Decision:** Every compound-joint mechanism record stores both `joint_kind_sequence` and `joint_role_sequence`, including explicit roles such as `S_v`, `U_v`, `S_phys`, `U_phys`, and `R_phys`. The cyclic origin and designated task/winding joint are also recorded.
 
 **Reason:** A V05 source mechanism `S_v-U_phys-R-R` can be cyclically isomorphic to a `USRR`-class solver topology without being semantically equivalent to a V08 child `U_v-...` mechanism. The same joint letters can assign the virtual tool closure, physical axis aggregate, and designated winding coordinate to different joints. Solver topology may be reused; task interpretation may not.
+
+---
+
+## ADR-020 — Preserve terminal roll as a control, not the generic V05 source
+
+<!-- V05_AUDIT_CORRECTION_2026_08_08 -->
+
+**Decision:** Active spatial-4R V05 sources place the tool point transversely off the terminal axis. The original on-axis geometry is retained as `terminal_roll_control_4r`.
+
+**Reason:** With the tool point on the final axis and pointing collinear with it, the final position- and pointing-Jacobian columns vanish. At rank three / nullity one the fixed-position fiber is necessarily pure terminal roll, not a nontrivial coupled spatial self-motion.
+
+## ADR-021 — Separate exact axis aggregation from closed-mechanism equivalence
+
+**Decision:** `RR → U_phys` receives its own exact axis-aggregation status. An independently instantiated and continued `S_v-U_phys-R-R` mechanism receives a separate closed-mechanism status.
+
+**Reason:** Comparing a serial source chain to the same chain under an identity coordinate regrouping proves the regrouping but cannot prove source-component correspondence to an independent closed mechanism.
+
+## ADR-022 — Jacobians may be analytical, automatic, or numerical, but must be checked
+
+**Decision:** The continuation kernel may use an analytical geometric Jacobian, automatic differentiation, or a numerical derivative. The analytical V05 Jacobian is cross-checked against central finite differences at each seed.
+
+**Reason:** A derivative is not required merely to find one configuration, but rank, tangent, pseudo-arclength correction, conditioning, and singularity diagnostics require derivative information or an approximation to it.
