@@ -12,7 +12,10 @@ import numpy as np
 from matplotlib.animation import FuncAnimation, PillowWriter
 from PIL import Image
 
+from .planar_l3 import default_l3_calibration_payload
 from .registry import PARENT_CHILD_FAMILIES, RUNG_SPECS, program_payload
+from .spatial_l4 import default_l4_equivalence_payload
+from .spatial_l5 import default_l5_scaffold_payload
 from .u_drive import (
     conceptual_branch_samples,
     free_branch_contract,
@@ -167,6 +170,80 @@ def _family_rows() -> str:
     return "".join(rows)
 
 
+def _l3_calibration_rows(payload: dict[str, Any]) -> str:
+    calibration = payload.get("l3_calibration")
+    if not isinstance(calibration, dict):
+        return ""
+    summaries = calibration.get("summaries")
+    if not isinstance(summaries, list):
+        return ""
+    rows: list[str] = []
+    for entry in summaries:
+        if not isinstance(entry, dict):
+            continue
+        rows.append(
+            "<tr>"
+            f"<td><code>{entry.get('rho')}</code></td>"
+            f"<td><code>{entry.get('assemblable')}</code></td>"
+            f"<td><code>{entry.get('designated_input_can_fully_rotate')}</code></td>"
+            f"<td><code>{entry.get('dexterous')}</code></td>"
+            f"<td><code>{entry.get('decomposition_status')}</code></td>"
+            f"<td><code>{entry.get('predicate_reconstruction_match')}</code></td>"
+            "</tr>"
+        )
+    return "".join(rows)
+
+
+def _l4_equivalence_rows(payload: dict[str, Any]) -> str:
+    section = payload.get("l4_equivalence")
+    if not isinstance(section, dict):
+        return ""
+    summaries = section.get("summaries")
+    if not isinstance(summaries, list):
+        return ""
+    rows: list[str] = []
+    for entry in summaries:
+        if not isinstance(entry, dict):
+            continue
+        rows.append(
+            "<tr>"
+            f"<td><code>{entry.get('architecture_id')}</code></td>"
+            f"<td><code>{entry.get('axis_aggregation_status')}</code></td>"
+            f"<td><code>{entry.get('closed_mechanism_status')}</code></td>"
+            f"<td><code>{entry.get('orientation_curve_type')}</code></td>"
+            f"<td><code>{entry.get('reconstruction_status')}</code></td>"
+            f"<td><code>{entry.get('independent_reduced_solve_present')}</code></td>"
+            "</tr>"
+        )
+    return "".join(rows)
+
+
+def _l5_scaffold_rows(payload: dict[str, Any]) -> str:
+    section = payload.get("l5_scaffold")
+    if not isinstance(section, dict):
+        return ""
+    summary = section.get("summary")
+    if not isinstance(summary, dict):
+        return ""
+    families = summary.get("candidate_families")
+    family_list = (
+        ", ".join(f"<code>{name}</code>" for name in families)
+        if isinstance(families, list)
+        else ""
+    )
+    return (
+        "<tr>"
+        f"<td><code>{summary.get('architecture_id')}</code></td>"
+        f"<td><code>{summary.get('seed_rank_jp')}</code></td>"
+        f"<td><code>{summary.get('seed_nullity_jp')}</code></td>"
+        f"<td><code>{summary.get('seed_status')}</code></td>"
+        f"<td>{family_list}</td>"
+        f"<td><code>{summary.get('reconstruction_status')}</code></td>"
+        f"<td><code>{summary.get('process_status')}</code></td>"
+        "</tr>"
+    )
+
+
 def render_ladder_html(
     *,
     payload: dict[str, Any],
@@ -181,6 +258,72 @@ def render_ladder_html(
         'style="max-width: 760px;"></p>'
         if animation_name is not None
         else "<p><em>Animation generation disabled for this run.</em></p>"
+    )
+    l3_rows = _l3_calibration_rows(payload)
+    l3_section = (
+        """
+<h2>L3 planar calibration (trusted exact map)</h2>
+<p>
+Radius-level retrofit of the analytical planar 3R→4R result into shared ladder records.
+<code>EXACT_GLOBAL</code> certifies the map at each radius; dexterity/rotatability remain
+separate predicates. Process status stays <code>SCAFFOLD</code>. Active science remains
+V05–V09.
+</p>
+<table>
+<tr>
+<th>rho</th><th>assemblable</th><th>rotatable</th><th>dexterous</th>
+<th>map certificate</th><th>predicate match</th>
+</tr>
+"""
+        + l3_rows
+        + "</table>"
+        if l3_rows
+        else ""
+    )
+    l4_rows = _l4_equivalence_rows(payload)
+    l4_section = (
+        """
+<h2>L4 spatial 4R equivalence (wraps V05)</h2>
+<p>
+Shared ladder records for the existing V05 independent closed-mechanism evidence.
+Proximal <code>exact_u_pair_4r</code> is <code>EXACT_ON_COMPONENT</code> on the compared
+component; generic architectures do not promote a child. Process stays
+<code>SCAFFOLD</code>. Scientific source:
+<a href="../kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">V05D readout</a>.
+</p>
+<table>
+<tr>
+<th>architecture</th><th>axis aggregation</th><th>closed mechanism</th>
+<th>orientation curve</th><th>reconstruction</th><th>independent reduce</th>
+</tr>
+"""
+        + l4_rows
+        + "</table>"
+        if l4_rows
+        else ""
+    )
+    l5_rows = _l5_scaffold_rows(payload)
+    l5_section = (
+        """
+<h2>L5 spatial 5R scaffold (V06-mapped)</h2>
+<p>
+Architecture-scoped scaffold after the proximal exact-U gate: synthetic 5R seed audit
+(<code>rank Jp=3</code>, <code>nullity=2</code>) plus candidate letter families. This is
+<strong>not</strong> a 2D parent representation and <strong>not</strong> pointing-image
+reconstruction. All family certificates stay <code>UNRESOLVED</code>. V06A
+(<code>FixedPositionParentResult</code>) remains the next scientific step. Process status
+is <code>SCAFFOLD</code>.
+</p>
+<table>
+<tr>
+<th>architecture</th><th>seed rank Jp</th><th>seed nullity</th><th>seed status</th>
+<th>candidate families</th><th>reconstruction</th><th>process</th>
+</tr>
+"""
+        + l5_rows
+        + "</table>"
+        if l5_rows
+        else ""
     )
     return f"""<!doctype html>
 <html lang="en">
@@ -223,7 +366,7 @@ def render_ladder_html(
 <p>
 <strong>Active scientific sequence:</strong> <code>docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code>.
 This readout is an optional interface scaffold subordinate to that program. It does not demote
-the V05 closed-mechanism HOLD or promote L5–L7 claims.
+the V05 scoped closed-mechanism gate or promote L5–L7 claims beyond accepted scope.
 </p>
 <p>
 The common implementation contract is: construct the exact fixed-position source parent,
@@ -250,6 +393,12 @@ the leaf, and reconstruct the parent task image from accepted fibers.
 </tr>
 {_html_table_rows()}
 </table>
+
+{l3_section}
+
+{l4_section}
+
+{l5_section}
 
 <h2>Candidate L5 parent → child letter corpus</h2>
 <p>
@@ -288,13 +437,15 @@ of one mechanism branch—not two independent mechanism DOFs.
 <h2>Scaffold mapping to active V05–V09</h2>
 <ol>
 <li><strong>L3:</strong> planar calibration adapter (trusted exact map).</li>
-<li><strong>L4 / V05:</strong> close the independent <code>S_v-U_phys-R-R</code>
-reduced-mechanism equivalence gate (currently HOLD / UNRESOLVED).</li>
-<li><strong>L5 / V06:</strong> complete 2D 5R parent + task-derived fiber family
-(scientific claims blocked until V05 lifts).</li>
+<li><strong>L4 / V05:</strong> proximal <code>exact_u_pair_4r</code> closed-mechanism is
+<code>EXACT_ON_COMPONENT</code>; multi-component / other architectures remain unresolved.</li>
+<li><strong>L5 / V06:</strong> scaffold interface with nullity-2 seed audit and
+candidate letter families (<code>UNRESOLVED</code>); complete 2D parent + reconstruction
+remain V06A / later science.</li>
 <li><strong>L6:</strong> V07-first freeze a decomposition-free SO(3) reference, then
 optional nested slices / V08 quotient against that truth.</li>
-<li><strong>L7:</strong> deferred / BLOCKED until the V05 closed-mechanism gate lifts.</li>
+<li><strong>L7:</strong> deferred / BLOCKED pending multi-component and nested-slice
+certificate work beyond the proximal exact-U gate.</li>
 </ol>
 
 <h2>Evidence guardrails</h2>
@@ -332,6 +483,9 @@ def build_ladder_readout(
     payload["source_fiber_drive_contract"] = task_derived_fiber_contract().to_dict()
     payload["conceptual_u_branch"] = asdict(summary)
     payload["conceptual_only"] = True
+    payload["l3_calibration"] = default_l3_calibration_payload()
+    payload["l4_equivalence"] = default_l4_equivalence_payload()
+    payload["l5_scaffold"] = default_l5_scaffold_payload()
 
     json_path = data_dir / "decomposition_ladder_program.json"
     json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

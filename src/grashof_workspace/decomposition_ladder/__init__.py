@@ -22,12 +22,35 @@ from .models import (
     SourceParentRecord,
     UDriveContract,
 )
+from .planar_l3 import (
+    DEFAULT_L3_ARM_LENGTHS,
+    DEFAULT_L3_RADII,
+    PlanarL3CalibrationResult,
+    PlanarL3EvidenceBundle,
+    build_planar_l3_evidence_bundle,
+    default_l3_calibration_payload,
+    evaluate_planar_l3,
+    evaluate_planar_l3_evidence_radii,
+    evaluate_planar_l3_radii,
+)
 from .registry import (
     DEFAULT_FIBER_SPECS,
     PARENT_CHILD_FAMILIES,
     RUNG_SPECS,
     program_payload,
     rung_spec,
+)
+from .spatial_l4 import (
+    SpatialL4EvidenceBundle,
+    build_spatial_l4_exact_u_pair_bundle,
+    build_spatial_l4_generic_bundle,
+    default_l4_equivalence_payload,
+    ladder_certificate_from_forged_identity,
+)
+from .spatial_l5 import (
+    SpatialL5ScaffoldBundle,
+    build_spatial_l5_scaffold_bundle,
+    default_l5_scaffold_payload,
 )
 from .u_drive import (
     UBranchSample,
@@ -45,6 +68,8 @@ from .u_drive import (
 
 __all__ = [
     "DEFAULT_FIBER_SPECS",
+    "DEFAULT_L3_ARM_LENGTHS",
+    "DEFAULT_L3_RADII",
     "PARENT_CHILD_FAMILIES",
     "RUNG_SPECS",
     "CertificateStatus",
@@ -55,6 +80,8 @@ __all__ = [
     "LadderRung",
     "LeafPredicateRecord",
     "ParentChildFamilySpec",
+    "PlanarL3CalibrationResult",
+    "PlanarL3EvidenceBundle",
     "ProcessStatus",
     "ReconstructionRecord",
     "RungSpec",
@@ -62,12 +89,25 @@ __all__ = [
     "SliceRole",
     "SourceFiberRecord",
     "SourceParentRecord",
+    "SpatialL4EvidenceBundle",
+    "SpatialL5ScaffoldBundle",
     "UBranchSample",
     "UBranchSummary",
     "UDriveContract",
+    "build_planar_l3_evidence_bundle",
+    "build_spatial_l4_exact_u_pair_bundle",
+    "build_spatial_l4_generic_bundle",
+    "build_spatial_l5_scaffold_bundle",
     "choose_local_drive_coordinate",
     "conceptual_branch_samples",
+    "default_l3_calibration_payload",
+    "default_l4_equivalence_payload",
+    "default_l5_scaffold_payload",
+    "evaluate_planar_l3",
+    "evaluate_planar_l3_evidence_radii",
+    "evaluate_planar_l3_radii",
     "free_branch_contract",
+    "ladder_certificate_from_forged_identity",
     "prescribed_coordinate_contract",
     "program_payload",
     "rung_spec",

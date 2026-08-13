@@ -34,7 +34,7 @@
       "active_question": "Can a complete source component and an independently instantiated one-DOF closed mechanism be shown to have the same orientation map?",
       "process_status": "SCAFFOLD",
       "notes": [
-        "Maps to active V05. Independent reduced closed-mechanism solve remains HOLD.",
+        "Maps to active V05. Proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; multi-component EXACT_GLOBAL and other architectures remain unresolved.",
         "The generic orientation image is a curve in SO(3), not full spatial dexterity."
       ]
     },
@@ -50,10 +50,11 @@
       "redundancy_slice_count": 0,
       "direct_leaf": false,
       "active_question": "Can the complete two-dimensional pointing parent be reconstructed from a task-derived family of certified one-DOF fibers?",
-      "process_status": "PLANNED",
+      "process_status": "SCAFFOLD",
       "notes": [
-        "Maps to active V06. Scientific claims remain blocked until the V05 gate lifts.",
-        "Parent\u2192fiber decomposition is central; letter families are candidate tests only."
+        "Maps to active V06. Architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+        "Parent geometry/charts remain UNRESOLVED; letter families are candidate tests only.",
+        "Not a 2D parent representation and not pointing-image reconstruction (V06A next)."
       ]
     },
     {
@@ -88,7 +89,7 @@
       "active_question": "Can task orientation and internal redundancy be separated while preserving nonempty, compatible one-DOF leaves over the required target?",
       "process_status": "BLOCKED",
       "notes": [
-        "Deferred beyond the active V05\u2013V09 sequence until the V05 closed-mechanism gate lifts.",
+        "Deferred beyond the active V05\u2013V09 sequence pending multi-component certificates.",
         "The redundancy coordinate is not a fourth orientation coordinate."
       ]
     }
@@ -352,10 +353,11 @@
       "source_fiber_dimension": 1,
       "candidate_child_family": "architecture-dependent spatial four-bar",
       "process_status": "SCAFFOLD",
-      "certificate_status": "UNRESOLVED",
+      "certificate_status": "EXACT_ON_COMPONENT",
       "reconstruction_target": "Y1 \u2282 SO(3)",
       "notes": [
-        "Independent reduced closed-mechanism solve remains the active V05 gate."
+        "Catalog status EXACT_ON_COMPONENT is scoped to proximal exact_u_pair_4r on the compared V05 component; not multi-component EXACT_GLOBAL.",
+        "generic_4r, near-aligned, and non-proximal architectures remain unresolved or rejected for closed-mechanism equivalence."
       ]
     },
     {
@@ -374,11 +376,12 @@
       ],
       "source_fiber_dimension": 1,
       "candidate_child_family": "candidate UUUR/UURU/URUU/USRR/URSR/URRS corpus",
-      "process_status": "PLANNED",
+      "process_status": "SCAFFOLD",
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "S^2 pointing image",
       "notes": [
-        "V06 scientific claims blocked until V05 closed-mechanism gate lifts."
+        "V06 architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+        "2D parent representation still required before reconstruction claims (Gate K2)."
       ]
     },
     {
@@ -448,7 +451,7 @@
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "SO(3) coverage with nonempty redundancy fibers",
       "notes": [
-        "Deferred until the active V05 closed-mechanism gate lifts."
+        "Deferred pending multi-component certificates beyond proximal exact-U gate."
       ]
     }
   ],
@@ -461,7 +464,7 @@
     "Drive continuation arclength s by default; alpha(s) and beta(s) are outputs.",
     "Prescribe alpha or beta only where that coordinate is a regular local chart.",
     "Promote source_chain_evidence only from an accepted closed-mechanism certificate.",
-    "L7 remains BLOCKED until the V05 closed-mechanism gate lifts."
+    "L7 remains BLOCKED pending multi-component / nested-slice certificate work."
   ],
   "canonical_drive_contract": {
     "mode": "free_branch",
@@ -497,5 +500,2166 @@
     "beta_range": 1.1,
     "interpretation": "alpha circulates while beta rocks"
   },
-  "conceptual_only": true
+  "conceptual_only": true,
+  "l3_calibration": {
+    "arm_lengths": [
+      2.0,
+      2.0,
+      1.0
+    ],
+    "radii": [
+      0.0,
+      1.0,
+      2.0,
+      3.5
+    ],
+    "note": "Trusted planar calibration leaf: EXACT_GLOBAL certifies the analytical 3R\u21944R map at each radius; process_status remains SCAFFOLD.",
+    "bundles": [
+      {
+        "summary": {
+          "rung": "L3",
+          "rho": 0.0,
+          "source_chain": "planar 3R",
+          "source_lengths": [
+            2.0,
+            2.0,
+            1.0
+          ],
+          "source_parent_mobility": 1,
+          "target_space": "SO(2)",
+          "virtual_closure": "exact virtual revolute closure R_v at p*",
+          "child_family": "planar 4R",
+          "child_loop_lengths": [
+            0.0,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "assemblable": true,
+          "grashof_class": "grashof",
+          "inversion_type": "degenerate-coincident-ground-pivots",
+          "designated_input_can_fully_rotate": true,
+          "dexterous": true,
+          "decomposition_status": "EXACT_GLOBAL",
+          "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+          "predicate_reconstruction_match": true,
+          "notes": [
+            "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+            "This is the trusted calibration rung for the ladder interfaces.",
+            "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+          ]
+        },
+        "parent": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_0",
+          "source_chain_id": "planar_3r",
+          "task_point": [
+            0.0,
+            0.0
+          ],
+          "dimension": 1,
+          "target_space": "SO(2)",
+          "component_ids": [
+            "planar3r_fiber_rho_0"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "Radius-level adapter: task_point=(rho, 0) uses radial symmetry of the planar workspace.",
+            "SourceProblemRecord in the L3 program doc aliases this SourceParentRecord."
+          ]
+        },
+        "fiber": {
+          "rung": "L3",
+          "fiber_id": "planar3r_fiber_rho_0",
+          "parent_id": "planar3r_fixed_position_rho_0",
+          "component_id": "planar3r_fiber_rho_0",
+          "slice_values": {
+            "rho": 0.0
+          },
+          "dimension": 1,
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "source_provenance": "analytical_planar3r",
+          "sample_count": 1,
+          "task_image_status": "SO2_full_circle",
+          "notes": [
+            "Analytical planar fixed-position fiber; no numerical continuation."
+          ]
+        },
+        "child": {
+          "child_id": "planar4r_child_rho_0",
+          "source_fiber_id": "planar3r_fiber_rho_0",
+          "family": "planar 4R",
+          "joint_kind_sequence": [
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "R_v",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived_analytical",
+          "status": "EXACT_GLOBAL",
+          "notes": [
+            "Loop lengths (ground,input,coupler,output)=(rho,l3,l2,l1).",
+            "Trusted analytical child, not a spatial independent reduced solve."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "planar3r_fiber_rho_0",
+          "child_id": "planar4r_child_rho_0",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_GLOBAL",
+          "status": "EXACT_GLOBAL",
+          "component_scope": "analytical_planar_map_at_rho_0",
+          "coordinate_map": "planar3r_radius_to_fourbar_lengths",
+          "reconstruction_map": "designated_input_rotatability_equals_dexterous_radius",
+          "closure_error": 0.0,
+          "tangent_error": 0.0,
+          "task_map_error": 0.0,
+          "reason": "Trusted planar analytical 3R\u21944R map at this radius (not a spatial independent reduced-solve certificate).",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "planar4r_child_rho_0",
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "coordinate_windings": {
+            "designated_input": 1
+          },
+          "coordinate_ranges": {
+            "designated_input": null
+          },
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; not automatic dexterous_workspace coverage promotion",
+          "notes": [
+            "designated_input winding 1 means full rotation; 0 means not fully rotatable.",
+            "Workspace membership is reconstructed separately via ReconstructionRecord."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_0",
+          "target_space": "SO(2)",
+          "accepted_fiber_ids": [
+            "planar3r_fiber_rho_0"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "dexterous_radius",
+          "reconstructed_coverage_status": "designated_input_full_rotation",
+          "comparison_error": 0.0,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_GLOBAL",
+          "notes": [
+            "EXACT_GLOBAL here certifies the analytical map; dexterity is the separate predicate.",
+            "predicate_reconstruction_match=True"
+          ]
+        }
+      },
+      {
+        "summary": {
+          "rung": "L3",
+          "rho": 1.0,
+          "source_chain": "planar 3R",
+          "source_lengths": [
+            2.0,
+            2.0,
+            1.0
+          ],
+          "source_parent_mobility": 1,
+          "target_space": "SO(2)",
+          "virtual_closure": "exact virtual revolute closure R_v at p*",
+          "child_family": "planar 4R",
+          "child_loop_lengths": [
+            1.0,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "assemblable": true,
+          "grashof_class": "change-point",
+          "inversion_type": "change-point",
+          "designated_input_can_fully_rotate": true,
+          "dexterous": true,
+          "decomposition_status": "EXACT_GLOBAL",
+          "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+          "predicate_reconstruction_match": true,
+          "notes": [
+            "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+            "This is the trusted calibration rung for the ladder interfaces.",
+            "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+          ]
+        },
+        "parent": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_1",
+          "source_chain_id": "planar_3r",
+          "task_point": [
+            1.0,
+            0.0
+          ],
+          "dimension": 1,
+          "target_space": "SO(2)",
+          "component_ids": [
+            "planar3r_fiber_rho_1"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "Radius-level adapter: task_point=(rho, 0) uses radial symmetry of the planar workspace.",
+            "SourceProblemRecord in the L3 program doc aliases this SourceParentRecord."
+          ]
+        },
+        "fiber": {
+          "rung": "L3",
+          "fiber_id": "planar3r_fiber_rho_1",
+          "parent_id": "planar3r_fixed_position_rho_1",
+          "component_id": "planar3r_fiber_rho_1",
+          "slice_values": {
+            "rho": 1.0
+          },
+          "dimension": 1,
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "source_provenance": "analytical_planar3r",
+          "sample_count": 1,
+          "task_image_status": "SO2_full_circle",
+          "notes": [
+            "Analytical planar fixed-position fiber; no numerical continuation."
+          ]
+        },
+        "child": {
+          "child_id": "planar4r_child_rho_1",
+          "source_fiber_id": "planar3r_fiber_rho_1",
+          "family": "planar 4R",
+          "joint_kind_sequence": [
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "R_v",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived_analytical",
+          "status": "EXACT_GLOBAL",
+          "notes": [
+            "Loop lengths (ground,input,coupler,output)=(rho,l3,l2,l1).",
+            "Trusted analytical child, not a spatial independent reduced solve."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "planar3r_fiber_rho_1",
+          "child_id": "planar4r_child_rho_1",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_GLOBAL",
+          "status": "EXACT_GLOBAL",
+          "component_scope": "analytical_planar_map_at_rho_1",
+          "coordinate_map": "planar3r_radius_to_fourbar_lengths",
+          "reconstruction_map": "designated_input_rotatability_equals_dexterous_radius",
+          "closure_error": 0.0,
+          "tangent_error": 0.0,
+          "task_map_error": 0.0,
+          "reason": "Trusted planar analytical 3R\u21944R map at this radius (not a spatial independent reduced-solve certificate).",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "planar4r_child_rho_1",
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "coordinate_windings": {
+            "designated_input": 1
+          },
+          "coordinate_ranges": {
+            "designated_input": null
+          },
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; not automatic dexterous_workspace coverage promotion",
+          "notes": [
+            "designated_input winding 1 means full rotation; 0 means not fully rotatable.",
+            "Workspace membership is reconstructed separately via ReconstructionRecord."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_1",
+          "target_space": "SO(2)",
+          "accepted_fiber_ids": [
+            "planar3r_fiber_rho_1"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "dexterous_radius",
+          "reconstructed_coverage_status": "designated_input_full_rotation",
+          "comparison_error": 0.0,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_GLOBAL",
+          "notes": [
+            "EXACT_GLOBAL here certifies the analytical map; dexterity is the separate predicate.",
+            "predicate_reconstruction_match=True"
+          ]
+        }
+      },
+      {
+        "summary": {
+          "rung": "L3",
+          "rho": 2.0,
+          "source_chain": "planar 3R",
+          "source_lengths": [
+            2.0,
+            2.0,
+            1.0
+          ],
+          "source_parent_mobility": 1,
+          "target_space": "SO(2)",
+          "virtual_closure": "exact virtual revolute closure R_v at p*",
+          "child_family": "planar 4R",
+          "child_loop_lengths": [
+            2.0,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "assemblable": true,
+          "grashof_class": "grashof",
+          "inversion_type": "crank-rocker",
+          "designated_input_can_fully_rotate": true,
+          "dexterous": true,
+          "decomposition_status": "EXACT_GLOBAL",
+          "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+          "predicate_reconstruction_match": true,
+          "notes": [
+            "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+            "This is the trusted calibration rung for the ladder interfaces.",
+            "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+          ]
+        },
+        "parent": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_2",
+          "source_chain_id": "planar_3r",
+          "task_point": [
+            2.0,
+            0.0
+          ],
+          "dimension": 1,
+          "target_space": "SO(2)",
+          "component_ids": [
+            "planar3r_fiber_rho_2"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "Radius-level adapter: task_point=(rho, 0) uses radial symmetry of the planar workspace.",
+            "SourceProblemRecord in the L3 program doc aliases this SourceParentRecord."
+          ]
+        },
+        "fiber": {
+          "rung": "L3",
+          "fiber_id": "planar3r_fiber_rho_2",
+          "parent_id": "planar3r_fixed_position_rho_2",
+          "component_id": "planar3r_fiber_rho_2",
+          "slice_values": {
+            "rho": 2.0
+          },
+          "dimension": 1,
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "source_provenance": "analytical_planar3r",
+          "sample_count": 1,
+          "task_image_status": "SO2_full_circle",
+          "notes": [
+            "Analytical planar fixed-position fiber; no numerical continuation."
+          ]
+        },
+        "child": {
+          "child_id": "planar4r_child_rho_2",
+          "source_fiber_id": "planar3r_fiber_rho_2",
+          "family": "planar 4R",
+          "joint_kind_sequence": [
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "R_v",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived_analytical",
+          "status": "EXACT_GLOBAL",
+          "notes": [
+            "Loop lengths (ground,input,coupler,output)=(rho,l3,l2,l1).",
+            "Trusted analytical child, not a spatial independent reduced solve."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "planar3r_fiber_rho_2",
+          "child_id": "planar4r_child_rho_2",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_GLOBAL",
+          "status": "EXACT_GLOBAL",
+          "component_scope": "analytical_planar_map_at_rho_2",
+          "coordinate_map": "planar3r_radius_to_fourbar_lengths",
+          "reconstruction_map": "designated_input_rotatability_equals_dexterous_radius",
+          "closure_error": 0.0,
+          "tangent_error": 0.0,
+          "task_map_error": 0.0,
+          "reason": "Trusted planar analytical 3R\u21944R map at this radius (not a spatial independent reduced-solve certificate).",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "planar4r_child_rho_2",
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "coordinate_windings": {
+            "designated_input": 1
+          },
+          "coordinate_ranges": {
+            "designated_input": null
+          },
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; not automatic dexterous_workspace coverage promotion",
+          "notes": [
+            "designated_input winding 1 means full rotation; 0 means not fully rotatable.",
+            "Workspace membership is reconstructed separately via ReconstructionRecord."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_2",
+          "target_space": "SO(2)",
+          "accepted_fiber_ids": [
+            "planar3r_fiber_rho_2"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "dexterous_radius",
+          "reconstructed_coverage_status": "designated_input_full_rotation",
+          "comparison_error": 0.0,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_GLOBAL",
+          "notes": [
+            "EXACT_GLOBAL here certifies the analytical map; dexterity is the separate predicate.",
+            "predicate_reconstruction_match=True"
+          ]
+        }
+      },
+      {
+        "summary": {
+          "rung": "L3",
+          "rho": 3.5,
+          "source_chain": "planar 3R",
+          "source_lengths": [
+            2.0,
+            2.0,
+            1.0
+          ],
+          "source_parent_mobility": 1,
+          "target_space": "SO(2)",
+          "virtual_closure": "exact virtual revolute closure R_v at p*",
+          "child_family": "planar 4R",
+          "child_loop_lengths": [
+            3.5,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "assemblable": true,
+          "grashof_class": "non-grashof",
+          "inversion_type": "double-rocker",
+          "designated_input_can_fully_rotate": false,
+          "dexterous": false,
+          "decomposition_status": "EXACT_GLOBAL",
+          "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+          "predicate_reconstruction_match": true,
+          "notes": [
+            "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+            "This is the trusted calibration rung for the ladder interfaces.",
+            "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+          ]
+        },
+        "parent": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_3.5",
+          "source_chain_id": "planar_3r",
+          "task_point": [
+            3.5,
+            0.0
+          ],
+          "dimension": 1,
+          "target_space": "SO(2)",
+          "component_ids": [
+            "planar3r_fiber_rho_3.5"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "Radius-level adapter: task_point=(rho, 0) uses radial symmetry of the planar workspace.",
+            "SourceProblemRecord in the L3 program doc aliases this SourceParentRecord."
+          ]
+        },
+        "fiber": {
+          "rung": "L3",
+          "fiber_id": "planar3r_fiber_rho_3.5",
+          "parent_id": "planar3r_fixed_position_rho_3.5",
+          "component_id": "planar3r_fiber_rho_3.5",
+          "slice_values": {
+            "rho": 3.5
+          },
+          "dimension": 1,
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "source_provenance": "analytical_planar3r",
+          "sample_count": 1,
+          "task_image_status": "SO2_partial_or_bounded",
+          "notes": [
+            "Analytical planar fixed-position fiber; no numerical continuation."
+          ]
+        },
+        "child": {
+          "child_id": "planar4r_child_rho_3.5",
+          "source_fiber_id": "planar3r_fiber_rho_3.5",
+          "family": "planar 4R",
+          "joint_kind_sequence": [
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "R_v",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived_analytical",
+          "status": "EXACT_GLOBAL",
+          "notes": [
+            "Loop lengths (ground,input,coupler,output)=(rho,l3,l2,l1).",
+            "Trusted analytical child, not a spatial independent reduced solve."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "planar3r_fiber_rho_3.5",
+          "child_id": "planar4r_child_rho_3.5",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_GLOBAL",
+          "status": "EXACT_GLOBAL",
+          "component_scope": "analytical_planar_map_at_rho_3.5",
+          "coordinate_map": "planar3r_radius_to_fourbar_lengths",
+          "reconstruction_map": "designated_input_rotatability_equals_dexterous_radius",
+          "closure_error": 0.0,
+          "tangent_error": 0.0,
+          "task_map_error": 0.0,
+          "reason": "Trusted planar analytical 3R\u21944R map at this radius (not a spatial independent reduced-solve certificate).",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "planar4r_child_rho_3.5",
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "coordinate_windings": {
+            "designated_input": 0
+          },
+          "coordinate_ranges": {
+            "designated_input": 0.0
+          },
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; not automatic dexterous_workspace coverage promotion",
+          "notes": [
+            "designated_input winding 1 means full rotation; 0 means not fully rotatable.",
+            "Workspace membership is reconstructed separately via ReconstructionRecord."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_3.5",
+          "target_space": "SO(2)",
+          "accepted_fiber_ids": [
+            "planar3r_fiber_rho_3.5"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "non_dexterous_assemblable_radius",
+          "reconstructed_coverage_status": "designated_input_non_rotating",
+          "comparison_error": 0.0,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_GLOBAL",
+          "notes": [
+            "EXACT_GLOBAL here certifies the analytical map; dexterity is the separate predicate.",
+            "predicate_reconstruction_match=True"
+          ]
+        }
+      }
+    ],
+    "summaries": [
+      {
+        "rung": "L3",
+        "rho": 0.0,
+        "source_chain": "planar 3R",
+        "source_lengths": [
+          2.0,
+          2.0,
+          1.0
+        ],
+        "source_parent_mobility": 1,
+        "target_space": "SO(2)",
+        "virtual_closure": "exact virtual revolute closure R_v at p*",
+        "child_family": "planar 4R",
+        "child_loop_lengths": [
+          0.0,
+          1.0,
+          2.0,
+          2.0
+        ],
+        "assemblable": true,
+        "grashof_class": "grashof",
+        "inversion_type": "degenerate-coincident-ground-pivots",
+        "designated_input_can_fully_rotate": true,
+        "dexterous": true,
+        "decomposition_status": "EXACT_GLOBAL",
+        "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+        "predicate_reconstruction_match": true,
+        "notes": [
+          "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+          "This is the trusted calibration rung for the ladder interfaces.",
+          "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+        ]
+      },
+      {
+        "rung": "L3",
+        "rho": 1.0,
+        "source_chain": "planar 3R",
+        "source_lengths": [
+          2.0,
+          2.0,
+          1.0
+        ],
+        "source_parent_mobility": 1,
+        "target_space": "SO(2)",
+        "virtual_closure": "exact virtual revolute closure R_v at p*",
+        "child_family": "planar 4R",
+        "child_loop_lengths": [
+          1.0,
+          1.0,
+          2.0,
+          2.0
+        ],
+        "assemblable": true,
+        "grashof_class": "change-point",
+        "inversion_type": "change-point",
+        "designated_input_can_fully_rotate": true,
+        "dexterous": true,
+        "decomposition_status": "EXACT_GLOBAL",
+        "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+        "predicate_reconstruction_match": true,
+        "notes": [
+          "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+          "This is the trusted calibration rung for the ladder interfaces.",
+          "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+        ]
+      },
+      {
+        "rung": "L3",
+        "rho": 2.0,
+        "source_chain": "planar 3R",
+        "source_lengths": [
+          2.0,
+          2.0,
+          1.0
+        ],
+        "source_parent_mobility": 1,
+        "target_space": "SO(2)",
+        "virtual_closure": "exact virtual revolute closure R_v at p*",
+        "child_family": "planar 4R",
+        "child_loop_lengths": [
+          2.0,
+          1.0,
+          2.0,
+          2.0
+        ],
+        "assemblable": true,
+        "grashof_class": "grashof",
+        "inversion_type": "crank-rocker",
+        "designated_input_can_fully_rotate": true,
+        "dexterous": true,
+        "decomposition_status": "EXACT_GLOBAL",
+        "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+        "predicate_reconstruction_match": true,
+        "notes": [
+          "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+          "This is the trusted calibration rung for the ladder interfaces.",
+          "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+        ]
+      },
+      {
+        "rung": "L3",
+        "rho": 3.5,
+        "source_chain": "planar 3R",
+        "source_lengths": [
+          2.0,
+          2.0,
+          1.0
+        ],
+        "source_parent_mobility": 1,
+        "target_space": "SO(2)",
+        "virtual_closure": "exact virtual revolute closure R_v at p*",
+        "child_family": "planar 4R",
+        "child_loop_lengths": [
+          3.5,
+          1.0,
+          2.0,
+          2.0
+        ],
+        "assemblable": true,
+        "grashof_class": "non-grashof",
+        "inversion_type": "double-rocker",
+        "designated_input_can_fully_rotate": false,
+        "dexterous": false,
+        "decomposition_status": "EXACT_GLOBAL",
+        "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+        "predicate_reconstruction_match": true,
+        "notes": [
+          "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+          "This is the trusted calibration rung for the ladder interfaces.",
+          "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+        ]
+      }
+    ]
+  },
+  "l4_equivalence": {
+    "note": "L4 wraps existing V05 closed-mechanism evidence into shared ladder records. Scientific source remains docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md and results/kinematic_decomposition/v05d/.",
+    "v05d_readout": "results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html",
+    "bundles": [
+      {
+        "architecture_id": "exact_u_pair_4r",
+        "parent": {
+          "rung": "L4",
+          "parent_id": "exact_u_pair_4r_fixed_position",
+          "source_chain_id": "exact_u_pair_4r",
+          "task_point": [
+            0.5550458968135394,
+            0.26567312703408075,
+            0.47308103725990397
+          ],
+          "dimension": 1,
+          "target_space": "Y1 \u2282 SO(3)",
+          "component_ids": [
+            "exact_u_pair_4r_component0"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "L4 wraps the active V05 fixed-position parent; process stays SCAFFOLD.",
+            "Target is a one-parameter orientation family, not dexterous_workspace."
+          ]
+        },
+        "fiber": {
+          "rung": "L4",
+          "fiber_id": "exact_u_pair_4r_component0",
+          "parent_id": "exact_u_pair_4r_fixed_position",
+          "component_id": "exact_u_pair_4r_component0",
+          "slice_values": {},
+          "dimension": 1,
+          "branch_status": "budget_limited",
+          "returned": false,
+          "source_provenance": "source_derived",
+          "sample_count": 81,
+          "task_image_status": "NONTRIVIAL_POINTING_CURVE",
+          "notes": [
+            "Direct L4 leaf: no additional task/redundancy slices."
+          ]
+        },
+        "child": {
+          "child_id": "exact_u_pair_4r_sv_uphys_rr",
+          "source_fiber_id": "exact_u_pair_4r_component0",
+          "family": "S_v-U_phys-R-R",
+          "joint_kind_sequence": [
+            "S_v",
+            "U",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "S_v",
+            "U_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived",
+          "status": "EXACT_ON_COMPONENT",
+          "notes": [
+            "Semantic roles keep U_phys; explorer tool_a/tool_beta are not L4 task evidence.",
+            "Solver chart is cyclic URRS for SpatialFourBarGeometry only.",
+            "Independent SpatialFourBarGeometry distinct from AggregatedMechanismModel.chain.",
+            "Assembled at the source seed pose; reduced physical angles are seed deltas.",
+            "Solver chart is cyclic URRS; semantic origin remains S_v.",
+            "U_phys must not inherit U_v/tool_a winding semantics.",
+            "Reference assembly closure_norm=0.000e+00, rank=6, nullity=1."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "exact_u_pair_4r_component0",
+          "child_id": "exact_u_pair_4r_sv_uphys_rr",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_ON_COMPONENT",
+          "status": "EXACT_ON_COMPONENT",
+          "component_scope": "open_budget_40",
+          "coordinate_map": "independent URRS chart physical deltas \u2194 source joint angles (seed-assembled S_v-U_phys-R-R)",
+          "reconstruction_map": "source joint angles \u2194 reduced physical deltas; S chart is internal",
+          "closure_error": 6.182677544732746e-11,
+          "tangent_error": 0.0,
+          "task_map_error": 0.009195729667881935,
+          "reason": "Independent S_v-U_phys-R-R closed mechanism matches the source component over scope=open_budget_40. Multi-component EXACT_GLOBAL remains unverified.",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "exact_u_pair_4r_sv_uphys_rr",
+          "branch_status": "budget_limited",
+          "returned": false,
+          "coordinate_windings": {},
+          "coordinate_ranges": {},
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; explorer tool_alpha/tool_beta not used",
+          "notes": [
+            "L4 leaf evidence is the independent closed-loop comparison, not U_v windings."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L4",
+          "parent_id": "exact_u_pair_4r_fixed_position",
+          "target_space": "Y1 \u2282 SO(3)",
+          "accepted_fiber_ids": [
+            "exact_u_pair_4r_component0"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "orientation_curve:NONTRIVIAL_POINTING_CURVE",
+          "reconstructed_coverage_status": "matched_on_component",
+          "comparison_error": 0.01864719347397013,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_ON_COMPONENT",
+          "notes": [
+            "Reconstruction is the claimed Y1 orientation/pointing curve on one component.",
+            "Not dexterous_workspace / full SO(3) coverage.",
+            "Accepted from existing V05 independent closed-mechanism certificate."
+          ]
+        },
+        "v05_certificate": {
+          "source_chain_id": "exact_u_pair_4r",
+          "fixed_position_problem_id": "exact_u_pair_4r_pstar",
+          "source_component_id": "exact_u_pair_4r_component0",
+          "source_mobility": 1,
+          "joint_kind_sequence": [
+            "S_v",
+            "U",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "S_v",
+            "U_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "cyclic_origin_role": "S_v",
+          "designated_task_joint_role": "tool_frame",
+          "reduction_operations": [
+            "axis_aggregation",
+            "closed_mechanism_decomposition"
+          ],
+          "reduced_topology": "S_v-U_phys-R-R",
+          "coordinate_map": "independent URRS chart physical deltas \u2194 source joint angles (seed-assembled S_v-U_phys-R-R)",
+          "inverse_or_reconstruction_map": "source joint angles \u2194 reduced physical deltas; S chart is internal",
+          "task_map": "tool orientation R(q) on p(q)=p*",
+          "rank_and_nullity_checks": {
+            "rank_jp": 3,
+            "nullity_jp": 1,
+            "regular": true,
+            "seed_status": "PASS",
+            "motion_signature": "NONTRIVIAL_POINTING_CURVE",
+            "finite_difference_jp_error_fro": 9.757587379712797e-11,
+            "finite_difference_verified": true,
+            "p_star": [
+              0.5550458968135394,
+              0.26567312703408075,
+              0.47308103725990397
+            ]
+          },
+          "coordinate_regrouping_residuals": {
+            "position_residual_m": 0.0,
+            "rotation_frobenius": 0.0,
+            "pointing_residual": 0.0,
+            "joint_map_residual_rad": 0.0
+          },
+          "closure_residuals": {
+            "max_closure_residual": 6.182677544732746e-11
+          },
+          "tangent_subspace_error": -2.220446049250313e-16,
+          "trajectory_position_error_m": 9.11865700686194e-12,
+          "trajectory_pointing_error": 0.009195729667881935,
+          "trajectory_joint_map_error_rad": null,
+          "component_correspondence": "exact_on_component:open_budget_40",
+          "joint_limit_correspondence": "not_modeled; exact regrouping assumes original coordinate order and identical limits",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_ON_COMPONENT",
+          "status": "EXACT_ON_COMPONENT",
+          "failure_or_scope_reason": "Independent S_v-U_phys-R-R closed mechanism matches the source component over scope=open_budget_40. Multi-component EXACT_GLOBAL remains unverified.",
+          "candidates": [
+            {
+              "pair_index": 0,
+              "joint_a": 0,
+              "joint_b": 1,
+              "distance_m": 0.0,
+              "parallelism_residual": 1.0,
+              "orthogonality_abs_dot": 0.0,
+              "center": [
+                0.0,
+                0.0,
+                0.2
+              ],
+              "w_a": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "w_b": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "exact_intersecting": true,
+              "exact_orthogonal": true,
+              "exact_u_candidate": true
+            },
+            {
+              "pair_index": 1,
+              "joint_a": 1,
+              "joint_b": 2,
+              "distance_m": 0.21094788432451766,
+              "parallelism_residual": 0.9807674351775563,
+              "orthogonality_abs_dot": 0.19518001458970663,
+              "center": [
+                0.2798019801980198,
+                -0.010495049504950477,
+                0.30495049504950494
+              ],
+              "w_a": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "w_b": [
+                0.19518001458970663,
+                0.9759000729485331,
+                0.09759000729485331
+              ],
+              "exact_intersecting": false,
+              "exact_orthogonal": false,
+              "exact_u_candidate": false
+            },
+            {
+              "pair_index": 2,
+              "joint_a": 2,
+              "joint_b": 3,
+              "distance_m": 0.22608266913152708,
+              "parallelism_residual": 0.9586528178322297,
+              "orthogonality_abs_dot": 0.2845782403177127,
+              "center": [
+                0.38462272353424976,
+                -0.06734813770414755,
+                0.4237213018446716
+              ],
+              "w_a": [
+                0.19518001458970663,
+                0.9759000729485331,
+                0.09759000729485331
+              ],
+              "w_b": [
+                -0.09720197391996738,
+                0.21384434262392824,
+                0.9720197391996738
+              ],
+              "exact_intersecting": false,
+              "exact_orthogonal": false,
+              "exact_u_candidate": false
+            }
+          ],
+          "aggregated": {
+            "architecture_id": "exact_u_pair_4r",
+            "pair_index": 0,
+            "family_label": "S_v-U_phys-R-R",
+            "joint_kind_sequence": [
+              "S_v",
+              "U",
+              "R",
+              "R"
+            ],
+            "joint_role_sequence": [
+              "S_v",
+              "U_phys",
+              "R_phys",
+              "R_phys"
+            ],
+            "u_center": [
+              0.0,
+              0.0,
+              0.2
+            ],
+            "u_axes": [
+              [
+                0.0,
+                0.0,
+                1.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "candidate": {
+              "pair_index": 0,
+              "joint_a": 0,
+              "joint_b": 1,
+              "distance_m": 0.0,
+              "parallelism_residual": 1.0,
+              "orthogonality_abs_dot": 0.0,
+              "center": [
+                0.0,
+                0.0,
+                0.2
+              ],
+              "w_a": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "w_b": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "exact_intersecting": true,
+              "exact_orthogonal": true,
+              "exact_u_candidate": true
+            },
+            "notes": [
+              "Exact coordinate regrouping over the same source screws.",
+              "Not an independently instantiated S_v-U_phys-R-R closed mechanism.",
+              "U_phys is physical and must not inherit U_v/tool_a winding semantics."
+            ]
+          },
+          "evidence": {
+            "home_candidates": [
+              {
+                "pair_index": 0,
+                "joint_a": 0,
+                "joint_b": 1,
+                "distance_m": 0.0,
+                "parallelism_residual": 1.0,
+                "orthogonality_abs_dot": 0.0,
+                "center": [
+                  0.0,
+                  0.0,
+                  0.2
+                ],
+                "w_a": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "w_b": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "exact_intersecting": true,
+                "exact_orthogonal": true,
+                "exact_u_candidate": true
+              },
+              {
+                "pair_index": 1,
+                "joint_a": 1,
+                "joint_b": 2,
+                "distance_m": 0.21094788432451766,
+                "parallelism_residual": 0.9807674351775563,
+                "orthogonality_abs_dot": 0.19518001458970663,
+                "center": [
+                  0.2798019801980198,
+                  -0.010495049504950477,
+                  0.30495049504950494
+                ],
+                "w_a": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "w_b": [
+                  0.19518001458970663,
+                  0.9759000729485331,
+                  0.09759000729485331
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              },
+              {
+                "pair_index": 2,
+                "joint_a": 2,
+                "joint_b": 3,
+                "distance_m": 0.22608266913152708,
+                "parallelism_residual": 0.9586528178322297,
+                "orthogonality_abs_dot": 0.2845782403177127,
+                "center": [
+                  0.38462272353424976,
+                  -0.06734813770414755,
+                  0.4237213018446716
+                ],
+                "w_a": [
+                  0.19518001458970663,
+                  0.9759000729485331,
+                  0.09759000729485331
+                ],
+                "w_b": [
+                  -0.09720197391996738,
+                  0.21384434262392824,
+                  0.9720197391996738
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              }
+            ],
+            "seed_candidates": [
+              {
+                "pair_index": 0,
+                "joint_a": 0,
+                "joint_b": 1,
+                "distance_m": 0.0,
+                "parallelism_residual": 1.0,
+                "orthogonality_abs_dot": 0.0,
+                "center": [
+                  0.0,
+                  0.0,
+                  0.2
+                ],
+                "w_a": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "w_b": [
+                  0.955336489125606,
+                  0.29552020666133955,
+                  0.0
+                ],
+                "exact_intersecting": true,
+                "exact_orthogonal": true,
+                "exact_u_candidate": true
+              },
+              {
+                "pair_index": 1,
+                "joint_a": 1,
+                "joint_b": 2,
+                "distance_m": 0.2109478843245177,
+                "parallelism_residual": 0.9807674351775562,
+                "orthogonality_abs_dot": 0.19518001458970666,
+                "center": [
+                  0.2566073248243684,
+                  0.11726994850172251,
+                  0.2990673539712503
+                ],
+                "w_a": [
+                  0.955336489125606,
+                  0.29552020666133955,
+                  0.0
+                ],
+                "w_b": [
+                  -0.08576905306778539,
+                  0.9377305320467808,
+                  -0.33660825718202003
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              },
+              {
+                "pair_index": 2,
+                "joint_a": 2,
+                "joint_b": 3,
+                "distance_m": 0.2260826691315271,
+                "parallelism_residual": 0.9586528178322298,
+                "orthogonality_abs_dot": 0.28457824031771267,
+                "center": [
+                  0.35745282588540417,
+                  0.1298669193879924,
+                  0.3780800202307919
+                ],
+                "w_a": [
+                  -0.08576905306778539,
+                  0.9377305320467808,
+                  -0.33660825718202003
+                ],
+                "w_b": [
+                  0.1978376231363756,
+                  0.5998587540847635,
+                  0.7752610850672337
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              }
+            ],
+            "coordinate_regrouping_diagnostic_only": {
+              "position_residual_m": 0.0,
+              "rotation_frobenius": 0.0,
+              "pointing_residual": 0.0,
+              "joint_map_residual_rad": 0.0
+            },
+            "independent_reduced_solve_present": true,
+            "roles_guard": {
+              "has_S_v": true,
+              "has_U_phys": true,
+              "forbids_U_v": true,
+              "designated_task_is_not_U_phys": true
+            },
+            "closed_mechanism_comparison": {
+              "architecture_id": "exact_u_pair_4r",
+              "component_id": "exact_u_pair_4r_component0",
+              "comparison_mode": "independent_closed_loop",
+              "independent_reduced_solve_present": true,
+              "scope": "open_budget_40",
+              "source_branch_status": "budget_limited",
+              "source_returned": false,
+              "reduced_step_count": 41,
+              "source_sample_count": 81,
+              "max_closure_residual": 6.182677544732746e-11,
+              "max_position_error_m": 9.11865700686194e-12,
+              "max_pointing_error": 0.009195729667881935,
+              "max_joint_map_error_rad": null,
+              "seed_tangent_misalignment": -2.220446049250313e-16,
+              "accepted": true,
+              "failure_or_scope_reason": "Independent closed loop matches the scoped source component (open_budget_40): closure\u22641e-08, position\u22641e-09, pointing\u22640.05, seed tangent misalignment\u22641e-06.",
+              "notes": [
+                "Physical reduced angles are seed deltas mapped to source joint space.",
+                "Pointing error is nearest-neighbor distance into the source fiber image.",
+                "Explorer tool_alpha/tool_beta labels are not used as V05 task evidence.",
+                "Independent SpatialFourBarGeometry distinct from AggregatedMechanismModel.chain.",
+                "Assembled at the source seed pose; reduced physical angles are seed deltas.",
+                "Solver chart is cyclic URRS; semantic origin remains S_v.",
+                "U_phys must not inherit U_v/tool_a winding semantics.",
+                "Reference assembly closure_norm=0.000e+00, rank=6, nullity=1."
+              ]
+            }
+          }
+        },
+        "comparison": {
+          "architecture_id": "exact_u_pair_4r",
+          "component_id": "exact_u_pair_4r_component0",
+          "comparison_mode": "independent_closed_loop",
+          "independent_reduced_solve_present": true,
+          "scope": "open_budget_40",
+          "source_branch_status": "budget_limited",
+          "source_returned": false,
+          "reduced_step_count": 41,
+          "source_sample_count": 81,
+          "max_closure_residual": 6.182677544732746e-11,
+          "max_position_error_m": 9.11865700686194e-12,
+          "max_pointing_error": 0.009195729667881935,
+          "max_joint_map_error_rad": null,
+          "seed_tangent_misalignment": -2.220446049250313e-16,
+          "accepted": true,
+          "failure_or_scope_reason": "Independent closed loop matches the scoped source component (open_budget_40): closure\u22641e-08, position\u22641e-09, pointing\u22640.05, seed tangent misalignment\u22641e-06.",
+          "notes": [
+            "Physical reduced angles are seed deltas mapped to source joint space.",
+            "Pointing error is nearest-neighbor distance into the source fiber image.",
+            "Explorer tool_alpha/tool_beta labels are not used as V05 task evidence.",
+            "Independent SpatialFourBarGeometry distinct from AggregatedMechanismModel.chain.",
+            "Assembled at the source seed pose; reduced physical angles are seed deltas.",
+            "Solver chart is cyclic URRS; semantic origin remains S_v.",
+            "U_phys must not inherit U_v/tool_a winding semantics.",
+            "Reference assembly closure_norm=0.000e+00, rank=6, nullity=1."
+          ]
+        },
+        "orientation_image": {
+          "architecture_id": "exact_u_pair_4r",
+          "component_id": "exact_u_pair_4r_component0",
+          "p_star": [
+            0.5550458968135394,
+            0.26567312703408075,
+            0.47308103725990397
+          ],
+          "status": "EXPORTED",
+          "curve_type": "NONTRIVIAL_POINTING_CURVE",
+          "sample_count": 81,
+          "near_singular_count": 0,
+          "metrics": {
+            "curve_type": "NONTRIVIAL_POINTING_CURVE",
+            "orientation_path_length_rad": 1.927470905258947,
+            "pointing_path_length_rad": 1.2286958709964024,
+            "max_pointing_displacement_rad": 1.2260516671732926,
+            "incremental_axis_drift_rad": 1.5625052408910434,
+            "first_increment_axis_world": [
+              -0.7242119835728702,
+              -0.19416377576030908,
+              -0.6616777395619983
+            ],
+            "notes": [
+              "Path lengths are sampled geodesic sums, not global coverage measures.",
+              "PURE_TERMINAL_ROLL means orientation changes while the selected pointing axis is fixed.",
+              "FIXED_AXIS_ONE_PARAMETER_SUBGROUP is a numerical diagnostic, not an analytical subgroup proof."
+            ]
+          },
+          "multiplicity": {
+            "same_pointing_distinct_orientation_pairs": 0,
+            "same_orientation_distinct_pointing_pairs": 0,
+            "notes": [
+              "Pairwise scan over fiber samples (possibly subsampled).",
+              "same_pointing_distinct_orientation indicates roll-like multiplicity about d.",
+              "Not a coverage claim."
+            ]
+          },
+          "notes": [
+            "Orientation-curve truth only; not an SO(3) coverage certificate.",
+            "A scalar angle is used only when the curve type justifies it.",
+            "Plus/minus rays from one seed do not certify multi-component fiber completeness.",
+            "Pseudo-arclength correction uses [p(q)-p*; t^T(q-q_pred)]=0.",
+            "Exact consecutive orthogonal intersecting RR at J1/J2 (U_phys candidate).",
+            "Aggregation geometry certificate is issued by V05D; closed-mechanism equivalence is separate.",
+            "pair_distance=0.000e+00, pair_parallelism=1.000e+00",
+            "terminal_tool_axis_distance_m=6.000000e-02",
+            "expected_curve_type=NONTRIVIAL_POINTING_CURVE"
+          ]
+        },
+        "max_orientation_error_rad": 0.01864719347397013,
+        "notes": [
+          "Existing V05 independent S_v-U_phys-R-R solve wrapped into ladder records.",
+          "Scoped EXACT_ON_COMPONENT only; multi-component EXACT_GLOBAL unverified.",
+          "Scientific source: docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md / V05D."
+        ]
+      },
+      {
+        "architecture_id": "generic_4r",
+        "parent": {
+          "rung": "L4",
+          "parent_id": "generic_4r_fixed_position",
+          "source_chain_id": "generic_4r",
+          "task_point": [
+            0.4402399650508423,
+            0.38133648033480305,
+            0.48684834853867
+          ],
+          "dimension": 1,
+          "target_space": "Y1 \u2282 SO(3)",
+          "component_ids": [
+            "generic_4r_component0"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "L4 wraps the active V05 fixed-position parent; process stays SCAFFOLD.",
+            "Target is a one-parameter orientation family, not dexterous_workspace."
+          ]
+        },
+        "fiber": {
+          "rung": "L4",
+          "fiber_id": "generic_4r_component0",
+          "parent_id": "generic_4r_fixed_position",
+          "component_id": "generic_4r_component0",
+          "slice_values": {},
+          "dimension": 1,
+          "branch_status": "budget_limited",
+          "returned": false,
+          "source_provenance": "source_derived",
+          "sample_count": 81,
+          "task_image_status": "NONTRIVIAL_POINTING_CURVE",
+          "notes": [
+            "Direct L4 leaf: no additional task/redundancy slices."
+          ]
+        },
+        "child": null,
+        "certificate": {
+          "source_fiber_id": "generic_4r_component0",
+          "child_id": "none",
+          "axis_aggregation_status": "REJECTED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "aggregation_only_no_architecture_child",
+          "coordinate_map": "none",
+          "reconstruction_map": "none",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "generic_4r has no exact proximal U architecture child; closed_mechanism_status remains UNRESOLVED.",
+          "accepted_for_reconstruction": false
+        },
+        "leaf_predicate": null,
+        "reconstruction": {
+          "rung": "L4",
+          "parent_id": "generic_4r_fixed_position",
+          "target_space": "Y1 \u2282 SO(3)",
+          "accepted_fiber_ids": [],
+          "unresolved_fiber_ids": [
+            "generic_4r_component0"
+          ],
+          "direct_coverage_status": "orientation_curve:NONTRIVIAL_POINTING_CURVE",
+          "reconstructed_coverage_status": "unresolved_or_rejected_closed_mechanism",
+          "comparison_error": null,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "UNRESOLVED",
+          "notes": [
+            "Reconstruction is the claimed Y1 orientation/pointing curve on one component.",
+            "Not dexterous_workspace / full SO(3) coverage.",
+            "Closed-mechanism not accepted; reconstruction remains unresolved."
+          ]
+        },
+        "v05_certificate": {
+          "source_chain_id": "generic_4r",
+          "fixed_position_problem_id": "generic_4r_pstar",
+          "source_component_id": "generic_4r_component0",
+          "source_mobility": 1,
+          "joint_kind_sequence": [
+            "S_v",
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "S_v",
+            "R_phys",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "cyclic_origin_role": "S_v",
+          "designated_task_joint_role": "tool_frame",
+          "reduction_operations": [
+            "axis_aggregation"
+          ],
+          "reduced_topology": "none",
+          "coordinate_map": "none",
+          "inverse_or_reconstruction_map": "none",
+          "task_map": "tool orientation R(q) on p(q)=p*",
+          "rank_and_nullity_checks": {
+            "rank_jp": 3,
+            "nullity_jp": 1,
+            "regular": true,
+            "seed_status": "PASS",
+            "motion_signature": "NONTRIVIAL_POINTING_CURVE",
+            "finite_difference_jp_error_fro": 1.1447708415101765e-10,
+            "finite_difference_verified": true,
+            "p_star": [
+              0.4402399650508423,
+              0.38133648033480305,
+              0.48684834853867
+            ]
+          },
+          "coordinate_regrouping_residuals": {
+            "best_pair_distance_m": 0.02549509756796393,
+            "best_pair_orthogonality_abs_dot": 0.07820618870057751,
+            "best_pair_parallelism_residual": 0.9969372056699106
+          },
+          "closure_residuals": {},
+          "tangent_subspace_error": null,
+          "trajectory_position_error_m": null,
+          "trajectory_pointing_error": null,
+          "trajectory_joint_map_error_rad": null,
+          "component_correspondence": "not_applicable",
+          "joint_limit_correspondence": "not_modeled",
+          "axis_aggregation_status": "REJECTED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "REJECTED",
+          "failure_or_scope_reason": "No consecutive exact intersecting orthogonal RR pair; there is no exact U_phys aggregation candidate.",
+          "candidates": [
+            {
+              "pair_index": 0,
+              "joint_a": 0,
+              "joint_b": 1,
+              "distance_m": 0.02549509756796393,
+              "parallelism_residual": 0.9969372056699106,
+              "orthogonality_abs_dot": 0.07820618870057751,
+              "center": [
+                -0.0025000000000000022,
+                0.0125,
+                0.21
+              ],
+              "w_a": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "w_b": [
+                0.9775773587572189,
+                0.19551547175144376,
+                0.07820618870057751
+              ],
+              "exact_intersecting": false,
+              "exact_orthogonal": false,
+              "exact_u_candidate": false
+            },
+            {
+              "pair_index": 1,
+              "joint_a": 1,
+              "joint_b": 2,
+              "distance_m": 0.18354052786388217,
+              "parallelism_residual": 0.9281312901065646,
+              "orthogonality_abs_dot": 0.37225301654267934,
+              "center": [
+                0.31220900207481406,
+                0.079523464254393,
+                0.32687280284383147
+              ],
+              "w_a": [
+                0.9775773587572189,
+                0.19551547175144376,
+                0.07820618870057751
+              ],
+              "w_b": [
+                0.17593030196692086,
+                0.9773905664828937,
+                0.11728686797794724
+              ],
+              "exact_intersecting": false,
+              "exact_orthogonal": false,
+              "exact_u_candidate": false
+            },
+            {
+              "pair_index": 2,
+              "joint_a": 2,
+              "joint_b": 3,
+              "distance_m": 0.15709243157084787,
+              "parallelism_residual": 0.9467922141052779,
+              "orthogonality_abs_dot": 0.32184546495115585,
+              "center": [
+                0.3890804799784703,
+                0.09109817125334807,
+                0.4375608837387011
+              ],
+              "w_a": [
+                0.17593030196692086,
+                0.9773905664828937,
+                0.11728686797794724
+              ],
+              "w_b": [
+                -0.1440046082211958,
+                0.24000768036865966,
+                0.9600307214746386
+              ],
+              "exact_intersecting": false,
+              "exact_orthogonal": false,
+              "exact_u_candidate": false
+            }
+          ],
+          "aggregated": null,
+          "evidence": {
+            "home_candidates": [
+              {
+                "pair_index": 0,
+                "joint_a": 0,
+                "joint_b": 1,
+                "distance_m": 0.02549509756796393,
+                "parallelism_residual": 0.9969372056699106,
+                "orthogonality_abs_dot": 0.07820618870057751,
+                "center": [
+                  -0.0025000000000000022,
+                  0.0125,
+                  0.21
+                ],
+                "w_a": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "w_b": [
+                  0.9775773587572189,
+                  0.19551547175144376,
+                  0.07820618870057751
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              },
+              {
+                "pair_index": 1,
+                "joint_a": 1,
+                "joint_b": 2,
+                "distance_m": 0.18354052786388217,
+                "parallelism_residual": 0.9281312901065646,
+                "orthogonality_abs_dot": 0.37225301654267934,
+                "center": [
+                  0.31220900207481406,
+                  0.079523464254393,
+                  0.32687280284383147
+                ],
+                "w_a": [
+                  0.9775773587572189,
+                  0.19551547175144376,
+                  0.07820618870057751
+                ],
+                "w_b": [
+                  0.17593030196692086,
+                  0.9773905664828937,
+                  0.11728686797794724
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              },
+              {
+                "pair_index": 2,
+                "joint_a": 2,
+                "joint_b": 3,
+                "distance_m": 0.15709243157084787,
+                "parallelism_residual": 0.9467922141052779,
+                "orthogonality_abs_dot": 0.32184546495115585,
+                "center": [
+                  0.3890804799784703,
+                  0.09109817125334807,
+                  0.4375608837387011
+                ],
+                "w_a": [
+                  0.17593030196692086,
+                  0.9773905664828937,
+                  0.11728686797794724
+                ],
+                "w_b": [
+                  -0.1440046082211958,
+                  0.24000768036865966,
+                  0.9600307214746386
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              }
+            ],
+            "seed_candidates": [
+              {
+                "pair_index": 0,
+                "joint_a": 0,
+                "joint_b": 1,
+                "distance_m": 0.025495097567963945,
+                "parallelism_residual": 0.9969372056699107,
+                "orthogonality_abs_dot": 0.07820618870057751,
+                "center": [
+                  -0.007170381763865349,
+                  0.010539716569264446,
+                  0.21
+                ],
+                "w_a": [
+                  0.0,
+                  0.0,
+                  1.0
+                ],
+                "w_b": [
+                  0.824271062866498,
+                  0.5607682292800329,
+                  0.07820618870057751
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              },
+              {
+                "pair_index": 1,
+                "joint_a": 1,
+                "joint_b": 2,
+                "distance_m": 0.18354052786388217,
+                "parallelism_residual": 0.9281312901065648,
+                "orthogonality_abs_dot": 0.37225301654267934,
+                "center": [
+                  0.23884181652664974,
+                  0.22127526528011215,
+                  0.32434081137686066
+                ],
+                "w_a": [
+                  0.824271062866498,
+                  0.5607682292800329,
+                  0.07820618870057751
+                ],
+                "w_b": [
+                  -0.18329119675497924,
+                  0.9616815408450305,
+                  -0.20389446091067703
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              },
+              {
+                "pair_index": 2,
+                "joint_a": 2,
+                "joint_b": 3,
+                "distance_m": 0.1570924315708479,
+                "parallelism_residual": 0.9467922141052781,
+                "orthogonality_abs_dot": 0.32184546495115585,
+                "center": [
+                  0.28910317547513315,
+                  0.2837412298405173,
+                  0.3882984602355535
+                ],
+                "w_a": [
+                  -0.18329119675497924,
+                  0.9616815408450305,
+                  -0.20389446091067703
+                ],
+                "w_b": [
+                  0.10981197456000004,
+                  0.5334177447330113,
+                  0.8386935315400865
+                ],
+                "exact_intersecting": false,
+                "exact_orthogonal": false,
+                "exact_u_candidate": false
+              }
+            ]
+          }
+        },
+        "comparison": null,
+        "orientation_image": {
+          "architecture_id": "generic_4r",
+          "component_id": "generic_4r_component0",
+          "p_star": [
+            0.4402399650508423,
+            0.38133648033480305,
+            0.48684834853867
+          ],
+          "status": "EXPORTED",
+          "curve_type": "NONTRIVIAL_POINTING_CURVE",
+          "sample_count": 81,
+          "near_singular_count": 0,
+          "metrics": {
+            "curve_type": "NONTRIVIAL_POINTING_CURVE",
+            "orientation_path_length_rad": 2.42106161450296,
+            "pointing_path_length_rad": 1.124237396066859,
+            "max_pointing_displacement_rad": 0.8342720555080166,
+            "incremental_axis_drift_rad": 1.5518061529143172,
+            "first_increment_axis_world": [
+              0.7098738936944825,
+              0.6092162003513237,
+              -0.3534609968299385
+            ],
+            "notes": [
+              "Path lengths are sampled geodesic sums, not global coverage measures.",
+              "PURE_TERMINAL_ROLL means orientation changes while the selected pointing axis is fixed.",
+              "FIXED_AXIS_ONE_PARAMETER_SUBGROUP is a numerical diagnostic, not an analytical subgroup proof."
+            ]
+          },
+          "multiplicity": {
+            "same_pointing_distinct_orientation_pairs": 0,
+            "same_orientation_distinct_pointing_pairs": 0,
+            "notes": [
+              "Pairwise scan over fiber samples (possibly subsampled).",
+              "same_pointing_distinct_orientation indicates roll-like multiplicity about d.",
+              "Not a coverage claim."
+            ]
+          },
+          "notes": [
+            "Orientation-curve truth only; not an SO(3) coverage certificate.",
+            "A scalar angle is used only when the curve type justifies it.",
+            "Plus/minus rays from one seed do not certify multi-component fiber completeness.",
+            "Pseudo-arclength correction uses [p(q)-p*; t^T(q-q_pred)]=0.",
+            "No intentional consecutive intersecting pairs.",
+            "terminal_tool_axis_distance_m=6.000000e-02",
+            "expected_curve_type=NONTRIVIAL_POINTING_CURVE"
+          ]
+        },
+        "max_orientation_error_rad": null,
+        "notes": [
+          "Generic architecture rejection/absence of exact U: no L4 child promotion.",
+          "Orientation curve may still be exported as source truth without a child map."
+        ]
+      }
+    ],
+    "summaries": [
+      {
+        "architecture_id": "exact_u_pair_4r",
+        "axis_aggregation_status": "EXACT_GLOBAL",
+        "closed_mechanism_status": "EXACT_ON_COMPONENT",
+        "orientation_curve_type": "NONTRIVIAL_POINTING_CURVE",
+        "reconstruction_status": "EXACT_ON_COMPONENT",
+        "max_orientation_error_rad": 0.01864719347397013,
+        "independent_reduced_solve_present": true
+      },
+      {
+        "architecture_id": "generic_4r",
+        "axis_aggregation_status": "REJECTED",
+        "closed_mechanism_status": "UNRESOLVED",
+        "orientation_curve_type": "NONTRIVIAL_POINTING_CURVE",
+        "reconstruction_status": "UNRESOLVED",
+        "max_orientation_error_rad": null,
+        "independent_reduced_solve_present": false
+      }
+    ]
+  },
+  "l5_scaffold": {
+    "note": "L5 scaffold only: seed nullity-2 audit + candidate letter families. Not a 2D parent representation and not pointing-image reconstruction. V06A remains the next scientific step.",
+    "v06_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
+    "bundle": {
+      "architecture_id": "generic_5r",
+      "parent": {
+        "rung": "L5",
+        "parent_id": "generic_5r_pointing_parent_scaffold",
+        "source_chain_id": "generic_5r",
+        "task_point": [
+          0.6076189565151159,
+          0.2690228407649954,
+          0.6407937249859998
+        ],
+        "dimension": 2,
+        "target_space": "S^2",
+        "component_ids": [
+          "generic_5r_fiber_placeholder"
+        ],
+        "process_status": "SCAFFOLD",
+        "notes": [
+          "Scaffold placeholder keyed to a fixed-position seed p*.",
+          "Parent geometry/charts are UNRESOLVED \u2014 not a FixedPositionParentResult.",
+          "V06A must construct the complete M=2 parent independently of children."
+        ]
+      },
+      "fiber_placeholder": {
+        "rung": "L5",
+        "fiber_id": "generic_5r_fiber_placeholder",
+        "parent_id": "generic_5r_pointing_parent_scaffold",
+        "component_id": "generic_5r_fiber_placeholder",
+        "slice_values": {},
+        "dimension": 1,
+        "branch_status": "scaffold_placeholder",
+        "returned": false,
+        "source_provenance": "scaffold_only",
+        "sample_count": 0,
+        "task_image_status": "UNRESOLVED_parent_charts_absent",
+        "notes": [
+          "No pointing-latitude fiber has been continued.",
+          "Placeholder exists so shared L5 interfaces are exercisable without Gate K2 violations."
+        ]
+      },
+      "children": [
+        {
+          "child_id": "generic_5r_UUUR_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "UUUR",
+          "joint_kind_sequence": [
+            "U",
+            "U",
+            "U",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "U_phys",
+            "U_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_UURU_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "UURU",
+          "joint_kind_sequence": [
+            "U",
+            "U",
+            "R",
+            "U"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "U_phys",
+            "R_phys",
+            "U_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_URUU_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "URUU",
+          "joint_kind_sequence": [
+            "U",
+            "R",
+            "U",
+            "U"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "R_phys",
+            "U_phys",
+            "U_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_USRR_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "USRR",
+          "joint_kind_sequence": [
+            "U",
+            "S",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "S_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_URSR_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "URSR",
+          "joint_kind_sequence": [
+            "U",
+            "R",
+            "S",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "R_phys",
+            "S_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_URRS_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "URRS",
+          "joint_kind_sequence": [
+            "U",
+            "R",
+            "R",
+            "S"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "R_phys",
+            "R_phys",
+            "S_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        }
+      ],
+      "certificates": [
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_UUUR_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SUUR\u2192UUUR has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_UURU_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SURU\u2192UURU has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_URUU_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SRUU\u2192URUU has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_USRR_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SSRR\u2192USRR has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_URSR_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SRSR\u2192URSR has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_URRS_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SRRS\u2192URRS has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        }
+      ],
+      "reconstruction": {
+        "rung": "L5",
+        "parent_id": "generic_5r_pointing_parent_scaffold",
+        "target_space": "S^2",
+        "accepted_fiber_ids": [],
+        "unresolved_fiber_ids": [
+          "generic_5r_fiber_placeholder"
+        ],
+        "direct_coverage_status": "UNRESOLVED_no_parent_image",
+        "reconstructed_coverage_status": "UNRESOLVED_no_accepted_children",
+        "comparison_error": null,
+        "process_status": "SCAFFOLD",
+        "certificate_status": "UNRESOLVED",
+        "notes": [
+          "Gate K2 / ADR-024: a collection of 1D fibers is not the complete 2D parent.",
+          "ADR-026: descriptor discovery remains blocked until parent image reconstruction succeeds.",
+          "Reconstruction uses only accepted source-derived children \u2014 none exist yet."
+        ]
+      },
+      "seed_audit": {
+        "architecture_id": "generic_5r",
+        "status": "PASS",
+        "regular": true,
+        "rank_jp": 3,
+        "nullity_jp": 2,
+        "p_star": [
+          0.6076189565151159,
+          0.2690228407649954,
+          0.6407937249859998
+        ],
+        "p_residual_m": 0.0,
+        "motion_signature": "NONTRIVIAL_POINTING_CURVE",
+        "finite_difference_verified": true,
+        "notes": [
+          "Seed audit only; does not represent the complete two-dimensional parent.",
+          "Gate K2 / ADR-024: do not treat 1D traces as the M=2 parent."
+        ]
+      },
+      "notes": [
+        "L5 scaffold interface under V06; scientific source remains docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md.",
+        "Next scientific step: V06A FixedPositionParentResult (independent 2D parent).",
+        "Architecture-scoped after proximal exact_u_pair_4r EXACT_ON_COMPONENT gate."
+      ]
+    },
+    "summary": {
+      "architecture_id": "generic_5r",
+      "seed_rank_jp": 3,
+      "seed_nullity_jp": 2,
+      "seed_status": "PASS",
+      "candidate_family_count": 6,
+      "candidate_families": [
+        "UUUR",
+        "UURU",
+        "URUU",
+        "USRR",
+        "URSR",
+        "URRS"
+      ],
+      "all_certificates_unresolved": true,
+      "reconstruction_status": "UNRESOLVED",
+      "accepted_fiber_count": 0,
+      "process_status": "SCAFFOLD"
+    }
+  }
 }

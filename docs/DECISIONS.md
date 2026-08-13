@@ -197,3 +197,71 @@ with coordinate maps, reconstruction maps, component scope, rank checks, tangent
 **Decision:** Ladder `EquivalenceCertificateRecord` stores `axis_aggregation_status` and `closed_mechanism_status` separately; overall status mirrors closed-mechanism status. Leaf promotion to `source_chain_evidence` requires a real accepted closed-mechanism certificate object, never caller status strings alone. Process labels (`PLANNED`/`SCAFFOLD`/`BLOCKED`/`REVIEW`) live in `ProcessStatus`, not in the certificate taxonomy.
 
 **Reason:** Re-merging process labels into certificate statuses and trusting forged provenance strings recreates the audit defects that forced V05 overall HOLD.
+
+---
+
+## ADR-028 — Scoped EXACT_ON_COMPONENT closes the V05 gate for exact_u_pair_4r
+
+<!-- V05_CLOSED_MECHANISM_GATE_2026_08_13 -->
+
+**Decision:** An independently instantiated and continued proximal `S_v-U_phys-R-R` loop that matches the `exact_u_pair_4r` source fiber over an explicit component scope may receive `closed_mechanism_status=EXACT_ON_COMPONENT`. Axis aggregation remains a separate `EXACT_GLOBAL` claim. Multi-component `EXACT_GLOBAL`, non-proximal pairs, and other corpus architectures remain unresolved. Identity-on-same-chain residuals still cannot promote closed-mechanism status.
+
+**Reason:** The audited HOLD required an independent reduced solve, not merely scalar regrouping. One scoped accepted component is sufficient to close the V05 gate for that architecture while preserving honesty about incomplete global coverage.
+
+## ADR-029 — L3 emits shared ladder records from the analytical planar map
+
+<!-- L3_INTERFACE_RETROFIT_2026_08_13 -->
+
+**Decision:** The L3 planar calibration adapter emits shared ladder evidence records
+(`SourceParentRecord`, fiber/child/certificate/leaf/reconstruction) from the existing
+`Planar3R`/`FourBar` analytical map at each radius. `EXACT_GLOBAL` certifies the 3R↔4R
+map (including non-assemblable exterior radii); dexterity/rotatability remain separate
+predicates. Process status stays `SCAFFOLD`. The program-doc name `SourceProblemRecord`
+aliases `SourceParentRecord`. This does not demote V05–V09 primacy or substitute for
+spatial closed-mechanism certificates.
+
+**Reason:** The ladder acceptance criterion is interface retrofit without changing the
+trusted mathematical kernel; a duplicate problem-record type would only create drift.
+
+## ADR-030 — Workspace exemplar viz is not a certificate path
+
+<!-- WORKSPACE_EXEMPLAR_VIZ_2026_08_13 -->
+
+**Decision:** Planar workspace exemplar statics/GIFs under `outputs/workspace_exemplars/`
+reuse existing `Planar3R`/`FourBar` classification and a visualization-only pose sampler.
+They do not change analytical workspace predicates and do not issue
+`DecompositionCertificate` / ladder equivalence claims.
+
+**Reason:** Side-by-side reduced-mechanism behavior is an evidence aid for the trusted
+planar map; conflating renders with certificates would recreate provenance defects.
+
+## ADR-031 — L4 wraps V05 closed-mechanism evidence into shared ladder records
+
+<!-- L4_V05_INTERFACE_2026_08_13 -->
+
+**Decision:** The L4 ladder adapter emits shared evidence records from the existing V05
+proximal `exact_u_pair_4r` independent closed-mechanism path (plus V05C orientation-curve
+truth on the claimed component). Catalog `FiberFamilySpec` status may be
+`EXACT_ON_COMPONENT` only with that scoped meaning; multi-component `EXACT_GLOBAL` and
+other architectures remain unresolved. Process status stays `SCAFFOLD`. V05–V09 remains
+the scientific source of truth; the ladder does not re-solve the reduced loop.
+
+**Reason:** L4 acceptance is interface expression of the audited V05 gate, not a parallel
+scientific sequence or an over-claim of global spatial-4R coverage.
+
+## ADR-032 — L5 scaffold is not a V06A parent or pointing reconstruction
+
+<!-- L5_SCAFFOLD_INTERFACE_2026_08_13 -->
+
+**Decision:** The L5 ladder adapter may promote process status to `SCAFFOLD` with a
+synthetic spatial-5R seed audit (`rank Jp=3`, `nullity=2`) and candidate letter-family
+records whose axis aggregation, closed-mechanism, and reconstruction statuses remain
+`UNRESOLVED`. This does **not** constitute a two-dimensional `FixedPositionParentResult`,
+does not reconstruct the pointing image, and must not promote `U_v` leaf roles to
+`source_chain_evidence`. Reconstruction stays blocked until accepted source-derived
+children exist and an independent parent image is available (Gate K2 / ADR-024 /
+ADR-026). V06A remains the next scientific step; V05–V09 primacy is unchanged.
+
+**Reason:** Architecture-scoped interface exercise after the proximal exact-U gate is
+useful, but claiming a complete M=2 parent from a seed audit or 1D fiber placeholders
+would violate the evidence chain.

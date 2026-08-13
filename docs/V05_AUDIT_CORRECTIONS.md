@@ -1,6 +1,6 @@
 # V05A–V05E Audit Corrections
 
-**Status:** implementation patch; V05 remains on hold pending an independent reduced closed-mechanism solve  
+**Status:** independent proximal `exact_u_pair_4r` closed-mechanism solve accepted as `EXACT_ON_COMPONENT`; multi-component/`EXACT_GLOBAL` and other architectures remain unresolved  
 **Date:** 2026-08-08
 
 ## Decision
@@ -79,14 +79,23 @@ The exact proximal pair may receive:
 axis_aggregation_status = EXACT_GLOBAL
 ```
 
-while the current closed-mechanism result remains:
+while aggregation alone historically left:
 
 ```text
 closed_mechanism_status = UNRESOLVED
 overall status = UNRESOLVED
 ```
 
-Same-source identity residuals are stored only as coordinate-regrouping diagnostics. They are not closure, tangent, or trajectory evidence for an independent reduced mechanism.
+After the independent `S_v-U_phys-R-R` closed-mechanism gate (ADR-028), proximal
+`exact_u_pair_4r` may promote:
+
+```text
+closed_mechanism_status = EXACT_ON_COMPONENT
+overall status = EXACT_ON_COMPONENT
+```
+
+with explicit component scope. Same-source identity residuals remain coordinate-regrouping
+diagnostics only and still cannot promote closed-mechanism status.
 
 ### V05E — rejection and boundary suite
 
@@ -117,4 +126,9 @@ The current worked case has a valid parent slice and local `U_v` chart, but its 
 
 The patch clears the source-geometry, continuation, curve-classification, status-separation, strict-JSON, tolerance-validation, and CI-readout defects.
 
-V05 still does **not** pass the complete decomposition gate until an independent expanded closed mechanism is instantiated and continued, then compared to the source over a complete explicitly scoped component.
+### Gate update (ADR-028)
+
+Proximal `exact_u_pair_4r` now passes a scoped closed-mechanism gate:
+`closed_mechanism_status=EXACT_ON_COMPONENT` after an independently instantiated and
+continued `S_v-U_phys-R-R` loop is compared to the source fiber. Multi-component
+`EXACT_GLOBAL`, non-proximal pairs, and other corpus architectures remain unresolved.

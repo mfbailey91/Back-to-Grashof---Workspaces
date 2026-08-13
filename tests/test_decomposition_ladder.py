@@ -58,6 +58,8 @@ def test_rung_dimensions_reduce_to_one_dimensional_leaves() -> None:
     assert rung_spec(LadderRung.L7).redundancy_slice_count == 1
     assert rung_spec(LadderRung.L7).process_status is ProcessStatus.BLOCKED
     assert rung_spec(LadderRung.L6).process_status is ProcessStatus.PLANNED
+    assert rung_spec(LadderRung.L5).process_status is ProcessStatus.SCAFFOLD
+    assert rung_spec(LadderRung.L4).process_status is ProcessStatus.SCAFFOLD
 
 
 def test_registered_fiber_specs_match_rung_leaf_dimensions() -> None:
@@ -67,7 +69,12 @@ def test_registered_fiber_specs_match_rung_leaf_dimensions() -> None:
         assert fiber.parent_dimension == by_rung[fiber.rung].fixed_position_mobility
         assert fiber.source_fiber_dimension == 1
         assert len(fiber.constraints) == by_rung[fiber.rung].total_slice_count
-    assert DEFAULT_FIBER_SPECS[1].certificate_status is CertificateStatus.UNRESOLVED
+    assert DEFAULT_FIBER_SPECS[1].certificate_status is CertificateStatus.EXACT_ON_COMPONENT
+    assert "exact_u_pair_4r" in " ".join(DEFAULT_FIBER_SPECS[1].notes)
+    assert "unresolved" in " ".join(DEFAULT_FIBER_SPECS[1].notes).casefold()
+    l5_fiber = next(spec for spec in DEFAULT_FIBER_SPECS if spec.rung is LadderRung.L5)
+    assert l5_fiber.process_status is ProcessStatus.SCAFFOLD
+    assert l5_fiber.certificate_status is CertificateStatus.UNRESOLVED
     assert DEFAULT_FIBER_SPECS[4].process_status is ProcessStatus.BLOCKED
 
 
@@ -150,8 +157,12 @@ def test_ladder_readout_writes_html_json_and_plot(tmp_path) -> None:
     assert "UUUR" in html and "SUUR" in html
     assert "candidate test corpus" in html
     assert "Descriptor discovery remains downstream" in html
+    assert "L5 spatial 5R scaffold" in html
+    assert "nullity=2" in html or "nullity</th>" in html
     payload = paths.json.read_text(encoding="utf-8")
     assert "optional_subordinate_to_V05_V09" in payload
+    assert '"l5_scaffold"' in payload
+    assert '"nullity_jp": 2' in payload or '"seed_nullity_jp": 2' in payload
 
 
 def test_certificate_preserves_aggregation_closed_split() -> None:

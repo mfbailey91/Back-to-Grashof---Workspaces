@@ -17,7 +17,11 @@ def test_render_explorer_index_mentions_active_ladder() -> None:
     assert "V06" in html
     assert "mechanism_explorer_only" in html
     assert "V05B–E audit-corrected MVP" in html or "Active V05B" in html or "audit-corrected MVP" in html
-    assert "V05 gate held" in html or "gate HOLD" in html or "HOLD" in html
+    assert (
+        "CLOSED_ON_COMPONENT" in html
+        or "V05 gate CLOSED" in html
+        or "exact_u_pair_4r" in html
+    )
 
 
 def test_render_kd_hub_mentions_certificate_and_next() -> None:

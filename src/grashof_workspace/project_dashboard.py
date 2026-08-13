@@ -105,9 +105,9 @@ The active scientific ladder is now source-chain first:
 <pre>spatial 4R + S_v (off-axis tool)
   → fixed-position fiber (V05B)
   → classified orientation-curve truth (V05C)
-  → exact RR→U aggregation certificate + closed-mechanism UNRESOLVED (V05D)
+  → exact RR→U aggregation + closed-mechanism EXACT_ON_COMPONENT for exact_u_pair_4r (V05D)
   → near-aligned rejection + false-U diagnostic (V05E)
-  → V06 scaffold only until V05 gate closes</pre>
+  → V06 architecture-scoped after proximal exact-U gate</pre>
 <p>
 Docs:
 <a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
@@ -311,8 +311,8 @@ Canonical readout: <a href="v04c/sprint_04c_virtual_u_equivalence.html">v04c/spr
     <td>V05C</td>
   </tr>
   <tr>
-    <td>Exact proximal RR→U axis aggregation may be EXACT_GLOBAL as regrouping; closed-mechanism equivalence remains UNRESOLVED pending an independent reduced solve.</td>
-    <td>source-chain certificate / HOLD</td>
+    <td>Exact proximal RR→U axis aggregation is EXACT_GLOBAL as regrouping; closed-mechanism equivalence is EXACT_ON_COMPONENT for proximal exact_u_pair_4r after an independent reduced solve.</td>
+    <td>source-chain certificate / CLOSED_ON_COMPONENT</td>
     <td>V05D</td>
   </tr>
   <tr>
@@ -348,16 +348,16 @@ Canonical readout:
 </p>
 
 <h2 id="active">Active kinematic decomposition — V05B–E</h2>
-<p class="status pass">AUDIT-CORRECTED MVP — V05 scientific gate HOLD</p>
+<p class="status pass">AUDIT-CORRECTED MVP — V05 gate CLOSED_ON_COMPONENT (exact_u_pair_4r)</p>
 <p>
 Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>
 · corrections: <a href="../../docs/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
 </p>
 <pre>V05A corpus (off-axis + terminal-roll control) → V05B fixed-position fiber (audit-corrected MVP)
 V05C orientation-curve classification (audit-corrected MVP)
-V05D exact-axis certificates / closed-mechanism UNRESOLVED
+V05D exact-axis EXACT_GLOBAL / closed-mechanism EXACT_ON_COMPONENT (exact_u_pair_4r)
 V05E near-aligned rejection (audit-corrected MVP)
-V05 overall gate HOLD · V06 scientific claims BLOCKED until independent reduced solve
+V05 overall CLOSED_ON_COMPONENT · other architectures UNRESOLVED · V06 architecture-scoped
 V10+ deferred atlas</pre>
 <ul>
   <li>V05B:
@@ -384,10 +384,11 @@ Program docs:
 
 <h2 id="next">Next: V06 — spatial 5R fixed-position parent</h2>
 <p>
-Software scaffold work for a spatial 5R fixed-position parent may proceed, but
-<strong>V06 scientific claims are blocked</strong> until V05 closes the independent
-<code>S_v-U_phys-R-R</code> reduced closed-mechanism comparison. Do not promote explorer
-four-bar atlases to manipulator evidence without certificates.
+Software scaffold work for a spatial 5R fixed-position parent may proceed.
+<strong>V06 scientific claims</strong> may be architecture-scoped for pathways that inherit
+the accepted proximal exact-U closed-mechanism certificate; multi-component and
+non-proximal embeddings remain unverified. Do not promote explorer four-bar atlases
+to manipulator evidence without certificates.
 </p>
 
 <h2 id="links">Full sprint link index</h2>
@@ -497,8 +498,11 @@ def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE)
   Exports are <strong>not</strong> coverage certificates for <code>SO(3)</code> or <code>S²</code>.
   Explorer <code>spatial4bar_explorer/v05a</code> remains <code>mechanism_explorer_only</code>
   and is <strong>not</strong> this ladder.
-  <strong>V05 scientific gate: HOLD</strong> pending an independently instantiated and continued
-  reduced closed mechanism (exact axis aggregation alone is not closed-mechanism equivalence).
+  <strong>V05 scientific gate: CLOSED_ON_COMPONENT</strong> for proximal
+  <code>exact_u_pair_4r</code> after an independently instantiated and continued
+  reduced closed mechanism. Exact axis aggregation alone is still not
+  closed-mechanism equivalence; multi-component <code>EXACT_GLOBAL</code> and other
+  architectures remain unresolved.
 </div>
 
 <h2>Thesis</h2>
@@ -508,7 +512,7 @@ def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE)
   → classified OrientationImageResult / PointingImageResult (V05C)
   → DecompositionCertificate: axis_aggregation vs closed_mechanism (V05D)
   → near-aligned REJECTED + false_u_surrogate diagnostic (V05E)
-  → V06 scaffold only until V05 gate closes</pre>
+  → V06 architecture-scoped after proximal exact-U gate</pre>
 <p>
 Docs:
 <a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
@@ -566,8 +570,9 @@ PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir res
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V06</strong> — spatial 5R fixed-position parent scaffold only until the V05 closed-mechanism gate closes.
-Scientific V06 claims remain <strong>BLOCKED</strong>.</p>
+<p><strong>V06</strong> — spatial 5R fixed-position parent may proceed as architecture-scoped
+scaffold/claim work inheriting the proximal exact-U <code>EXACT_ON_COMPONENT</code> gate.
+Multi-component <code>EXACT_GLOBAL</code> remains unverified.</p>
 
 <p class="meta" style="margin-top:2rem;">
   Project dashboard (explorer + ladder):

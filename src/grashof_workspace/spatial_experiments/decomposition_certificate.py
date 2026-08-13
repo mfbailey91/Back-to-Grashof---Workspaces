@@ -7,10 +7,11 @@ The audit requires two claims to remain separate:
 2. an independently instantiated ``S_v-U_phys-R-R`` closed mechanism may or
    may not reproduce a complete fixed-position source component.
 
-V05 now certifies claim (1) and leaves claim (2) ``UNRESOLVED`` until the
-reduced closure is built and continued independently.  Identity comparisons of
-a serial chain with itself are retained only as coordinate-regrouping
-sanity diagnostics and cannot promote the closed-mechanism status.
+``issue_axis_aggregation_certificate`` certifies claim (1) and leaves claim (2)
+``UNRESOLVED``.  ``issue_closed_mechanism_certificate`` promotes claim (2) only
+after an independent reduced solve + comparison accepts a scoped component.
+Identity comparisons of a serial chain with itself remain regrouping diagnostics
+only and cannot promote the closed-mechanism status.
 """
 
 from __future__ import annotations
@@ -28,6 +29,7 @@ from .axis_aggregation import (
     detect_exact_u_pairs,
     fk_identity_residuals,
 )
+from .closed_mechanism_compare import ClosedMechanismComparison
 from .fixed_position import audit_fixed_position_seed, pose_fixed_position_problem
 from .open_chain import OpenChainModel
 
@@ -278,4 +280,126 @@ def issue_axis_aggregation_certificate(
                 "designated_task_is_not_U_phys": True,
             },
         },
+    )
+
+
+def issue_closed_mechanism_certificate(
+    aggregation_certificate: DecompositionCertificate,
+    comparison: ClosedMechanismComparison,
+) -> DecompositionCertificate:
+    """Promote closed-mechanism status from an independent comparison result.
+
+    Refuses promotion when comparison is not an accepted independent closed-loop
+    solve. Identity-on-same-chain mode can never promote. MVP issues only
+    ``EXACT_ON_COMPONENT`` (never multi-component ``EXACT_GLOBAL``).
+    """
+
+    if aggregation_certificate.aggregated is None:
+        raise ValueError("closed-mechanism certificate requires an aggregated source")
+    if aggregation_certificate.axis_aggregation_status != "EXACT_GLOBAL":
+        raise ValueError("closed-mechanism promotion requires EXACT_GLOBAL axis aggregation")
+
+    evidence = dict(aggregation_certificate.evidence)
+    evidence["closed_mechanism_comparison"] = comparison.to_json_dict()
+    evidence["independent_reduced_solve_present"] = bool(
+        comparison.independent_reduced_solve_present
+        and comparison.comparison_mode == "independent_closed_loop"
+    )
+
+    refuse_reason: str | None = None
+    if comparison.comparison_mode != "independent_closed_loop":
+        refuse_reason = (
+            "Refusing promotion: comparison_mode must be independent_closed_loop "
+            f"(got {comparison.comparison_mode})."
+        )
+    elif not comparison.independent_reduced_solve_present:
+        refuse_reason = "Refusing promotion: independent_reduced_solve_present is false."
+    elif not comparison.accepted:
+        refuse_reason = (
+            "Independent reduced solve present but comparison not accepted: "
+            f"{comparison.failure_or_scope_reason}"
+        )
+
+    if refuse_reason is not None:
+        return DecompositionCertificate(
+            source_chain_id=aggregation_certificate.source_chain_id,
+            fixed_position_problem_id=aggregation_certificate.fixed_position_problem_id,
+            source_component_id=aggregation_certificate.source_component_id,
+            source_mobility=aggregation_certificate.source_mobility,
+            joint_kind_sequence=aggregation_certificate.joint_kind_sequence,
+            joint_role_sequence=aggregation_certificate.joint_role_sequence,
+            cyclic_origin_role=aggregation_certificate.cyclic_origin_role,
+            designated_task_joint_role=aggregation_certificate.designated_task_joint_role,
+            reduction_operations=aggregation_certificate.reduction_operations,
+            reduced_topology=aggregation_certificate.reduced_topology,
+            coordinate_map=(
+                "independent URRS chart physical deltas ↔ source joint angles "
+                "(seed-assembled S_v-U_phys-R-R)"
+            ),
+            inverse_or_reconstruction_map=(
+                "source joint angles ↔ reduced physical deltas; S chart is internal"
+            ),
+            task_map=aggregation_certificate.task_map,
+            rank_and_nullity_checks=aggregation_certificate.rank_and_nullity_checks,
+            coordinate_regrouping_residuals=aggregation_certificate.coordinate_regrouping_residuals,
+            closure_residuals={
+                "max_closure_residual": comparison.max_closure_residual,
+            },
+            tangent_subspace_error=comparison.seed_tangent_misalignment,
+            trajectory_position_error_m=comparison.max_position_error_m,
+            trajectory_pointing_error=comparison.max_pointing_error,
+            trajectory_joint_map_error_rad=comparison.max_joint_map_error_rad,
+            component_correspondence=f"rejected:{comparison.scope}",
+            joint_limit_correspondence=aggregation_certificate.joint_limit_correspondence,
+            axis_aggregation_status="EXACT_GLOBAL",
+            closed_mechanism_status="UNRESOLVED",
+            status="UNRESOLVED",
+            failure_or_scope_reason=refuse_reason,
+            candidates=aggregation_certificate.candidates,
+            aggregated=aggregation_certificate.aggregated,
+            evidence=evidence,
+        )
+
+    scope = comparison.scope
+    reason = (
+        f"Independent S_v-U_phys-R-R closed mechanism matches the source component "
+        f"over scope={scope}. Multi-component EXACT_GLOBAL remains unverified."
+    )
+    return DecompositionCertificate(
+        source_chain_id=aggregation_certificate.source_chain_id,
+        fixed_position_problem_id=aggregation_certificate.fixed_position_problem_id,
+        source_component_id=aggregation_certificate.source_component_id,
+        source_mobility=aggregation_certificate.source_mobility,
+        joint_kind_sequence=aggregation_certificate.joint_kind_sequence,
+        joint_role_sequence=aggregation_certificate.joint_role_sequence,
+        cyclic_origin_role=aggregation_certificate.cyclic_origin_role,
+        designated_task_joint_role=aggregation_certificate.designated_task_joint_role,
+        reduction_operations=aggregation_certificate.reduction_operations,
+        reduced_topology=aggregation_certificate.reduced_topology,
+        coordinate_map=(
+            "independent URRS chart physical deltas ↔ source joint angles "
+            "(seed-assembled S_v-U_phys-R-R)"
+        ),
+        inverse_or_reconstruction_map=(
+            "source joint angles ↔ reduced physical deltas; S chart is internal"
+        ),
+        task_map=aggregation_certificate.task_map,
+        rank_and_nullity_checks=aggregation_certificate.rank_and_nullity_checks,
+        coordinate_regrouping_residuals=aggregation_certificate.coordinate_regrouping_residuals,
+        closure_residuals={
+            "max_closure_residual": comparison.max_closure_residual,
+        },
+        tangent_subspace_error=comparison.seed_tangent_misalignment,
+        trajectory_position_error_m=comparison.max_position_error_m,
+        trajectory_pointing_error=comparison.max_pointing_error,
+        trajectory_joint_map_error_rad=comparison.max_joint_map_error_rad,
+        component_correspondence=f"exact_on_component:{scope}",
+        joint_limit_correspondence=aggregation_certificate.joint_limit_correspondence,
+        axis_aggregation_status="EXACT_GLOBAL",
+        closed_mechanism_status="EXACT_ON_COMPONENT",
+        status="EXACT_ON_COMPONENT",
+        failure_or_scope_reason=reason,
+        candidates=aggregation_certificate.candidates,
+        aggregated=aggregation_certificate.aggregated,
+        evidence=evidence,
     )

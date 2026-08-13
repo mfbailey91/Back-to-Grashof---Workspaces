@@ -39,7 +39,7 @@
 <p>
 <strong>Active scientific sequence:</strong> <code>docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code>.
 This readout is an optional interface scaffold subordinate to that program. It does not demote
-the V05 closed-mechanism HOLD or promote L5–L7 claims.
+the V05 scoped closed-mechanism gate or promote L5–L7 claims beyond accepted scope.
 </p>
 <p>
 The common implementation contract is: construct the exact fixed-position source parent,
@@ -66,6 +66,54 @@ the leaf, and reconstruct the parent task image from accepted fibers.
 </tr>
 <tr><td><code>L3</code></td><td>planar 3R</td><td>1</td><td>SO(2) planar orientation</td><td>0</td><td>0</td><td>direct</td></tr><tr><td><code>L4</code></td><td>spatial 4R</td><td>1</td><td>specified one-parameter orientation family Y1 ⊂ SO(3)</td><td>0</td><td>0</td><td>direct</td></tr><tr><td><code>L5</code></td><td>spatial 5R</td><td>2</td><td>S^2 tool pointing</td><td>1</td><td>0</td><td>fiber family</td></tr><tr><td><code>L6</code></td><td>spatial 6R</td><td>3</td><td>SO(3) full orientation</td><td>2</td><td>0</td><td>fiber family</td></tr><tr><td><code>L7</code></td><td>spatial 7R</td><td>4</td><td>SO(3) orientation plus one-dimensional self-motion</td><td>2</td><td>1</td><td>fiber family</td></tr>
 </table>
+
+
+<h2>L3 planar calibration (trusted exact map)</h2>
+<p>
+Radius-level retrofit of the analytical planar 3R→4R result into shared ladder records.
+<code>EXACT_GLOBAL</code> certifies the map at each radius; dexterity/rotatability remain
+separate predicates. Process status stays <code>SCAFFOLD</code>. Active science remains
+V05–V09.
+</p>
+<table>
+<tr>
+<th>rho</th><th>assemblable</th><th>rotatable</th><th>dexterous</th>
+<th>map certificate</th><th>predicate match</th>
+</tr>
+<tr><td><code>0.0</code></td><td><code>True</code></td><td><code>True</code></td><td><code>True</code></td><td><code>EXACT_GLOBAL</code></td><td><code>True</code></td></tr><tr><td><code>1.0</code></td><td><code>True</code></td><td><code>True</code></td><td><code>True</code></td><td><code>EXACT_GLOBAL</code></td><td><code>True</code></td></tr><tr><td><code>2.0</code></td><td><code>True</code></td><td><code>True</code></td><td><code>True</code></td><td><code>EXACT_GLOBAL</code></td><td><code>True</code></td></tr><tr><td><code>3.5</code></td><td><code>True</code></td><td><code>False</code></td><td><code>False</code></td><td><code>EXACT_GLOBAL</code></td><td><code>True</code></td></tr></table>
+
+
+<h2>L4 spatial 4R equivalence (wraps V05)</h2>
+<p>
+Shared ladder records for the existing V05 independent closed-mechanism evidence.
+Proximal <code>exact_u_pair_4r</code> is <code>EXACT_ON_COMPONENT</code> on the compared
+component; generic architectures do not promote a child. Process stays
+<code>SCAFFOLD</code>. Scientific source:
+<a href="../kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">V05D readout</a>.
+</p>
+<table>
+<tr>
+<th>architecture</th><th>axis aggregation</th><th>closed mechanism</th>
+<th>orientation curve</th><th>reconstruction</th><th>independent reduce</th>
+</tr>
+<tr><td><code>exact_u_pair_4r</code></td><td><code>EXACT_GLOBAL</code></td><td><code>EXACT_ON_COMPONENT</code></td><td><code>NONTRIVIAL_POINTING_CURVE</code></td><td><code>EXACT_ON_COMPONENT</code></td><td><code>True</code></td></tr><tr><td><code>generic_4r</code></td><td><code>REJECTED</code></td><td><code>UNRESOLVED</code></td><td><code>NONTRIVIAL_POINTING_CURVE</code></td><td><code>UNRESOLVED</code></td><td><code>False</code></td></tr></table>
+
+
+<h2>L5 spatial 5R scaffold (V06-mapped)</h2>
+<p>
+Architecture-scoped scaffold after the proximal exact-U gate: synthetic 5R seed audit
+(<code>rank Jp=3</code>, <code>nullity=2</code>) plus candidate letter families. This is
+<strong>not</strong> a 2D parent representation and <strong>not</strong> pointing-image
+reconstruction. All family certificates stay <code>UNRESOLVED</code>. V06A
+(<code>FixedPositionParentResult</code>) remains the next scientific step. Process status
+is <code>SCAFFOLD</code>.
+</p>
+<table>
+<tr>
+<th>architecture</th><th>seed rank Jp</th><th>seed nullity</th><th>seed status</th>
+<th>candidate families</th><th>reconstruction</th><th>process</th>
+</tr>
+<tr><td><code>generic_5r</code></td><td><code>3</code></td><td><code>2</code></td><td><code>PASS</code></td><td><code>UUUR</code>, <code>UURU</code>, <code>URUU</code>, <code>USRR</code>, <code>URSR</code>, <code>URRS</code></td><td><code>UNRESOLVED</code></td><td><code>SCAFFOLD</code></td></tr></table>
 
 <h2>Candidate L5 parent → child letter corpus</h2>
 <p>
@@ -104,13 +152,15 @@ of one mechanism branch—not two independent mechanism DOFs.
 <h2>Scaffold mapping to active V05–V09</h2>
 <ol>
 <li><strong>L3:</strong> planar calibration adapter (trusted exact map).</li>
-<li><strong>L4 / V05:</strong> close the independent <code>S_v-U_phys-R-R</code>
-reduced-mechanism equivalence gate (currently HOLD / UNRESOLVED).</li>
-<li><strong>L5 / V06:</strong> complete 2D 5R parent + task-derived fiber family
-(scientific claims blocked until V05 lifts).</li>
+<li><strong>L4 / V05:</strong> proximal <code>exact_u_pair_4r</code> closed-mechanism is
+<code>EXACT_ON_COMPONENT</code>; multi-component / other architectures remain unresolved.</li>
+<li><strong>L5 / V06:</strong> scaffold interface with nullity-2 seed audit and
+candidate letter families (<code>UNRESOLVED</code>); complete 2D parent + reconstruction
+remain V06A / later science.</li>
 <li><strong>L6:</strong> V07-first freeze a decomposition-free SO(3) reference, then
 optional nested slices / V08 quotient against that truth.</li>
-<li><strong>L7:</strong> deferred / BLOCKED until the V05 closed-mechanism gate lifts.</li>
+<li><strong>L7:</strong> deferred / BLOCKED pending multi-component and nested-slice
+certificate work beyond the proximal exact-U gate.</li>
 </ol>
 
 <h2>Evidence guardrails</h2>

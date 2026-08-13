@@ -58,7 +58,10 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
         ),
         process_status=ProcessStatus.SCAFFOLD,
         notes=(
-            "Maps to active V05. Independent reduced closed-mechanism solve remains HOLD.",
+            (
+                "Maps to active V05. Proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; "
+                "multi-component EXACT_GLOBAL and other architectures remain unresolved."
+            ),
             "The generic orientation image is a curve in SO(3), not full spatial dexterity.",
         ),
     ),
@@ -77,10 +80,11 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
             "Can the complete two-dimensional pointing parent be reconstructed from a "
             "task-derived family of certified one-DOF fibers?"
         ),
-        process_status=ProcessStatus.PLANNED,
+        process_status=ProcessStatus.SCAFFOLD,
         notes=(
-            "Maps to active V06. Scientific claims remain blocked until the V05 gate lifts.",
-            "Parent→fiber decomposition is central; letter families are candidate tests only.",
+            "Maps to active V06. Architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+            "Parent geometry/charts remain UNRESOLVED; letter families are candidate tests only.",
+            "Not a 2D parent representation and not pointing-image reconstruction (V06A next).",
         ),
     ),
     RungSpec(
@@ -121,7 +125,7 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
         ),
         process_status=ProcessStatus.BLOCKED,
         notes=(
-            "Deferred beyond the active V05–V09 sequence until the V05 closed-mechanism gate lifts.",
+            "Deferred beyond the active V05–V09 sequence pending multi-component certificates.",
             "The redundancy coordinate is not a fourth orientation coordinate.",
         ),
     ),
@@ -261,9 +265,18 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         source_fiber_dimension=1,
         candidate_child_family="architecture-dependent spatial four-bar",
         process_status=ProcessStatus.SCAFFOLD,
-        certificate_status=CertificateStatus.UNRESOLVED,
+        certificate_status=CertificateStatus.EXACT_ON_COMPONENT,
         reconstruction_target="Y1 ⊂ SO(3)",
-        notes=("Independent reduced closed-mechanism solve remains the active V05 gate.",),
+        notes=(
+            (
+                "Catalog status EXACT_ON_COMPONENT is scoped to proximal exact_u_pair_4r "
+                "on the compared V05 component; not multi-component EXACT_GLOBAL."
+            ),
+            (
+                "generic_4r, near-aligned, and non-proximal architectures remain unresolved "
+                "or rejected for closed-mechanism equivalence."
+            ),
+        ),
     ),
     FiberFamilySpec(
         rung=LadderRung.L5,
@@ -272,10 +285,13 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         constraints=(POINTING_LATITUDE_SLICE,),
         source_fiber_dimension=1,
         candidate_child_family="candidate UUUR/UURU/URUU/USRR/URSR/URRS corpus",
-        process_status=ProcessStatus.PLANNED,
+        process_status=ProcessStatus.SCAFFOLD,
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="S^2 pointing image",
-        notes=("V06 scientific claims blocked until V05 closed-mechanism gate lifts.",),
+        notes=(
+            "V06 architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+            "2D parent representation still required before reconstruction claims (Gate K2).",
+        ),
     ),
     FiberFamilySpec(
         rung=LadderRung.L6,
@@ -305,7 +321,7 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         process_status=ProcessStatus.BLOCKED,
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="SO(3) coverage with nonempty redundancy fibers",
-        notes=("Deferred until the active V05 closed-mechanism gate lifts.",),
+        notes=("Deferred pending multi-component certificates beyond proximal exact-U gate.",),
     ),
 )
 
@@ -339,6 +355,6 @@ def program_payload() -> dict[str, Any]:
             "Drive continuation arclength s by default; alpha(s) and beta(s) are outputs.",
             "Prescribe alpha or beta only where that coordinate is a regular local chart.",
             "Promote source_chain_evidence only from an accepted closed-mechanism certificate.",
-            "L7 remains BLOCKED until the V05 closed-mechanism gate lifts.",
+            "L7 remains BLOCKED pending multi-component / nested-slice certificate work.",
         ],
     }
