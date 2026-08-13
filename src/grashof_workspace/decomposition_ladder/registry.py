@@ -80,10 +80,11 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
             "Can the complete two-dimensional pointing parent be reconstructed from a "
             "task-derived family of certified one-DOF fibers?"
         ),
-        process_status=ProcessStatus.PLANNED,
+        process_status=ProcessStatus.SCAFFOLD,
         notes=(
-            "Maps to active V06. Architecture-scoped after proximal exact-U EXACT_ON_COMPONENT gate.",
-            "Parent→fiber decomposition is central; letter families are candidate tests only.",
+            "Maps to active V06. Architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+            "Parent geometry/charts remain UNRESOLVED; letter families are candidate tests only.",
+            "Not a 2D parent representation and not pointing-image reconstruction (V06A next).",
         ),
     ),
     RungSpec(
@@ -284,10 +285,13 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         constraints=(POINTING_LATITUDE_SLICE,),
         source_fiber_dimension=1,
         candidate_child_family="candidate UUUR/UURU/URUU/USRR/URSR/URRS corpus",
-        process_status=ProcessStatus.PLANNED,
+        process_status=ProcessStatus.SCAFFOLD,
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="S^2 pointing image",
-        notes=("V06 architecture-scoped after proximal exact-U EXACT_ON_COMPONENT gate.",),
+        notes=(
+            "V06 architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+            "2D parent representation still required before reconstruction claims (Gate K2).",
+        ),
     ),
     FiberFamilySpec(
         rung=LadderRung.L6,

@@ -172,7 +172,7 @@ See `docs/SPATIAL_4BAR_V05_V09_PROGRAM.md` for the retained historical plan and 
 ```text
 L3  planar calibration retrofit (trusted exact map)
 L4  maps to V05 (proximal exact_u_pair_4r closed-mechanism EXACT_ON_COMPONENT; other architectures unresolved)
-L5  maps to V06 (claims blocked until V05 lifts)
+L5  maps to V06 (architecture-scoped scaffold after proximal exact-U; 2D parent / reconstruction still UNRESOLVED)
 L6  V07-first independent SO(3) truth, then optional nested / V08 work
 L7  deferred / BLOCKED until the V05 closed-mechanism gate lifts
 ```

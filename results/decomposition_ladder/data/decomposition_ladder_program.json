@@ -50,10 +50,11 @@
       "redundancy_slice_count": 0,
       "direct_leaf": false,
       "active_question": "Can the complete two-dimensional pointing parent be reconstructed from a task-derived family of certified one-DOF fibers?",
-      "process_status": "PLANNED",
+      "process_status": "SCAFFOLD",
       "notes": [
-        "Maps to active V06. Architecture-scoped after proximal exact-U EXACT_ON_COMPONENT gate.",
-        "Parent\u2192fiber decomposition is central; letter families are candidate tests only."
+        "Maps to active V06. Architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+        "Parent geometry/charts remain UNRESOLVED; letter families are candidate tests only.",
+        "Not a 2D parent representation and not pointing-image reconstruction (V06A next)."
       ]
     },
     {
@@ -375,11 +376,12 @@
       ],
       "source_fiber_dimension": 1,
       "candidate_child_family": "candidate UUUR/UURU/URUU/USRR/URSR/URRS corpus",
-      "process_status": "PLANNED",
+      "process_status": "SCAFFOLD",
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "S^2 pointing image",
       "notes": [
-        "V06 architecture-scoped after proximal exact-U EXACT_ON_COMPONENT gate."
+        "V06 architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+        "2D parent representation still required before reconstruction claims (Gate K2)."
       ]
     },
     {
@@ -2296,5 +2298,368 @@
         "independent_reduced_solve_present": false
       }
     ]
+  },
+  "l5_scaffold": {
+    "note": "L5 scaffold only: seed nullity-2 audit + candidate letter families. Not a 2D parent representation and not pointing-image reconstruction. V06A remains the next scientific step.",
+    "v06_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
+    "bundle": {
+      "architecture_id": "generic_5r",
+      "parent": {
+        "rung": "L5",
+        "parent_id": "generic_5r_pointing_parent_scaffold",
+        "source_chain_id": "generic_5r",
+        "task_point": [
+          0.6076189565151159,
+          0.2690228407649954,
+          0.6407937249859998
+        ],
+        "dimension": 2,
+        "target_space": "S^2",
+        "component_ids": [
+          "generic_5r_fiber_placeholder"
+        ],
+        "process_status": "SCAFFOLD",
+        "notes": [
+          "Scaffold placeholder keyed to a fixed-position seed p*.",
+          "Parent geometry/charts are UNRESOLVED \u2014 not a FixedPositionParentResult.",
+          "V06A must construct the complete M=2 parent independently of children."
+        ]
+      },
+      "fiber_placeholder": {
+        "rung": "L5",
+        "fiber_id": "generic_5r_fiber_placeholder",
+        "parent_id": "generic_5r_pointing_parent_scaffold",
+        "component_id": "generic_5r_fiber_placeholder",
+        "slice_values": {},
+        "dimension": 1,
+        "branch_status": "scaffold_placeholder",
+        "returned": false,
+        "source_provenance": "scaffold_only",
+        "sample_count": 0,
+        "task_image_status": "UNRESOLVED_parent_charts_absent",
+        "notes": [
+          "No pointing-latitude fiber has been continued.",
+          "Placeholder exists so shared L5 interfaces are exercisable without Gate K2 violations."
+        ]
+      },
+      "children": [
+        {
+          "child_id": "generic_5r_UUUR_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "UUUR",
+          "joint_kind_sequence": [
+            "U",
+            "U",
+            "U",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "U_phys",
+            "U_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_UURU_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "UURU",
+          "joint_kind_sequence": [
+            "U",
+            "U",
+            "R",
+            "U"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "U_phys",
+            "R_phys",
+            "U_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_URUU_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "URUU",
+          "joint_kind_sequence": [
+            "U",
+            "R",
+            "U",
+            "U"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "R_phys",
+            "U_phys",
+            "U_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_USRR_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "USRR",
+          "joint_kind_sequence": [
+            "U",
+            "S",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "S_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_URSR_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "URSR",
+          "joint_kind_sequence": [
+            "U",
+            "R",
+            "S",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "R_phys",
+            "S_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        },
+        {
+          "child_id": "generic_5r_URRS_candidate",
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "family": "URRS",
+          "joint_kind_sequence": [
+            "U",
+            "R",
+            "R",
+            "S"
+          ],
+          "joint_role_sequence": [
+            "U_v",
+            "R_phys",
+            "R_phys",
+            "S_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "candidate_corpus_only",
+          "status": "UNRESOLVED",
+          "notes": [
+            "Letter labels identify a candidate test corpus only.",
+            "Mobility and joint-letter matching are not equivalence certificates.",
+            "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued.",
+            "Letter/mobility matching is not an equivalence certificate.",
+            "U_v on the child is a candidate task role, not source_chain_evidence."
+          ]
+        }
+      ],
+      "certificates": [
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_UUUR_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SUUR\u2192UUUR has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_UURU_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SURU\u2192UURU has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_URUU_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SRUU\u2192URUU has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_USRR_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SSRR\u2192USRR has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_URSR_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SRSR\u2192URSR has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        },
+        {
+          "source_fiber_id": "generic_5r_fiber_placeholder",
+          "child_id": "generic_5r_URRS_candidate",
+          "axis_aggregation_status": "UNRESOLVED",
+          "closed_mechanism_status": "UNRESOLVED",
+          "status": "UNRESOLVED",
+          "component_scope": "scaffold_candidate_corpus_only",
+          "coordinate_map": "unresolved",
+          "reconstruction_map": "unresolved",
+          "closure_error": null,
+          "tangent_error": null,
+          "task_map_error": null,
+          "reason": "Candidate family SRRS\u2192URRS has no issued axis-aggregation or independent closed-mechanism certificate.",
+          "accepted_for_reconstruction": false
+        }
+      ],
+      "reconstruction": {
+        "rung": "L5",
+        "parent_id": "generic_5r_pointing_parent_scaffold",
+        "target_space": "S^2",
+        "accepted_fiber_ids": [],
+        "unresolved_fiber_ids": [
+          "generic_5r_fiber_placeholder"
+        ],
+        "direct_coverage_status": "UNRESOLVED_no_parent_image",
+        "reconstructed_coverage_status": "UNRESOLVED_no_accepted_children",
+        "comparison_error": null,
+        "process_status": "SCAFFOLD",
+        "certificate_status": "UNRESOLVED",
+        "notes": [
+          "Gate K2 / ADR-024: a collection of 1D fibers is not the complete 2D parent.",
+          "ADR-026: descriptor discovery remains blocked until parent image reconstruction succeeds.",
+          "Reconstruction uses only accepted source-derived children \u2014 none exist yet."
+        ]
+      },
+      "seed_audit": {
+        "architecture_id": "generic_5r",
+        "status": "PASS",
+        "regular": true,
+        "rank_jp": 3,
+        "nullity_jp": 2,
+        "p_star": [
+          0.6076189565151159,
+          0.2690228407649954,
+          0.6407937249859998
+        ],
+        "p_residual_m": 0.0,
+        "motion_signature": "NONTRIVIAL_POINTING_CURVE",
+        "finite_difference_verified": true,
+        "notes": [
+          "Seed audit only; does not represent the complete two-dimensional parent.",
+          "Gate K2 / ADR-024: do not treat 1D traces as the M=2 parent."
+        ]
+      },
+      "notes": [
+        "L5 scaffold interface under V06; scientific source remains docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md.",
+        "Next scientific step: V06A FixedPositionParentResult (independent 2D parent).",
+        "Architecture-scoped after proximal exact_u_pair_4r EXACT_ON_COMPONENT gate."
+      ]
+    },
+    "summary": {
+      "architecture_id": "generic_5r",
+      "seed_rank_jp": 3,
+      "seed_nullity_jp": 2,
+      "seed_status": "PASS",
+      "candidate_family_count": 6,
+      "candidate_families": [
+        "UUUR",
+        "UURU",
+        "URUU",
+        "USRR",
+        "URSR",
+        "URRS"
+      ],
+      "all_certificates_unresolved": true,
+      "reconstruction_status": "UNRESOLVED",
+      "accepted_fiber_count": 0,
+      "process_status": "SCAFFOLD"
+    }
   }
 }

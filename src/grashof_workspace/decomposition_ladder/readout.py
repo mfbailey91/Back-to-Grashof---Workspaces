@@ -15,6 +15,7 @@ from PIL import Image
 from .planar_l3 import default_l3_calibration_payload
 from .registry import PARENT_CHILD_FAMILIES, RUNG_SPECS, program_payload
 from .spatial_l4 import default_l4_equivalence_payload
+from .spatial_l5 import default_l5_scaffold_payload
 from .u_drive import (
     conceptual_branch_samples,
     free_branch_contract,
@@ -217,6 +218,32 @@ def _l4_equivalence_rows(payload: dict[str, Any]) -> str:
     return "".join(rows)
 
 
+def _l5_scaffold_rows(payload: dict[str, Any]) -> str:
+    section = payload.get("l5_scaffold")
+    if not isinstance(section, dict):
+        return ""
+    summary = section.get("summary")
+    if not isinstance(summary, dict):
+        return ""
+    families = summary.get("candidate_families")
+    family_list = (
+        ", ".join(f"<code>{name}</code>" for name in families)
+        if isinstance(families, list)
+        else ""
+    )
+    return (
+        "<tr>"
+        f"<td><code>{summary.get('architecture_id')}</code></td>"
+        f"<td><code>{summary.get('seed_rank_jp')}</code></td>"
+        f"<td><code>{summary.get('seed_nullity_jp')}</code></td>"
+        f"<td><code>{summary.get('seed_status')}</code></td>"
+        f"<td>{family_list}</td>"
+        f"<td><code>{summary.get('reconstruction_status')}</code></td>"
+        f"<td><code>{summary.get('process_status')}</code></td>"
+        "</tr>"
+    )
+
+
 def render_ladder_html(
     *,
     payload: dict[str, Any],
@@ -273,6 +300,29 @@ component; generic architectures do not promote a child. Process stays
         + l4_rows
         + "</table>"
         if l4_rows
+        else ""
+    )
+    l5_rows = _l5_scaffold_rows(payload)
+    l5_section = (
+        """
+<h2>L5 spatial 5R scaffold (V06-mapped)</h2>
+<p>
+Architecture-scoped scaffold after the proximal exact-U gate: synthetic 5R seed audit
+(<code>rank Jp=3</code>, <code>nullity=2</code>) plus candidate letter families. This is
+<strong>not</strong> a 2D parent representation and <strong>not</strong> pointing-image
+reconstruction. All family certificates stay <code>UNRESOLVED</code>. V06A
+(<code>FixedPositionParentResult</code>) remains the next scientific step. Process status
+is <code>SCAFFOLD</code>.
+</p>
+<table>
+<tr>
+<th>architecture</th><th>seed rank Jp</th><th>seed nullity</th><th>seed status</th>
+<th>candidate families</th><th>reconstruction</th><th>process</th>
+</tr>
+"""
+        + l5_rows
+        + "</table>"
+        if l5_rows
         else ""
     )
     return f"""<!doctype html>
@@ -348,6 +398,8 @@ the leaf, and reconstruct the parent task image from accepted fibers.
 
 {l4_section}
 
+{l5_section}
+
 <h2>Candidate L5 parent → child letter corpus</h2>
 <p>
 For L5, replacing the virtual spherical closure <code>S_v</code> by a task-derived
@@ -387,8 +439,9 @@ of one mechanism branch—not two independent mechanism DOFs.
 <li><strong>L3:</strong> planar calibration adapter (trusted exact map).</li>
 <li><strong>L4 / V05:</strong> proximal <code>exact_u_pair_4r</code> closed-mechanism is
 <code>EXACT_ON_COMPONENT</code>; multi-component / other architectures remain unresolved.</li>
-<li><strong>L5 / V06:</strong> complete 2D 5R parent + task-derived fiber family
-(architecture-scoped after the proximal exact-U gate).</li>
+<li><strong>L5 / V06:</strong> scaffold interface with nullity-2 seed audit and
+candidate letter families (<code>UNRESOLVED</code>); complete 2D parent + reconstruction
+remain V06A / later science.</li>
 <li><strong>L6:</strong> V07-first freeze a decomposition-free SO(3) reference, then
 optional nested slices / V08 quotient against that truth.</li>
 <li><strong>L7:</strong> deferred / BLOCKED pending multi-component and nested-slice
@@ -432,6 +485,7 @@ def build_ladder_readout(
     payload["conceptual_only"] = True
     payload["l3_calibration"] = default_l3_calibration_payload()
     payload["l4_equivalence"] = default_l4_equivalence_payload()
+    payload["l5_scaffold"] = default_l5_scaffold_payload()
 
     json_path = data_dir / "decomposition_ladder_program.json"
     json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

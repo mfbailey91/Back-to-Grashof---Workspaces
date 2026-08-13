@@ -248,3 +248,20 @@ the scientific source of truth; the ladder does not re-solve the reduced loop.
 
 **Reason:** L4 acceptance is interface expression of the audited V05 gate, not a parallel
 scientific sequence or an over-claim of global spatial-4R coverage.
+
+## ADR-032 — L5 scaffold is not a V06A parent or pointing reconstruction
+
+<!-- L5_SCAFFOLD_INTERFACE_2026_08_13 -->
+
+**Decision:** The L5 ladder adapter may promote process status to `SCAFFOLD` with a
+synthetic spatial-5R seed audit (`rank Jp=3`, `nullity=2`) and candidate letter-family
+records whose axis aggregation, closed-mechanism, and reconstruction statuses remain
+`UNRESOLVED`. This does **not** constitute a two-dimensional `FixedPositionParentResult`,
+does not reconstruct the pointing image, and must not promote `U_v` leaf roles to
+`source_chain_evidence`. Reconstruction stays blocked until accepted source-derived
+children exist and an independent parent image is available (Gate K2 / ADR-024 /
+ADR-026). V06A remains the next scientific step; V05–V09 primacy is unchanged.
+
+**Reason:** Architecture-scoped interface exercise after the proximal exact-U gate is
+useful, but claiming a complete M=2 parent from a seed audit or 1D fiber placeholders
+would violate the evidence chain.

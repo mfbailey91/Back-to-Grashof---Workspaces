@@ -1,0 +1,32 @@
+"""Tests for the V06 synthetic spatial-5R corpus seed audit."""
+
+from __future__ import annotations
+
+from grashof_workspace.spatial_experiments.v06_corpus import (
+    audit_fixed_position_seed_5r,
+    build_generic_5r,
+    seed_audit_summary,
+)
+
+
+def test_generic_5r_seed_has_rank3_nullity2() -> None:
+    entry = build_generic_5r()
+    assert entry.model.n_joints == 5
+    assert entry.model.architecture_id == "generic_5r"
+    assert entry.terminal_axis_offset_m > 1e-6
+
+    audit = audit_fixed_position_seed_5r(entry)
+    assert audit.status == "PASS"
+    assert audit.regular
+    assert audit.rank_jp == 3
+    assert audit.nullity_jp == 2
+    assert audit.finite_difference_verified
+
+
+def test_seed_audit_summary_refuses_parent_claim() -> None:
+    audit = audit_fixed_position_seed_5r(build_generic_5r())
+    summary = seed_audit_summary(audit)
+    notes = " ".join(summary["notes"]).casefold()
+    assert summary["nullity_jp"] == 2
+    assert "complete two-dimensional parent" in notes
+    assert "gate k2" in notes

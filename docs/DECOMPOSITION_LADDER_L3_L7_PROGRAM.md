@@ -277,6 +277,20 @@ orientation-curve truth for the claimed component. Catalog fiber status is scope
 
 ## L5 — spatial 5R parent and pointing-fiber family
 
+### Interface status (scaffold)
+
+L5 process status is `SCAFFOLD` after the proximal exact-U gate. The adapter
+`spatial_l5.py` plus `v06_corpus.py` provide:
+
+- a synthetic off-axis spatial-5R seed audit (`rank Jp=3`, `nullity=2`);
+- shared parent/fiber/child/certificate/reconstruction placeholders;
+- candidate letter families with both aggregation and closed statuses `UNRESOLVED`;
+- empty reconstruction acceptance (Gate K2 / ADR-026).
+
+This is **not** a complete two-dimensional parent representation and **not**
+pointing-image reconstruction. V06A (`FixedPositionParentResult`) remains the next
+scientific step.
+
 ### Goal
 
 Implement the first full parent → fiber family → child → reconstruction experiment.
