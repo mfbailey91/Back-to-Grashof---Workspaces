@@ -51,3 +51,9 @@ alwaysApply: true
 21. During decomposition visualizations, keep the physical source manipulator visible as a transparent reference and show each reduction operation separately.
 22. When uncertain about a mechanism theorem, mark the result unverified or unresolved and add a research note instead of inventing a generalization.
 23. The historical spatial-four-bar V05–V09 files are deferred V10–V14 specifications. The active sequence is `docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`.
+24. Optional L3–L7 ladder scaffold code (`src/grashof_workspace/decomposition_ladder/`, `docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md`) is subordinate to the active V05–V09 sequence. Do not demote `docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`.
+25. Keep process/scaffold labels (`PLANNED`, `SCAFFOLD`, `BLOCKED`, `REVIEW`) separate from the six `DecompositionCertificate` statuses. Preserve `axis_aggregation_status` vs `closed_mechanism_status`.
+26. For a one-DOF child containing `U_v`, canonical continuation drives pseudo-arclength `s`; `alpha(s)` and `beta(s)` are coupled outputs from the same branch. Prescribe alpha or beta only as a local chart where its derivative with respect to `s` is nonzero.
+27. A collection of one-dimensional fibers is not the complete higher-dimensional parent until coverage of the slice-parameter domain, critical values, components, and reconstruction has been audited.
+28. Descriptor discovery remains blocked until at least one independently computed parent task image is reconstructed from accepted source-derived children within declared tolerances.
+29. Promote `source_chain_evidence` only from a real accepted closed-mechanism certificate object, never from caller-supplied status strings alone. L7 remains BLOCKED until the V05 gate lifts.

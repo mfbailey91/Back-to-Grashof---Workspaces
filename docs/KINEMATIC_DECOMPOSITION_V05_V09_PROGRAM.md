@@ -310,6 +310,8 @@ Use explicit screw axes and home transforms. Do not begin with URDF import.
 
 ### V05B — fixed-position source mechanism
 
+**Status (2026-08-08):** MVP implemented on the minimal V05A spatial-4R corpus.
+
 For a regular seed \(q_0\):
 
 1. set \(p^*=p(q_0)\);
@@ -319,7 +321,13 @@ For a regular seed \(q_0\):
 5. preserve closure residual, tangent, singular values, return status, and component identity;
 6. distinguish a returned cycle from an open or budget-limited branch.
 
+Software: `src/grashof_workspace/spatial_experiments/{open_chain,fixed_position,fixed_position_continuation,v05_corpus,v05b}.py`.
+Readout: [`results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html`](../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html).
+Note: ± rays from one seed do not certify full multi-component completeness. V05C–E are implemented on this corpus. Explorer `spatial4bar_explorer/v05a` is not this work package.
+
 ### V05C — orientation-curve truth
+
+**Status (2026-08-08):** MVP implemented on V05B fixed-position fibers.
 
 Render and export:
 
@@ -333,7 +341,13 @@ Render and export:
 
 Do not reduce the orientation curve to a single angle unless the architecture proves a one-parameter subgroup or another valid scalar coordinate.
 
+Software: `src/grashof_workspace/spatial_experiments/{orientation_image,v05c}.py`.
+Readout: [`results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
+These exports are orientation-curve / pointing-curve truth, not coverage certificates. V05D aggregation certificates and V05E near-aligned rejection are implemented.
+
 ### V05D — exact axis aggregation and candidate spatial four-bar
+
+**Status:** MVP complete for proximal exact `RR→U` on `exact_u_pair_4r` (`EXACT_ON_COMPONENT`); `generic_4r` rejected.
 
 For architectures with an exact \(RR\rightarrow U\) pair:
 
@@ -346,9 +360,19 @@ For architectures with an exact \(RR\rightarrow U\) pair:
 
 The existing generic `U/S/R` closure and continuation kernel may be reused, but V05 introduces role-aware source families `S_v-U_phys-R-R`, `S_v-R-U_phys-R`, and `S_v-R-R-U_phys`. Existing `tool_a`/`tool_b` winding semantics must not be reused because the universal joint is physical and the virtual tool closure is spherical.
 
+Software: `src/grashof_workspace/spatial_experiments/{axis_aggregation,decomposition_certificate,v05d}.py`.
+Readout: [`results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
+Non-proximal pair embeddings and multi-component `EXACT_GLOBAL` remain unverified. V05E near-aligned rejection is implemented.
+
 ### V05E — rejection tests
 
+**Status:** MVP complete for `near_aligned_u_pair_4r` (`REJECTED` as exact aggregation) with declared geometric tolerances and a diagnostic `false_u_surrogate` task-error report.
+
 The near-aligned perturbation must be rejected as exact aggregation. The software should show the geometric tolerance and the task error caused by treating it as a universal joint.
+
+Software: `src/grashof_workspace/spatial_experiments/{axis_aggregation,decomposition_certificate,v05_corpus,v05e}.py`.
+Readout: [`results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
+The forced exact-U surrogate is diagnostic-only and is **not** an `APPROXIMATE` DecompositionCertificate.
 
 ## Deliverables
 
@@ -868,3 +892,25 @@ It is:
 > Fixing tool position produces an exact virtual closed mechanism whose mobility equals the residual configuration freedom available for orientation generation. The project walks from spatial 4R to 5R to 6R, establishes the source orientation image at each rung, and then tests whether architecture-dependent kinematic decomposition exposes lower-dimensional mechanisms whose intrinsic properties determine global coverage.
 
 That ordering makes spatial-four-bar classification a justified analytical or numerical tool rather than the premise of the workspace theory.
+
+---
+
+## V05 audit correction status
+
+<!-- V05_AUDIT_CORRECTION_2026_08_08 -->
+
+The initial V05A–E implementation is superseded by `V05_AUDIT_CORRECTIONS.md`.
+
+Current disposition:
+
+```text
+V05A source corpus                 CORRECTED: off-axis active cases + terminal-roll control
+V05B source continuation           CORRECTED MVP: augmented pseudo-arclength + FD Jacobian check
+V05C orientation image             CORRECTED MVP: explicit curve classification
+V05D exact axis aggregation        EXACT_GLOBAL where geometry permits
+V05D closed-mechanism equivalence  UNRESOLVED pending independent reduced solve
+V05E rejection/boundary            CORRECTED MVP: tolerance-relative suite
+V05 overall gate                   HOLD
+```
+
+V06 may proceed only as non-claiming software scaffold work until the independent reduced closed-mechanism comparison closes the V05 gate.

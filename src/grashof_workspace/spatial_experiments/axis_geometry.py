@@ -19,6 +19,24 @@ import numpy as np
 from numpy.typing import NDArray
 
 Vec3 = NDArray[np.floating]
+Vec3Tuple = tuple[float, float, float]
+Mat3Tuple = tuple[Vec3Tuple, Vec3Tuple, Vec3Tuple]
+
+
+def as_vec3(values: Vec3 | tuple[float, ...] | list[float]) -> Vec3Tuple:
+    """Cast a length-3 array-like to ``tuple[float, float, float]``."""
+    arr = np.asarray(values, dtype=float).reshape(3)
+    return (float(arr[0]), float(arr[1]), float(arr[2]))
+
+
+def as_mat3(values: NDArray[np.floating] | tuple[tuple[float, ...], ...]) -> Mat3Tuple:
+    """Cast a 3×3 array-like to a nested float triple."""
+    mat = np.asarray(values, dtype=float).reshape(3, 3)
+    return (
+        as_vec3(mat[0]),
+        as_vec3(mat[1]),
+        as_vec3(mat[2]),
+    )
 
 
 def unit_vector(v: Vec3 | tuple[float, float, float], *, name: str = "vector") -> Vec3:

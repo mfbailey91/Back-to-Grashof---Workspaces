@@ -1,0 +1,689 @@
+{
+  "sprint": "V05D",
+  "program": "kinematic_decomposition",
+  "operation": "axis_aggregation_then_closed_mechanism_decomposition",
+  "audit_status": "HOLD_PENDING_INDEPENDENT_REDUCED_SOLVE",
+  "certificates": [
+    {
+      "source_chain_id": "exact_u_pair_4r",
+      "fixed_position_problem_id": "exact_u_pair_4r_pstar",
+      "source_component_id": "exact_u_pair_4r_component0",
+      "source_mobility": 1,
+      "joint_kind_sequence": [
+        "S_v",
+        "U",
+        "R",
+        "R"
+      ],
+      "joint_role_sequence": [
+        "S_v",
+        "U_phys",
+        "R_phys",
+        "R_phys"
+      ],
+      "cyclic_origin_role": "S_v",
+      "designated_task_joint_role": "tool_frame",
+      "reduction_operations": [
+        "axis_aggregation",
+        "closed_mechanism_decomposition"
+      ],
+      "reduced_topology": "S_v-U_phys-R-R",
+      "coordinate_map": "exact scalar regrouping of consecutive physical RR coordinates as ordered U_phys",
+      "inverse_or_reconstruction_map": "identity scalar-coordinate expansion for axis regrouping",
+      "task_map": "tool orientation R(q) on p(q)=p*",
+      "rank_and_nullity_checks": {
+        "rank_jp": 3,
+        "nullity_jp": 1,
+        "regular": true,
+        "seed_status": "PASS",
+        "motion_signature": "NONTRIVIAL_POINTING_CURVE",
+        "finite_difference_jp_error_fro": 9.757587379712797e-11,
+        "finite_difference_verified": true,
+        "p_star": [
+          0.5550458968135394,
+          0.26567312703408075,
+          0.47308103725990397
+        ]
+      },
+      "coordinate_regrouping_residuals": {
+        "position_residual_m": 0.0,
+        "rotation_frobenius": 0.0,
+        "pointing_residual": 0.0,
+        "joint_map_residual_rad": 0.0
+      },
+      "closure_residuals": {},
+      "tangent_subspace_error": null,
+      "trajectory_position_error_m": null,
+      "trajectory_pointing_error": null,
+      "trajectory_joint_map_error_rad": null,
+      "component_correspondence": "not_evaluated_with_independent_reduced_mechanism",
+      "joint_limit_correspondence": "not_modeled; exact regrouping assumes original coordinate order and identical limits",
+      "axis_aggregation_status": "EXACT_GLOBAL",
+      "closed_mechanism_status": "UNRESOLVED",
+      "status": "UNRESOLVED",
+      "failure_or_scope_reason": "Exact global physical-axis regrouping is established for the consecutive RR pair. Independent closed-loop construction, continuation, tangent comparison, and complete component correspondence have not yet been performed; the closed-mechanism decomposition therefore remains UNRESOLVED.",
+      "candidates": [
+        {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.0,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.0,
+            0.0,
+            0.2
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "exact_intersecting": true,
+          "exact_orthogonal": true,
+          "exact_u_candidate": true
+        },
+        {
+          "pair_index": 1,
+          "joint_a": 1,
+          "joint_b": 2,
+          "distance_m": 0.21094788432451766,
+          "parallelism_residual": 0.9807674351775563,
+          "orthogonality_abs_dot": 0.19518001458970663,
+          "center": [
+            0.2798019801980198,
+            -0.010495049504950477,
+            0.30495049504950494
+          ],
+          "w_a": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "w_b": [
+            0.19518001458970663,
+            0.9759000729485331,
+            0.09759000729485331
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        },
+        {
+          "pair_index": 2,
+          "joint_a": 2,
+          "joint_b": 3,
+          "distance_m": 0.22608266913152708,
+          "parallelism_residual": 0.9586528178322297,
+          "orthogonality_abs_dot": 0.2845782403177127,
+          "center": [
+            0.38462272353424976,
+            -0.06734813770414755,
+            0.4237213018446716
+          ],
+          "w_a": [
+            0.19518001458970663,
+            0.9759000729485331,
+            0.09759000729485331
+          ],
+          "w_b": [
+            -0.09720197391996738,
+            0.21384434262392824,
+            0.9720197391996738
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        }
+      ],
+      "aggregated": {
+        "architecture_id": "exact_u_pair_4r",
+        "pair_index": 0,
+        "family_label": "S_v-U_phys-R-R",
+        "joint_kind_sequence": [
+          "S_v",
+          "U",
+          "R",
+          "R"
+        ],
+        "joint_role_sequence": [
+          "S_v",
+          "U_phys",
+          "R_phys",
+          "R_phys"
+        ],
+        "u_center": [
+          0.0,
+          0.0,
+          0.2
+        ],
+        "u_axes": [
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "candidate": {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.0,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.0,
+            0.0,
+            0.2
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "exact_intersecting": true,
+          "exact_orthogonal": true,
+          "exact_u_candidate": true
+        },
+        "notes": [
+          "Exact coordinate regrouping over the same source screws.",
+          "Not an independently instantiated S_v-U_phys-R-R closed mechanism.",
+          "U_phys is physical and must not inherit U_v/tool_a winding semantics."
+        ]
+      },
+      "evidence": {
+        "home_candidates": [
+          {
+            "pair_index": 0,
+            "joint_a": 0,
+            "joint_b": 1,
+            "distance_m": 0.0,
+            "parallelism_residual": 1.0,
+            "orthogonality_abs_dot": 0.0,
+            "center": [
+              0.0,
+              0.0,
+              0.2
+            ],
+            "w_a": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "w_b": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "exact_intersecting": true,
+            "exact_orthogonal": true,
+            "exact_u_candidate": true
+          },
+          {
+            "pair_index": 1,
+            "joint_a": 1,
+            "joint_b": 2,
+            "distance_m": 0.21094788432451766,
+            "parallelism_residual": 0.9807674351775563,
+            "orthogonality_abs_dot": 0.19518001458970663,
+            "center": [
+              0.2798019801980198,
+              -0.010495049504950477,
+              0.30495049504950494
+            ],
+            "w_a": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "w_b": [
+              0.19518001458970663,
+              0.9759000729485331,
+              0.09759000729485331
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          },
+          {
+            "pair_index": 2,
+            "joint_a": 2,
+            "joint_b": 3,
+            "distance_m": 0.22608266913152708,
+            "parallelism_residual": 0.9586528178322297,
+            "orthogonality_abs_dot": 0.2845782403177127,
+            "center": [
+              0.38462272353424976,
+              -0.06734813770414755,
+              0.4237213018446716
+            ],
+            "w_a": [
+              0.19518001458970663,
+              0.9759000729485331,
+              0.09759000729485331
+            ],
+            "w_b": [
+              -0.09720197391996738,
+              0.21384434262392824,
+              0.9720197391996738
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          }
+        ],
+        "seed_candidates": [
+          {
+            "pair_index": 0,
+            "joint_a": 0,
+            "joint_b": 1,
+            "distance_m": 0.0,
+            "parallelism_residual": 1.0,
+            "orthogonality_abs_dot": 0.0,
+            "center": [
+              0.0,
+              0.0,
+              0.2
+            ],
+            "w_a": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "w_b": [
+              0.955336489125606,
+              0.29552020666133955,
+              0.0
+            ],
+            "exact_intersecting": true,
+            "exact_orthogonal": true,
+            "exact_u_candidate": true
+          },
+          {
+            "pair_index": 1,
+            "joint_a": 1,
+            "joint_b": 2,
+            "distance_m": 0.2109478843245177,
+            "parallelism_residual": 0.9807674351775562,
+            "orthogonality_abs_dot": 0.19518001458970666,
+            "center": [
+              0.2566073248243684,
+              0.11726994850172251,
+              0.2990673539712503
+            ],
+            "w_a": [
+              0.955336489125606,
+              0.29552020666133955,
+              0.0
+            ],
+            "w_b": [
+              -0.08576905306778539,
+              0.9377305320467808,
+              -0.33660825718202003
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          },
+          {
+            "pair_index": 2,
+            "joint_a": 2,
+            "joint_b": 3,
+            "distance_m": 0.2260826691315271,
+            "parallelism_residual": 0.9586528178322298,
+            "orthogonality_abs_dot": 0.28457824031771267,
+            "center": [
+              0.35745282588540417,
+              0.1298669193879924,
+              0.3780800202307919
+            ],
+            "w_a": [
+              -0.08576905306778539,
+              0.9377305320467808,
+              -0.33660825718202003
+            ],
+            "w_b": [
+              0.1978376231363756,
+              0.5998587540847635,
+              0.7752610850672337
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          }
+        ],
+        "coordinate_regrouping_diagnostic_only": {
+          "position_residual_m": 0.0,
+          "rotation_frobenius": 0.0,
+          "pointing_residual": 0.0,
+          "joint_map_residual_rad": 0.0
+        },
+        "independent_reduced_solve_present": false,
+        "roles_guard": {
+          "has_S_v": true,
+          "has_U_phys": true,
+          "forbids_U_v": true,
+          "designated_task_is_not_U_phys": true
+        }
+      }
+    },
+    {
+      "source_chain_id": "generic_4r",
+      "fixed_position_problem_id": "generic_4r_pstar",
+      "source_component_id": "generic_4r_component0",
+      "source_mobility": 1,
+      "joint_kind_sequence": [
+        "S_v",
+        "R",
+        "R",
+        "R",
+        "R"
+      ],
+      "joint_role_sequence": [
+        "S_v",
+        "R_phys",
+        "R_phys",
+        "R_phys",
+        "R_phys"
+      ],
+      "cyclic_origin_role": "S_v",
+      "designated_task_joint_role": "tool_frame",
+      "reduction_operations": [
+        "axis_aggregation"
+      ],
+      "reduced_topology": "none",
+      "coordinate_map": "none",
+      "inverse_or_reconstruction_map": "none",
+      "task_map": "tool orientation R(q) on p(q)=p*",
+      "rank_and_nullity_checks": {
+        "rank_jp": 3,
+        "nullity_jp": 1,
+        "regular": true,
+        "seed_status": "PASS",
+        "motion_signature": "NONTRIVIAL_POINTING_CURVE",
+        "finite_difference_jp_error_fro": 1.1447708415101765e-10,
+        "finite_difference_verified": true,
+        "p_star": [
+          0.4402399650508423,
+          0.38133648033480305,
+          0.48684834853867
+        ]
+      },
+      "coordinate_regrouping_residuals": {
+        "best_pair_distance_m": 0.02549509756796393,
+        "best_pair_orthogonality_abs_dot": 0.07820618870057751,
+        "best_pair_parallelism_residual": 0.9969372056699106
+      },
+      "closure_residuals": {},
+      "tangent_subspace_error": null,
+      "trajectory_position_error_m": null,
+      "trajectory_pointing_error": null,
+      "trajectory_joint_map_error_rad": null,
+      "component_correspondence": "not_applicable",
+      "joint_limit_correspondence": "not_modeled",
+      "axis_aggregation_status": "REJECTED",
+      "closed_mechanism_status": "UNRESOLVED",
+      "status": "REJECTED",
+      "failure_or_scope_reason": "No consecutive exact intersecting orthogonal RR pair; there is no exact U_phys aggregation candidate.",
+      "candidates": [
+        {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.02549509756796393,
+          "parallelism_residual": 0.9969372056699106,
+          "orthogonality_abs_dot": 0.07820618870057751,
+          "center": [
+            -0.0025000000000000022,
+            0.0125,
+            0.21
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            0.9775773587572189,
+            0.19551547175144376,
+            0.07820618870057751
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        },
+        {
+          "pair_index": 1,
+          "joint_a": 1,
+          "joint_b": 2,
+          "distance_m": 0.18354052786388217,
+          "parallelism_residual": 0.9281312901065646,
+          "orthogonality_abs_dot": 0.37225301654267934,
+          "center": [
+            0.31220900207481406,
+            0.079523464254393,
+            0.32687280284383147
+          ],
+          "w_a": [
+            0.9775773587572189,
+            0.19551547175144376,
+            0.07820618870057751
+          ],
+          "w_b": [
+            0.17593030196692086,
+            0.9773905664828937,
+            0.11728686797794724
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        },
+        {
+          "pair_index": 2,
+          "joint_a": 2,
+          "joint_b": 3,
+          "distance_m": 0.15709243157084787,
+          "parallelism_residual": 0.9467922141052779,
+          "orthogonality_abs_dot": 0.32184546495115585,
+          "center": [
+            0.3890804799784703,
+            0.09109817125334807,
+            0.4375608837387011
+          ],
+          "w_a": [
+            0.17593030196692086,
+            0.9773905664828937,
+            0.11728686797794724
+          ],
+          "w_b": [
+            -0.1440046082211958,
+            0.24000768036865966,
+            0.9600307214746386
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        }
+      ],
+      "aggregated": null,
+      "evidence": {
+        "home_candidates": [
+          {
+            "pair_index": 0,
+            "joint_a": 0,
+            "joint_b": 1,
+            "distance_m": 0.02549509756796393,
+            "parallelism_residual": 0.9969372056699106,
+            "orthogonality_abs_dot": 0.07820618870057751,
+            "center": [
+              -0.0025000000000000022,
+              0.0125,
+              0.21
+            ],
+            "w_a": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "w_b": [
+              0.9775773587572189,
+              0.19551547175144376,
+              0.07820618870057751
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          },
+          {
+            "pair_index": 1,
+            "joint_a": 1,
+            "joint_b": 2,
+            "distance_m": 0.18354052786388217,
+            "parallelism_residual": 0.9281312901065646,
+            "orthogonality_abs_dot": 0.37225301654267934,
+            "center": [
+              0.31220900207481406,
+              0.079523464254393,
+              0.32687280284383147
+            ],
+            "w_a": [
+              0.9775773587572189,
+              0.19551547175144376,
+              0.07820618870057751
+            ],
+            "w_b": [
+              0.17593030196692086,
+              0.9773905664828937,
+              0.11728686797794724
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          },
+          {
+            "pair_index": 2,
+            "joint_a": 2,
+            "joint_b": 3,
+            "distance_m": 0.15709243157084787,
+            "parallelism_residual": 0.9467922141052779,
+            "orthogonality_abs_dot": 0.32184546495115585,
+            "center": [
+              0.3890804799784703,
+              0.09109817125334807,
+              0.4375608837387011
+            ],
+            "w_a": [
+              0.17593030196692086,
+              0.9773905664828937,
+              0.11728686797794724
+            ],
+            "w_b": [
+              -0.1440046082211958,
+              0.24000768036865966,
+              0.9600307214746386
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          }
+        ],
+        "seed_candidates": [
+          {
+            "pair_index": 0,
+            "joint_a": 0,
+            "joint_b": 1,
+            "distance_m": 0.025495097567963945,
+            "parallelism_residual": 0.9969372056699107,
+            "orthogonality_abs_dot": 0.07820618870057751,
+            "center": [
+              -0.007170381763865349,
+              0.010539716569264446,
+              0.21
+            ],
+            "w_a": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "w_b": [
+              0.824271062866498,
+              0.5607682292800329,
+              0.07820618870057751
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          },
+          {
+            "pair_index": 1,
+            "joint_a": 1,
+            "joint_b": 2,
+            "distance_m": 0.18354052786388217,
+            "parallelism_residual": 0.9281312901065648,
+            "orthogonality_abs_dot": 0.37225301654267934,
+            "center": [
+              0.23884181652664974,
+              0.22127526528011215,
+              0.32434081137686066
+            ],
+            "w_a": [
+              0.824271062866498,
+              0.5607682292800329,
+              0.07820618870057751
+            ],
+            "w_b": [
+              -0.18329119675497924,
+              0.9616815408450305,
+              -0.20389446091067703
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          },
+          {
+            "pair_index": 2,
+            "joint_a": 2,
+            "joint_b": 3,
+            "distance_m": 0.1570924315708479,
+            "parallelism_residual": 0.9467922141052781,
+            "orthogonality_abs_dot": 0.32184546495115585,
+            "center": [
+              0.28910317547513315,
+              0.2837412298405173,
+              0.3882984602355535
+            ],
+            "w_a": [
+              -0.18329119675497924,
+              0.9616815408450305,
+              -0.20389446091067703
+            ],
+            "w_b": [
+              0.10981197456000004,
+              0.5334177447330113,
+              0.8386935315400865
+            ],
+            "exact_intersecting": false,
+            "exact_orthogonal": false,
+            "exact_u_candidate": false
+          }
+        ]
+      }
+    }
+  ]
+}

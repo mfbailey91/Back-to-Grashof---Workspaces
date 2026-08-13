@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>V05D — Exact Axis Aggregation Audit</title>
+<style>
+body { font-family: Georgia, serif; max-width: 1000px; margin: 2rem auto; line-height: 1.45; }
+table { border-collapse: collapse; width: 100%; } th,td { border:1px solid #bbb; padding:.4rem; text-align:left; }
+code { font-family: ui-monospace, monospace; } .note { background:#f7f4ea; border-left:3px solid #c4a35a; padding:.7rem; }
+</style></head><body>
+<h1>V05D — Axis Aggregation and Decomposition Status</h1>
+<div class="note"><strong>Audit correction.</strong> Exact physical-axis regrouping and
+closed-mechanism equivalence are different claims. The exact proximal pair may receive
+<code>axis_aggregation_status=EXACT_GLOBAL</code>; the independently solved
+<code>S_v-U_phys-R-R</code> component remains <code>UNRESOLVED</code>.</div>
+<table><tr><th>Source</th><th>Axis aggregation</th><th>Closed mechanism</th><th>Overall</th><th>Topology</th><th>Roles</th><th>Source motion</th></tr><tr><td><code>exact_u_pair_4r</code></td><td><code>EXACT_GLOBAL</code></td><td><code>UNRESOLVED</code></td><td><code>UNRESOLVED</code></td><td><code>S_v-U_phys-R-R</code></td><td><code>S_v,U_phys,R_phys,R_phys</code></td><td><code>NONTRIVIAL_POINTING_CURVE</code></td></tr><tr><td><code>generic_4r</code></td><td><code>REJECTED</code></td><td><code>UNRESOLVED</code></td><td><code>REJECTED</code></td><td><code>none</code></td><td><code>—</code></td><td><code>NONTRIVIAL_POINTING_CURVE</code></td></tr></table>
+<h2>Diagnostics</h2><h3>exact_u_pair_4r pair geometry</h3><p><img src="figures/v05d_exact_u_pair_4r_pair_geometry.png" alt="exact_u_pair_4r pair geometry" style="max-width:720px"></p><h3>exact_u_pair_4r regrouping diagnostics</h3><p><img src="figures/v05d_exact_u_pair_4r_regrouping_diagnostics.png" alt="exact_u_pair_4r regrouping diagnostics" style="max-width:720px"></p><h3>generic_4r pair geometry</h3><p><img src="figures/v05d_generic_4r_pair_geometry.png" alt="generic_4r pair geometry" style="max-width:720px"></p><h3>generic_4r regrouping diagnostics</h3><p><img src="figures/v05d_generic_4r_regrouping_diagnostics.png" alt="generic_4r regrouping diagnostics" style="max-width:720px"></p>
+<h2>Next proof obligation</h2>
+<ol><li>Instantiate an independent expanded <code>S_v-U_phys-R-R</code> closure.</li>
+<li>Continue source and reduced components separately.</li>
+<li>Compare coordinate maps, tangent spaces, orientation task maps, complete component scope, and limits.</li></ol>
+</body></html>

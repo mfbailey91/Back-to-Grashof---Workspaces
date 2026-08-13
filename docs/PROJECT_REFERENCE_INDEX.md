@@ -43,6 +43,16 @@ It also explains why the planar 3R case produces a four-bar, why a spatial 4R pr
 
 ## 2. Active Program
 
+### [`DECOMPOSITION_LADDER_L3_L7_PROGRAM.md`](DECOMPOSITION_LADDER_L3_L7_PROGRAM.md)
+
+Optional L3–L7 interface scaffold subordinate to the active V05–V09 sequence. L4↔V05, L5↔V06, L6 is V07-first then V08, L7 deferred/BLOCKED. Letter families are a candidate corpus only.
+
+**Program readout:** [`../results/decomposition_ladder/index.html`](../results/decomposition_ladder/index.html).
+
+### [`U_JOINT_DRIVE_CONTRACT.md`](U_JOINT_DRIVE_CONTRACT.md)
+
+Canonical one-DOF U-drive semantics: drive branch parameter `s`; `alpha(s)`/`beta(s)` are coupled outputs.
+
 ### [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)
 
 Active sequential program:
@@ -55,6 +65,11 @@ V08  aligned-roll quotient and task-derived four-bar fibers
 V09  validated mechanism predicates and coverage reconstruction
 ```
 
+**V05B MVP readout:** [`../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html`](../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html).
+**V05C MVP readout:** [`../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
+**V05D MVP readout:** [`../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
+**V05E MVP readout:** [`../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
+Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 
 Repository-level phase order, program gates, and downstream V10–V14 mapping.
@@ -142,3 +157,10 @@ Use the following names consistently:
 - **pointing level-set fiber** for a one-dimensional child of a higher-dimensional pointing parent;
 - **dexterous workspace** only for full orientation coverage;
 - **pointing-complete workspace** for full `S^2` coverage when roll is excluded by task definition.
+
+## V05 audit correction references
+
+<!-- V05_AUDIT_CORRECTION_2026_08_08 -->
+
+- [`V05_AUDIT_CORRECTIONS.md`](V05_AUDIT_CORRECTIONS.md) — corrected source corpus, pseudo-arclength continuation, curve classification, certificate split, and boundary suite.
+- [`JACOBIAN_AND_DERIVATIVE_POLICY.md`](JACOBIAN_AND_DERIVATIVE_POLICY.md) — why derivative information is used and which derivative-free alternatives remain valid.

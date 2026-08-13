@@ -28,6 +28,7 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
+from .axis_geometry import as_vec3
 from .jacobians import (
     ABS_RANK_TOL,
     REL_RANK_TOL,
@@ -136,7 +137,7 @@ def fiber_independence_report(
     dh_dq6 = float(grad[-1])
     independent = rank_report.rank == 4 and rank_report.nullity == 1 and n_cross > N_PARALLEL_CROSS_TOL
     return FiberIndependenceReport(
-        n=tuple(float(x) for x in n_hat),
+        n=as_vec3(n_hat),
         c=n_dot_d,
         n_dot_d=n_dot_d,
         n_cross_d_norm=n_cross,

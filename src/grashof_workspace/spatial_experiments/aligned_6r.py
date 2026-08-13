@@ -11,14 +11,25 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from .axis_geometry import AxisLine, parallelism_residual, point_axis_distance, unit_vector
+from .axis_geometry import (
+    AxisLine,
+    as_mat3,
+    as_vec3,
+    parallelism_residual,
+    point_axis_distance,
+    unit_vector,
+)
 from .serial_chain import SerialRevoluteChain
 
 REGULAR_Q = (0.35, -0.42, 0.55, 0.28, -0.33, 0.70)
 SINGULAR_SEARCH_SEED = 17
 
 
-def frame_from_pointing(d: tuple[float, float, float]) -> tuple[tuple[float, float, float], ...]:
+def frame_from_pointing(d: tuple[float, float, float]) -> tuple[
+    tuple[float, float, float],
+    tuple[float, float, float],
+    tuple[float, float, float],
+]:
     z = unit_vector(d, name="pointing")
     helper = np.array([1.0, 0.0, 0.0], dtype=float)
     if abs(float(np.dot(helper, z))) > 0.9:
@@ -27,7 +38,7 @@ def frame_from_pointing(d: tuple[float, float, float]) -> tuple[tuple[float, flo
     x = x / float(np.linalg.norm(x))
     y = np.cross(z, x)
     R = np.column_stack([x, y, z])
-    return tuple(tuple(float(R[i, j]) for j in range(3)) for i in range(3))
+    return as_mat3(R)
 
 
 def generic_home_axes() -> tuple[AxisLine, ...]:
@@ -55,8 +66,8 @@ class GenericAligned6R:
         axes = generic_home_axes()
         r6 = np.asarray(axes[5].r, dtype=float)
         w6 = np.asarray(axes[5].w, dtype=float)
-        p0 = tuple(float(x) for x in (r6 + 0.04 * w6))
-        d0 = tuple(float(x) for x in w6)
+        p0 = as_vec3(r6 + 0.04 * w6)
+        d0 = as_vec3(w6)
         chain = SerialRevoluteChain(home_axes=axes, p0=p0, d0=d0, R0=frame_from_pointing(d0))
         return cls(chain=chain, task_point=p0, is_aligned=True)
 
@@ -69,7 +80,7 @@ class GenericAligned6R:
             helper = np.array([0.0, 1.0, 0.0], dtype=float)
         transverse = np.cross(w6, helper)
         transverse = transverse / float(np.linalg.norm(transverse))
-        p0 = tuple(float(x) for x in (np.asarray(base.task_point) + offset_m * transverse))
+        p0 = as_vec3(np.asarray(base.task_point) + offset_m * transverse)
         chain = SerialRevoluteChain(
             home_axes=base.chain.home_axes,
             p0=p0,
@@ -88,7 +99,7 @@ class GenericAligned6R:
         transverse = np.cross(w6, helper)
         transverse = transverse / float(np.linalg.norm(transverse))
         d0_vec = np.cos(tilt_rad) * w6 + np.sin(tilt_rad) * transverse
-        d0 = tuple(float(x) for x in d0_vec)
+        d0 = as_vec3(d0_vec)
         R0 = frame_from_pointing(d0)
         chain = SerialRevoluteChain(
             home_axes=base.chain.home_axes,

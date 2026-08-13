@@ -160,3 +160,19 @@ The former V05–V09 spatial-four-bar-first program is retained after the decomp
 - only then promote the method as a general or architecture-qualified workspace characterization framework.
 
 See `docs/SPATIAL_4BAR_V05_V09_PROGRAM.md` for the retained historical plan and its remapping.
+
+---
+
+## Optional scaffold — L3–L7 interface contracts
+
+<!-- DECOMPOSITION_LADDER_L3_L7_2026_08_12 -->
+
+`docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` and `src/grashof_workspace/decomposition_ladder/` provide optional shared interfaces. They do **not** replace the Active Phase V05–V09 above.
+
+```text
+L3  planar calibration retrofit (trusted exact map)
+L4  maps to V05 (closed-mechanism gate currently HOLD / UNRESOLVED)
+L5  maps to V06 (claims blocked until V05 lifts)
+L6  V07-first independent SO(3) truth, then optional nested / V08 work
+L7  deferred / BLOCKED until the V05 closed-mechanism gate lifts
+```

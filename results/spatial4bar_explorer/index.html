@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Spatial 4-Bar Explorer — project printout through V05A</title>
+<title>Spatial 4-Bar Explorer — project printout through V05 audit correction</title>
 <style>
+
   body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
   h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 1.2; }
   h1 { font-size: 1.75rem; margin-bottom: 0.35rem; }
@@ -25,20 +26,23 @@
     a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; }
     ul.toc { columns: 1; }
   }
+
 </style>
 </head>
 <body>
 
 <h1>Spatial 4-Bar Explorer</h1>
 <p class="meta">
-  <strong>Project printout through Sprint V05A</strong> · aligned-terminal 6R → one-DOF spatial four-bar track<br>
-  Artifact root: <code>results/spatial4bar_explorer/</code> · Status date: 2026-08-07
+  <strong>Project printout through V05 audit correction</strong> · explorer V00–V05A + kinematic-decomposition ladder<br>
+  Artifact roots: <code>results/spatial4bar_explorer/</code> ·
+  <code>results/kinematic_decomposition/</code> · Status date: 2026-08-08
 </p>
 
 <div class="note">
-  This page is the cumulative index and narrative for sprints <strong>V00–V05A</strong>.
-  V05A delivers the parent-first SUUR→UUUR pointing-fiber MVP; V05B–V09 remain ahead.
-  Open linked HTML pages for figures, tables, and JSON.
+  Explorer sprints <strong>V00–V05A</strong> remain a <code>mechanism_explorer_only</code> laboratory
+  (deferred V10 prep). The <strong>active</strong> source-chain program is kinematic decomposition
+  <strong>V05B–E (audit-corrected MVP; V05 gate held)</strong>; next gate is <strong>V06</strong>.
+  Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>.
 </div>
 
 <h2>Contents</h2>
@@ -49,8 +53,9 @@
   <li><a href="#sprints">Sprint-by-sprint printout</a></li>
   <li><a href="#findings">Findings locked so far</a></li>
   <li><a href="#contract">V04C provisional contract</a></li>
-  <li><a href="#v05a">Sprint V05A</a></li>
-  <li><a href="#next">Next: V05B Gate A</a></li>
+  <li><a href="#v05a">Explorer V05A</a></li>
+  <li><a href="#active">V05B–E audit-corrected MVP</a></li>
+  <li><a href="#next">Next: V06</a></li>
   <li><a href="#links">Full sprint link index</a></li>
 </ul>
 
@@ -66,11 +71,22 @@ not conventional planar Grashof class names.
   → compound parents SUUR / SSRR (M = 2)
   → tool-slice → ordered one-DOF families
   → physical geometry → closure/continuation → winding W = (w_α, w_β)
-  → (later) descriptor trends → candidate rules → 6R dexterity test</pre>
+  → (later, certified only) descriptor trends → candidate rules → 6R dexterity test</pre>
 <p>
-Docs: <a href="../../docs/SPRINT_03_SPATIAL_4BAR_EXPLORER.md">SPRINT_03_SPATIAL_4BAR_EXPLORER.md</a>
-· <a href="../../docs/SPATIAL_4BAR_V05_V09_PROGRAM.md">SPATIAL_4BAR_V05_V09_PROGRAM.md</a>
+The active scientific ladder is now source-chain first:
+</p>
+<pre>spatial 4R + S_v (off-axis tool)
+  → fixed-position fiber (V05B)
+  → classified orientation-curve truth (V05C)
+  → exact RR→U aggregation certificate + closed-mechanism UNRESOLVED (V05D)
+  → near-aligned rejection + false-U diagnostic (V05E)
+  → V06 scaffold only until V05 gate closes</pre>
+<p>
+Docs:
+<a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+· <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
 · <a href="../../docs/ROADMAP.md">ROADMAP.md</a>
+· explorer notes: <a href="../../docs/SPRINT_03_SPATIAL_4BAR_EXPLORER.md">SPRINT_03_SPATIAL_4BAR_EXPLORER.md</a>
 </p>
 
 <h2 id="families">Families and tool axes</h2>
@@ -84,15 +100,19 @@ Docs: <a href="../../docs/SPRINT_03_SPATIAL_4BAR_EXPLORER.md">SPRINT_03_SPATIAL_
 <p>
 Twelve family–axis <em>questions</em> exist, but each physical mechanism is solved
 <strong>once</strong>; <code>tool_a</code> and <code>tool_b</code> are two classifications read from the same returned branch.
+These explorer windings must not be reused as <code>U_phys</code> / source-chain roles.
 </p>
 
 <h2 id="pipeline">Evidence pipeline (what counts)</h2>
 <ol>
   <li><strong>Scaffold only (not research evidence):</strong> V01/V02 random descriptor samples and mock branch labels.</li>
   <li><strong>Physical geometry:</strong> V02B reference assemblies and topology-preserving perturbations.</li>
-  <li><strong>Numerical mechanism result:</strong> V03 closure / continuation; V04 returned-cycle windings.</li>
-  <li><strong>Provisional convention:</strong> V04C virtual-<code>U</code> canonicalization (must be rechecked on the V05 corpus).</li>
-  <li><strong>Not yet:</strong> empirical descriptor trends, candidate Grashof-like rules, or robot-workspace validation.</li>
+  <li><strong>Numerical mechanism result (explorer):</strong> V03 closure / continuation; V04 returned-cycle windings.</li>
+  <li><strong>Provisional convention:</strong> V04C virtual-<code>U</code> canonicalization (storage/diagnostics only).</li>
+  <li><strong>Explorer pointing fiber:</strong> V05A SUUR→UUUR MVP — provenance <code>mechanism_explorer_only</code>.</li>
+  <li><strong>Source-chain certificates:</strong> active V05B–E under <code>results/kinematic_decomposition/</code>
+      (fiber, orientation curve, <code>DecompositionCertificate</code>, near-aligned rejection).</li>
+  <li><strong>Not yet:</strong> V06 5R parent; certified all-family atlas (V10+); workspace coverage theorems.</li>
 </ol>
 
 <h2 id="sprints">Sprint-by-sprint printout (V00–V04C)</h2>
@@ -179,7 +199,7 @@ Returned-cycle continuation + angle unwrap → integer windings
 On the initial UUUR physical sample set, both crank and rocker examples appear
 (e.g. <code>uuur_physical_000</code>: <code>W = (−1, 0)</code> crank/rocker;
 <code>uuur_physical_003</code>: <code>W = (0, 0)</code> rocker/rocker).
-Other families remain V03 diagnostics until the all-family atlas (V05).
+Other families remain V03 diagnostics until a certified all-family atlas (deferred V10).
 </p>
 <p>
 Canonical readout: <a href="v04/index.html">v04/</a>
@@ -199,7 +219,7 @@ Canonical readout: <a href="v04b/sprint_04b_virtual_u_robustness.html">v04b/spri
 </p>
 
 <h3>V04C — virtual-U equivalence and fiber interpretation</h3>
-<p class="status pass">DONE — provisional canonicalization for V05</p>
+<p class="status pass">DONE — provisional canonicalization</p>
 <p>
 On the tested canonical UUUR geometry:
 </p>
@@ -249,30 +269,50 @@ Canonical readout: <a href="v04c/sprint_04c_virtual_u_equivalence.html">v04c/spr
     <td>V04C</td>
   </tr>
   <tr>
-    <td>One SUUR→UUUR task-derived pointing fiber passes the fiber-equivalence contract (<code>h=n·d</code>, U-lift tangent).</td>
-    <td>numerical mechanism</td>
+    <td>One SUUR→UUUR parent pointing slice and local virtual-U chart are valid; parent–child mechanism equivalence remains unresolved (split status).</td>
+    <td>numerical mechanism / mechanism_explorer_only</td>
     <td>V05A</td>
+  </tr>
+  <tr>
+    <td>Off-axis spatial 4R fixed-position fibers continue with rank 3 / nullity 1 and nontrivial pointing; singular parallel exterior rejects; terminal-roll retained as named control.</td>
+    <td>source-chain</td>
+    <td>V05B</td>
+  </tr>
+  <tr>
+    <td>Orientation/pointing curve exports are classified (e.g. NONTRIVIAL_POINTING_CURVE vs PURE_TERMINAL_ROLL); not SO(3)/S² coverage.</td>
+    <td>source-chain</td>
+    <td>V05C</td>
+  </tr>
+  <tr>
+    <td>Exact proximal RR→U axis aggregation may be EXACT_GLOBAL as regrouping; closed-mechanism equivalence remains UNRESOLVED pending an independent reduced solve.</td>
+    <td>source-chain certificate / HOLD</td>
+    <td>V05D</td>
+  </tr>
+  <tr>
+    <td>Near-aligned RR pair rejects exact aggregation; forced exact-U surrogate shows nonzero task error (diagnostic only).</td>
+    <td>source-chain rejection</td>
+    <td>V05E</td>
   </tr>
 </table>
 
-<h2 id="contract">V04C provisional experiment contract (for V05)</h2>
+<h2 id="contract">V04C provisional experiment contract</h2>
 <ul>
   <li><strong>Axis order:</strong> canonicalize to <code>ab</code> (solver-coordinate storage).</li>
   <li><strong>Orientation domain:</strong> reduce <code>φ</code> modulo 180° for diagnostic representation.</li>
   <li><strong>Open branches:</strong> keep unresolved / budget-limited cases explicit; do not promote budget exhaustion to a topology claim.</li>
   <li><strong>Scope:</strong> decisions apply to the tested canonical UUUR geometry and only to storage / diagnostics — not a proof of physical <code>S_v → U_v</code> fiber equivalence.</li>
-  <li><strong>Blocking before V05 evidence:</strong> implement the task-derived pointing-slice contract
+  <li><strong>Explorer pointing fibers:</strong> use the task-derived pointing-slice contract
       (<a href="../../docs/SPATIAL_POINTING_SLICE_CONTRACT.md">SPATIAL_POINTING_SLICE_CONTRACT.md</a>);
       arbitrary <code>φ</code> sweeps remain diagnostic-only until mapped to legitimate pointing fibers.</li>
 </ul>
 
-<h2 id="v05a">Sprint V05A — parent-first pointing fiber (MVP)</h2>
-<p class="status pass">DONE — SUUR → UUUR worked fiber PASS</p>
+<h2 id="v05a">Explorer V05A — parent-first pointing fiber (historical / deferred V10 prep)</h2>
+<p class="status pass">SPLIT — parent slice / U_v chart PASS; child equivalence UNRESOLVED (mechanism_explorer_only)</p>
 <p>
 Restored the aligned-terminal fiber kernel and constructed one task-derived
 <code>UUUR</code> child from an intersecting-pairs <code>SUUR</code> parent with explicit
-<code>h(d)=n·d=c</code>. Fiber-equivalence status <strong>PASS</strong>; provenance
-<code>task_derived</code>. SSRR-line parents and the V05B winding atlas are deferred.
+<code>h(d)=n·d=c</code>. This is <strong>not</strong> active-program V05B.
+Parent–child mechanism equivalence is not claimed from the undifferentiated legacy PASS.
 </p>
 <p>
 Canonical readout:
@@ -280,28 +320,47 @@ Canonical readout:
 · JSON: <a href="v05a/data/v05a_pointing_slice_fibers.json">v05a/data/v05a_pointing_slice_fibers.json</a>
 </p>
 
-<h2 id="next">Next — active V05 (source-chain program)</h2>
+<h2 id="active">Active kinematic decomposition — V05B–E</h2>
+<p class="status pass">AUDIT-CORRECTED MVP — V05 scientific gate HOLD</p>
 <p>
-The spatial-four-bar-first V05–V09 sequence is remapped to deferred <strong>V10–V14</strong>.
-Active program (docs only in the kinematic-decomposition handoff; implementation next):
+Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>
+· corrections: <a href="../../docs/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
 </p>
-<pre>V05  spatial 4R fixed-position fiber and one-DOF decomposition baseline
-V06  spatial 5R fixed-position parent and pointing image
-V07  generic spatial 6R orientation reference
-V08  aligned-roll quotient and task-derived four-bar fibers
-V09  validated mechanism predicates and coverage reconstruction
-V10+ deferred family atlas / mining / rules / evaluator / broad validation</pre>
+<pre>V05A corpus (off-axis + terminal-roll control) → V05B fixed-position fiber (audit-corrected MVP)
+V05C orientation-curve classification (audit-corrected MVP)
+V05D exact-axis certificates / closed-mechanism UNRESOLVED
+V05E near-aligned rejection (audit-corrected MVP)
+V05 overall gate HOLD · V06 scientific claims BLOCKED until independent reduced solve
+V10+ deferred atlas</pre>
+<ul>
+  <li>V05B:
+    <a href="../kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html">sprint_v05b_fixed_position_fiber.html</a>
+  </li>
+  <li>V05C:
+    <a href="../kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html">sprint_v05c_orientation_curve.html</a>
+    (classified orientation-curve truth, not coverage)
+  </li>
+  <li>V05D:
+    <a href="../kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">sprint_v05d_axis_aggregation.html</a>
+    (<code>DecompositionCertificate</code>: axis aggregation vs closed-mechanism statuses)
+  </li>
+  <li>V05E:
+    <a href="../kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a>
+    (near-aligned <code>REJECTED</code> + false-U task-error diagnostic)
+  </li>
+</ul>
 <p>
-The explorer “V05A” SUUR→UUUR MVP above is preparatory pointing-slice evidence for deferred V10,
-not a substitute for active source-chain V05. Standalone V02B–V04 <code>UXXX</code> rows remain
-<code>mechanism_explorer_only</code>.
-</p>
-<p>
-Plan docs:
+Program docs:
 <a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
 · <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
-· <a href="../../docs/SPATIAL_POINTING_SLICE_CONTRACT.md">SPATIAL_POINTING_SLICE_CONTRACT.md</a>
-· <a href="../../docs/SPRINT_V05_ALL_FAMILY_WINDING_ATLAS.md">SPRINT_V05_ALL_FAMILY_WINDING_ATLAS.md</a> (historical → V10)
+</p>
+
+<h2 id="next">Next: V06 — spatial 5R fixed-position parent</h2>
+<p>
+Software scaffold work for a spatial 5R fixed-position parent may proceed, but
+<strong>V06 scientific claims are blocked</strong> until V05 closes the independent
+<code>S_v-U_phys-R-R</code> reduced closed-mechanism comparison. Do not promote explorer
+four-bar atlases to manipulator evidence without certificates.
 </p>
 
 <h2 id="links">Full sprint link index</h2>
@@ -348,16 +407,38 @@ Plan docs:
     <td><a href="v04c/">v04c/</a> · provisional ab / φ mod 180°</td>
   </tr>
   <tr>
-    <td>V05A</td>
+    <td>Explorer V05A</td>
     <td><a href="v05a/sprint_05a_pointing_slice_fibers.html">sprint_05a_pointing_slice_fibers.html</a></td>
-    <td><a href="v05a/">v05a/</a> · SUUR→UUUR pointing fiber MVP</td>
+    <td><a href="v05a/">v05a/</a> · mechanism_explorer_only</td>
+  </tr>
+  <tr>
+    <td>Active V05B</td>
+    <td><a href="../kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html">sprint_v05b_fixed_position_fiber.html</a></td>
+    <td><a href="../kinematic_decomposition/v05b/">v05b/</a> · 4R + S_v fiber</td>
+  </tr>
+  <tr>
+    <td>Active V05C</td>
+    <td><a href="../kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html">sprint_v05c_orientation_curve.html</a></td>
+    <td><a href="../kinematic_decomposition/v05c/">v05c/</a> · orientation-curve truth</td>
+  </tr>
+  <tr>
+    <td>Active V05D</td>
+    <td><a href="../kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">sprint_v05d_axis_aggregation.html</a></td>
+    <td><a href="../kinematic_decomposition/v05d/">v05d/</a> · DecompositionCertificate</td>
+  </tr>
+  <tr>
+    <td>Active V05E</td>
+    <td><a href="../kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a></td>
+    <td><a href="../kinematic_decomposition/v05e/">v05e/</a> · near-aligned rejection</td>
   </tr>
 </table>
 
 <p class="meta" style="margin-top:2rem;">
-  Cumulative explorer tree with all early sprint pages in one folder:
+  Cumulative explorer tree with early sprint pages:
   <a href="v04/index.html">v04/index.html</a>.
-  Prefer the versioned folders above when citing a sprint’s authoritative readout.
+  Prefer versioned folders above when citing a sprint’s authoritative readout.
+  Regenerate this page with
+  <code>python -m grashof_workspace.project_dashboard --results-root results</code>.
 </p>
 
 </body>

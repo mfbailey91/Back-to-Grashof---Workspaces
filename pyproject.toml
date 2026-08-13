@@ -25,6 +25,7 @@ dev = [
 [project.scripts]
 grashof-workspace = "grashof_workspace.cli:main"
 grashof-spatial4bar-explorer = "grashof_workspace.spatial4bar_explorer.cli:main"
+grashof-decomposition-ladder = "grashof_workspace.decomposition_ladder.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -39,6 +40,14 @@ markers = [
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+exclude = [
+  ".venv",
+  "v05_review_patch",
+  "decomposition_ladder_patch",
+  "kinematic_decomposition_project_handoff",
+  "build",
+  "outputs",
+]
 
 [tool.mypy]
 python_version = "3.12"

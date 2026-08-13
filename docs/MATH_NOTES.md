@@ -454,3 +454,137 @@ UNRESOLVED
 ```
 
 rather than an unqualified exact theorem.
+
+---
+
+## 17. V05 pseudo-arclength correction and derivative policy
+
+<!-- V05_AUDIT_CORRECTION_2026_08_08 -->
+
+For a spatial-4R fixed-position fiber, solve
+
+\[
+G(q)=
+\begin{bmatrix}
+p(q)-p^*\\
+t_k^T(q-q_{\mathrm{pred}})
+\end{bmatrix}=0
+\]
+
+with Newton matrix
+
+\[
+DG(q)=
+\begin{bmatrix}
+J_p(q)\\
+t_k^T
+\end{bmatrix}.
+\]
+
+The arclength equation selects a unique corrected point from the one-dimensional position level set and avoids treating a single joint as a global parameter.
+
+The project does not require a hand-derived Jacobian as a matter of principle. Finite differences, automatic differentiation, secant/Broyden approximations, or derivative-free local solvers may be used. However, the following structural quantities require derivative information or an approximation:
+
+- local rank and fiber dimension;
+- null tangent;
+- pseudo-arclength correction;
+- singularity and conditioning diagnostics.
+
+The active implementation uses the analytical geometric Jacobian and independently checks it against a central finite-difference Jacobian.
+
+---
+
+## 18. Nested level-set decomposition from L3 through L7
+
+<!-- DECOMPOSITION_LADDER_L3_L7_2026_08_12 -->
+
+Let a regular fixed-position source parent have dimension
+
+\[
+m=n-d_p,
+\]
+
+where \(d_p=2\) for planar position and \(d_p=3\) for spatial position. Choose
+\(m-1\) independent scalar constraints
+
+\[
+h_1(q)=c_1,\ldots,h_{m-1}(q)=c_{m-1}.
+\]
+
+At regular values, the nested level set
+
+\[
+\mathcal F_{\mathbf c}
+=
+\{q:p(q)=p^*,\ h_i(q)=c_i\}
+\]
+
+is one-dimensional. This is the common source-fiber construction for the optional L3-L7 ladder scaffold subordinate to the active V05–V09 sequence:
+
+```text
+L3 planar 3R: no additional slice
+L4 / V05 spatial 4R: no additional slice
+L5 / V06 spatial 5R: one task slice
+L6 / V07-first then V08: two task slices after independent SO(3) truth
+L7 deferred: one redundancy gauge plus two task slices (BLOCKED until V05 gate lifts)
+```
+
+A one-dimensional source fiber is defined by the source chain and the explicit level-set constraints. It is not automatically a known four-bar family. Mechanism compression is a second operation requiring an equivalence certificate that preserves the ADR-021 split between axis aggregation and closed-mechanism equivalence.
+
+For an L5 pointing parent, a useful scalar field is
+
+\[
+h(d)=n^Td=c.
+\]
+
+Regular values define one-dimensional pointing fibers. The parent is reconstructed as a union of fibers only after the parameter domain, critical values, components, and singular fibers have been audited:
+
+\[
+\mathcal P_{p^*}
+=
+\bigcup_c \mathcal F_c.
+\]
+
+This is a fiber-family statement, not a claim that the parent is globally a Cartesian product.
+
+## 19. Universal-joint coordinates on a one-DOF child
+
+A universal joint has two local coordinates,
+
+\[
+U(\alpha,\beta)=R_a(\alpha)R_b(\beta),
+\]
+
+but a closed one-degree-of-freedom child supplies only one independent branch parameter. The canonical parameter is pseudo-arclength \(s\):
+
+\[
+\alpha=\alpha(s),
+\qquad
+\beta=\beta(s).
+\]
+
+The numerical solver advances \(s\) and solves loop closure for both universal-joint coordinates and all remaining coordinates. The two winding questions are read from the same returned branch:
+
+\[
+w_\alpha
+=
+\operatorname{round}\frac{\Delta\widetilde\alpha}{2\pi},
+\qquad
+w_\beta
+=
+\operatorname{round}\frac{\Delta\widetilde\beta}{2\pi}.
+\]
+
+Prescribing \(\alpha\) means adding
+
+\[
+\alpha=\alpha_{\mathrm{command}}
+\]
+
+as one equation and solving all other coordinates. It is a valid local chart only where
+
+\[
+\frac{d\alpha}{ds}\neq0.
+\]
+
+At an \(\alpha\) turning point, switch to \(\beta\) when valid or return to pseudo-arclength. Thus \(\alpha\) and \(\beta\) are two coupled coordinates of one compound joint, not two independent inputs to the one-DOF mechanism.
