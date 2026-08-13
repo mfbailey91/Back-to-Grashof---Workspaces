@@ -229,6 +229,12 @@ planar 3R source
 
 The common interface reproduces the existing exact planar workspace with no change to the trusted mathematical kernel.
 
+### Visualization follow-up
+
+Workspace exemplar PNGs/GIFs under `outputs/workspace_exemplars/` compare reduced four-bar
+motion at dexterous / reachable-nondexterous / boundary radii. They are a visualization aid
+for the trusted planar map, not an additional certificate path.
+
 ---
 
 ## L4 — spatial 4R direct one-dimensional equivalence

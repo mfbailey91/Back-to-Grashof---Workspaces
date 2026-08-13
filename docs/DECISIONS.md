@@ -222,3 +222,15 @@ spatial closed-mechanism certificates.
 
 **Reason:** The ladder acceptance criterion is interface retrofit without changing the
 trusted mathematical kernel; a duplicate problem-record type would only create drift.
+
+## ADR-030 — Workspace exemplar viz is not a certificate path
+
+<!-- WORKSPACE_EXEMPLAR_VIZ_2026_08_13 -->
+
+**Decision:** Planar workspace exemplar statics/GIFs under `outputs/workspace_exemplars/`
+reuse existing `Planar3R`/`FourBar` classification and a visualization-only pose sampler.
+They do not change analytical workspace predicates and do not issue
+`DecompositionCertificate` / ladder equivalence claims.
+
+**Reason:** Side-by-side reduced-mechanism behavior is an evidence aid for the trusted
+planar map; conflating renders with certificates would recreate provenance defects.
