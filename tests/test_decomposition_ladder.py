@@ -67,7 +67,9 @@ def test_registered_fiber_specs_match_rung_leaf_dimensions() -> None:
         assert fiber.parent_dimension == by_rung[fiber.rung].fixed_position_mobility
         assert fiber.source_fiber_dimension == 1
         assert len(fiber.constraints) == by_rung[fiber.rung].total_slice_count
-    assert DEFAULT_FIBER_SPECS[1].certificate_status is CertificateStatus.UNRESOLVED
+    assert DEFAULT_FIBER_SPECS[1].certificate_status is CertificateStatus.EXACT_ON_COMPONENT
+    assert "exact_u_pair_4r" in " ".join(DEFAULT_FIBER_SPECS[1].notes)
+    assert "unresolved" in " ".join(DEFAULT_FIBER_SPECS[1].notes).casefold()
     assert DEFAULT_FIBER_SPECS[4].process_status is ProcessStatus.BLOCKED
 
 

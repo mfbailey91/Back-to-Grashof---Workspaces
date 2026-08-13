@@ -3,9 +3,9 @@
 **Status:** optional software scaffold subordinate to active V05–V09  
 **Active scientific sequence:** [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)  
 **Project:** Characterization of Manipulator Workspaces  
-**Purpose:** provide shared parent → fiber → child → reconstruction interfaces from the trusted planar 3R calibration through deferred spatial 7R work without demoting the audited V05 closed-mechanism HOLD.
+**Purpose:** provide shared parent → fiber → child → reconstruction interfaces from the trusted planar 3R calibration through deferred spatial 7R work without demoting the active V05–V09 scientific sequence (proximal exact-U closed-mechanism is already `EXACT_ON_COMPONENT`).
 
-This document does **not** replace the active V05–V09 program. L4 maps to V05, L5 to V06, L6 is V07-first then V08, and L7 remains BLOCKED until the V05 gate lifts.
+This document does **not** replace the active V05–V09 program. L4 maps to V05, L5 to V06, L6 is V07-first then V08, and L7 remains BLOCKED pending multi-component / nested-slice certificates beyond the proximal exact-U gate.
 
 ---
 
@@ -265,6 +265,14 @@ Close the current V05 independent reduced-mechanism gate.
 
 At least one nontrivial source component and one independently solved reduced component have matching orientation maps over the claimed scope.
 
+### Interface status
+
+V05 already issued the independent `S_v-U_phys-R-R` closed-mechanism certificate for proximal
+`exact_u_pair_4r`. The ladder adapter `spatial_l4.py` expresses that evidence as shared
+records (`SourceParentRecord`, fiber/child/certificate/leaf/reconstruction) plus V05C
+orientation-curve truth for the claimed component. Catalog fiber status is scoped
+`EXACT_ON_COMPONENT` (not multi-component `EXACT_GLOBAL`). Process remains `SCAFFOLD`.
+
 ---
 
 ## L5 — spatial 5R parent and pointing-fiber family
@@ -352,7 +360,7 @@ Separate the one excess self-motion dimension from the three-dimensional orienta
 
 ### Status
 
-L7 is outside the active V05–V09 sequence. Software may retain dimensional contracts with `ProcessStatus.BLOCKED`. Do not treat L7 as an active scientific claim until the V05 closed-mechanism gate lifts.
+L7 is outside the active V05–V09 sequence. Software may retain dimensional contracts with `ProcessStatus.BLOCKED`. Do not treat L7 as an active scientific claim until multi-component / nested-slice certificates exist beyond the proximal exact-U gate.
 
 ### Source parent
 

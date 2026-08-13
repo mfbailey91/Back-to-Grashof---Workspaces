@@ -234,3 +234,17 @@ They do not change analytical workspace predicates and do not issue
 
 **Reason:** Side-by-side reduced-mechanism behavior is an evidence aid for the trusted
 planar map; conflating renders with certificates would recreate provenance defects.
+
+## ADR-031 — L4 wraps V05 closed-mechanism evidence into shared ladder records
+
+<!-- L4_V05_INTERFACE_2026_08_13 -->
+
+**Decision:** The L4 ladder adapter emits shared evidence records from the existing V05
+proximal `exact_u_pair_4r` independent closed-mechanism path (plus V05C orientation-curve
+truth on the claimed component). Catalog `FiberFamilySpec` status may be
+`EXACT_ON_COMPONENT` only with that scoped meaning; multi-component `EXACT_GLOBAL` and
+other architectures remain unresolved. Process status stays `SCAFFOLD`. V05–V09 remains
+the scientific source of truth; the ladder does not re-solve the reduced loop.
+
+**Reason:** L4 acceptance is interface expression of the audited V05 gate, not a parallel
+scientific sequence or an over-claim of global spatial-4R coverage.

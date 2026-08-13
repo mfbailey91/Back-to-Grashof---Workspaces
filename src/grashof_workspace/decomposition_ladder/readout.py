@@ -14,6 +14,7 @@ from PIL import Image
 
 from .planar_l3 import default_l3_calibration_payload
 from .registry import PARENT_CHILD_FAMILIES, RUNG_SPECS, program_payload
+from .spatial_l4 import default_l4_equivalence_payload
 from .u_drive import (
     conceptual_branch_samples,
     free_branch_contract,
@@ -192,6 +193,30 @@ def _l3_calibration_rows(payload: dict[str, Any]) -> str:
     return "".join(rows)
 
 
+def _l4_equivalence_rows(payload: dict[str, Any]) -> str:
+    section = payload.get("l4_equivalence")
+    if not isinstance(section, dict):
+        return ""
+    summaries = section.get("summaries")
+    if not isinstance(summaries, list):
+        return ""
+    rows: list[str] = []
+    for entry in summaries:
+        if not isinstance(entry, dict):
+            continue
+        rows.append(
+            "<tr>"
+            f"<td><code>{entry.get('architecture_id')}</code></td>"
+            f"<td><code>{entry.get('axis_aggregation_status')}</code></td>"
+            f"<td><code>{entry.get('closed_mechanism_status')}</code></td>"
+            f"<td><code>{entry.get('orientation_curve_type')}</code></td>"
+            f"<td><code>{entry.get('reconstruction_status')}</code></td>"
+            f"<td><code>{entry.get('independent_reduced_solve_present')}</code></td>"
+            "</tr>"
+        )
+    return "".join(rows)
+
+
 def render_ladder_html(
     *,
     payload: dict[str, Any],
@@ -226,6 +251,28 @@ V05–V09.
         + l3_rows
         + "</table>"
         if l3_rows
+        else ""
+    )
+    l4_rows = _l4_equivalence_rows(payload)
+    l4_section = (
+        """
+<h2>L4 spatial 4R equivalence (wraps V05)</h2>
+<p>
+Shared ladder records for the existing V05 independent closed-mechanism evidence.
+Proximal <code>exact_u_pair_4r</code> is <code>EXACT_ON_COMPONENT</code> on the compared
+component; generic architectures do not promote a child. Process stays
+<code>SCAFFOLD</code>. Scientific source:
+<a href="../kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">V05D readout</a>.
+</p>
+<table>
+<tr>
+<th>architecture</th><th>axis aggregation</th><th>closed mechanism</th>
+<th>orientation curve</th><th>reconstruction</th><th>independent reduce</th>
+</tr>
+"""
+        + l4_rows
+        + "</table>"
+        if l4_rows
         else ""
     )
     return f"""<!doctype html>
@@ -298,6 +345,8 @@ the leaf, and reconstruct the parent task image from accepted fibers.
 </table>
 
 {l3_section}
+
+{l4_section}
 
 <h2>Candidate L5 parent → child letter corpus</h2>
 <p>
@@ -382,6 +431,7 @@ def build_ladder_readout(
     payload["conceptual_u_branch"] = asdict(summary)
     payload["conceptual_only"] = True
     payload["l3_calibration"] = default_l3_calibration_payload()
+    payload["l4_equivalence"] = default_l4_equivalence_payload()
 
     json_path = data_dir / "decomposition_ladder_program.json"
     json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

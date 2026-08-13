@@ -264,12 +264,16 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         source_fiber_dimension=1,
         candidate_child_family="architecture-dependent spatial four-bar",
         process_status=ProcessStatus.SCAFFOLD,
-        certificate_status=CertificateStatus.UNRESOLVED,
+        certificate_status=CertificateStatus.EXACT_ON_COMPONENT,
         reconstruction_target="Y1 ⊂ SO(3)",
         notes=(
             (
-                "V05 proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; "
-                "multi-component EXACT_GLOBAL and other architectures remain unresolved."
+                "Catalog status EXACT_ON_COMPONENT is scoped to proximal exact_u_pair_4r "
+                "on the compared V05 component; not multi-component EXACT_GLOBAL."
+            ),
+            (
+                "generic_4r, near-aligned, and non-proximal architectures remain unresolved "
+                "or rejected for closed-mechanism equivalence."
             ),
         ),
     ),
