@@ -43,6 +43,16 @@ It also explains why the planar 3R case produces a four-bar, why a spatial 4R pr
 
 ## 2. Active Program
 
+### [`DECOMPOSITION_LADDER_L3_L7_PROGRAM.md`](DECOMPOSITION_LADDER_L3_L7_PROGRAM.md)
+
+Optional L3–L7 interface scaffold subordinate to the active V05–V09 sequence. L4↔V05, L5↔V06, L6 is V07-first then V08, L7 deferred/BLOCKED. Letter families are a candidate corpus only.
+
+**Program readout:** [`../results/decomposition_ladder/index.html`](../results/decomposition_ladder/index.html).
+
+### [`U_JOINT_DRIVE_CONTRACT.md`](U_JOINT_DRIVE_CONTRACT.md)
+
+Canonical one-DOF U-drive semantics: drive branch parameter `s`; `alpha(s)`/`beta(s)` are coupled outputs.
+
 ### [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)
 
 Active sequential program:

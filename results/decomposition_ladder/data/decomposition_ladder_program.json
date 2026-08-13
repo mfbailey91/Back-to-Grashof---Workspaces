@@ -1,0 +1,501 @@
+{
+  "program": "decomposition_ladder_L3_L7_scaffold",
+  "active_sequence": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md",
+  "scaffold_status": "optional_subordinate_to_V05_V09",
+  "rungs": [
+    {
+      "rung": "L3",
+      "source_chain": "planar 3R",
+      "n_joints": 3,
+      "position_dimension": 2,
+      "fixed_position_mobility": 1,
+      "target_label": "SO(2) planar orientation",
+      "target_dimension": 1,
+      "task_slice_count": 0,
+      "redundancy_slice_count": 0,
+      "direct_leaf": true,
+      "active_question": "Can the trusted planar source fiber, exact virtual 4R, winding, and workspace reconstruction be expressed through the common interfaces?",
+      "process_status": "SCAFFOLD",
+      "notes": [
+        "Calibration rung with an exact analytical result."
+      ]
+    },
+    {
+      "rung": "L4",
+      "source_chain": "spatial 4R",
+      "n_joints": 4,
+      "position_dimension": 3,
+      "fixed_position_mobility": 1,
+      "target_label": "specified one-parameter orientation family Y1 \u2282 SO(3)",
+      "target_dimension": 1,
+      "task_slice_count": 0,
+      "redundancy_slice_count": 0,
+      "direct_leaf": true,
+      "active_question": "Can a complete source component and an independently instantiated one-DOF closed mechanism be shown to have the same orientation map?",
+      "process_status": "SCAFFOLD",
+      "notes": [
+        "Maps to active V05. Independent reduced closed-mechanism solve remains HOLD.",
+        "The generic orientation image is a curve in SO(3), not full spatial dexterity."
+      ]
+    },
+    {
+      "rung": "L5",
+      "source_chain": "spatial 5R",
+      "n_joints": 5,
+      "position_dimension": 3,
+      "fixed_position_mobility": 2,
+      "target_label": "S^2 tool pointing",
+      "target_dimension": 2,
+      "task_slice_count": 1,
+      "redundancy_slice_count": 0,
+      "direct_leaf": false,
+      "active_question": "Can the complete two-dimensional pointing parent be reconstructed from a task-derived family of certified one-DOF fibers?",
+      "process_status": "PLANNED",
+      "notes": [
+        "Maps to active V06. Scientific claims remain blocked until the V05 gate lifts.",
+        "Parent\u2192fiber decomposition is central; letter families are candidate tests only."
+      ]
+    },
+    {
+      "rung": "L6",
+      "source_chain": "spatial 6R",
+      "n_joints": 6,
+      "position_dimension": 3,
+      "fixed_position_mobility": 3,
+      "target_label": "SO(3) full orientation",
+      "target_dimension": 3,
+      "task_slice_count": 2,
+      "redundancy_slice_count": 0,
+      "direct_leaf": false,
+      "active_question": "After freezing a decomposition-free SO(3) reference (V07), can nested task slices and any V08 quotient reconstruct that independent truth?",
+      "process_status": "PLANNED",
+      "notes": [
+        "V07-first: independent orientation reference before nested decomposition.",
+        "V08 aligned-roll quotient is a qualified special case after V07 truth exists."
+      ]
+    },
+    {
+      "rung": "L7",
+      "source_chain": "spatial 7R",
+      "n_joints": 7,
+      "position_dimension": 3,
+      "fixed_position_mobility": 4,
+      "target_label": "SO(3) orientation plus one-dimensional self-motion",
+      "target_dimension": 3,
+      "task_slice_count": 2,
+      "redundancy_slice_count": 1,
+      "direct_leaf": false,
+      "active_question": "Can task orientation and internal redundancy be separated while preserving nonempty, compatible one-DOF leaves over the required target?",
+      "process_status": "BLOCKED",
+      "notes": [
+        "Deferred beyond the active V05\u2013V09 sequence until the V05 closed-mechanism gate lifts.",
+        "The redundancy coordinate is not a fourth orientation coordinate."
+      ]
+    }
+  ],
+  "parent_child_families": [
+    {
+      "parent_label": "SUUR",
+      "child_label": "UUUR",
+      "parent_joint_kinds": [
+        "S",
+        "U",
+        "U",
+        "R"
+      ],
+      "child_joint_kinds": [
+        "U",
+        "U",
+        "U",
+        "R"
+      ],
+      "parent_joint_roles": [
+        "S_v",
+        "U_phys",
+        "U_phys",
+        "R_phys"
+      ],
+      "child_joint_roles": [
+        "U_v",
+        "U_phys",
+        "U_phys",
+        "R_phys"
+      ],
+      "source_pattern": "candidate 5R + S_v corpus entry assuming two physical RR\u2192U aggregates followed by R (aggregation uncertified)",
+      "candidate_corpus_status": "PLANNED",
+      "axis_aggregation_status": "UNRESOLVED",
+      "closed_mechanism_status": "UNRESOLVED",
+      "notes": [
+        "Letter labels identify a candidate test corpus only.",
+        "Mobility and joint-letter matching are not equivalence certificates.",
+        "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued."
+      ],
+      "parent_mobility": 2,
+      "child_mobility": 1
+    },
+    {
+      "parent_label": "SURU",
+      "child_label": "UURU",
+      "parent_joint_kinds": [
+        "S",
+        "U",
+        "R",
+        "U"
+      ],
+      "child_joint_kinds": [
+        "U",
+        "U",
+        "R",
+        "U"
+      ],
+      "parent_joint_roles": [
+        "S_v",
+        "U_phys",
+        "R_phys",
+        "U_phys"
+      ],
+      "child_joint_roles": [
+        "U_v",
+        "U_phys",
+        "R_phys",
+        "U_phys"
+      ],
+      "source_pattern": "candidate 5R + S_v corpus entry with U-R-U physical ordering",
+      "candidate_corpus_status": "PLANNED",
+      "axis_aggregation_status": "UNRESOLVED",
+      "closed_mechanism_status": "UNRESOLVED",
+      "notes": [
+        "Letter labels identify a candidate test corpus only.",
+        "Mobility and joint-letter matching are not equivalence certificates.",
+        "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued."
+      ],
+      "parent_mobility": 2,
+      "child_mobility": 1
+    },
+    {
+      "parent_label": "SRUU",
+      "child_label": "URUU",
+      "parent_joint_kinds": [
+        "S",
+        "R",
+        "U",
+        "U"
+      ],
+      "child_joint_kinds": [
+        "U",
+        "R",
+        "U",
+        "U"
+      ],
+      "parent_joint_roles": [
+        "S_v",
+        "R_phys",
+        "U_phys",
+        "U_phys"
+      ],
+      "child_joint_roles": [
+        "U_v",
+        "R_phys",
+        "U_phys",
+        "U_phys"
+      ],
+      "source_pattern": "candidate 5R + S_v corpus entry with R-U-U physical ordering",
+      "candidate_corpus_status": "PLANNED",
+      "axis_aggregation_status": "UNRESOLVED",
+      "closed_mechanism_status": "UNRESOLVED",
+      "notes": [
+        "Letter labels identify a candidate test corpus only.",
+        "Mobility and joint-letter matching are not equivalence certificates.",
+        "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued."
+      ],
+      "parent_mobility": 2,
+      "child_mobility": 1
+    },
+    {
+      "parent_label": "SSRR",
+      "child_label": "USRR",
+      "parent_joint_kinds": [
+        "S",
+        "S",
+        "R",
+        "R"
+      ],
+      "child_joint_kinds": [
+        "U",
+        "S",
+        "R",
+        "R"
+      ],
+      "parent_joint_roles": [
+        "S_v",
+        "S_phys",
+        "R_phys",
+        "R_phys"
+      ],
+      "child_joint_roles": [
+        "U_v",
+        "S_phys",
+        "R_phys",
+        "R_phys"
+      ],
+      "source_pattern": "candidate 5R + S_v corpus entry assuming one physical RRR\u2192S aggregate followed by R-R (aggregation uncertified)",
+      "candidate_corpus_status": "PLANNED",
+      "axis_aggregation_status": "UNRESOLVED",
+      "closed_mechanism_status": "UNRESOLVED",
+      "notes": [
+        "Letter labels identify a candidate test corpus only.",
+        "Mobility and joint-letter matching are not equivalence certificates.",
+        "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued."
+      ],
+      "parent_mobility": 2,
+      "child_mobility": 1
+    },
+    {
+      "parent_label": "SRSR",
+      "child_label": "URSR",
+      "parent_joint_kinds": [
+        "S",
+        "R",
+        "S",
+        "R"
+      ],
+      "child_joint_kinds": [
+        "U",
+        "R",
+        "S",
+        "R"
+      ],
+      "parent_joint_roles": [
+        "S_v",
+        "R_phys",
+        "S_phys",
+        "R_phys"
+      ],
+      "child_joint_roles": [
+        "U_v",
+        "R_phys",
+        "S_phys",
+        "R_phys"
+      ],
+      "source_pattern": "candidate 5R + S_v corpus entry with R-S-R physical ordering",
+      "candidate_corpus_status": "PLANNED",
+      "axis_aggregation_status": "UNRESOLVED",
+      "closed_mechanism_status": "UNRESOLVED",
+      "notes": [
+        "Letter labels identify a candidate test corpus only.",
+        "Mobility and joint-letter matching are not equivalence certificates.",
+        "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued."
+      ],
+      "parent_mobility": 2,
+      "child_mobility": 1
+    },
+    {
+      "parent_label": "SRRS",
+      "child_label": "URRS",
+      "parent_joint_kinds": [
+        "S",
+        "R",
+        "R",
+        "S"
+      ],
+      "child_joint_kinds": [
+        "U",
+        "R",
+        "R",
+        "S"
+      ],
+      "parent_joint_roles": [
+        "S_v",
+        "R_phys",
+        "R_phys",
+        "S_phys"
+      ],
+      "child_joint_roles": [
+        "U_v",
+        "R_phys",
+        "R_phys",
+        "S_phys"
+      ],
+      "source_pattern": "candidate 5R + S_v corpus entry with R-R-S physical ordering",
+      "candidate_corpus_status": "PLANNED",
+      "axis_aggregation_status": "UNRESOLVED",
+      "closed_mechanism_status": "UNRESOLVED",
+      "notes": [
+        "Letter labels identify a candidate test corpus only.",
+        "Mobility and joint-letter matching are not equivalence certificates.",
+        "axis_aggregation_status and closed_mechanism_status remain UNRESOLVED until issued."
+      ],
+      "parent_mobility": 2,
+      "child_mobility": 1
+    }
+  ],
+  "default_fiber_specs": [
+    {
+      "rung": "L3",
+      "parent_id": "planar_3r_fixed_position_component",
+      "parent_dimension": 1,
+      "constraints": [],
+      "source_fiber_dimension": 1,
+      "candidate_child_family": "planar 4R",
+      "process_status": "SCAFFOLD",
+      "certificate_status": "EXACT_GLOBAL",
+      "reconstruction_target": "SO(2)",
+      "notes": [
+        "Trusted calibration leaf; no additional slicing required."
+      ]
+    },
+    {
+      "rung": "L4",
+      "parent_id": "spatial_4r_fixed_position_component",
+      "parent_dimension": 1,
+      "constraints": [],
+      "source_fiber_dimension": 1,
+      "candidate_child_family": "architecture-dependent spatial four-bar",
+      "process_status": "SCAFFOLD",
+      "certificate_status": "UNRESOLVED",
+      "reconstruction_target": "Y1 \u2282 SO(3)",
+      "notes": [
+        "Independent reduced closed-mechanism solve remains the active V05 gate."
+      ]
+    },
+    {
+      "rung": "L5",
+      "parent_id": "spatial_5r_pointing_parent",
+      "parent_dimension": 2,
+      "constraints": [
+        {
+          "name": "pointing_latitude",
+          "role": "task",
+          "formula": "h(d)=n\u00b7d=c",
+          "parameter_name": "c",
+          "target_space": "S^2",
+          "rationale": "At regular values, a scalar pointing level set reduces the two-dimensional 5R pointing parent to a one-dimensional source fiber."
+        }
+      ],
+      "source_fiber_dimension": 1,
+      "candidate_child_family": "candidate UUUR/UURU/URUU/USRR/URSR/URRS corpus",
+      "process_status": "PLANNED",
+      "certificate_status": "UNRESOLVED",
+      "reconstruction_target": "S^2 pointing image",
+      "notes": [
+        "V06 scientific claims blocked until V05 closed-mechanism gate lifts."
+      ]
+    },
+    {
+      "rung": "L6",
+      "parent_id": "spatial_6r_orientation_parent",
+      "parent_dimension": 3,
+      "constraints": [
+        {
+          "name": "orientation_chart_coordinate_1",
+          "role": "task",
+          "formula": "h1(R)=c1",
+          "parameter_name": "c1",
+          "target_space": "SO(3)",
+          "rationale": "First local/global task coordinate used to foliate a 3D orientation parent."
+        },
+        {
+          "name": "orientation_chart_coordinate_2",
+          "role": "task",
+          "formula": "h2(R)=c2",
+          "parameter_name": "c2",
+          "target_space": "SO(3)",
+          "rationale": "Second independent task coordinate leaving a one-dimensional orientation leaf."
+        }
+      ],
+      "source_fiber_dimension": 1,
+      "candidate_child_family": "architecture-dependent one-DOF leaf",
+      "process_status": "PLANNED",
+      "certificate_status": "UNRESOLVED",
+      "reconstruction_target": "SO(3) orientation image",
+      "notes": [
+        "Requires frozen V07 decomposition-free SO(3) reference before reconstruction claims."
+      ]
+    },
+    {
+      "rung": "L7",
+      "parent_id": "spatial_7r_orientation_redundancy_parent",
+      "parent_dimension": 4,
+      "constraints": [
+        {
+          "name": "redundancy_gauge",
+          "role": "redundancy",
+          "formula": "r(q)=\u03c1",
+          "parameter_name": "rho",
+          "target_space": "configuration self-motion",
+          "rationale": "Select one internal self-motion level without pretending it is an orientation coordinate."
+        },
+        {
+          "name": "orientation_chart_coordinate_1",
+          "role": "task",
+          "formula": "h1(R)=c1",
+          "parameter_name": "c1",
+          "target_space": "SO(3)",
+          "rationale": "First local/global task coordinate used to foliate a 3D orientation parent."
+        },
+        {
+          "name": "orientation_chart_coordinate_2",
+          "role": "task",
+          "formula": "h2(R)=c2",
+          "parameter_name": "c2",
+          "target_space": "SO(3)",
+          "rationale": "Second independent task coordinate leaving a one-dimensional orientation leaf."
+        }
+      ],
+      "source_fiber_dimension": 1,
+      "candidate_child_family": "architecture-dependent one-DOF leaf",
+      "process_status": "BLOCKED",
+      "certificate_status": "UNRESOLVED",
+      "reconstruction_target": "SO(3) coverage with nonempty redundancy fibers",
+      "notes": [
+        "Deferred until the active V05 closed-mechanism gate lifts."
+      ]
+    }
+  ],
+  "guardrails": [
+    "V05\u2013V09 remains the active scientific sequence; this ladder is an optional scaffold.",
+    "Construct and validate the source parent before proposing child mechanisms.",
+    "A one-dimensional level-set fiber is not automatically a known four-bar family.",
+    "Letter/mobility families are candidate corpus entries, not certified parents.",
+    "Preserve axis_aggregation_status vs closed_mechanism_status (ADR-021).",
+    "Drive continuation arclength s by default; alpha(s) and beta(s) are outputs.",
+    "Prescribe alpha or beta only where that coordinate is a regular local chart.",
+    "Promote source_chain_evidence only from an accepted closed-mechanism certificate.",
+    "L7 remains BLOCKED until the V05 closed-mechanism gate lifts."
+  ],
+  "canonical_drive_contract": {
+    "mode": "free_branch",
+    "branch_parameter": "s (pseudo-arclength)",
+    "commanded_coordinate": null,
+    "solved_coordinates": [
+      "alpha(s)",
+      "beta(s)",
+      "all remaining loop coordinates"
+    ],
+    "valid_when": "the closure Jacobian has a regular one-dimensional nullspace",
+    "fallback": "reduce step size, change chart, or stop/branch at a singular point",
+    "interpretation": "The solver moves the whole closed mechanism along its one-dimensional branch. Neither U coordinate is independently prescribed."
+  },
+  "source_fiber_drive_contract": {
+    "mode": "task_derived_fiber",
+    "branch_parameter": "s on {p(q)=p*, h(T(q))=c}",
+    "commanded_coordinate": "the scalar slice value c is fixed for the entire fiber",
+    "solved_coordinates": [
+      "source joint coordinates q(s)",
+      "derived alpha(s)",
+      "derived beta(s)"
+    ],
+    "valid_when": "the combined source constraint has rank n-1 and nullity one",
+    "fallback": "choose another regular slice chart or mark the fiber critical/unresolved",
+    "interpretation": "The task slice selects which one-dimensional fiber is being solved. It does not independently drive alpha and beta."
+  },
+  "conceptual_u_branch": {
+    "sample_count": 121,
+    "alpha_winding": 1,
+    "beta_winding": 0,
+    "alpha_range": 6.283185307179586,
+    "beta_range": 1.1,
+    "interpretation": "alpha circulates while beta rocks"
+  },
+  "conceptual_only": true
+}

@@ -163,3 +163,37 @@ with coordinate maps, reconstruction maps, component scope, rank checks, tangent
 **Decision:** The continuation kernel may use an analytical geometric Jacobian, automatic differentiation, or a numerical derivative. The analytical V05 Jacobian is cross-checked against central finite differences at each seed.
 
 **Reason:** A derivative is not required merely to find one configuration, but rank, tangent, pseudo-arclength correction, conditioning, and singularity diagnostics require derivative information or an approximation to it.
+
+---
+
+## ADR-023 — Optional L3–L7 ladder scaffold subordinate to active V05–V09
+
+<!-- DECOMPOSITION_LADDER_L3_L7_2026_08_12 -->
+
+**Decision:** Keep `docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md` as the active scientific sequence. Treat `docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` as an optional interface scaffold that maps L3→planar calibration, L4→V05, L5→V06, L6→V07-first then V08, and L7 as deferred/BLOCKED until the V05 closed-mechanism gate lifts.
+
+**Reason:** The dimensional parent→fiber→child contract is reusable, but promoting a parallel “active general program” would demote the audited V05 HOLD and reopen the V05A undifferentiated-PASS failure mode.
+
+## ADR-024 — A higher-dimensional parent is reconstructed from an audited fiber family, not assumed to be a product
+
+**Decision:** Treat L5/L6/L7 parents as unions or foliations of level-set fibers only after slice-parameter coverage, critical values, components, and singular fibers are represented. Do not assume \(P^m\cong F^1\times B^{m-1}\).
+
+**Reason:** Fibers may appear, disappear, split, merge, or collapse at critical values. A stack of selected curves is not automatically the complete parent.
+
+## ADR-025 — Canonical U-joint drive is the one-dimensional branch parameter
+
+**Decision:** For a one-DOF child containing `U_v`, drive pseudo-arclength `s` by default and read `alpha(s)` and `beta(s)` from one branch. A prescribed-alpha or prescribed-beta solve is a local chart valid only when the selected coordinate derivative is nonzero.
+
+**Reason:** A universal joint has two chart coordinates, but loop closure leaves the complete child with one global DOF. Treating alpha and beta as independent inputs would violate the mechanism mobility.
+
+## ADR-026 — Descriptor discovery remains downstream of successful reconstruction
+
+**Decision:** Keep the historical descriptor-mining sprint deferred until at least one independently computed source-parent task image is reconstructed from accepted source-derived child mechanisms within documented tolerances.
+
+**Reason:** Otherwise the project risks discovering correlations for representation-dependent winding labels that have not been shown to determine manipulator orientation coverage.
+
+## ADR-027 — Ladder certificates preserve the ADR-021 aggregation/closed split
+
+**Decision:** Ladder `EquivalenceCertificateRecord` stores `axis_aggregation_status` and `closed_mechanism_status` separately; overall status mirrors closed-mechanism status. Leaf promotion to `source_chain_evidence` requires a real accepted closed-mechanism certificate object, never caller status strings alone. Process labels (`PLANNED`/`SCAFFOLD`/`BLOCKED`/`REVIEW`) live in `ProcessStatus`, not in the certificate taxonomy.
+
+**Reason:** Re-merging process labels into certificate statuses and trusting forged provenance strings recreates the audit defects that forced V05 overall HOLD.

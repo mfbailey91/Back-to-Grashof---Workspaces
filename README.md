@@ -76,6 +76,9 @@ V09  validated mechanism predicates and coverage reconstruction
 
 The earlier all-family spatial-four-bar atlas/rule program is preserved as deferred V10–V14 work after the decomposition-validation gate.
 
+Optional shared L3–L7 interface scaffolding lives in `docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` and `src/grashof_workspace/decomposition_ladder/`. It is subordinate to the active V05–V09 sequence above and does not claim the V05 closed-mechanism gate is closed.
+
+
 ## Important terminology
 
 - **spatial 4R serial manipulator:** an open chain with four revolute joints;

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kinematic Decomposition Ladder L3–L7</title>
+<style>
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    max-width: 980px;
+    margin: 2rem auto;
+    padding: 0 1.25rem 3rem;
+    line-height: 1.48;
+    color: #1a1a1a;
+  }
+  h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  table { border-collapse: collapse; width: 100%; margin: 0.8rem 0 1.2rem; }
+  th, td {
+    border: 1px solid #bbb;
+    padding: 0.45rem 0.55rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #f3f3f3; }
+  code, pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9em;
+  }
+  pre { background: #f6f6f6; border: 1px solid #ddd; padding: 0.8rem 1rem; overflow-x: auto; }
+  .note {
+    background: #faf7f0;
+    border-left: 3px solid #c4a35a;
+    padding: 0.7rem 0.9rem;
+    margin: 1rem 0;
+  }
+</style>
+</head>
+<body>
+<h1>Kinematic Decomposition Ladder — L3 through L7 (optional scaffold)</h1>
+<p>
+<strong>Active scientific sequence:</strong> <code>docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code>.
+This readout is an optional interface scaffold subordinate to that program. It does not demote
+the V05 closed-mechanism HOLD or promote L5–L7 claims.
+</p>
+<p>
+The common implementation contract is: construct the exact fixed-position source parent,
+introduce only enough task/redundancy level sets to obtain a one-dimensional source fiber,
+compress that fiber into a known closed mechanism only where equivalence is certified, solve
+the leaf, and reconstruct the parent task image from accepted fibers.
+</p>
+
+<pre>source open chain
+  → fix Cartesian position
+  → source parent of dimension m
+  → impose m−1 justified scalar level sets
+  → one-dimensional source fiber
+  → candidate one-DOF closed-mechanism child
+  → independent parent/child equivalence certificate
+  → leaf continuation + winding/coverage
+  → parent orientation/pointing reconstruction</pre>
+
+<h2>Ladder</h2>
+<table>
+<tr>
+<th>Rung</th><th>Source</th><th>Fixed-position mobility</th><th>Target</th>
+<th>Task slices</th><th>Redundancy slices</th><th>Leaf construction</th>
+</tr>
+<tr><td><code>L3</code></td><td>planar 3R</td><td>1</td><td>SO(2) planar orientation</td><td>0</td><td>0</td><td>direct</td></tr><tr><td><code>L4</code></td><td>spatial 4R</td><td>1</td><td>specified one-parameter orientation family Y1 ⊂ SO(3)</td><td>0</td><td>0</td><td>direct</td></tr><tr><td><code>L5</code></td><td>spatial 5R</td><td>2</td><td>S^2 tool pointing</td><td>1</td><td>0</td><td>fiber family</td></tr><tr><td><code>L6</code></td><td>spatial 6R</td><td>3</td><td>SO(3) full orientation</td><td>2</td><td>0</td><td>fiber family</td></tr><tr><td><code>L7</code></td><td>spatial 7R</td><td>4</td><td>SO(3) orientation plus one-dimensional self-motion</td><td>2</td><td>1</td><td>fiber family</td></tr>
+</table>
+
+<h2>Candidate L5 parent → child letter corpus</h2>
+<p>
+For L5, replacing the virtual spherical closure <code>S_v</code> by a task-derived
+<code>U_v</code> on one regular pointing level set removes one degree of freedom.
+Letter labels below are a <em>candidate test corpus</em> only: kinds and roles are recorded,
+but axis aggregation and closed-mechanism statuses remain <code>UNRESOLVED</code> until
+issued. Mobility/letter matching is not an equivalence certificate.
+</p>
+<table>
+<tr><th>Parent</th><th>M</th><th>Child</th><th>M</th><th>Architecture origin</th></tr>
+<tr><td><code>SUUR</code></td><td>2</td><td><code>UUUR</code></td><td>1</td><td>candidate 5R + S_v corpus entry assuming two physical RR→U aggregates followed by R (aggregation uncertified)</td></tr><tr><td><code>SURU</code></td><td>2</td><td><code>UURU</code></td><td>1</td><td>candidate 5R + S_v corpus entry with U-R-U physical ordering</td></tr><tr><td><code>SRUU</code></td><td>2</td><td><code>URUU</code></td><td>1</td><td>candidate 5R + S_v corpus entry with R-U-U physical ordering</td></tr><tr><td><code>SSRR</code></td><td>2</td><td><code>USRR</code></td><td>1</td><td>candidate 5R + S_v corpus entry assuming one physical RRR→S aggregate followed by R-R (aggregation uncertified)</td></tr><tr><td><code>SRSR</code></td><td>2</td><td><code>URSR</code></td><td>1</td><td>candidate 5R + S_v corpus entry with R-S-R physical ordering</td></tr><tr><td><code>SRRS</code></td><td>2</td><td><code>URRS</code></td><td>1</td><td>candidate 5R + S_v corpus entry with R-R-S physical ordering</td></tr>
+</table>
+
+<h2>How the U joint is “driven”</h2>
+<div class="note"><strong>Simple statement.</strong> A U joint has two coordinates, alpha and beta, but the closed child mechanism has only one global DOF. We therefore drive the branch parameter s. Loop closure forces alpha and beta to move together as alpha(s) and beta(s). Prescribing alpha is only a local convenience: set alpha to a command and solve every other coordinate. At an alpha turning point, switch to beta or return to pseudo-arclength s.</div>
+<p>
+The canonical child solver drives pseudo-arclength <code>s</code>. Loop closure returns
+<code>alpha(s)</code>, <code>beta(s)</code>, and every other joint coordinate. A prescribed-alpha
+experiment adds <code>alpha=alpha_command</code> as one equation and solves the remaining
+coordinates; it fails as a local chart when <code>dalpha/ds=0</code>.
+</p>
+<p>
+In the conceptual branch below, alpha winds once while beta rocks. They are still coordinates
+of one mechanism branch—not two independent mechanism DOFs.
+</p>
+<p><img src="figures/u_drive_coordinates.svg" alt="U coordinate graph" style="max-width: 760px;"></p>
+<p><em>Animation generation disabled for this run.</em></p>
+<table>
+<tr><th>Conceptual result</th><th>Value</th></tr>
+<tr><td>alpha winding</td><td>1</td></tr>
+<tr><td>beta winding</td><td>0</td></tr>
+<tr><td>interpretation</td><td>alpha circulates while beta rocks</td></tr>
+</table>
+
+<h2>Scaffold mapping to active V05–V09</h2>
+<ol>
+<li><strong>L3:</strong> planar calibration adapter (trusted exact map).</li>
+<li><strong>L4 / V05:</strong> close the independent <code>S_v-U_phys-R-R</code>
+reduced-mechanism equivalence gate (currently HOLD / UNRESOLVED).</li>
+<li><strong>L5 / V06:</strong> complete 2D 5R parent + task-derived fiber family
+(scientific claims blocked until V05 lifts).</li>
+<li><strong>L6:</strong> V07-first freeze a decomposition-free SO(3) reference, then
+optional nested slices / V08 quotient against that truth.</li>
+<li><strong>L7:</strong> deferred / BLOCKED until the V05 closed-mechanism gate lifts.</li>
+</ol>
+
+<h2>Evidence guardrails</h2>
+<ul>
+<li>A level-set fiber can be valid even when no known four-bar compression exists.</li>
+<li>A matching DOF count or joint-letter string is not an equivalence certificate.</li>
+<li>Preserve <code>axis_aggregation_status</code> vs <code>closed_mechanism_status</code> (ADR-021).</li>
+<li><code>tool_alpha</code> and <code>tool_beta</code> are readouts from the same leaf solve.</li>
+<li>Promote <code>source_chain_evidence</code> only with a real accepted closed-mechanism certificate.</li>
+<li>Descriptor discovery remains downstream of successful reconstruction.</li>
+</ul>
+</body>
+</html>

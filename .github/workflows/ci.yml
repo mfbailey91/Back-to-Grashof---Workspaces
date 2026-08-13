@@ -23,6 +23,13 @@ jobs:
         run: ruff check .
       - name: Mypy
         run: mypy src
+      - name: Decomposition ladder artifact smoke
+        env:
+          MPLBACKEND: Agg
+        run: |
+          python -m grashof_workspace.decomposition_ladder.cli \
+            --outdir outputs/decomposition_ladder \
+            --no-animation
       - name: V05 audit artifact smoke
         env:
           MPLBACKEND: Agg
