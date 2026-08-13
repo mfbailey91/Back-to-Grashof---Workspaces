@@ -217,7 +217,7 @@ planar 3R source
 
 ### Required outputs
 
-- `SourceProblemRecord`;
+- `SourceParentRecord` (doc alias for the earlier `SourceProblemRecord` name);
 - exact virtual-closure record;
 - source component;
 - exact reduced mechanism;

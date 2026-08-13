@@ -12,6 +12,7 @@ import numpy as np
 from matplotlib.animation import FuncAnimation, PillowWriter
 from PIL import Image
 
+from .planar_l3 import default_l3_calibration_payload
 from .registry import PARENT_CHILD_FAMILIES, RUNG_SPECS, program_payload
 from .u_drive import (
     conceptual_branch_samples,
@@ -167,6 +168,30 @@ def _family_rows() -> str:
     return "".join(rows)
 
 
+def _l3_calibration_rows(payload: dict[str, Any]) -> str:
+    calibration = payload.get("l3_calibration")
+    if not isinstance(calibration, dict):
+        return ""
+    summaries = calibration.get("summaries")
+    if not isinstance(summaries, list):
+        return ""
+    rows: list[str] = []
+    for entry in summaries:
+        if not isinstance(entry, dict):
+            continue
+        rows.append(
+            "<tr>"
+            f"<td><code>{entry.get('rho')}</code></td>"
+            f"<td><code>{entry.get('assemblable')}</code></td>"
+            f"<td><code>{entry.get('designated_input_can_fully_rotate')}</code></td>"
+            f"<td><code>{entry.get('dexterous')}</code></td>"
+            f"<td><code>{entry.get('decomposition_status')}</code></td>"
+            f"<td><code>{entry.get('predicate_reconstruction_match')}</code></td>"
+            "</tr>"
+        )
+    return "".join(rows)
+
+
 def render_ladder_html(
     *,
     payload: dict[str, Any],
@@ -181,6 +206,27 @@ def render_ladder_html(
         'style="max-width: 760px;"></p>'
         if animation_name is not None
         else "<p><em>Animation generation disabled for this run.</em></p>"
+    )
+    l3_rows = _l3_calibration_rows(payload)
+    l3_section = (
+        """
+<h2>L3 planar calibration (trusted exact map)</h2>
+<p>
+Radius-level retrofit of the analytical planar 3R→4R result into shared ladder records.
+<code>EXACT_GLOBAL</code> certifies the map at each radius; dexterity/rotatability remain
+separate predicates. Process status stays <code>SCAFFOLD</code>. Active science remains
+V05–V09.
+</p>
+<table>
+<tr>
+<th>rho</th><th>assemblable</th><th>rotatable</th><th>dexterous</th>
+<th>map certificate</th><th>predicate match</th>
+</tr>
+"""
+        + l3_rows
+        + "</table>"
+        if l3_rows
+        else ""
     )
     return f"""<!doctype html>
 <html lang="en">
@@ -250,6 +296,8 @@ the leaf, and reconstruct the parent task image from accepted fibers.
 </tr>
 {_html_table_rows()}
 </table>
+
+{l3_section}
 
 <h2>Candidate L5 parent → child letter corpus</h2>
 <p>
@@ -333,6 +381,7 @@ def build_ladder_readout(
     payload["source_fiber_drive_contract"] = task_derived_fiber_contract().to_dict()
     payload["conceptual_u_branch"] = asdict(summary)
     payload["conceptual_only"] = True
+    payload["l3_calibration"] = default_l3_calibration_payload()
 
     json_path = data_dir / "decomposition_ladder_program.json"
     json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")

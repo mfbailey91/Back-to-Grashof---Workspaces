@@ -22,6 +22,17 @@ from .models import (
     SourceParentRecord,
     UDriveContract,
 )
+from .planar_l3 import (
+    DEFAULT_L3_ARM_LENGTHS,
+    DEFAULT_L3_RADII,
+    PlanarL3CalibrationResult,
+    PlanarL3EvidenceBundle,
+    build_planar_l3_evidence_bundle,
+    default_l3_calibration_payload,
+    evaluate_planar_l3,
+    evaluate_planar_l3_evidence_radii,
+    evaluate_planar_l3_radii,
+)
 from .registry import (
     DEFAULT_FIBER_SPECS,
     PARENT_CHILD_FAMILIES,
@@ -45,6 +56,8 @@ from .u_drive import (
 
 __all__ = [
     "DEFAULT_FIBER_SPECS",
+    "DEFAULT_L3_ARM_LENGTHS",
+    "DEFAULT_L3_RADII",
     "PARENT_CHILD_FAMILIES",
     "RUNG_SPECS",
     "CertificateStatus",
@@ -55,6 +68,8 @@ __all__ = [
     "LadderRung",
     "LeafPredicateRecord",
     "ParentChildFamilySpec",
+    "PlanarL3CalibrationResult",
+    "PlanarL3EvidenceBundle",
     "ProcessStatus",
     "ReconstructionRecord",
     "RungSpec",
@@ -65,8 +80,13 @@ __all__ = [
     "UBranchSample",
     "UBranchSummary",
     "UDriveContract",
+    "build_planar_l3_evidence_bundle",
     "choose_local_drive_coordinate",
     "conceptual_branch_samples",
+    "default_l3_calibration_payload",
+    "evaluate_planar_l3",
+    "evaluate_planar_l3_evidence_radii",
+    "evaluate_planar_l3_radii",
     "free_branch_contract",
     "prescribed_coordinate_contract",
     "program_payload",

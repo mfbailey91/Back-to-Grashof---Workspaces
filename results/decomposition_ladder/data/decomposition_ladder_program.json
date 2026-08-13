@@ -34,7 +34,7 @@
       "active_question": "Can a complete source component and an independently instantiated one-DOF closed mechanism be shown to have the same orientation map?",
       "process_status": "SCAFFOLD",
       "notes": [
-        "Maps to active V05. Independent reduced closed-mechanism solve remains HOLD.",
+        "Maps to active V05. Proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; multi-component EXACT_GLOBAL and other architectures remain unresolved.",
         "The generic orientation image is a curve in SO(3), not full spatial dexterity."
       ]
     },
@@ -52,7 +52,7 @@
       "active_question": "Can the complete two-dimensional pointing parent be reconstructed from a task-derived family of certified one-DOF fibers?",
       "process_status": "PLANNED",
       "notes": [
-        "Maps to active V06. Scientific claims remain blocked until the V05 gate lifts.",
+        "Maps to active V06. Architecture-scoped after proximal exact-U EXACT_ON_COMPONENT gate.",
         "Parent\u2192fiber decomposition is central; letter families are candidate tests only."
       ]
     },
@@ -88,7 +88,7 @@
       "active_question": "Can task orientation and internal redundancy be separated while preserving nonempty, compatible one-DOF leaves over the required target?",
       "process_status": "BLOCKED",
       "notes": [
-        "Deferred beyond the active V05\u2013V09 sequence until the V05 closed-mechanism gate lifts.",
+        "Deferred beyond the active V05\u2013V09 sequence pending multi-component certificates.",
         "The redundancy coordinate is not a fourth orientation coordinate."
       ]
     }
@@ -355,7 +355,7 @@
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "Y1 \u2282 SO(3)",
       "notes": [
-        "Independent reduced closed-mechanism solve remains the active V05 gate."
+        "V05 proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; multi-component EXACT_GLOBAL and other architectures remain unresolved."
       ]
     },
     {
@@ -378,7 +378,7 @@
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "S^2 pointing image",
       "notes": [
-        "V06 scientific claims blocked until V05 closed-mechanism gate lifts."
+        "V06 architecture-scoped after proximal exact-U EXACT_ON_COMPONENT gate."
       ]
     },
     {
@@ -448,7 +448,7 @@
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "SO(3) coverage with nonempty redundancy fibers",
       "notes": [
-        "Deferred until the active V05 closed-mechanism gate lifts."
+        "Deferred pending multi-component certificates beyond proximal exact-U gate."
       ]
     }
   ],
@@ -461,7 +461,7 @@
     "Drive continuation arclength s by default; alpha(s) and beta(s) are outputs.",
     "Prescribe alpha or beta only where that coordinate is a regular local chart.",
     "Promote source_chain_evidence only from an accepted closed-mechanism certificate.",
-    "L7 remains BLOCKED until the V05 closed-mechanism gate lifts."
+    "L7 remains BLOCKED pending multi-component / nested-slice certificate work."
   ],
   "canonical_drive_contract": {
     "mode": "free_branch",
@@ -497,5 +497,739 @@
     "beta_range": 1.1,
     "interpretation": "alpha circulates while beta rocks"
   },
-  "conceptual_only": true
+  "conceptual_only": true,
+  "l3_calibration": {
+    "arm_lengths": [
+      2.0,
+      2.0,
+      1.0
+    ],
+    "radii": [
+      0.0,
+      1.0,
+      2.0,
+      3.5
+    ],
+    "note": "Trusted planar calibration leaf: EXACT_GLOBAL certifies the analytical 3R\u21944R map at each radius; process_status remains SCAFFOLD.",
+    "bundles": [
+      {
+        "summary": {
+          "rung": "L3",
+          "rho": 0.0,
+          "source_chain": "planar 3R",
+          "source_lengths": [
+            2.0,
+            2.0,
+            1.0
+          ],
+          "source_parent_mobility": 1,
+          "target_space": "SO(2)",
+          "virtual_closure": "exact virtual revolute closure R_v at p*",
+          "child_family": "planar 4R",
+          "child_loop_lengths": [
+            0.0,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "assemblable": true,
+          "grashof_class": "grashof",
+          "inversion_type": "degenerate-coincident-ground-pivots",
+          "designated_input_can_fully_rotate": true,
+          "dexterous": true,
+          "decomposition_status": "EXACT_GLOBAL",
+          "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+          "predicate_reconstruction_match": true,
+          "notes": [
+            "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+            "This is the trusted calibration rung for the ladder interfaces.",
+            "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+          ]
+        },
+        "parent": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_0",
+          "source_chain_id": "planar_3r",
+          "task_point": [
+            0.0,
+            0.0
+          ],
+          "dimension": 1,
+          "target_space": "SO(2)",
+          "component_ids": [
+            "planar3r_fiber_rho_0"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "Radius-level adapter: task_point=(rho, 0) uses radial symmetry of the planar workspace.",
+            "SourceProblemRecord in the L3 program doc aliases this SourceParentRecord."
+          ]
+        },
+        "fiber": {
+          "rung": "L3",
+          "fiber_id": "planar3r_fiber_rho_0",
+          "parent_id": "planar3r_fixed_position_rho_0",
+          "component_id": "planar3r_fiber_rho_0",
+          "slice_values": {
+            "rho": 0.0
+          },
+          "dimension": 1,
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "source_provenance": "analytical_planar3r",
+          "sample_count": 1,
+          "task_image_status": "SO2_full_circle",
+          "notes": [
+            "Analytical planar fixed-position fiber; no numerical continuation."
+          ]
+        },
+        "child": {
+          "child_id": "planar4r_child_rho_0",
+          "source_fiber_id": "planar3r_fiber_rho_0",
+          "family": "planar 4R",
+          "joint_kind_sequence": [
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "R_v",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived_analytical",
+          "status": "EXACT_GLOBAL",
+          "notes": [
+            "Loop lengths (ground,input,coupler,output)=(rho,l3,l2,l1).",
+            "Trusted analytical child, not a spatial independent reduced solve."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "planar3r_fiber_rho_0",
+          "child_id": "planar4r_child_rho_0",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_GLOBAL",
+          "status": "EXACT_GLOBAL",
+          "component_scope": "analytical_planar_map_at_rho_0",
+          "coordinate_map": "planar3r_radius_to_fourbar_lengths",
+          "reconstruction_map": "designated_input_rotatability_equals_dexterous_radius",
+          "closure_error": 0.0,
+          "tangent_error": 0.0,
+          "task_map_error": 0.0,
+          "reason": "Trusted planar analytical 3R\u21944R map at this radius (not a spatial independent reduced-solve certificate).",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "planar4r_child_rho_0",
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "coordinate_windings": {
+            "designated_input": 1
+          },
+          "coordinate_ranges": {
+            "designated_input": null
+          },
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; not automatic dexterous_workspace coverage promotion",
+          "notes": [
+            "designated_input winding 1 means full rotation; 0 means not fully rotatable.",
+            "Workspace membership is reconstructed separately via ReconstructionRecord."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_0",
+          "target_space": "SO(2)",
+          "accepted_fiber_ids": [
+            "planar3r_fiber_rho_0"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "dexterous_radius",
+          "reconstructed_coverage_status": "designated_input_full_rotation",
+          "comparison_error": 0.0,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_GLOBAL",
+          "notes": [
+            "EXACT_GLOBAL here certifies the analytical map; dexterity is the separate predicate.",
+            "predicate_reconstruction_match=True"
+          ]
+        }
+      },
+      {
+        "summary": {
+          "rung": "L3",
+          "rho": 1.0,
+          "source_chain": "planar 3R",
+          "source_lengths": [
+            2.0,
+            2.0,
+            1.0
+          ],
+          "source_parent_mobility": 1,
+          "target_space": "SO(2)",
+          "virtual_closure": "exact virtual revolute closure R_v at p*",
+          "child_family": "planar 4R",
+          "child_loop_lengths": [
+            1.0,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "assemblable": true,
+          "grashof_class": "change-point",
+          "inversion_type": "change-point",
+          "designated_input_can_fully_rotate": true,
+          "dexterous": true,
+          "decomposition_status": "EXACT_GLOBAL",
+          "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+          "predicate_reconstruction_match": true,
+          "notes": [
+            "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+            "This is the trusted calibration rung for the ladder interfaces.",
+            "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+          ]
+        },
+        "parent": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_1",
+          "source_chain_id": "planar_3r",
+          "task_point": [
+            1.0,
+            0.0
+          ],
+          "dimension": 1,
+          "target_space": "SO(2)",
+          "component_ids": [
+            "planar3r_fiber_rho_1"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "Radius-level adapter: task_point=(rho, 0) uses radial symmetry of the planar workspace.",
+            "SourceProblemRecord in the L3 program doc aliases this SourceParentRecord."
+          ]
+        },
+        "fiber": {
+          "rung": "L3",
+          "fiber_id": "planar3r_fiber_rho_1",
+          "parent_id": "planar3r_fixed_position_rho_1",
+          "component_id": "planar3r_fiber_rho_1",
+          "slice_values": {
+            "rho": 1.0
+          },
+          "dimension": 1,
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "source_provenance": "analytical_planar3r",
+          "sample_count": 1,
+          "task_image_status": "SO2_full_circle",
+          "notes": [
+            "Analytical planar fixed-position fiber; no numerical continuation."
+          ]
+        },
+        "child": {
+          "child_id": "planar4r_child_rho_1",
+          "source_fiber_id": "planar3r_fiber_rho_1",
+          "family": "planar 4R",
+          "joint_kind_sequence": [
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "R_v",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived_analytical",
+          "status": "EXACT_GLOBAL",
+          "notes": [
+            "Loop lengths (ground,input,coupler,output)=(rho,l3,l2,l1).",
+            "Trusted analytical child, not a spatial independent reduced solve."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "planar3r_fiber_rho_1",
+          "child_id": "planar4r_child_rho_1",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_GLOBAL",
+          "status": "EXACT_GLOBAL",
+          "component_scope": "analytical_planar_map_at_rho_1",
+          "coordinate_map": "planar3r_radius_to_fourbar_lengths",
+          "reconstruction_map": "designated_input_rotatability_equals_dexterous_radius",
+          "closure_error": 0.0,
+          "tangent_error": 0.0,
+          "task_map_error": 0.0,
+          "reason": "Trusted planar analytical 3R\u21944R map at this radius (not a spatial independent reduced-solve certificate).",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "planar4r_child_rho_1",
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "coordinate_windings": {
+            "designated_input": 1
+          },
+          "coordinate_ranges": {
+            "designated_input": null
+          },
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; not automatic dexterous_workspace coverage promotion",
+          "notes": [
+            "designated_input winding 1 means full rotation; 0 means not fully rotatable.",
+            "Workspace membership is reconstructed separately via ReconstructionRecord."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_1",
+          "target_space": "SO(2)",
+          "accepted_fiber_ids": [
+            "planar3r_fiber_rho_1"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "dexterous_radius",
+          "reconstructed_coverage_status": "designated_input_full_rotation",
+          "comparison_error": 0.0,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_GLOBAL",
+          "notes": [
+            "EXACT_GLOBAL here certifies the analytical map; dexterity is the separate predicate.",
+            "predicate_reconstruction_match=True"
+          ]
+        }
+      },
+      {
+        "summary": {
+          "rung": "L3",
+          "rho": 2.0,
+          "source_chain": "planar 3R",
+          "source_lengths": [
+            2.0,
+            2.0,
+            1.0
+          ],
+          "source_parent_mobility": 1,
+          "target_space": "SO(2)",
+          "virtual_closure": "exact virtual revolute closure R_v at p*",
+          "child_family": "planar 4R",
+          "child_loop_lengths": [
+            2.0,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "assemblable": true,
+          "grashof_class": "grashof",
+          "inversion_type": "crank-rocker",
+          "designated_input_can_fully_rotate": true,
+          "dexterous": true,
+          "decomposition_status": "EXACT_GLOBAL",
+          "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+          "predicate_reconstruction_match": true,
+          "notes": [
+            "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+            "This is the trusted calibration rung for the ladder interfaces.",
+            "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+          ]
+        },
+        "parent": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_2",
+          "source_chain_id": "planar_3r",
+          "task_point": [
+            2.0,
+            0.0
+          ],
+          "dimension": 1,
+          "target_space": "SO(2)",
+          "component_ids": [
+            "planar3r_fiber_rho_2"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "Radius-level adapter: task_point=(rho, 0) uses radial symmetry of the planar workspace.",
+            "SourceProblemRecord in the L3 program doc aliases this SourceParentRecord."
+          ]
+        },
+        "fiber": {
+          "rung": "L3",
+          "fiber_id": "planar3r_fiber_rho_2",
+          "parent_id": "planar3r_fixed_position_rho_2",
+          "component_id": "planar3r_fiber_rho_2",
+          "slice_values": {
+            "rho": 2.0
+          },
+          "dimension": 1,
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "source_provenance": "analytical_planar3r",
+          "sample_count": 1,
+          "task_image_status": "SO2_full_circle",
+          "notes": [
+            "Analytical planar fixed-position fiber; no numerical continuation."
+          ]
+        },
+        "child": {
+          "child_id": "planar4r_child_rho_2",
+          "source_fiber_id": "planar3r_fiber_rho_2",
+          "family": "planar 4R",
+          "joint_kind_sequence": [
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "R_v",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived_analytical",
+          "status": "EXACT_GLOBAL",
+          "notes": [
+            "Loop lengths (ground,input,coupler,output)=(rho,l3,l2,l1).",
+            "Trusted analytical child, not a spatial independent reduced solve."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "planar3r_fiber_rho_2",
+          "child_id": "planar4r_child_rho_2",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_GLOBAL",
+          "status": "EXACT_GLOBAL",
+          "component_scope": "analytical_planar_map_at_rho_2",
+          "coordinate_map": "planar3r_radius_to_fourbar_lengths",
+          "reconstruction_map": "designated_input_rotatability_equals_dexterous_radius",
+          "closure_error": 0.0,
+          "tangent_error": 0.0,
+          "task_map_error": 0.0,
+          "reason": "Trusted planar analytical 3R\u21944R map at this radius (not a spatial independent reduced-solve certificate).",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "planar4r_child_rho_2",
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "coordinate_windings": {
+            "designated_input": 1
+          },
+          "coordinate_ranges": {
+            "designated_input": null
+          },
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; not automatic dexterous_workspace coverage promotion",
+          "notes": [
+            "designated_input winding 1 means full rotation; 0 means not fully rotatable.",
+            "Workspace membership is reconstructed separately via ReconstructionRecord."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_2",
+          "target_space": "SO(2)",
+          "accepted_fiber_ids": [
+            "planar3r_fiber_rho_2"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "dexterous_radius",
+          "reconstructed_coverage_status": "designated_input_full_rotation",
+          "comparison_error": 0.0,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_GLOBAL",
+          "notes": [
+            "EXACT_GLOBAL here certifies the analytical map; dexterity is the separate predicate.",
+            "predicate_reconstruction_match=True"
+          ]
+        }
+      },
+      {
+        "summary": {
+          "rung": "L3",
+          "rho": 3.5,
+          "source_chain": "planar 3R",
+          "source_lengths": [
+            2.0,
+            2.0,
+            1.0
+          ],
+          "source_parent_mobility": 1,
+          "target_space": "SO(2)",
+          "virtual_closure": "exact virtual revolute closure R_v at p*",
+          "child_family": "planar 4R",
+          "child_loop_lengths": [
+            3.5,
+            1.0,
+            2.0,
+            2.0
+          ],
+          "assemblable": true,
+          "grashof_class": "non-grashof",
+          "inversion_type": "double-rocker",
+          "designated_input_can_fully_rotate": false,
+          "dexterous": false,
+          "decomposition_status": "EXACT_GLOBAL",
+          "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+          "predicate_reconstruction_match": true,
+          "notes": [
+            "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+            "This is the trusted calibration rung for the ladder interfaces.",
+            "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+          ]
+        },
+        "parent": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_3.5",
+          "source_chain_id": "planar_3r",
+          "task_point": [
+            3.5,
+            0.0
+          ],
+          "dimension": 1,
+          "target_space": "SO(2)",
+          "component_ids": [
+            "planar3r_fiber_rho_3.5"
+          ],
+          "process_status": "SCAFFOLD",
+          "notes": [
+            "Radius-level adapter: task_point=(rho, 0) uses radial symmetry of the planar workspace.",
+            "SourceProblemRecord in the L3 program doc aliases this SourceParentRecord."
+          ]
+        },
+        "fiber": {
+          "rung": "L3",
+          "fiber_id": "planar3r_fiber_rho_3.5",
+          "parent_id": "planar3r_fixed_position_rho_3.5",
+          "component_id": "planar3r_fiber_rho_3.5",
+          "slice_values": {
+            "rho": 3.5
+          },
+          "dimension": 1,
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "source_provenance": "analytical_planar3r",
+          "sample_count": 1,
+          "task_image_status": "SO2_partial_or_bounded",
+          "notes": [
+            "Analytical planar fixed-position fiber; no numerical continuation."
+          ]
+        },
+        "child": {
+          "child_id": "planar4r_child_rho_3.5",
+          "source_fiber_id": "planar3r_fiber_rho_3.5",
+          "family": "planar 4R",
+          "joint_kind_sequence": [
+            "R",
+            "R",
+            "R",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "R_v",
+            "R_phys",
+            "R_phys",
+            "R_phys"
+          ],
+          "expected_mobility": 1,
+          "geometry_provenance": "source_derived_analytical",
+          "status": "EXACT_GLOBAL",
+          "notes": [
+            "Loop lengths (ground,input,coupler,output)=(rho,l3,l2,l1).",
+            "Trusted analytical child, not a spatial independent reduced solve."
+          ]
+        },
+        "certificate": {
+          "source_fiber_id": "planar3r_fiber_rho_3.5",
+          "child_id": "planar4r_child_rho_3.5",
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "closed_mechanism_status": "EXACT_GLOBAL",
+          "status": "EXACT_GLOBAL",
+          "component_scope": "analytical_planar_map_at_rho_3.5",
+          "coordinate_map": "planar3r_radius_to_fourbar_lengths",
+          "reconstruction_map": "designated_input_rotatability_equals_dexterous_radius",
+          "closure_error": 0.0,
+          "tangent_error": 0.0,
+          "task_map_error": 0.0,
+          "reason": "Trusted planar analytical 3R\u21944R map at this radius (not a spatial independent reduced-solve certificate).",
+          "accepted_for_reconstruction": true
+        },
+        "leaf_predicate": {
+          "child_id": "planar4r_child_rho_3.5",
+          "branch_status": "returned_analytical",
+          "returned": true,
+          "coordinate_windings": {
+            "designated_input": 0
+          },
+          "coordinate_ranges": {
+            "designated_input": 0.0
+          },
+          "minimum_singularity_margin": null,
+          "evidence_scope": "leaf_predicate_only; not automatic dexterous_workspace coverage promotion",
+          "notes": [
+            "designated_input winding 1 means full rotation; 0 means not fully rotatable.",
+            "Workspace membership is reconstructed separately via ReconstructionRecord."
+          ]
+        },
+        "reconstruction": {
+          "rung": "L3",
+          "parent_id": "planar3r_fixed_position_rho_3.5",
+          "target_space": "SO(2)",
+          "accepted_fiber_ids": [
+            "planar3r_fiber_rho_3.5"
+          ],
+          "unresolved_fiber_ids": [],
+          "direct_coverage_status": "non_dexterous_assemblable_radius",
+          "reconstructed_coverage_status": "designated_input_non_rotating",
+          "comparison_error": 0.0,
+          "process_status": "SCAFFOLD",
+          "certificate_status": "EXACT_GLOBAL",
+          "notes": [
+            "EXACT_GLOBAL here certifies the analytical map; dexterity is the separate predicate.",
+            "predicate_reconstruction_match=True"
+          ]
+        }
+      }
+    ],
+    "summaries": [
+      {
+        "rung": "L3",
+        "rho": 0.0,
+        "source_chain": "planar 3R",
+        "source_lengths": [
+          2.0,
+          2.0,
+          1.0
+        ],
+        "source_parent_mobility": 1,
+        "target_space": "SO(2)",
+        "virtual_closure": "exact virtual revolute closure R_v at p*",
+        "child_family": "planar 4R",
+        "child_loop_lengths": [
+          0.0,
+          1.0,
+          2.0,
+          2.0
+        ],
+        "assemblable": true,
+        "grashof_class": "grashof",
+        "inversion_type": "degenerate-coincident-ground-pivots",
+        "designated_input_can_fully_rotate": true,
+        "dexterous": true,
+        "decomposition_status": "EXACT_GLOBAL",
+        "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+        "predicate_reconstruction_match": true,
+        "notes": [
+          "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+          "This is the trusted calibration rung for the ladder interfaces.",
+          "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+        ]
+      },
+      {
+        "rung": "L3",
+        "rho": 1.0,
+        "source_chain": "planar 3R",
+        "source_lengths": [
+          2.0,
+          2.0,
+          1.0
+        ],
+        "source_parent_mobility": 1,
+        "target_space": "SO(2)",
+        "virtual_closure": "exact virtual revolute closure R_v at p*",
+        "child_family": "planar 4R",
+        "child_loop_lengths": [
+          1.0,
+          1.0,
+          2.0,
+          2.0
+        ],
+        "assemblable": true,
+        "grashof_class": "change-point",
+        "inversion_type": "change-point",
+        "designated_input_can_fully_rotate": true,
+        "dexterous": true,
+        "decomposition_status": "EXACT_GLOBAL",
+        "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+        "predicate_reconstruction_match": true,
+        "notes": [
+          "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+          "This is the trusted calibration rung for the ladder interfaces.",
+          "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+        ]
+      },
+      {
+        "rung": "L3",
+        "rho": 2.0,
+        "source_chain": "planar 3R",
+        "source_lengths": [
+          2.0,
+          2.0,
+          1.0
+        ],
+        "source_parent_mobility": 1,
+        "target_space": "SO(2)",
+        "virtual_closure": "exact virtual revolute closure R_v at p*",
+        "child_family": "planar 4R",
+        "child_loop_lengths": [
+          2.0,
+          1.0,
+          2.0,
+          2.0
+        ],
+        "assemblable": true,
+        "grashof_class": "grashof",
+        "inversion_type": "crank-rocker",
+        "designated_input_can_fully_rotate": true,
+        "dexterous": true,
+        "decomposition_status": "EXACT_GLOBAL",
+        "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+        "predicate_reconstruction_match": true,
+        "notes": [
+          "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+          "This is the trusted calibration rung for the ladder interfaces.",
+          "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+        ]
+      },
+      {
+        "rung": "L3",
+        "rho": 3.5,
+        "source_chain": "planar 3R",
+        "source_lengths": [
+          2.0,
+          2.0,
+          1.0
+        ],
+        "source_parent_mobility": 1,
+        "target_space": "SO(2)",
+        "virtual_closure": "exact virtual revolute closure R_v at p*",
+        "child_family": "planar 4R",
+        "child_loop_lengths": [
+          3.5,
+          1.0,
+          2.0,
+          2.0
+        ],
+        "assemblable": true,
+        "grashof_class": "non-grashof",
+        "inversion_type": "double-rocker",
+        "designated_input_can_fully_rotate": false,
+        "dexterous": false,
+        "decomposition_status": "EXACT_GLOBAL",
+        "certificate_scope": "exact 3R\u21944R map at this radius, including non-assemblable exterior radii; dexterity/rotatability are separate predicates",
+        "predicate_reconstruction_match": true,
+        "notes": [
+          "Exact designated-link rotatability, not the textual Grashof label, is the predicate.",
+          "This is the trusted calibration rung for the ladder interfaces.",
+          "EXACT_GLOBAL certifies the analytical map, not workspace membership."
+        ]
+      }
+    ]
+  }
 }

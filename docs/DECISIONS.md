@@ -207,3 +207,18 @@ with coordinate maps, reconstruction maps, component scope, rank checks, tangent
 **Decision:** An independently instantiated and continued proximal `S_v-U_phys-R-R` loop that matches the `exact_u_pair_4r` source fiber over an explicit component scope may receive `closed_mechanism_status=EXACT_ON_COMPONENT`. Axis aggregation remains a separate `EXACT_GLOBAL` claim. Multi-component `EXACT_GLOBAL`, non-proximal pairs, and other corpus architectures remain unresolved. Identity-on-same-chain residuals still cannot promote closed-mechanism status.
 
 **Reason:** The audited HOLD required an independent reduced solve, not merely scalar regrouping. One scoped accepted component is sufficient to close the V05 gate for that architecture while preserving honesty about incomplete global coverage.
+
+## ADR-029 — L3 emits shared ladder records from the analytical planar map
+
+<!-- L3_INTERFACE_RETROFIT_2026_08_13 -->
+
+**Decision:** The L3 planar calibration adapter emits shared ladder evidence records
+(`SourceParentRecord`, fiber/child/certificate/leaf/reconstruction) from the existing
+`Planar3R`/`FourBar` analytical map at each radius. `EXACT_GLOBAL` certifies the 3R↔4R
+map (including non-assemblable exterior radii); dexterity/rotatability remain separate
+predicates. Process status stays `SCAFFOLD`. The program-doc name `SourceProblemRecord`
+aliases `SourceParentRecord`. This does not demote V05–V09 primacy or substitute for
+spatial closed-mechanism certificates.
+
+**Reason:** The ladder acceptance criterion is interface retrofit without changing the
+trusted mathematical kernel; a duplicate problem-record type would only create drift.
