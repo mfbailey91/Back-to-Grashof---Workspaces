@@ -223,7 +223,7 @@ def render_ladder_html(
 <p>
 <strong>Active scientific sequence:</strong> <code>docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code>.
 This readout is an optional interface scaffold subordinate to that program. It does not demote
-the V05 closed-mechanism HOLD or promote L5–L7 claims.
+the V05 scoped closed-mechanism gate or promote L5–L7 claims beyond accepted scope.
 </p>
 <p>
 The common implementation contract is: construct the exact fixed-position source parent,
@@ -288,13 +288,14 @@ of one mechanism branch—not two independent mechanism DOFs.
 <h2>Scaffold mapping to active V05–V09</h2>
 <ol>
 <li><strong>L3:</strong> planar calibration adapter (trusted exact map).</li>
-<li><strong>L4 / V05:</strong> close the independent <code>S_v-U_phys-R-R</code>
-reduced-mechanism equivalence gate (currently HOLD / UNRESOLVED).</li>
+<li><strong>L4 / V05:</strong> proximal <code>exact_u_pair_4r</code> closed-mechanism is
+<code>EXACT_ON_COMPONENT</code>; multi-component / other architectures remain unresolved.</li>
 <li><strong>L5 / V06:</strong> complete 2D 5R parent + task-derived fiber family
-(scientific claims blocked until V05 lifts).</li>
+(architecture-scoped after the proximal exact-U gate).</li>
 <li><strong>L6:</strong> V07-first freeze a decomposition-free SO(3) reference, then
 optional nested slices / V08 quotient against that truth.</li>
-<li><strong>L7:</strong> deferred / BLOCKED until the V05 closed-mechanism gate lifts.</li>
+<li><strong>L7:</strong> deferred / BLOCKED pending multi-component and nested-slice
+certificate work beyond the proximal exact-U gate.</li>
 </ol>
 
 <h2>Evidence guardrails</h2>

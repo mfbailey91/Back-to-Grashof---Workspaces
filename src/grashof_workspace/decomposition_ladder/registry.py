@@ -58,7 +58,10 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
         ),
         process_status=ProcessStatus.SCAFFOLD,
         notes=(
-            "Maps to active V05. Independent reduced closed-mechanism solve remains HOLD.",
+            (
+                "Maps to active V05. Proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; "
+                "multi-component EXACT_GLOBAL and other architectures remain unresolved."
+            ),
             "The generic orientation image is a curve in SO(3), not full spatial dexterity.",
         ),
     ),
@@ -79,7 +82,7 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
         ),
         process_status=ProcessStatus.PLANNED,
         notes=(
-            "Maps to active V06. Scientific claims remain blocked until the V05 gate lifts.",
+            "Maps to active V06. Architecture-scoped after proximal exact-U EXACT_ON_COMPONENT gate.",
             "Parent→fiber decomposition is central; letter families are candidate tests only.",
         ),
     ),
@@ -121,7 +124,7 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
         ),
         process_status=ProcessStatus.BLOCKED,
         notes=(
-            "Deferred beyond the active V05–V09 sequence until the V05 closed-mechanism gate lifts.",
+            "Deferred beyond the active V05–V09 sequence pending multi-component certificates.",
             "The redundancy coordinate is not a fourth orientation coordinate.",
         ),
     ),
@@ -263,7 +266,12 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         process_status=ProcessStatus.SCAFFOLD,
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="Y1 ⊂ SO(3)",
-        notes=("Independent reduced closed-mechanism solve remains the active V05 gate.",),
+        notes=(
+            (
+                "V05 proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; "
+                "multi-component EXACT_GLOBAL and other architectures remain unresolved."
+            ),
+        ),
     ),
     FiberFamilySpec(
         rung=LadderRung.L5,
@@ -275,7 +283,7 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         process_status=ProcessStatus.PLANNED,
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="S^2 pointing image",
-        notes=("V06 scientific claims blocked until V05 closed-mechanism gate lifts.",),
+        notes=("V06 architecture-scoped after proximal exact-U EXACT_ON_COMPONENT gate.",),
     ),
     FiberFamilySpec(
         rung=LadderRung.L6,
@@ -305,7 +313,7 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         process_status=ProcessStatus.BLOCKED,
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="SO(3) coverage with nonempty redundancy fibers",
-        notes=("Deferred until the active V05 closed-mechanism gate lifts.",),
+        notes=("Deferred pending multi-component certificates beyond proximal exact-U gate.",),
     ),
 )
 
@@ -339,6 +347,6 @@ def program_payload() -> dict[str, Any]:
             "Drive continuation arclength s by default; alpha(s) and beta(s) are outputs.",
             "Prescribe alpha or beta only where that coordinate is a regular local chart.",
             "Promote source_chain_evidence only from an accepted closed-mechanism certificate.",
-            "L7 remains BLOCKED until the V05 closed-mechanism gate lifts.",
+            "L7 remains BLOCKED pending multi-component / nested-slice certificate work.",
         ],
     }

@@ -908,9 +908,9 @@ V05A source corpus                 CORRECTED: off-axis active cases + terminal-r
 V05B source continuation           CORRECTED MVP: augmented pseudo-arclength + FD Jacobian check
 V05C orientation image             CORRECTED MVP: explicit curve classification
 V05D exact axis aggregation        EXACT_GLOBAL where geometry permits
-V05D closed-mechanism equivalence  UNRESOLVED pending independent reduced solve
+V05D closed-mechanism equivalence  EXACT_ON_COMPONENT for proximal exact_u_pair_4r
 V05E rejection/boundary            CORRECTED MVP: tolerance-relative suite
-V05 overall gate                   HOLD
+V05 overall gate                   CLOSED_ON_COMPONENT (exact_u_pair_4r); other architectures UNRESOLVED
 ```
 
-V06 may proceed only as non-claiming software scaffold work until the independent reduced closed-mechanism comparison closes the V05 gate.
+V06 may proceed as architecture-scoped scaffold/claim work for pathways that inherit the accepted proximal exact-U closed-mechanism certificate. Multi-component `EXACT_GLOBAL` and non-proximal embeddings remain unverified.
