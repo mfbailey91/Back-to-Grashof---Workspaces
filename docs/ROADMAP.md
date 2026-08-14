@@ -71,6 +71,8 @@ Its standalone results remain `mechanism_explorer_only` until connected to a cer
 
 ### V06 — Spatial 5R fixed-position parent
 
+Implementation starts at **V06A0** (generic 2D implicit-manifold engine; software validation on the unit sphere). See [`V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md`](V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md).
+
 - construct the exact \(5R+S_v\), \(M=2\) parent;
 - represent its two-dimensional orientation image and pointing projection;
 - test exact `S_v U U R` / `S_v S R R` parent reductions where architecture permits;

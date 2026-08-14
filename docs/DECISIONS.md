@@ -291,6 +291,14 @@ reconstruction claim remains gated.
 connected components. Task-aware metrics and honest parent/component identity prevent a
 numerically good local result from being silently promoted into a global reconstruction.
 
+## ADR-035 — V06A0 is manifold-engine software validation, not a parent certificate
+
+<!-- V06A0_MANIFOLD_ENGINE_2026_08_13 -->
+
+**Decision:** V06A0 implements a generic two-dimensional implicit-manifold atlas engine and validates it on the analytical unit-sphere fixture. Process/software status may be recorded as `SOFTWARE_VALIDATION`. This does **not** issue a `DecompositionCertificate`, does not construct a spatial-5R `FixedPositionParentResult`, and does not change L5 reconstruction or catalog certificate statuses. V06A1 is the first 5R local-chart claim.
+
+**Reason:** A collection of numerical charts on an analytical surface is not source-chain evidence. Mixing engine tests with parent certificates would violate Gate K2 / ADR-032.
+
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
 <!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->

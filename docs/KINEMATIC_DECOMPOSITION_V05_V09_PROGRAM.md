@@ -422,7 +422,11 @@ M=2,
 
 ## Work packages
 
+Implementation slices (does not replace V06A–E): V06A0 generic 2D manifold engine → V06A1 one local 5R chart → V06A2 parent atlas → V06C source images → V06B compound parent → V06D1/D2 fibers and children → V06E reconstruction. Details: [`V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md`](V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md).
+
 ### V06A — two-dimensional parent first
+
+**V06A0 (implementation prerequisite):** a generic two-dimensional implicit-manifold engine, validated on the analytical unit sphere, with no 5R parent or certificate claim.
 
 1. construct synthetic 5R architectures using the same source-chain representation as V05;
 2. verify rank three and source nullity two at regular seeds;

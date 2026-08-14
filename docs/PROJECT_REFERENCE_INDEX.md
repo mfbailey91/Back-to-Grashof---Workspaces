@@ -57,6 +57,10 @@ Optional L3–L7 interface scaffold subordinate to the active V05–V09 sequence
 
 Canonical one-DOF U-drive semantics: drive branch parameter `s`; `alpha(s)`/`beta(s)` are coupled outputs.
 
+### [`V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md`](V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md)
+
+Subordinate V06 implementation plan (V06A0–E slice order). Does not replace the V05–V09 scientific program.
+
 ### [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)
 
 Active sequential program:
@@ -73,6 +77,7 @@ V09  validated mechanism predicates and coverage reconstruction
 **V05C MVP readout:** [`../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
 **V05D MVP readout:** [`../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
 **V05E MVP readout:** [`../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
+**V06A0 software-validation readout:** [`../results/kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html`](../results/kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html) (unit-sphere manifold engine; not a 5R parent).
 Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 
