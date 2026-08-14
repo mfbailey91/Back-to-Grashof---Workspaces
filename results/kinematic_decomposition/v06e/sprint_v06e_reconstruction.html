@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>V06E — reconstruction closeout</title>
+<style>
+body { font-family: Georgia, serif; max-width: 960px; margin: 2rem auto; line-height: 1.45; }
+code { font-family: ui-monospace, monospace; }
+.note { background:#f7f4ea; border-left:3px solid #c4a35a; padding:.7rem; }
+table { border-collapse: collapse; } th,td { border:1px solid #bbb; padding:.4rem; text-align:left; }
+</style></head><body>
+<h1>V06E — source-fiber vs accepted-child reconstruction</h1>
+<div class="note"><strong>ADR-042.</strong> Painting task-derived fibers onto the frozen
+V06C grid is not parent completeness. Accepted-child reconstruction is empty because
+no <code>EXACT_GLOBAL</code> / <code>EXACT_ON_COMPONENT</code> children exist.
+Descriptor discovery stays blocked (ADR-026). V06 program gate:
+<strong>not passed</strong>.</div>
+<table>
+<tr><th>direct coverage</th><td>PARTIAL_COVERAGE</td></tr>
+<tr><th>reconstruction coverage</th><td>PARTIAL</td></tr>
+<tr><th>complete foliation</th><td>False</td></tr>
+<tr><th>factorization</th><td>no valid recombination</td></tr>
+<tr><th>fiber-hit / missed COVERED fraction</th>
+<td>6 / 0.000</td></tr>
+<tr><th>accepted children</th><td>0</td></tr>
+<tr><th>Hausdorff (rad)</th><td>0.22507835173639007</td></tr>
+<tr><th>icosphere level</th><td>2</td></tr>
+</table>
+<h2>V06 gate checklist</h2>
+<table><tr><th>item</th><th>met</th></tr><tr><td>independent_2d_source_parent</td><td>True</td></tr><tr><td>frozen_orientation_and_pointing_images</td><td>True</td></tr><tr><td>explicit_task_fiber_provenance</td><td>True</td></tr><tr><td>compound_parent_certified_or_rejected</td><td>True</td></tr><tr><td>source_fiber_reconstruction_compared</td><td>True</td></tr><tr><td>child_reconstruction_only_accepted</td><td>True</td></tr><tr><td>factorization_status_explicit</td><td>True</td></tr><tr><td>coverage_qualified_by_declared_resolution</td><td>True</td></tr><tr><td>critical_unresolved_limits_explicit</td><td>True</td></tr><tr><td>complete_s2_coverage</td><td>False</td></tr><tr><td>accepted_child_factorization</td><td>False</td></tr><tr><td>parent_component_complete</td><td>False</td></tr></table>
+<p><img src="figures/v06e_reconstruction_comparison.png" alt="V06E reconstruction" style="max-width:720px"></p>
+<h2>Prior V06 artifacts</h2>
+<p>
+<a href="../v06a0/sprint_v06a0_implicit_manifold.html">A0</a> ·
+<a href="../v06a1/sprint_v06a1_local_parent_patch.html">A1</a> ·
+<a href="../v06a2/sprint_v06a2_parent_atlas.html">A2</a> ·
+<a href="../v06c/sprint_v06c_source_images.html">C</a> ·
+<a href="../v06b/sprint_v06b_compound_parent.html">B</a> ·
+<a href="../v06d1/sprint_v06d1_level_sets.html">D1</a> ·
+<a href="../v06d2/sprint_v06d2_virtual_u_child.html">D2</a>
+</p>
+<p>Reproduce:
+<code>PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06e --outdir results/kinematic_decomposition/v06e</code></p>
+</body></html>

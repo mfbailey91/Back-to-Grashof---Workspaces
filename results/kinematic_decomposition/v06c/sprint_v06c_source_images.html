@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>V06C — generic_5r source images</title>
+<style>
+body { font-family: Georgia, serif; max-width: 960px; margin: 2rem auto; line-height: 1.45; }
+code { font-family: ui-monospace, monospace; }
+.note { background:#f7f4ea; border-left:3px solid #c4a35a; padding:.7rem; }
+table { border-collapse: collapse; } th,td { border:1px solid #bbb; padding:.4rem; text-align:left; }
+</style></head><body>
+<h1>V06C — source orientation and pointing truth</h1>
+<div class="note"><strong>ADR-038.</strong> These are decomposition-free source task images
+of a <code>BUDGET_LIMITED</code> atlas. They are not V05 orientation curves, not all of
+<code>SO(3)</code>, not <code>S^2</code> completeness, and not a
+<code>DecompositionCertificate</code>. Coverage label
+<code>PARTIAL_COVERAGE</code>.</div>
+<table>
+<tr><th>orientation vertices</th><td>70</td></tr>
+<tr><th>orientation edges</th><td>144</td></tr>
+<tr><th>mapped spherical triangles</th><td>60</td></tr>
+<tr><th>unresolved faces</th><td>0</td></tr>
+<tr><th>icosphere level / cells</th><td>2 / 320</td></tr>
+<tr><th>max cell diameter (rad)</th><td>0.3264</td></tr>
+<tr><th>covered / uncovered cells</th><td>0 / 312</td></tr>
+<tr><th>critical / near-critical vertices</th><td>0 / 0</td></tr>
+</table>
+<p><img src="figures/v06c_generic_5r_source_images.png" alt="source images" style="max-width:720px"></p>
+<p>Reproduce:
+<code>PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06c --outdir results/kinematic_decomposition/v06c</code></p>
+</body></html>

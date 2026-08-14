@@ -208,7 +208,7 @@ def _family_label_for_pair(pair_index: int, n_joints: int = 4) -> str:
         2: "S_v-R-R-U_phys",
     }
     if n_joints != 4 or pair_index not in labels:
-        raise NotImplementedError("role-aware labels are currently defined only for spatial 4R")
+        raise NotImplementedError("single-pair role-aware labels are currently defined only for spatial 4R")
     return labels[pair_index]
 
 
@@ -217,7 +217,7 @@ def _kind_role_sequences(
     n_joints: int = 4,
 ) -> tuple[tuple[str, ...], tuple[str, ...]]:
     if n_joints != 4:
-        raise NotImplementedError("role-aware sequences are currently defined only for 4R")
+        raise NotImplementedError("single-pair role-aware sequences are currently defined only for 4R")
     kinds: list[str] = ["S_v"]
     roles: list[str] = ["S_v"]
     i = 0
@@ -231,6 +231,122 @@ def _kind_role_sequences(
             roles.append("R_phys")
             i += 1
     return tuple(kinds), tuple(roles)
+
+
+SUUR_PAIR_INDICES = (0, 2)
+SUUR_FAMILY_LABEL = "S_v-U_phys-U_phys-R"
+
+
+def suur_kind_role_sequences() -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """Semantic SUUR parent. Not UUUR and not U_v."""
+
+    return ("S", "U", "U", "R"), ("S_v", "U_phys", "U_phys", "R_phys")
+
+
+@dataclass(frozen=True, slots=True)
+class MultiAggregationRecord:
+    """Non-overlapping multi-pair RR→U_phys regrouping. Not a closed parent."""
+
+    architecture_id: str
+    pair_indices: tuple[int, ...]
+    candidates: tuple[AggregationCandidate, ...]
+    joint_kind_sequence: tuple[str, ...]
+    joint_role_sequence: tuple[str, ...]
+    family_label: str
+    u_centers: tuple[tuple[float, float, float], ...]
+    fk_identity_residuals: dict[str, float]
+    axis_aggregation_status: str
+    joint_limits: str
+    notes: tuple[str, ...] = ()
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return {
+            "architecture_id": self.architecture_id,
+            "pair_indices": list(self.pair_indices),
+            "candidates": [c.to_json_dict() for c in self.candidates],
+            "joint_kind_sequence": list(self.joint_kind_sequence),
+            "joint_role_sequence": list(self.joint_role_sequence),
+            "family_label": self.family_label,
+            "u_centers": [list(c) for c in self.u_centers],
+            "fk_identity_residuals": self.fk_identity_residuals,
+            "axis_aggregation_status": self.axis_aggregation_status,
+            "joint_limits": self.joint_limits,
+            "certificate_status": None,
+            "notes": list(self.notes),
+        }
+
+
+def lift_source_to_suur_physical(q_source: tuple[float, ...]) -> tuple[float, ...]:
+    """Identity chart: physical SUUR scalars are the five source angles."""
+
+    q = tuple(float(v) for v in q_source)
+    if len(q) != 5:
+        raise ValueError("SUUR physical lift expects five source joints")
+    return q
+
+
+def embed_suur_physical_to_source(q_physical: tuple[float, ...]) -> tuple[float, ...]:
+    q = tuple(float(v) for v in q_physical)
+    if len(q) != 5:
+        raise ValueError("SUUR physical embed expects five physical scalars")
+    return q
+
+
+def build_suur_multi_aggregation(
+    model: OpenChainModel,
+    q0: tuple[float, ...],
+) -> MultiAggregationRecord:
+    """Assess J1/J2 and J3/J4 as a non-overlapping SUUR regrouping."""
+
+    if model.n_joints != 5:
+        raise ValueError("SUUR multi-aggregation is defined for spatial 5R")
+    candidates = detect_exact_u_pairs(model, q=None)
+    selected = tuple(c for c in candidates if c.pair_index in SUUR_PAIR_INDICES)
+    kinds, roles = suur_kind_role_sequences()
+    exact = all(c.exact_u_candidate for c in selected) and len(selected) == 2
+    overlapping = selected[0].joint_b == selected[1].joint_a if len(selected) == 2 else True
+    centers = tuple(c.center for c in selected)
+    distinct = True
+    if len(centers) == 2:
+        distinct = float(np.linalg.norm(np.asarray(centers[0]) - np.asarray(centers[1]))) > 1e-9
+    q_lift = lift_source_to_suur_physical(q0)
+    q_emb = embed_suur_physical_to_source(q_lift)
+    state_s = model.chain.evaluate(q0)
+    state_r = model.chain.evaluate(q_emb)
+    residuals = {
+        "position_residual_m": float(np.linalg.norm(np.asarray(state_s.p) - np.asarray(state_r.p))),
+        "rotation_frobenius": float(np.linalg.norm(np.asarray(state_s.R) - np.asarray(state_r.R), ord="fro")),
+        "pointing_residual": float(np.linalg.norm(np.asarray(state_s.d) - np.asarray(state_r.d))),
+        "joint_map_residual_rad": float(
+            np.linalg.norm(np.asarray(q0, dtype=float) - np.asarray(q_emb, dtype=float))
+        ),
+    }
+    if exact and distinct and not overlapping:
+        status = "EXACT_GLOBAL"
+        notes = (
+            "Exact non-overlapping J1/J2 and J3/J4 RR→U_phys regrouping.",
+            "Not an independent closed S_v-U_phys-U_phys-R parent certificate.",
+            "SUUR is not UUUR; U_v is forbidden.",
+        )
+    else:
+        status = "REJECTED"
+        notes = (
+            "Selected pairs are not two exact non-overlapping U_phys aggregates.",
+            "Independent SUUR closed parent is not instantiated.",
+        )
+    return MultiAggregationRecord(
+        architecture_id=model.architecture_id,
+        pair_indices=SUUR_PAIR_INDICES,
+        candidates=selected,
+        joint_kind_sequence=kinds,
+        joint_role_sequence=roles,
+        family_label=SUUR_FAMILY_LABEL,
+        u_centers=centers,
+        fk_identity_residuals=residuals,
+        axis_aggregation_status=status,
+        joint_limits="not_modeled",
+        notes=notes,
+    )
 
 
 def build_aggregated_mechanism(

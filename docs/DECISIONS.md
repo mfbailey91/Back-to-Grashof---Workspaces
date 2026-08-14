@@ -313,6 +313,102 @@ component discovery.
 **Reason:** A visually plausible local chart is not the two-dimensional parent
 (Gate K2). Representation statuses must stay separate from certificate statuses.
 
+## ADR-037 — A parent atlas is a representation, not a closed component or certificate
+
+<!-- V06A2_PARENT_ATLAS_2026_08_13 -->
+
+**Decision:** V06A2 may emit a multi-chart `ParentAtlasResult` for `generic_5r` with
+representation statuses such as `ATLAS_OPEN_FRONTIER`, `BUDGET_LIMITED`,
+`SINGULAR_BOUNDARY`, or `MULTICOMPONENT_UNRESOLVED`, plus a separate
+`ComponentDiscoveryStatus`. These are not `DecompositionCertificate` statuses.
+A one-seed atlas, even with Sobol confirmation, is not a complete parent and is
+not `S^2` coverage. L5 may name the seed-grown `component_ids` only as a
+representation handle. Fibers, children, and reconstruction stay `UNRESOLVED`.
+`CLOSED_COMPONENT_AT_DECLARED_RESOLUTION` is reserved for an actually closed
+atlas at a declared resolution.
+
+**Reason:** Growing charts and clustering projected seeds can still leave open,
+singular, or extra-component frontiers. Treating that work as reconstruction or
+as `EXACT_ON_COMPONENT` would violate Gate K2 / ADR-032 / ADR-036.
+
+## ADR-038 — V06C source images are task truth at declared resolution, not coverage or certificates
+
+<!-- V06C_SOURCE_IMAGES_2026_08_14 -->
+
+**Decision:** V06C may emit a `ParentOrientationSurfaceResult` and
+`ParentPointingImageResult` by mapping the V06A2 source atlas through `R(q)` and
+`d=R z_T`, plus a declared-resolution icosphere grid. These are not V05
+orientation-curve objects, not all of `SO(3)`, not `S^2` completeness, and not
+`DecompositionCertificate`s. While the atlas is `BUDGET_LIMITED`, open, or
+multicomponent-unresolved, image-level coverage is `PARTIAL_COVERAGE` or
+`UNRESOLVED` — never global `COVERED_AT_DECLARED_RESOLUTION`. L5 reconstruction
+stays `UNRESOLVED`. V06B remains the next scientific slice.
+
+**Reason:** A mapped pointing mesh from an incomplete parent atlas is an oracle
+for later comparison, not a workspace theorem (Gate K2 / ADR-008 / ADR-013).
+
+## ADR-039 — Two-pair EXACT_GLOBAL aggregation is not a complete SUUR parent
+
+<!-- V06B_SUUR_PARENT_2026_08_14 -->
+
+**Decision:** V06B may certify exact non-overlapping `RR→U_phys` pairs on
+`exact_two_u_5r` as `axis_aggregation_status=EXACT_GLOBAL` and instantiate an
+independent `S_v-U_phys-U_phys-R` (`8` coordinates, `6` equations, `M=2`) atlas.
+Closed-mechanism status remains `LOCAL_ONLY` while source/reduced correspondence
+is budget-limited. `near_two_u_5r` and `generic_5r` must not receive exact
+two-pair aggregation. Semantic family SUUR is not `UUUR` and must not introduce
+`U_v`. L5 letter-family children and reconstruction stay `UNRESOLVED`.
+
+**Reason:** Physical regrouping of screws is not equivalence of complete
+two-dimensional parent components (ADR-010 / ADR-021 / Gate K2).
+
+## ADR-040 — Task-derived h=c fibers are not parent completeness or U_v
+
+<!-- V06D1_SOURCE_LEVEL_SETS_2026_08_14 -->
+
+**Decision:** V06D1 may continue one-dimensional source fibers of
+`h(d)=n·d = c` on the already represented `generic_5r` parent atlas. Provenance
+is `task-derived`. These fibers are evidence for a declared slice only. They do
+not complete the two-dimensional parent (Gate K2), do not instantiate `U_v` or
+`UUUR`, and do not accept reconstruction. A budget-limited atlas typically
+yields open or boundary-touching contours, not a complete foliation. V06D2
+remains the next scientific slice.
+
+**Reason:** Level-set traces of a pointing scalar are not a virtual-U chart,
+not a child mechanism, and not coverage reconstruction (ADR-008 / ADR-013 /
+ADR-024).
+
+## ADR-041 — A local U_v chart and one UUUR child are not reconstruction
+
+<!-- V06D2_VIRTUAL_U_CHILD_2026_08_14 -->
+
+**Decision:** V06D2 may derive a local candidate `U_v` from the kernel of
+`(d×n)^T` on one `exact_two_u_5r` `h=c` fiber and instantiate a single
+independent `U_v-U_phys-U_phys-R` child (7 coordinates, 6 equations, drive `s`).
+The chart is local, not a global child proof. Other letter families are not
+swept. Closed-mechanism status is issued from the comparison and is not
+initialized as accepted. Only `EXACT_GLOBAL` or `EXACT_ON_COMPONENT` may enter
+reconstruction; budget-limited open fibers typically remain `LOCAL_ONLY` or
+`REJECTED`. V06E remains the next scientific slice.
+
+**Reason:** Task-derived virtual-U replacement of `S_v` on a slice is not parent
+completeness and not coverage reconstruction (Gate K2 / ADR-024 / ADR-040).
+
+## ADR-042 — Source-fiber cell paint is not reconstruction from accepted children
+
+<!-- V06E_RECONSTRUCTION_CLOSEOUT_2026_08_14 -->
+
+**Decision:** V06E may compare task-derived `h=c` fibers to the frozen V06C
+sphere grid (stage 1) and must leave stage 2 empty unless a child carries
+`EXACT_GLOBAL` or `EXACT_ON_COMPONENT`. A `LOCAL_ONLY` UUUR child is excluded.
+Partial fiber-hit metrics, Hausdorff error, and an explicit factorization
+status such as `no valid recombination` do not complete the 2D parent, do not
+pass the V06 coverage gate, and do not lift ADR-026 descriptor discovery.
+V07A remains the next scientific slice.
+
+**Reason:** Gate K2 / ADR-024 reconstruct a parent from an audited accepted
+fiber/child family, not from a stack of open traces (ADR-026 / ADR-038).
+
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
 <!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->

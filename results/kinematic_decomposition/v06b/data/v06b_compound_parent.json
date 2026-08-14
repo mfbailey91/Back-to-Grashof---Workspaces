@@ -1,0 +1,1001 @@
+{
+  "certificate_status_note": "closed_mechanism_status is the certificate status; axis_aggregation is separate",
+  "exact_two_u_5r": {
+    "architecture_id": "exact_two_u_5r",
+    "aggregation": {
+      "architecture_id": "exact_two_u_5r",
+      "pair_indices": [
+        0,
+        2
+      ],
+      "candidates": [
+        {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.0,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.0,
+            0.0,
+            0.2
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "exact_intersecting": true,
+          "exact_orthogonal": true,
+          "exact_u_candidate": true
+        },
+        {
+          "pair_index": 2,
+          "joint_a": 2,
+          "joint_b": 3,
+          "distance_m": 0.0,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.32,
+            0.06,
+            0.48
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "exact_intersecting": true,
+          "exact_orthogonal": true,
+          "exact_u_candidate": true
+        }
+      ],
+      "joint_kind_sequence": [
+        "S",
+        "U",
+        "U",
+        "R"
+      ],
+      "joint_role_sequence": [
+        "S_v",
+        "U_phys",
+        "U_phys",
+        "R_phys"
+      ],
+      "family_label": "S_v-U_phys-U_phys-R",
+      "u_centers": [
+        [
+          0.0,
+          0.0,
+          0.2
+        ],
+        [
+          0.32,
+          0.06,
+          0.48
+        ]
+      ],
+      "fk_identity_residuals": {
+        "position_residual_m": 0.0,
+        "rotation_frobenius": 0.0,
+        "pointing_residual": 0.0,
+        "joint_map_residual_rad": 0.0
+      },
+      "axis_aggregation_status": "EXACT_GLOBAL",
+      "joint_limits": "not_modeled",
+      "certificate_status": null,
+      "notes": [
+        "Exact non-overlapping J1/J2 and J3/J4 RR\u2192U_phys regrouping.",
+        "Not an independent closed S_v-U_phys-U_phys-R parent certificate.",
+        "SUUR is not UUUR; U_v is forbidden."
+      ]
+    },
+    "certificate": {
+      "source_chain_id": "exact_two_u_5r",
+      "fixed_position_problem_id": "exact_two_u_5r_pstar",
+      "source_component_id": "exact_two_u_5r_component_seed0",
+      "source_mobility": 2,
+      "joint_kind_sequence": [
+        "S",
+        "U",
+        "U",
+        "R"
+      ],
+      "joint_role_sequence": [
+        "S_v",
+        "U_phys",
+        "U_phys",
+        "R_phys"
+      ],
+      "cyclic_origin_role": "S_v",
+      "designated_task_joint_role": "tool_frame",
+      "reduction_operations": [
+        "axis_aggregation",
+        "closed_mechanism_decomposition"
+      ],
+      "reduced_topology": "S_v-U_phys-U_phys-R",
+      "coordinate_map": "physical deltas of U1,U2,R plus S_v chart; identity on 5R joints",
+      "inverse_or_reconstruction_map": "physical 5-vector embeds to source q; S_v tracks R(q)",
+      "task_map": "tool orientation and pointing on p(q)=p*",
+      "rank_and_nullity_checks": {
+        "rank_jp": 3,
+        "nullity_jp": 2,
+        "rank_jd_np": 2,
+        "p_star": [
+          0.4664736283715176,
+          0.40828749147070675,
+          0.7542218053313281
+        ]
+      },
+      "coordinate_regrouping_residuals": {
+        "position_residual_m": 0.0,
+        "rotation_frobenius": 0.0,
+        "pointing_residual": 0.0,
+        "joint_map_residual_rad": 0.0
+      },
+      "closure_residuals": {
+        "max_closure_residual": 7.03512907181366e-13
+      },
+      "tangent_subspace_error": 7.877757940101726e-06,
+      "trajectory_position_error_m": 7.03512907181366e-13,
+      "trajectory_pointing_error": 1.4901161193847656e-08,
+      "trajectory_joint_map_error_rad": 0.0,
+      "component_correspondence": "local_on_budget_limited_atlas",
+      "joint_limit_correspondence": "not_modeled",
+      "axis_aggregation_status": "EXACT_GLOBAL",
+      "closed_mechanism_status": "LOCAL_ONLY",
+      "status": "LOCAL_ONLY",
+      "failure_or_scope_reason": "Independent SUUR parent matches the source locally on a budget-limited atlas. component_correspondence_complete is false; not EXACT_ON_COMPONENT.",
+      "candidates": [
+        {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.0,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.0,
+            0.0,
+            0.2
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "exact_intersecting": true,
+          "exact_orthogonal": true,
+          "exact_u_candidate": true
+        },
+        {
+          "pair_index": 2,
+          "joint_a": 2,
+          "joint_b": 3,
+          "distance_m": 0.0,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.32,
+            0.06,
+            0.48
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "exact_intersecting": true,
+          "exact_orthogonal": true,
+          "exact_u_candidate": true
+        }
+      ],
+      "aggregated": null,
+      "evidence": {
+        "multi_aggregation": {
+          "architecture_id": "exact_two_u_5r",
+          "pair_indices": [
+            0,
+            2
+          ],
+          "candidates": [
+            {
+              "pair_index": 0,
+              "joint_a": 0,
+              "joint_b": 1,
+              "distance_m": 0.0,
+              "parallelism_residual": 1.0,
+              "orthogonality_abs_dot": 0.0,
+              "center": [
+                0.0,
+                0.0,
+                0.2
+              ],
+              "w_a": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "w_b": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "exact_intersecting": true,
+              "exact_orthogonal": true,
+              "exact_u_candidate": true
+            },
+            {
+              "pair_index": 2,
+              "joint_a": 2,
+              "joint_b": 3,
+              "distance_m": 0.0,
+              "parallelism_residual": 1.0,
+              "orthogonality_abs_dot": 0.0,
+              "center": [
+                0.32,
+                0.06,
+                0.48
+              ],
+              "w_a": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "w_b": [
+                0.0,
+                1.0,
+                0.0
+              ],
+              "exact_intersecting": true,
+              "exact_orthogonal": true,
+              "exact_u_candidate": true
+            }
+          ],
+          "joint_kind_sequence": [
+            "S",
+            "U",
+            "U",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "S_v",
+            "U_phys",
+            "U_phys",
+            "R_phys"
+          ],
+          "family_label": "S_v-U_phys-U_phys-R",
+          "u_centers": [
+            [
+              0.0,
+              0.0,
+              0.2
+            ],
+            [
+              0.32,
+              0.06,
+              0.48
+            ]
+          ],
+          "fk_identity_residuals": {
+            "position_residual_m": 0.0,
+            "rotation_frobenius": 0.0,
+            "pointing_residual": 0.0,
+            "joint_map_residual_rad": 0.0
+          },
+          "axis_aggregation_status": "EXACT_GLOBAL",
+          "joint_limits": "not_modeled",
+          "certificate_status": null,
+          "notes": [
+            "Exact non-overlapping J1/J2 and J3/J4 RR\u2192U_phys regrouping.",
+            "Not an independent closed S_v-U_phys-U_phys-R parent certificate.",
+            "SUUR is not UUUR; U_v is forbidden."
+          ]
+        },
+        "comparison": {
+          "max_closure_residual": 7.03512907181366e-13,
+          "max_position_error_m": 7.03512907181366e-13,
+          "max_orientation_error_rad": 2.1073424255447017e-08,
+          "max_pointing_error": 1.4901161193847656e-08,
+          "max_joint_map_error_rad": 0.0,
+          "source_to_reduced_distance": 0.0,
+          "reduced_to_source_distance": 0.0,
+          "tangent_subspace_error": 7.877757940101726e-06,
+          "sample_count": 24,
+          "component_correspondence_complete": false,
+          "joint_limit_correspondence": "not_modeled",
+          "accepted_local": true,
+          "notes": [
+            "Bidirectional sample comparison on a budget-limited atlas is not component completeness.",
+            "Independent chain object id differs from the source chain."
+          ]
+        },
+        "independent_chain_distinct": true,
+        "component_correspondence_complete": false
+      }
+    },
+    "comparison": {
+      "max_closure_residual": 7.03512907181366e-13,
+      "max_position_error_m": 7.03512907181366e-13,
+      "max_orientation_error_rad": 2.1073424255447017e-08,
+      "max_pointing_error": 1.4901161193847656e-08,
+      "max_joint_map_error_rad": 0.0,
+      "source_to_reduced_distance": 0.0,
+      "reduced_to_source_distance": 0.0,
+      "tangent_subspace_error": 7.877757940101726e-06,
+      "sample_count": 24,
+      "component_correspondence_complete": false,
+      "joint_limit_correspondence": "not_modeled",
+      "accepted_local": true,
+      "notes": [
+        "Bidirectional sample comparison on a budget-limited atlas is not component completeness.",
+        "Independent chain object id differs from the source chain."
+      ]
+    },
+    "reduced_chart_count": 6,
+    "source_chart_count": 6,
+    "seed_closure_residual": 0.0,
+    "independent_chain_id": 4953693696,
+    "source_chain_id": 4905309696
+  },
+  "near_two_u_5r": {
+    "architecture_id": "near_two_u_5r",
+    "aggregation": {
+      "architecture_id": "near_two_u_5r",
+      "pair_indices": [
+        0,
+        2
+      ],
+      "candidates": [
+        {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.0,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.0,
+            0.0,
+            0.2
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "exact_intersecting": true,
+          "exact_orthogonal": true,
+          "exact_u_candidate": true
+        },
+        {
+          "pair_index": 2,
+          "joint_a": 2,
+          "joint_b": 3,
+          "distance_m": 9.999998333333703e-08,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.31999995000003334,
+            0.06000000004999998,
+            0.48
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            0.0009999998333333417,
+            0.9999995000000417,
+            0.0
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": true,
+          "exact_u_candidate": false
+        }
+      ],
+      "joint_kind_sequence": [
+        "S",
+        "U",
+        "U",
+        "R"
+      ],
+      "joint_role_sequence": [
+        "S_v",
+        "U_phys",
+        "U_phys",
+        "R_phys"
+      ],
+      "family_label": "S_v-U_phys-U_phys-R",
+      "u_centers": [
+        [
+          0.0,
+          0.0,
+          0.2
+        ],
+        [
+          0.31999995000003334,
+          0.06000000004999998,
+          0.48
+        ]
+      ],
+      "fk_identity_residuals": {
+        "position_residual_m": 0.0,
+        "rotation_frobenius": 0.0,
+        "pointing_residual": 0.0,
+        "joint_map_residual_rad": 0.0
+      },
+      "axis_aggregation_status": "REJECTED",
+      "joint_limits": "not_modeled",
+      "certificate_status": null,
+      "notes": [
+        "Selected pairs are not two exact non-overlapping U_phys aggregates.",
+        "Independent SUUR closed parent is not instantiated."
+      ]
+    },
+    "certificate": {
+      "source_chain_id": "near_two_u_5r",
+      "fixed_position_problem_id": "near_two_u_5r_pstar",
+      "source_component_id": "near_two_u_5r_component_seed0",
+      "source_mobility": 2,
+      "joint_kind_sequence": [
+        "S",
+        "U",
+        "U",
+        "R"
+      ],
+      "joint_role_sequence": [
+        "S_v",
+        "U_phys",
+        "U_phys",
+        "R_phys"
+      ],
+      "cyclic_origin_role": "S_v",
+      "designated_task_joint_role": "tool_frame",
+      "reduction_operations": [
+        "axis_aggregation",
+        "closed_mechanism_decomposition"
+      ],
+      "reduced_topology": "S_v-U_phys-U_phys-R",
+      "coordinate_map": "physical deltas of U1,U2,R plus S_v chart; identity on 5R joints",
+      "inverse_or_reconstruction_map": "physical 5-vector embeds to source q; S_v tracks R(q)",
+      "task_map": "tool orientation and pointing on p(q)=p*",
+      "rank_and_nullity_checks": {
+        "rank_jp": 3,
+        "nullity_jp": 2,
+        "rank_jd_np": 2,
+        "p_star": [
+          0.4664218866275417,
+          0.40834685370380586,
+          0.7542239562358901
+        ]
+      },
+      "coordinate_regrouping_residuals": {
+        "position_residual_m": 0.0,
+        "rotation_frobenius": 0.0,
+        "pointing_residual": 0.0,
+        "joint_map_residual_rad": 0.0
+      },
+      "closure_residuals": {},
+      "tangent_subspace_error": null,
+      "trajectory_position_error_m": null,
+      "trajectory_pointing_error": null,
+      "trajectory_joint_map_error_rad": null,
+      "component_correspondence": "not_applicable",
+      "joint_limit_correspondence": "not_modeled",
+      "axis_aggregation_status": "REJECTED",
+      "closed_mechanism_status": "REJECTED",
+      "status": "REJECTED",
+      "failure_or_scope_reason": "Near or unstructured source: exact two-pair U_phys aggregation rejected.",
+      "candidates": [
+        {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.0,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.0,
+            0.0,
+            0.2
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "exact_intersecting": true,
+          "exact_orthogonal": true,
+          "exact_u_candidate": true
+        },
+        {
+          "pair_index": 2,
+          "joint_a": 2,
+          "joint_b": 3,
+          "distance_m": 9.999998333333703e-08,
+          "parallelism_residual": 1.0,
+          "orthogonality_abs_dot": 0.0,
+          "center": [
+            0.31999995000003334,
+            0.06000000004999998,
+            0.48
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            0.0009999998333333417,
+            0.9999995000000417,
+            0.0
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": true,
+          "exact_u_candidate": false
+        }
+      ],
+      "aggregated": null,
+      "evidence": {
+        "multi_aggregation": {
+          "architecture_id": "near_two_u_5r",
+          "pair_indices": [
+            0,
+            2
+          ],
+          "candidates": [
+            {
+              "pair_index": 0,
+              "joint_a": 0,
+              "joint_b": 1,
+              "distance_m": 0.0,
+              "parallelism_residual": 1.0,
+              "orthogonality_abs_dot": 0.0,
+              "center": [
+                0.0,
+                0.0,
+                0.2
+              ],
+              "w_a": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "w_b": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "exact_intersecting": true,
+              "exact_orthogonal": true,
+              "exact_u_candidate": true
+            },
+            {
+              "pair_index": 2,
+              "joint_a": 2,
+              "joint_b": 3,
+              "distance_m": 9.999998333333703e-08,
+              "parallelism_residual": 1.0,
+              "orthogonality_abs_dot": 0.0,
+              "center": [
+                0.31999995000003334,
+                0.06000000004999998,
+                0.48
+              ],
+              "w_a": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "w_b": [
+                0.0009999998333333417,
+                0.9999995000000417,
+                0.0
+              ],
+              "exact_intersecting": false,
+              "exact_orthogonal": true,
+              "exact_u_candidate": false
+            }
+          ],
+          "joint_kind_sequence": [
+            "S",
+            "U",
+            "U",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "S_v",
+            "U_phys",
+            "U_phys",
+            "R_phys"
+          ],
+          "family_label": "S_v-U_phys-U_phys-R",
+          "u_centers": [
+            [
+              0.0,
+              0.0,
+              0.2
+            ],
+            [
+              0.31999995000003334,
+              0.06000000004999998,
+              0.48
+            ]
+          ],
+          "fk_identity_residuals": {
+            "position_residual_m": 0.0,
+            "rotation_frobenius": 0.0,
+            "pointing_residual": 0.0,
+            "joint_map_residual_rad": 0.0
+          },
+          "axis_aggregation_status": "REJECTED",
+          "joint_limits": "not_modeled",
+          "certificate_status": null,
+          "notes": [
+            "Selected pairs are not two exact non-overlapping U_phys aggregates.",
+            "Independent SUUR closed parent is not instantiated."
+          ]
+        }
+      }
+    },
+    "comparison": null,
+    "reduced_chart_count": 0,
+    "source_chart_count": 0,
+    "seed_closure_residual": null,
+    "independent_chain_id": null,
+    "source_chain_id": 4928868864
+  },
+  "generic_5r": {
+    "architecture_id": "generic_5r",
+    "aggregation": {
+      "architecture_id": "generic_5r",
+      "pair_indices": [
+        0,
+        2
+      ],
+      "candidates": [
+        {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.02549509756796393,
+          "parallelism_residual": 0.9969372056699106,
+          "orthogonality_abs_dot": 0.07820618870057751,
+          "center": [
+            -0.0025000000000000022,
+            0.0125,
+            0.21
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            0.9775773587572189,
+            0.19551547175144376,
+            0.07820618870057751
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        },
+        {
+          "pair_index": 2,
+          "joint_a": 2,
+          "joint_b": 3,
+          "distance_m": 0.15709243157084787,
+          "parallelism_residual": 0.9467922141052779,
+          "orthogonality_abs_dot": 0.32184546495115585,
+          "center": [
+            0.3890804799784703,
+            0.09109817125334807,
+            0.4375608837387011
+          ],
+          "w_a": [
+            0.17593030196692086,
+            0.9773905664828937,
+            0.11728686797794724
+          ],
+          "w_b": [
+            -0.1440046082211958,
+            0.24000768036865966,
+            0.9600307214746386
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        }
+      ],
+      "joint_kind_sequence": [
+        "S",
+        "U",
+        "U",
+        "R"
+      ],
+      "joint_role_sequence": [
+        "S_v",
+        "U_phys",
+        "U_phys",
+        "R_phys"
+      ],
+      "family_label": "S_v-U_phys-U_phys-R",
+      "u_centers": [
+        [
+          -0.0025000000000000022,
+          0.0125,
+          0.21
+        ],
+        [
+          0.3890804799784703,
+          0.09109817125334807,
+          0.4375608837387011
+        ]
+      ],
+      "fk_identity_residuals": {
+        "position_residual_m": 0.0,
+        "rotation_frobenius": 0.0,
+        "pointing_residual": 0.0,
+        "joint_map_residual_rad": 0.0
+      },
+      "axis_aggregation_status": "REJECTED",
+      "joint_limits": "not_modeled",
+      "certificate_status": null,
+      "notes": [
+        "Selected pairs are not two exact non-overlapping U_phys aggregates.",
+        "Independent SUUR closed parent is not instantiated."
+      ]
+    },
+    "certificate": {
+      "source_chain_id": "generic_5r",
+      "fixed_position_problem_id": "generic_5r_pstar",
+      "source_component_id": "generic_5r_component_seed0",
+      "source_mobility": 2,
+      "joint_kind_sequence": [
+        "S",
+        "U",
+        "U",
+        "R"
+      ],
+      "joint_role_sequence": [
+        "S_v",
+        "U_phys",
+        "U_phys",
+        "R_phys"
+      ],
+      "cyclic_origin_role": "S_v",
+      "designated_task_joint_role": "tool_frame",
+      "reduction_operations": [
+        "axis_aggregation",
+        "closed_mechanism_decomposition"
+      ],
+      "reduced_topology": "S_v-U_phys-U_phys-R",
+      "coordinate_map": "physical deltas of U1,U2,R plus S_v chart; identity on 5R joints",
+      "inverse_or_reconstruction_map": "physical 5-vector embeds to source q; S_v tracks R(q)",
+      "task_map": "tool orientation and pointing on p(q)=p*",
+      "rank_and_nullity_checks": {
+        "rank_jp": 3,
+        "nullity_jp": 2,
+        "rank_jd_np": 2,
+        "p_star": [
+          0.6076189565151159,
+          0.2690228407649954,
+          0.6407937249859998
+        ]
+      },
+      "coordinate_regrouping_residuals": {
+        "position_residual_m": 0.0,
+        "rotation_frobenius": 0.0,
+        "pointing_residual": 0.0,
+        "joint_map_residual_rad": 0.0
+      },
+      "closure_residuals": {},
+      "tangent_subspace_error": null,
+      "trajectory_position_error_m": null,
+      "trajectory_pointing_error": null,
+      "trajectory_joint_map_error_rad": null,
+      "component_correspondence": "not_applicable",
+      "joint_limit_correspondence": "not_modeled",
+      "axis_aggregation_status": "REJECTED",
+      "closed_mechanism_status": "REJECTED",
+      "status": "REJECTED",
+      "failure_or_scope_reason": "Near or unstructured source: exact two-pair U_phys aggregation rejected.",
+      "candidates": [
+        {
+          "pair_index": 0,
+          "joint_a": 0,
+          "joint_b": 1,
+          "distance_m": 0.02549509756796393,
+          "parallelism_residual": 0.9969372056699106,
+          "orthogonality_abs_dot": 0.07820618870057751,
+          "center": [
+            -0.0025000000000000022,
+            0.0125,
+            0.21
+          ],
+          "w_a": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "w_b": [
+            0.9775773587572189,
+            0.19551547175144376,
+            0.07820618870057751
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        },
+        {
+          "pair_index": 2,
+          "joint_a": 2,
+          "joint_b": 3,
+          "distance_m": 0.15709243157084787,
+          "parallelism_residual": 0.9467922141052779,
+          "orthogonality_abs_dot": 0.32184546495115585,
+          "center": [
+            0.3890804799784703,
+            0.09109817125334807,
+            0.4375608837387011
+          ],
+          "w_a": [
+            0.17593030196692086,
+            0.9773905664828937,
+            0.11728686797794724
+          ],
+          "w_b": [
+            -0.1440046082211958,
+            0.24000768036865966,
+            0.9600307214746386
+          ],
+          "exact_intersecting": false,
+          "exact_orthogonal": false,
+          "exact_u_candidate": false
+        }
+      ],
+      "aggregated": null,
+      "evidence": {
+        "multi_aggregation": {
+          "architecture_id": "generic_5r",
+          "pair_indices": [
+            0,
+            2
+          ],
+          "candidates": [
+            {
+              "pair_index": 0,
+              "joint_a": 0,
+              "joint_b": 1,
+              "distance_m": 0.02549509756796393,
+              "parallelism_residual": 0.9969372056699106,
+              "orthogonality_abs_dot": 0.07820618870057751,
+              "center": [
+                -0.0025000000000000022,
+                0.0125,
+                0.21
+              ],
+              "w_a": [
+                0.0,
+                0.0,
+                1.0
+              ],
+              "w_b": [
+                0.9775773587572189,
+                0.19551547175144376,
+                0.07820618870057751
+              ],
+              "exact_intersecting": false,
+              "exact_orthogonal": false,
+              "exact_u_candidate": false
+            },
+            {
+              "pair_index": 2,
+              "joint_a": 2,
+              "joint_b": 3,
+              "distance_m": 0.15709243157084787,
+              "parallelism_residual": 0.9467922141052779,
+              "orthogonality_abs_dot": 0.32184546495115585,
+              "center": [
+                0.3890804799784703,
+                0.09109817125334807,
+                0.4375608837387011
+              ],
+              "w_a": [
+                0.17593030196692086,
+                0.9773905664828937,
+                0.11728686797794724
+              ],
+              "w_b": [
+                -0.1440046082211958,
+                0.24000768036865966,
+                0.9600307214746386
+              ],
+              "exact_intersecting": false,
+              "exact_orthogonal": false,
+              "exact_u_candidate": false
+            }
+          ],
+          "joint_kind_sequence": [
+            "S",
+            "U",
+            "U",
+            "R"
+          ],
+          "joint_role_sequence": [
+            "S_v",
+            "U_phys",
+            "U_phys",
+            "R_phys"
+          ],
+          "family_label": "S_v-U_phys-U_phys-R",
+          "u_centers": [
+            [
+              -0.0025000000000000022,
+              0.0125,
+              0.21
+            ],
+            [
+              0.3890804799784703,
+              0.09109817125334807,
+              0.4375608837387011
+            ]
+          ],
+          "fk_identity_residuals": {
+            "position_residual_m": 0.0,
+            "rotation_frobenius": 0.0,
+            "pointing_residual": 0.0,
+            "joint_map_residual_rad": 0.0
+          },
+          "axis_aggregation_status": "REJECTED",
+          "joint_limits": "not_modeled",
+          "certificate_status": null,
+          "notes": [
+            "Selected pairs are not two exact non-overlapping U_phys aggregates.",
+            "Independent SUUR closed parent is not instantiated."
+          ]
+        }
+      }
+    },
+    "comparison": null,
+    "reduced_chart_count": 0,
+    "source_chart_count": 0,
+    "seed_closure_residual": null,
+    "independent_chain_id": null,
+    "source_chain_id": 4953689408
+  }
+}

@@ -568,6 +568,54 @@ Docs:
     <td><a href="v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a></td>
     <td><a href="v05e/data/v05e_near_aligned_rejection.json">v05e_near_aligned_rejection.json</a></td>
   </tr>
+  <tr>
+    <td>V06A0</td>
+    <td class="status pass">SOFTWARE VALIDATION</td>
+    <td><a href="v06a0/sprint_v06a0_implicit_manifold.html">sprint_v06a0_implicit_manifold.html</a></td>
+    <td><a href="v06a0/data/v06a0_implicit_manifold.json">v06a0_implicit_manifold.json</a></td>
+  </tr>
+  <tr>
+    <td>V06A1</td>
+    <td class="status pass">LOCAL_PATCH</td>
+    <td><a href="v06a1/sprint_v06a1_local_parent_patch.html">sprint_v06a1_local_parent_patch.html</a></td>
+    <td><a href="v06a1/data/v06a1_generic_5r_local_patch.json">v06a1_generic_5r_local_patch.json</a></td>
+  </tr>
+  <tr>
+    <td>V06A2</td>
+    <td class="status pass">PARENT ATLAS (not closed)</td>
+    <td><a href="v06a2/sprint_v06a2_parent_atlas.html">sprint_v06a2_parent_atlas.html</a></td>
+    <td><a href="v06a2/data/v06a2_generic_5r_parent_atlas.json">v06a2_generic_5r_parent_atlas.json</a></td>
+  </tr>
+  <tr>
+    <td>V06C</td>
+    <td class="status pass">SOURCE IMAGES (partial)</td>
+    <td><a href="v06c/sprint_v06c_source_images.html">sprint_v06c_source_images.html</a></td>
+    <td><a href="v06c/data/v06c_generic_5r_source_images.json">v06c_generic_5r_source_images.json</a></td>
+  </tr>
+  <tr>
+    <td>V06B</td>
+    <td class="status pass">SUUR LOCAL_ONLY / near REJECTED</td>
+    <td><a href="v06b/sprint_v06b_compound_parent.html">sprint_v06b_compound_parent.html</a></td>
+    <td><a href="v06b/data/v06b_compound_parent.json">v06b_compound_parent.json</a></td>
+  </tr>
+  <tr>
+    <td>V06D1</td>
+    <td class="status pass">SOURCE LEVEL SETS (not reconstruction)</td>
+    <td><a href="v06d1/sprint_v06d1_level_sets.html">sprint_v06d1_level_sets.html</a></td>
+    <td><a href="v06d1/data/v06d1_generic_5r_level_sets.json">v06d1_generic_5r_level_sets.json</a></td>
+  </tr>
+  <tr>
+    <td>V06D2</td>
+    <td class="status pass">ONE UUUR CHILD (not reconstruction)</td>
+    <td><a href="v06d2/sprint_v06d2_virtual_u_child.html">sprint_v06d2_virtual_u_child.html</a></td>
+    <td><a href="v06d2/data/v06d2_virtual_u_child.json">v06d2_virtual_u_child.json</a></td>
+  </tr>
+  <tr>
+    <td>V06E</td>
+    <td class="status pass">RECON CLOSEOUT (V06 not passed)</td>
+    <td><a href="v06e/sprint_v06e_reconstruction.html">sprint_v06e_reconstruction.html</a></td>
+    <td><a href="v06e/data/v06e_reconstruction.json">v06e_reconstruction.json</a></td>
+  </tr>
 </table>
 
 <h2>Reproduce</h2>
@@ -575,12 +623,21 @@ Docs:
 PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05c --outdir results/kinematic_decomposition/v05c
 PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05d --outdir results/kinematic_decomposition/v05d
 PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir results/kinematic_decomposition/v05e
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06a0 --outdir results/kinematic_decomposition/v06a0
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06a1 --outdir results/kinematic_decomposition/v06a1
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06a2 --outdir results/kinematic_decomposition/v06a2
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06c --outdir results/kinematic_decomposition/v06c
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06b --outdir results/kinematic_decomposition/v06b
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06d1 --outdir results/kinematic_decomposition/v06d1
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06d2 --outdir results/kinematic_decomposition/v06d2
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06e --outdir results/kinematic_decomposition/v06e
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V06</strong> — V06A1 issued a <code>LOCAL_PATCH</code> hexagonal chart of
-<code>generic_5r</code> (ADR-036). This is not a complete parent component and not
-<code>S^2</code> coverage. V06A2 atlas growth remains next. L5 reconstruction stays unresolved.
+<p><strong>V07</strong> — V06E compared source fibers to the frozen V06C grid
+(ADR-042). Accepted-child reconstruction is empty; factorization is
+<code>no valid recombination</code>; V06 is not passed. V07A remains next.
+L5 reconstruction stays unresolved.
 
 <p class="meta" style="margin-top:2rem;">
   Project index (so far):
@@ -653,10 +710,16 @@ def render_project_index_html(*, status_date: str = STATUS_DATE) -> str:
     <td><strong>V06</strong></td>
     <td>spatial 5R + S_v</td>
     <td>S² pointing parent</td>
-    <td>V06A1 <code>LOCAL_PATCH</code> on <code>generic_5r</code>; complete parent atlas not done; L5 reconstruction unresolved</td>
+    <td>V06E reconstruction closeout (partial source fibers; no accepted children; V06 not passed); V07A next</td>
     <td>
       <a href="kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html">V06A0</a> ·
       <a href="kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html">V06A1</a> ·
+      <a href="kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html">V06A2</a> ·
+      <a href="kinematic_decomposition/v06c/sprint_v06c_source_images.html">V06C</a> ·
+      <a href="kinematic_decomposition/v06b/sprint_v06b_compound_parent.html">V06B</a> ·
+      <a href="kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html">V06D1</a> ·
+      <a href="kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html">V06D2</a> ·
+      <a href="kinematic_decomposition/v06e/sprint_v06e_reconstruction.html">V06E</a> ·
       <a href="decomposition_ladder/index.html">L5 scaffold</a>
     </td>
   </tr>
@@ -738,7 +801,7 @@ Full ladder readout:
   <tr><th>Ladder rung</th><th>Active sprint</th><th>Relationship</th></tr>
   <tr><td>L3</td><td>—</td><td>Planar calibration interface (trusted exact map)</td></tr>
   <tr><td>L4</td><td>V05</td><td>Wraps V05 closed-mechanism evidence into shared records</td></tr>
-  <tr><td>L5</td><td>V06</td><td>Scaffold interface; V06A parent charts remain next science</td></tr>
+  <tr><td>L5</td><td>V06</td><td>Scaffold interface; V06E closeout (not passed), reconstruction unresolved</td></tr>
   <tr><td>L6</td><td>V07 then V08</td><td>Scaffold interface; V07A SO(3) freeze remains next science</td></tr>
   <tr><td>L7</td><td>deferred</td><td>Blocked pending nested-slice / multi-component work</td></tr>
 </table>
@@ -752,7 +815,7 @@ Full ladder readout:
 <p>
 Key docs:
 <a href="../docs/ROADMAP.md">ROADMAP.md</a> ·
-<a href="../docs/DECISIONS.md">DECISIONS.md</a> (ADR-028–034) ·
+<a href="../docs/DECISIONS.md">DECISIONS.md</a> (ADR-028–042) ·
 <a href="../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">V05–V09 program</a> ·
 <a href="../docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md">L3–L7 program</a> ·
 <a href="../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>

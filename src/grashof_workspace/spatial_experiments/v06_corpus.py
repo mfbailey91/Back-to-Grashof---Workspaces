@@ -24,8 +24,12 @@ from .open_chain import OpenChainModel
 from .serial_chain import SerialRevoluteChain
 
 GENERIC_5R_REGULAR_Q = (0.35, -0.40, 0.45, -0.30, 0.25)
+EXACT_TWO_U_REGULAR_Q = (0.30, -0.35, 0.40, -0.25, 0.20)
+NEAR_TWO_U_REGULAR_Q = EXACT_TWO_U_REGULAR_Q
 ACTIVE_TOOL_TRANSVERSE_OFFSET_M = 0.06
 ACTIVE_TOOL_AXIAL_OFFSET_M = 0.05
+NEAR_TWO_U_MISS_M = 1e-4
+NEAR_TWO_U_TILT_RAD = 1e-3
 
 
 def _r_phys_roles(n: int) -> tuple[str, ...]:
@@ -120,6 +124,92 @@ def build_generic_5r() -> Spatial5RCorpusEntry:
         regular_q=GENERIC_5R_REGULAR_Q,
         terminal_axis_offset_m=axis_distance,
         notes=notes,
+    )
+
+
+def exact_two_u_5r_home_axes() -> tuple[AxisLine, ...]:
+    """J1/J2 and J3/J4 are exact intersecting orthogonal U_phys pairs."""
+
+    c1 = (0.00, 0.00, 0.20)
+    c2 = (0.32, 0.06, 0.48)
+    return (
+        AxisLine(c1, (0.00, 0.00, 1.00)),
+        AxisLine(c1, (1.00, 0.00, 0.00)),
+        AxisLine(c2, (0.00, 0.00, 1.00)),
+        AxisLine(c2, (0.00, 1.00, 0.00)),
+        AxisLine((0.55, -0.05, 0.70), (0.15, -0.20, 1.00)),
+    )
+
+
+def near_two_u_5r_home_axes() -> tuple[AxisLine, ...]:
+    """Exact two-U geometry with J3/J4 perturbed past aggregation tolerance."""
+
+    base = exact_two_u_5r_home_axes()
+    a3 = base[2]
+    r4 = (
+        float(a3.r[0]),
+        float(a3.r[1] + NEAR_TWO_U_MISS_M),
+        float(a3.r[2]),
+    )
+    c = float(np.cos(NEAR_TWO_U_TILT_RAD))
+    s = float(np.sin(NEAR_TWO_U_TILT_RAD))
+    w4 = (s, c, 0.0)
+    return (base[0], base[1], a3, AxisLine(r4, w4), base[4])
+
+
+def _entry_from_axes(
+    *,
+    architecture_id: str,
+    axes: tuple[AxisLine, ...],
+    regular_q: tuple[float, ...],
+    extra_notes: tuple[str, ...],
+) -> Spatial5RCorpusEntry:
+    chain = _chain_from_axes(axes)
+    axis_distance = point_axis_distance(chain.p0, axes[-1])
+    notes = (
+        *extra_notes,
+        f"terminal_tool_axis_distance_m={axis_distance:.6e}",
+    )
+    model = OpenChainModel(
+        architecture_id=architecture_id,
+        chain=chain,
+        joint_kind_sequence=_r_kinds(5),
+        joint_role_sequence=_r_phys_roles(5),
+        notes=notes,
+    )
+    return Spatial5RCorpusEntry(
+        model=model,
+        regular_q=regular_q,
+        terminal_axis_offset_m=axis_distance,
+        notes=notes,
+    )
+
+
+def build_exact_two_u_5r() -> Spatial5RCorpusEntry:
+    """Off-axis 5R with two non-overlapping exact U_phys pairs."""
+
+    return _entry_from_axes(
+        architecture_id="exact_two_u_5r",
+        axes=exact_two_u_5r_home_axes(),
+        regular_q=EXACT_TWO_U_REGULAR_Q,
+        extra_notes=(
+            "V06B structured source: J1/J2 and J3/J4 exact intersecting orthogonal U_phys.",
+            "Not a complete 2D parent and not a UUUR child.",
+        ),
+    )
+
+
+def build_near_two_u_5r() -> Spatial5RCorpusEntry:
+    """Near-miss control: second U pair must be rejected as exact aggregation."""
+
+    return _entry_from_axes(
+        architecture_id="near_two_u_5r",
+        axes=near_two_u_5r_home_axes(),
+        regular_q=NEAR_TWO_U_REGULAR_Q,
+        extra_notes=(
+            "V06B near control: J3/J4 perturbed beyond exact U tolerances.",
+            "Must not receive EXACT_GLOBAL two-pair aggregation.",
+        ),
     )
 
 

@@ -290,8 +290,8 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="S^2 pointing image",
         notes=(
-            "V06 direct-parent LOCAL_PATCH at one generic_5r seed (ADR-036).",
-            "Complete 2D parent / reconstruction still required before reconstruction claims (Gate K2).",
+            "V06E partial source-fiber reconstruction; no accepted-child reconstruction (ADR-042).",
+            "Reconstruction still required before reconstruction claims (Gate K2).",
         ),
     ),
     FiberFamilySpec(

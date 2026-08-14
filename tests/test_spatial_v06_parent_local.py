@@ -55,17 +55,16 @@ def test_local_patch_is_one_chart_without_fibers_or_children() -> None:
 
 def test_l5_bundle_keeps_unresolved_fibers_and_children() -> None:
     bundle = build_spatial_l5_scaffold_bundle()
-    assert bundle.parent.component_ids == ()
     assert bundle.parent.process_status is ProcessStatus.SCAFFOLD
     notes = " ".join(bundle.parent.notes)
-    assert "LOCAL_PATCH" in notes
     assert "UNRESOLVED" in notes
-    assert bundle.fiber_placeholder.sample_count == 0
-    assert bundle.fiber_placeholder.component_id == "UNRESOLVED_PARENT_COMPONENT"
     assert bundle.reconstruction.accepted_fiber_ids == ()
+    assert bundle.fiber_placeholder.source_provenance in {"task-derived", "scaffold_only"}
     for child, cert in zip(bundle.children, bundle.certificates, strict=True):
-        assert child.status is CertificateStatus.UNRESOLVED
-        assert cert.closed_mechanism_status is CertificateStatus.UNRESOLVED
+        assert not cert.accepted_for_reconstruction
+        if child.family != "UUUR":
+            assert child.status is CertificateStatus.UNRESOLVED
+            assert cert.closed_mechanism_status is CertificateStatus.UNRESOLVED
     assert bundle.parent_local is not None
     assert bundle.parent_local["representation_status"] == "LOCAL_PATCH"
     assert bundle.parent_local["fiber_ids"] == []
