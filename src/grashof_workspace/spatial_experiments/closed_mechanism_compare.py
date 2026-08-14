@@ -46,6 +46,7 @@ class ClosedMechanismComparison:
     scope: str
     source_branch_status: str
     source_returned: bool
+    component_correspondence_complete: bool
     reduced_step_count: int
     source_sample_count: int
     max_closure_residual: float
@@ -66,6 +67,7 @@ class ClosedMechanismComparison:
             "scope": self.scope,
             "source_branch_status": self.source_branch_status,
             "source_returned": self.source_returned,
+            "component_correspondence_complete": self.component_correspondence_complete,
             "reduced_step_count": self.reduced_step_count,
             "source_sample_count": self.source_sample_count,
             "max_closure_residual": self.max_closure_residual,
@@ -146,6 +148,7 @@ def compare_independent_closed_mechanism(
             scope="rejected_empty_source_fiber",
             source_branch_status=fiber.branch_status,
             source_returned=fiber.returned,
+            component_correspondence_complete=False,
             reduced_step_count=len(reduced_trace.points),
             source_sample_count=0,
             max_closure_residual=float("inf"),
@@ -181,6 +184,7 @@ def compare_independent_closed_mechanism(
             scope="rejected_insufficient_reduced_samples",
             source_branch_status=fiber.branch_status,
             source_returned=fiber.returned,
+            component_correspondence_complete=False,
             reduced_step_count=len(reduced_trace.points),
             source_sample_count=len(fiber.accepted_samples),
             max_closure_residual=max(closure_errors) if closure_errors else float("inf"),
@@ -233,6 +237,7 @@ def compare_independent_closed_mechanism(
         scope=scope,
         source_branch_status=fiber.branch_status,
         source_returned=fiber.returned,
+        component_correspondence_complete=False,
         reduced_step_count=len(reduced_trace.points),
         source_sample_count=len(fiber.accepted_samples),
         max_closure_residual=max_closure,
@@ -264,6 +269,7 @@ def forged_identity_comparison(
         scope="forged_identity",
         source_branch_status="n/a",
         source_returned=False,
+        component_correspondence_complete=False,
         reduced_step_count=0,
         source_sample_count=0,
         max_closure_residual=0.0,

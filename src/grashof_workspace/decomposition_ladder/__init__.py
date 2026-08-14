@@ -52,6 +52,11 @@ from .spatial_l5 import (
     build_spatial_l5_scaffold_bundle,
     default_l5_scaffold_payload,
 )
+from .spatial_l6 import (
+    SpatialL6ScaffoldBundle,
+    build_spatial_l6_scaffold_bundle,
+    default_l6_scaffold_payload,
+)
 from .u_drive import (
     UBranchSample,
     UBranchSummary,
@@ -91,6 +96,7 @@ __all__ = [
     "SourceParentRecord",
     "SpatialL4EvidenceBundle",
     "SpatialL5ScaffoldBundle",
+    "SpatialL6ScaffoldBundle",
     "UBranchSample",
     "UBranchSummary",
     "UDriveContract",
@@ -98,11 +104,13 @@ __all__ = [
     "build_spatial_l4_exact_u_pair_bundle",
     "build_spatial_l4_generic_bundle",
     "build_spatial_l5_scaffold_bundle",
+    "build_spatial_l6_scaffold_bundle",
     "choose_local_drive_coordinate",
     "conceptual_branch_samples",
     "default_l3_calibration_payload",
     "default_l4_equivalence_payload",
     "default_l5_scaffold_payload",
+    "default_l6_scaffold_payload",
     "evaluate_planar_l3",
     "evaluate_planar_l3_evidence_radii",
     "evaluate_planar_l3_radii",

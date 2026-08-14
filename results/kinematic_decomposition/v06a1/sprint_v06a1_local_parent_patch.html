@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>V06A1 — generic_5r local parent patch</title>
+<style>
+body { font-family: Georgia, serif; max-width: 960px; margin: 2rem auto; line-height: 1.45; }
+code { font-family: ui-monospace, monospace; }
+.note { background:#f7f4ea; border-left:3px solid #c4a35a; padding:.7rem; }
+table { border-collapse: collapse; } th,td { border:1px solid #bbb; padding:.4rem; text-align:left; }
+</style></head><body>
+<h1>V06A1 — One local generic_5r parent chart</h1>
+<div class="note"><strong>LOCAL_PATCH (ADR-036).</strong> One hexagonal chart of
+<code>generic_5r</code> at a regular seed. This is
+<code>LOCAL_PATCH</code>, not a complete parent component,
+not <code>S^2</code> coverage, and not a <code>DecompositionCertificate</code>.
+<code>component_ids</code> are empty. Joint limits are <code>not_modeled</code>.</div>
+<table>
+<tr><th>accepted samples</th><td>7</td></tr>
+<tr><th>max position residual (m)</th><td>6.096e-12</td></tr>
+<tr><th>seed FD Jp error</th><td>1.627e-10 (verified=True)</td></tr>
+<tr><th>fibers</th><td>0</td></tr>
+<tr><th>chart id</th><td><code>generic_5r_local_hex_000</code></td></tr>
+</table>
+<p><img src="figures/v06a1_generic_5r_local_patch.png" alt="local patch" style="max-width:720px"></p>
+<p>Reproduce:
+<code>PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06a1 --outdir results/kinematic_decomposition/v06a1</code></p>
+</body></html>

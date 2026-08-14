@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>V06A0 — Implicit manifold engine (unit sphere)</title>
+<style>
+body { font-family: Georgia, serif; max-width: 960px; margin: 2rem auto; line-height: 1.45; }
+code { font-family: ui-monospace, monospace; }
+.note { background:#f7f4ea; border-left:3px solid #c4a35a; padding:.7rem; }
+table { border-collapse: collapse; } th,td { border:1px solid #bbb; padding:.4rem; text-align:left; }
+</style></head><body>
+<h1>V06A0 — Generic two-dimensional manifold engine</h1>
+<div class="note"><strong>Software validation only (ADR-035).</strong> The analytical unit
+sphere validates charts, overlaps, and atlas growth. This is
+<code>SOFTWARE_VALIDATION</code>, not a
+<code>DecompositionCertificate</code> and not a spatial-5R
+<code>FixedPositionParentResult</code>. L5 reconstruction remains unresolved.</div>
+<table>
+<tr><th>problem</th><td><code>analytical_unit_sphere</code></td></tr>
+<tr><th>charts</th><td>77</td></tr>
+<tr><th>components</th><td>1</td></tr>
+<tr><th>closed component</th><td>True</td></tr>
+<tr><th>approximate hull area</th><td>12.3814 (target 12.5664)</td></tr>
+<tr><th>declared chart radius</th><td>0.45</td></tr>
+<tr><th>rejected duplicate centers</th><td>86</td></tr>
+</table>
+<p><img src="figures/v06a0_unit_sphere_atlas.png" alt="sphere atlas" style="max-width:720px"></p>
+<p>Reproduce:
+<code>PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06a0 --outdir results/kinematic_decomposition/v06a0</code></p>
+</body></html>

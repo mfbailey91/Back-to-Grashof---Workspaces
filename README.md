@@ -76,7 +76,9 @@ V09  validated mechanism predicates and coverage reconstruction
 
 The earlier all-family spatial-four-bar atlas/rule program is preserved as deferred V10–V14 work after the decomposition-validation gate.
 
-Optional shared L3–L7 interface scaffolding lives in `docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` and `src/grashof_workspace/decomposition_ladder/`. It is subordinate to the active V05–V09 sequence above and does not claim the V05 closed-mechanism gate is closed.
+Optional shared L3–L7 interface scaffolding lives in `docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` and `src/grashof_workspace/decomposition_ladder/`. It is subordinate to the active V05–V09 sequence above. The proximal exact-U L4 case currently records an independent `LOCAL_ONLY` traced-arc match; complete component equivalence remains unresolved.
+
+Direct V06A construction of the two-dimensional 5R source parent may proceed without inheriting an L4 component certificate.
 
 
 ## Important terminology

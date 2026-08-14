@@ -347,7 +347,7 @@ These exports are orientation-curve / pointing-curve truth, not coverage certifi
 
 ### V05D — exact axis aggregation and candidate spatial four-bar
 
-**Status:** MVP complete for proximal exact `RR→U` on `exact_u_pair_4r` (`EXACT_ON_COMPONENT`); `generic_4r` rejected.
+**Status:** MVP complete for proximal exact `RR→U` on `exact_u_pair_4r`: axis aggregation is `EXACT_GLOBAL`, while the current independent budget-limited closed-loop match is `LOCAL_ONLY`; `generic_4r` rejects exact aggregation.
 
 For architectures with an exact \(RR\rightarrow U\) pair:
 
@@ -362,7 +362,9 @@ The existing generic `U/S/R` closure and continuation kernel may be reused, but 
 
 Software: `src/grashof_workspace/spatial_experiments/{axis_aggregation,decomposition_certificate,v05d}.py`.
 Readout: [`results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
-Non-proximal pair embeddings and multi-component `EXACT_GLOBAL` remain unverified. V05E near-aligned rejection is implemented.
+Complete bidirectional source/child component correspondence, non-proximal pair embeddings,
+and multi-component `EXACT_GLOBAL` remain unverified. V05E near-aligned rejection is
+implemented.
 
 ### V05E — rejection tests
 
@@ -420,7 +422,11 @@ M=2,
 
 ## Work packages
 
+Implementation slices (does not replace V06A–E): V06A0 generic 2D manifold engine → V06A1 one local 5R chart → V06A2 parent atlas → V06C source images → V06B compound parent → V06D1/D2 fibers and children → V06E reconstruction. Details: [`V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md`](V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md).
+
 ### V06A — two-dimensional parent first
+
+**V06A0 (implementation prerequisite):** a generic two-dimensional implicit-manifold engine, validated on the analytical unit sphere, with no 5R parent or certificate claim.
 
 1. construct synthetic 5R architectures using the same source-chain representation as V05;
 2. verify rank three and source nullity two at regular seeds;
@@ -517,6 +523,10 @@ V06 passes when the complete two-dimensional parent and its pointing projection 
 Complete \(S^2\) coverage is a result to evaluate, not an assumption.
 
 ---
+
+V06A direct source-parent construction is not blocked by the L4 local certificate. Any
+claim that a V06 one-dimensional child or reconstructed pointing image inherits a reduced
+mechanism equivalence remains blocked until its own source-derived certificate passes.
 
 # Sprint V07 — Generic Spatial 6R Fixed-Position Orientation Reference
 
@@ -908,9 +918,9 @@ V05A source corpus                 CORRECTED: off-axis active cases + terminal-r
 V05B source continuation           CORRECTED MVP: augmented pseudo-arclength + FD Jacobian check
 V05C orientation image             CORRECTED MVP: explicit curve classification
 V05D exact axis aggregation        EXACT_GLOBAL where geometry permits
-V05D closed-mechanism equivalence  EXACT_ON_COMPONENT for proximal exact_u_pair_4r
+V05D closed-mechanism equivalence  LOCAL_ONLY for proximal exact_u_pair_4r (traced arc)
 V05E rejection/boundary            CORRECTED MVP: tolerance-relative suite
-V05 overall gate                   CLOSED_ON_COMPONENT (exact_u_pair_4r); other architectures UNRESOLVED
+V05 overall gate                   LOCAL_ONLY (exact_u_pair_4r); other architectures UNRESOLVED
 ```
 
-V06 may proceed as architecture-scoped scaffold/claim work for pathways that inherit the accepted proximal exact-U closed-mechanism certificate. Multi-component `EXACT_GLOBAL` and non-proximal embeddings remain unverified.
+V06A direct source-parent construction is not blocked by the L4 local certificate. Decomposition-dependent children remain gated. Multi-component `EXACT_GLOBAL` and non-proximal embeddings remain unverified.

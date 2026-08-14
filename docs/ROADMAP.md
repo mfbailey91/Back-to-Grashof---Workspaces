@@ -71,6 +71,8 @@ Its standalone results remain `mechanism_explorer_only` until connected to a cer
 
 ### V06 — Spatial 5R fixed-position parent
 
+Implementation starts at **V06A0** (generic 2D implicit-manifold engine; software validation on the unit sphere). See [`V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md`](V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md).
+
 - construct the exact \(5R+S_v\), \(M=2\) parent;
 - represent its two-dimensional orientation image and pointing projection;
 - test exact `S_v U U R` / `S_v S R R` parent reductions where architecture permits;
@@ -169,10 +171,12 @@ See `docs/SPATIAL_4BAR_V05_V09_PROGRAM.md` for the retained historical plan and 
 
 `docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` and `src/grashof_workspace/decomposition_ladder/` provide optional shared interfaces. They do **not** replace the Active Phase V05–V09 above.
 
+**Project printout:** [`results/index.html`](../results/index.html) joins V05–V09 and L3–L7 status with links to explorer, kinematic-decomposition, and ladder hubs.
+
 ```text
 L3  planar calibration retrofit (trusted exact map)
-L4  maps to V05 (proximal exact_u_pair_4r closed-mechanism EXACT_ON_COMPONENT; other architectures unresolved)
-L5  maps to V06 (architecture-scoped scaffold after proximal exact-U; 2D parent / reconstruction still UNRESOLVED)
-L6  V07-first independent SO(3) truth, then optional nested / V08 work
-L7  deferred / BLOCKED until the V05 closed-mechanism gate lifts
+L4  maps to V05 (proximal exact_u_pair_4r independent match LOCAL_ONLY on a traced arc)
+L5  maps to V06 (direct 2D parent scaffold; child equivalence / reconstruction still UNRESOLVED)
+L6  maps to V07-first (architecture-scoped scaffold; SO(3) freeze / nested reconstruction still UNRESOLVED)
+L7  deferred / BLOCKED pending complete-component and nested-slice certificates
 ```

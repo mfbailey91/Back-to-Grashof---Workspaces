@@ -1,0 +1,78 @@
+{
+  "atlas": {
+    "representation_status": "BUDGET_LIMITED",
+    "certificate_status": null
+  },
+  "reconstruction": {
+    "architecture_id": "generic_5r",
+    "certificate_status": null,
+    "icosphere_level": 2,
+    "direct_coverage_label": "PARTIAL_COVERAGE",
+    "reconstruction_coverage": "PARTIAL",
+    "complete_foliation": false,
+    "factorization_status": "no valid recombination",
+    "reconstruction_law": "none issued; a few open task-derived fibers are not a reconstruction law",
+    "v06_program_passed": false,
+    "v06_gate": {
+      "independent_2d_source_parent": true,
+      "frozen_orientation_and_pointing_images": true,
+      "explicit_task_fiber_provenance": true,
+      "compound_parent_certified_or_rejected": true,
+      "source_fiber_reconstruction_compared": true,
+      "child_reconstruction_only_accepted": true,
+      "factorization_status_explicit": true,
+      "coverage_qualified_by_declared_resolution": true,
+      "critical_unresolved_limits_explicit": true,
+      "complete_s2_coverage": false,
+      "accepted_child_factorization": false,
+      "parent_component_complete": false
+    },
+    "metrics": {
+      "direct_source_covered_cells": 0,
+      "direct_source_uncovered_cells": 314,
+      "direct_source_ambiguous_cells": 6,
+      "direct_source_unresolved_cells": 0,
+      "source_fiber_reconstructed_cells": 6,
+      "accepted_child_reconstructed_cells": 0,
+      "missed_cell_fraction": 0.0,
+      "false_positive_fraction": 0.006369426751592357,
+      "ambiguous_boundary_fraction": 0.01875,
+      "symmetric_angular_hausdorff_rad": 0.22507835173639007,
+      "pointing_multiplicity_discrepancy": "unresolved: fiber samples are 1D traces, V06C clusters are 2D atlas vertices",
+      "source_component_discrepancy": "one seed component represented; extra components unresolved (atlas components=['generic_5r_component_seed0'])",
+      "critical_c_values": [],
+      "unresolved_c_intervals": [
+        "skipped_or_open:open:c=0.7273",
+        "skipped_or_open:open:c=0.7273",
+        "skipped_or_open:open:c=0.8003",
+        "skipped_or_open:open:c=0.8003",
+        "skipped_or_open:open:c=0.8734",
+        "skipped_or_open:open:c=0.8734"
+      ],
+      "fiber_returned_count": 0,
+      "fiber_open_count": 6,
+      "fiber_unresolved_count": 0,
+      "fiber_singular_count": 0,
+      "accepted_child_count": 0,
+      "excluded_local_only_children": 1
+    },
+    "fiber_hit_cell_ids": [
+      84,
+      85,
+      87,
+      248,
+      250,
+      253
+    ],
+    "missed_covered_cell_ids": [],
+    "refinement_history": [],
+    "extra_fiber_ids": [],
+    "joint_limits": "not_modeled",
+    "notes": [
+      "V06E stage 1 paints source fibers onto the frozen V06C grid (ADR-042).",
+      "V06D2 LOCAL_ONLY UUUR is excluded from stage 2.",
+      "Not S^2 completeness, not exact product, not descriptor discovery (ADR-026).",
+      "Joint limits not_modeled."
+    ]
+  }
+}

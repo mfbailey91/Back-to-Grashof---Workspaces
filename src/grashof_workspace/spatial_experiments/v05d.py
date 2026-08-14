@@ -133,6 +133,9 @@ def render_v05d_html(
     closed_exact = any(
         certificate.closed_mechanism_status == "EXACT_ON_COMPONENT" for certificate in certificates
     )
+    closed_local = any(
+        certificate.closed_mechanism_status == "LOCAL_ONLY" for certificate in certificates
+    )
     for cert in certificates:
         roles = ",".join(cert.joint_role_sequence) if cert.aggregated else "—"
         motion = cert.rank_and_nullity_checks.get("motion_signature", "—")
@@ -164,6 +167,21 @@ def render_v05d_html(
             "<ol><li>Non-proximal pair embeddings remain unverified.</li>"
             "<li>Multi-component <code>EXACT_GLOBAL</code> remains unverified.</li>"
             "<li>V06 scientific claims remain architecture-scoped after this L4/V05 result.</li></ol>"
+        )
+    elif closed_local:
+        note = (
+            "<strong>Independent traced-arc match.</strong> Proximal "
+            "<code>exact_u_pair_4r</code> retains "
+            "<code>axis_aggregation_status=EXACT_GLOBAL</code>, while the independent "
+            "<code>S_v-U_phys-R-R</code> comparison is <code>LOCAL_ONLY</code>. The "
+            "current source branch is budget-limited and complete bidirectional "
+            "component correspondence has not been established."
+        )
+        next_block = (
+            "<h2>Remaining obligations</h2>"
+            "<ol><li>Return or explicitly bound source and reduced components.</li>"
+            "<li>Check source→child and child→source correspondence.</li>"
+            "<li>Gate the claimed <code>Y1 ⊂ SO(3)</code> task with full orientation error.</li></ol>"
         )
     else:
         note = (
@@ -278,6 +296,9 @@ def build_v05d_readout(outdir: Path) -> list[DecompositionCertificate]:
     closed_exact = any(
         certificate.closed_mechanism_status == "EXACT_ON_COMPONENT" for certificate in certificates
     )
+    closed_local = any(
+        certificate.closed_mechanism_status == "LOCAL_ONLY" for certificate in certificates
+    )
     payload = {
         "sprint": "V05D",
         "program": "kinematic_decomposition",
@@ -285,7 +306,11 @@ def build_v05d_readout(outdir: Path) -> list[DecompositionCertificate]:
         "audit_status": (
             "CLOSED_ON_COMPONENT_EXACT_U_PAIR"
             if closed_exact
-            else "HOLD_PENDING_INDEPENDENT_REDUCED_SOLVE"
+            else (
+                "LOCAL_MATCH_TRACED_ARC_EXACT_U_PAIR"
+                if closed_local
+                else "HOLD_PENDING_INDEPENDENT_REDUCED_SOLVE"
+            )
         ),
         "certificates": [certificate.to_json_dict() for certificate in certificates],
     }

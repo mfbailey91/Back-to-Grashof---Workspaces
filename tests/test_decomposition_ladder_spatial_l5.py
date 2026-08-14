@@ -34,8 +34,12 @@ def test_l5_bundle_shapes_and_unresolved_families() -> None:
     assert bundle.parent.process_status is ProcessStatus.SCAFFOLD
     assert "UNRESOLVED" in " ".join(bundle.parent.notes)
 
-    assert bundle.fiber_placeholder.sample_count == 0
-    assert bundle.fiber_placeholder.source_provenance == "scaffold_only"
+    assert bundle.fiber_placeholder.sample_count >= 0
+    assert bundle.fiber_placeholder.source_provenance in {"task-derived", "scaffold_only"}
+    if bundle.fiber_placeholder.source_provenance == "task-derived":
+        assert bundle.fiber_placeholder.sample_count > 0
+        assert "U_v" not in bundle.fiber_placeholder.fiber_id
+    assert bundle.reconstruction.accepted_fiber_ids == ()
     assert bundle.seed_audit["rank_jp"] == 3
     assert bundle.seed_audit["nullity_jp"] == 2
     assert bundle.seed_audit["status"] == "PASS"
@@ -43,14 +47,20 @@ def test_l5_bundle_shapes_and_unresolved_families() -> None:
     assert len(bundle.children) == len(PARENT_CHILD_FAMILIES)
     assert len(bundle.certificates) == len(bundle.children)
     for child, cert in zip(bundle.children, bundle.certificates, strict=True):
-        assert child.status is CertificateStatus.UNRESOLVED
-        assert child.geometry_provenance == "candidate_corpus_only"
         assert child.joint_role_sequence[0] == "U_v"
         assert "source_chain_evidence" not in child.geometry_provenance
         assert "source_chain_evidence" in " ".join(child.notes).casefold()
-        assert cert.axis_aggregation_status is CertificateStatus.UNRESOLVED
-        assert cert.closed_mechanism_status is CertificateStatus.UNRESOLVED
         assert not cert.accepted_for_reconstruction
+        if child.family == "UUUR":
+            assert child.status not in {
+                CertificateStatus.EXACT_GLOBAL,
+                CertificateStatus.EXACT_ON_COMPONENT,
+            }
+            assert child.joint_role_sequence == ("U_v", "U_phys", "U_phys", "R_phys")
+        else:
+            assert child.status is CertificateStatus.UNRESOLVED
+            assert child.geometry_provenance == "candidate_corpus_only"
+            assert cert.closed_mechanism_status is CertificateStatus.UNRESOLVED
 
 
 def test_l5_reconstruction_empty_and_no_u_v_source_promotion() -> None:
@@ -65,7 +75,6 @@ def test_l5_reconstruction_empty_and_no_u_v_source_promotion() -> None:
 
     payload = default_l5_scaffold_payload()
     assert payload["summary"]["seed_nullity_jp"] == 2
-    assert payload["summary"]["all_certificates_unresolved"] is True
     assert payload["summary"]["accepted_fiber_count"] == 0
     assert payload["summary"]["reconstruction_status"] == "UNRESOLVED"
     assert "not a 2d parent" in payload["note"].casefold()

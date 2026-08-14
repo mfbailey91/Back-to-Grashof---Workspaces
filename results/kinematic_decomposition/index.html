@@ -34,7 +34,9 @@
 <h1>Kinematic Decomposition</h1>
 <p class="meta">
   <strong>Active source-chain program hub (V05B–E)</strong><br>
-  Artifact root: <code>results/kinematic_decomposition/</code> · Status date: 2026-08-08
+  Artifact root: <code>results/kinematic_decomposition/</code> · Status date: 2026-08-13<br>
+  <a href="../index.html">Project index (so far)</a> ·
+  <a href="../decomposition_ladder/index.html">L3–L7 ladder readout</a>
 </p>
 
 <div class="note">
@@ -42,11 +44,11 @@
   Exports are <strong>not</strong> coverage certificates for <code>SO(3)</code> or <code>S²</code>.
   Explorer <code>spatial4bar_explorer/v05a</code> remains <code>mechanism_explorer_only</code>
   and is <strong>not</strong> this ladder.
-  <strong>V05 scientific gate: CLOSED_ON_COMPONENT</strong> for proximal
-  <code>exact_u_pair_4r</code> after an independently instantiated and continued
-  reduced closed mechanism. Exact axis aggregation alone is still not
-  closed-mechanism equivalence; multi-component <code>EXACT_GLOBAL</code> and other
-  architectures remain unresolved.
+  <strong>V05 scientific gate: LOCAL_ONLY</strong> for proximal
+  <code>exact_u_pair_4r</code> on a budget-limited independent traced arc.
+  Exact axis aggregation remains <code>EXACT_GLOBAL</code> and is still not
+  closed-mechanism equivalence; complete component correspondence,
+  multi-component <code>EXACT_GLOBAL</code>, and other architectures remain unresolved.
 </div>
 
 <h2>Thesis</h2>
@@ -104,6 +106,54 @@ Docs:
     <td><a href="v05e/sprint_v05e_near_aligned_rejection.html">sprint_v05e_near_aligned_rejection.html</a></td>
     <td><a href="v05e/data/v05e_near_aligned_rejection.json">v05e_near_aligned_rejection.json</a></td>
   </tr>
+  <tr>
+    <td>V06A0</td>
+    <td class="status pass">SOFTWARE VALIDATION</td>
+    <td><a href="v06a0/sprint_v06a0_implicit_manifold.html">sprint_v06a0_implicit_manifold.html</a></td>
+    <td><a href="v06a0/data/v06a0_implicit_manifold.json">v06a0_implicit_manifold.json</a></td>
+  </tr>
+  <tr>
+    <td>V06A1</td>
+    <td class="status pass">LOCAL_PATCH</td>
+    <td><a href="v06a1/sprint_v06a1_local_parent_patch.html">sprint_v06a1_local_parent_patch.html</a></td>
+    <td><a href="v06a1/data/v06a1_generic_5r_local_patch.json">v06a1_generic_5r_local_patch.json</a></td>
+  </tr>
+  <tr>
+    <td>V06A2</td>
+    <td class="status pass">PARENT ATLAS (not closed)</td>
+    <td><a href="v06a2/sprint_v06a2_parent_atlas.html">sprint_v06a2_parent_atlas.html</a></td>
+    <td><a href="v06a2/data/v06a2_generic_5r_parent_atlas.json">v06a2_generic_5r_parent_atlas.json</a></td>
+  </tr>
+  <tr>
+    <td>V06C</td>
+    <td class="status pass">SOURCE IMAGES (partial)</td>
+    <td><a href="v06c/sprint_v06c_source_images.html">sprint_v06c_source_images.html</a></td>
+    <td><a href="v06c/data/v06c_generic_5r_source_images.json">v06c_generic_5r_source_images.json</a></td>
+  </tr>
+  <tr>
+    <td>V06B</td>
+    <td class="status pass">SUUR LOCAL_ONLY / near REJECTED</td>
+    <td><a href="v06b/sprint_v06b_compound_parent.html">sprint_v06b_compound_parent.html</a></td>
+    <td><a href="v06b/data/v06b_compound_parent.json">v06b_compound_parent.json</a></td>
+  </tr>
+  <tr>
+    <td>V06D1</td>
+    <td class="status pass">SOURCE LEVEL SETS (not reconstruction)</td>
+    <td><a href="v06d1/sprint_v06d1_level_sets.html">sprint_v06d1_level_sets.html</a></td>
+    <td><a href="v06d1/data/v06d1_generic_5r_level_sets.json">v06d1_generic_5r_level_sets.json</a></td>
+  </tr>
+  <tr>
+    <td>V06D2</td>
+    <td class="status pass">ONE UUUR CHILD (not reconstruction)</td>
+    <td><a href="v06d2/sprint_v06d2_virtual_u_child.html">sprint_v06d2_virtual_u_child.html</a></td>
+    <td><a href="v06d2/data/v06d2_virtual_u_child.json">v06d2_virtual_u_child.json</a></td>
+  </tr>
+  <tr>
+    <td>V06E</td>
+    <td class="status pass">RECON CLOSEOUT (V06 not passed)</td>
+    <td><a href="v06e/sprint_v06e_reconstruction.html">sprint_v06e_reconstruction.html</a></td>
+    <td><a href="v06e/data/v06e_reconstruction.json">v06e_reconstruction.json</a></td>
+  </tr>
 </table>
 
 <h2>Reproduce</h2>
@@ -111,15 +161,26 @@ Docs:
 PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05c --outdir results/kinematic_decomposition/v05c
 PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05d --outdir results/kinematic_decomposition/v05d
 PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir results/kinematic_decomposition/v05e
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06a0 --outdir results/kinematic_decomposition/v06a0
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06a1 --outdir results/kinematic_decomposition/v06a1
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06a2 --outdir results/kinematic_decomposition/v06a2
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06c --outdir results/kinematic_decomposition/v06c
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06b --outdir results/kinematic_decomposition/v06b
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06d1 --outdir results/kinematic_decomposition/v06d1
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06d2 --outdir results/kinematic_decomposition/v06d2
+PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06e --outdir results/kinematic_decomposition/v06e
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V06</strong> — spatial 5R fixed-position parent may proceed as architecture-scoped
-scaffold/claim work inheriting the proximal exact-U <code>EXACT_ON_COMPONENT</code> gate.
-Multi-component <code>EXACT_GLOBAL</code> remains unverified.</p>
+<p><strong>V07</strong> — V06E compared source fibers to the frozen V06C grid
+(ADR-042). Accepted-child reconstruction is empty; factorization is
+<code>no valid recombination</code>; V06 is not passed. V07A remains next.
+L5 reconstruction stays unresolved.
 
 <p class="meta" style="margin-top:2rem;">
-  Project dashboard (explorer + ladder):
+  Project index (so far):
+  <a href="../index.html">../index.html</a> ·
+  Explorer dashboard:
   <a href="../spatial4bar_explorer/index.html">../spatial4bar_explorer/index.html</a>
 </p>
 

@@ -2,7 +2,7 @@
   "sprint": "V05D",
   "program": "kinematic_decomposition",
   "operation": "axis_aggregation_then_closed_mechanism_decomposition",
-  "audit_status": "CLOSED_ON_COMPONENT_EXACT_U_PAIR",
+  "audit_status": "LOCAL_MATCH_TRACED_ARC_EXACT_U_PAIR",
   "certificates": [
     {
       "source_chain_id": "exact_u_pair_4r",
@@ -58,12 +58,12 @@
       "trajectory_position_error_m": 9.11865700686194e-12,
       "trajectory_pointing_error": 0.009195729667881935,
       "trajectory_joint_map_error_rad": null,
-      "component_correspondence": "exact_on_component:open_budget_40",
+      "component_correspondence": "local_on_traced_arc:open_budget_40",
       "joint_limit_correspondence": "not_modeled; exact regrouping assumes original coordinate order and identical limits",
       "axis_aggregation_status": "EXACT_GLOBAL",
-      "closed_mechanism_status": "EXACT_ON_COMPONENT",
-      "status": "EXACT_ON_COMPONENT",
-      "failure_or_scope_reason": "Independent S_v-U_phys-R-R closed mechanism matches the source component over scope=open_budget_40. Multi-component EXACT_GLOBAL remains unverified.",
+      "closed_mechanism_status": "LOCAL_ONLY",
+      "status": "LOCAL_ONLY",
+      "failure_or_scope_reason": "Independent S_v-U_phys-R-R closed mechanism matches the numerically traced arc over scope=open_budget_40, but complete bidirectional source/child component correspondence has not been established.",
       "candidates": [
         {
           "pair_index": 0,
@@ -391,6 +391,7 @@
           "scope": "open_budget_40",
           "source_branch_status": "budget_limited",
           "source_returned": false,
+          "component_correspondence_complete": false,
           "reduced_step_count": 41,
           "source_sample_count": 81,
           "max_closure_residual": 6.182677544732746e-11,

@@ -2,7 +2,7 @@
 
 **Status:** Active index for theory, terminology, plans, and deferred research tracks
 **Project:** Characterization of Manipulator Workspaces
-**Last updated:** 2026-08-07
+**Last updated:** 2026-08-13
 
 ---
 
@@ -43,6 +43,10 @@ It also explains why the planar 3R case produces a four-bar, why a spatial 4R pr
 
 ## 2. Active Program
 
+### Project printout (so far)
+
+**Root index:** [`../results/index.html`](../results/index.html) — joins active V05–V09 status, optional L3–L7 scaffold crosswalk, and links to the three evidence hubs.
+
 ### [`DECOMPOSITION_LADDER_L3_L7_PROGRAM.md`](DECOMPOSITION_LADDER_L3_L7_PROGRAM.md)
 
 Optional L3–L7 interface scaffold subordinate to the active V05–V09 sequence. L4↔V05, L5↔V06, L6 is V07-first then V08, L7 deferred/BLOCKED. Letter families are a candidate corpus only.
@@ -52,6 +56,10 @@ Optional L3–L7 interface scaffold subordinate to the active V05–V09 sequence
 ### [`U_JOINT_DRIVE_CONTRACT.md`](U_JOINT_DRIVE_CONTRACT.md)
 
 Canonical one-DOF U-drive semantics: drive branch parameter `s`; `alpha(s)`/`beta(s)` are coupled outputs.
+
+### [`V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md`](V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md)
+
+Subordinate V06 implementation plan (V06A0–E slice order). Does not replace the V05–V09 scientific program.
 
 ### [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)
 
@@ -69,6 +77,14 @@ V09  validated mechanism predicates and coverage reconstruction
 **V05C MVP readout:** [`../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
 **V05D MVP readout:** [`../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
 **V05E MVP readout:** [`../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
+**V06A0 software-validation readout:** [`../results/kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html`](../results/kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html) (unit-sphere manifold engine; not a 5R parent).
+**V06A1 local-patch readout:** [`../results/kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html`](../results/kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html) (`LOCAL_PATCH`; not a complete parent).
+**V06A2 parent-atlas readout:** [`../results/kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html`](../results/kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html) (multi-chart atlas; not a closed component).
+**V06C source-image readout:** [`../results/kinematic_decomposition/v06c/sprint_v06c_source_images.html`](../results/kinematic_decomposition/v06c/sprint_v06c_source_images.html) (orientation surface + pointing image; not S² completeness).
+**V06B compound-parent readout:** [`../results/kinematic_decomposition/v06b/sprint_v06b_compound_parent.html`](../results/kinematic_decomposition/v06b/sprint_v06b_compound_parent.html) (SUUR LOCAL_ONLY; near control REJECTED).
+**V06D1 level-set readout:** [`../results/kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html`](../results/kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html) (task-derived source fibers; not reconstruction).
+**V06D2 virtual-U readout:** [`../results/kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html`](../results/kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html) (one UUUR child; not reconstruction).
+**V06E reconstruction readout:** [`../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html`](../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html) (partial source-fiber paint; V06 not passed).
 Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 

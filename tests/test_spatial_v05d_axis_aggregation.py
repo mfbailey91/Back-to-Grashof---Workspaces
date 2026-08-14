@@ -88,9 +88,9 @@ def test_v05d_html_and_readout(tmp_path) -> None:
     certificates = build_v05d_readout(tmp_path)
     by_id = {certificate.source_chain_id: certificate for certificate in certificates}
     assert by_id["exact_u_pair_4r"].axis_aggregation_status == "EXACT_GLOBAL"
-    assert by_id["exact_u_pair_4r"].closed_mechanism_status == "EXACT_ON_COMPONENT"
+    assert by_id["exact_u_pair_4r"].closed_mechanism_status == "LOCAL_ONLY"
     assert by_id["generic_4r"].status == "REJECTED"
     html = render_v05d_html(certificates, figures={"demo": "figures/demo.png"})
-    assert "different claims" in html or "Scoped gate closed" in html
+    assert "different claims" in html or "Independent traced-arc match" in html
     assert (tmp_path / "data" / "v05d_axis_aggregation.json").exists()
     assert (tmp_path / "sprint_v05d_axis_aggregation.html").exists()

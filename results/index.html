@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Back to Grashof — project index printout (so far)</title>
+<style>
+
+  body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
+  h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 1.2; }
+  h1 { font-size: 1.75rem; margin-bottom: 0.35rem; }
+  h2 { margin-top: 2rem; border-bottom: 1px solid #ccc; padding-bottom: 0.25rem; }
+  h3 { margin-top: 1.25rem; }
+  .meta { color: #444; margin-bottom: 1.5rem; }
+  table { border-collapse: collapse; width: 100%; margin: 0.75rem 0 1rem; font-size: 0.95rem; }
+  th, td { border: 1px solid #bbb; padding: 0.4rem 0.55rem; text-align: left; vertical-align: top; }
+  th { background: #f3f3f3; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; }
+  pre { background: #f6f6f6; padding: 0.75rem 1rem; overflow-x: auto; border: 1px solid #ddd; }
+  ul.toc { columns: 2; column-gap: 2rem; }
+  .status { font-weight: bold; }
+  .pass { color: #0a5; }
+  .note { background: #faf7f0; border-left: 3px solid #c4a35a; padding: 0.6rem 0.85rem; margin: 1rem 0; }
+  @media print {
+    body { max-width: none; margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    a::after { content: " (" attr(href) ")"; font-size: 0.8em; color: #555; }
+    ul.toc { columns: 1; }
+  }
+
+</style>
+</head>
+<body>
+
+<h1>Back to Grashof — project index printout (so far)</h1>
+<p class="meta">
+  <strong>Active scientific sequence:</strong>
+  <code>docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code><br>
+  Optional L3–L7 ladder scaffold is subordinate to that program.
+  Status date: 2026-08-13
+</p>
+
+<div class="note">
+  This page joins the three evidence hubs. It does not replace them and does not
+  fabricate V06–V09 science artifacts. Proximal <code>exact_u_pair_4r</code>
+  closed-mechanism is <code>LOCAL_ONLY</code> on a traced arc (ADR-034); multi-component
+  <code>EXACT_GLOBAL</code> and other architectures remain unresolved.
+</div>
+
+<h2>Contents</h2>
+<ul class="toc">
+  <li><a href="#v05v09">Active V05–V09 status</a></li>
+  <li><a href="#l3l7">Optional L3–L7 scaffold</a></li>
+  <li><a href="#crosswalk">L↔V crosswalk</a></li>
+  <li><a href="#hubs">Evidence hubs</a></li>
+  <li><a href="#reproduce">Reproduce</a></li>
+</ul>
+
+<h2 id="v05v09">Active V05–V09 status</h2>
+<table>
+  <tr>
+    <th>Sprint</th><th>Source</th><th>Target</th><th>Status</th><th>Primary artifacts</th>
+  </tr>
+  <tr>
+    <td><strong>V05</strong></td>
+    <td>spatial 4R + S_v</td>
+    <td>orientation curve / 1D fiber</td>
+    <td><code>LOCAL_ONLY</code> (proximal <code>exact_u_pair_4r</code> traced-arc match); other architectures unresolved</td>
+    <td>
+      <a href="kinematic_decomposition/index.html">KD hub</a> ·
+      <a href="kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html">V05B</a> ·
+      <a href="kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html">V05C</a> ·
+      <a href="kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">V05D</a> ·
+      <a href="kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html">V05E</a>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>V06</strong></td>
+    <td>spatial 5R + S_v</td>
+    <td>S² pointing parent</td>
+    <td>V06E reconstruction closeout (partial source fibers; no accepted children; V06 not passed); V07A next</td>
+    <td>
+      <a href="kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html">V06A0</a> ·
+      <a href="kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html">V06A1</a> ·
+      <a href="kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html">V06A2</a> ·
+      <a href="kinematic_decomposition/v06c/sprint_v06c_source_images.html">V06C</a> ·
+      <a href="kinematic_decomposition/v06b/sprint_v06b_compound_parent.html">V06B</a> ·
+      <a href="kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html">V06D1</a> ·
+      <a href="kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html">V06D2</a> ·
+      <a href="kinematic_decomposition/v06e/sprint_v06e_reconstruction.html">V06E</a> ·
+      <a href="decomposition_ladder/index.html">L5 scaffold</a>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>V07</strong></td>
+    <td>spatial 6R + S_v</td>
+    <td>SO(3) orientation reference</td>
+    <td>Not started — Gate K3 freeze absent; L6 scaffold only</td>
+    <td><a href="decomposition_ladder/index.html">L6 scaffold</a> (seed audit, not frozen SO(3))</td>
+  </tr>
+  <tr>
+    <td><strong>V08</strong></td>
+    <td>aligned 6R quotient</td>
+    <td>pointing + roll vs V07 truth</td>
+    <td>Blocked on V07 reference (Gate K4)</td>
+    <td>—</td>
+  </tr>
+  <tr>
+    <td><strong>V09</strong></td>
+    <td>reconstruction</td>
+    <td>coverage from accepted children</td>
+    <td>Blocked on prior gates (Gate K5)</td>
+    <td>—</td>
+  </tr>
+</table>
+
+<h2 id="l3l7">Optional L3–L7 scaffold</h2>
+<p>
+Process labels (<code>SCAFFOLD</code>, <code>BLOCKED</code>) are separate from certificate
+statuses (<code>EXACT_GLOBAL</code>, <code>EXACT_ON_COMPONENT</code>, <code>LOCAL_ONLY</code>, <code>UNRESOLVED</code>).
+</p>
+<table>
+  <tr>
+    <th>Rung</th><th>Maps to</th><th>Process</th><th>Certificate / evidence</th><th>Notes</th>
+  </tr>
+  <tr>
+    <td><strong>L3</strong></td>
+    <td>planar calibration</td>
+    <td><code>SCAFFOLD</code></td>
+    <td>Map <code>EXACT_GLOBAL</code> at each radius</td>
+    <td>Trusted analytical planar 3R→4R retrofit</td>
+  </tr>
+  <tr>
+    <td><strong>L4</strong></td>
+    <td>V05</td>
+    <td><code>SCAFFOLD</code></td>
+    <td><code>LOCAL_ONLY</code> traced-arc match for proximal exact_u_pair_4r</td>
+    <td>Wraps audited V05D closed-mechanism evidence</td>
+  </tr>
+  <tr>
+    <td><strong>L5</strong></td>
+    <td>V06</td>
+    <td><code>SCAFFOLD</code></td>
+    <td>All certs <code>UNRESOLVED</code>; nullity-2 seed audit</td>
+    <td>Not a 2D parent; not pointing reconstruction (ADR-032)</td>
+  </tr>
+  <tr>
+    <td><strong>L6</strong></td>
+    <td>V07-first</td>
+    <td><code>SCAFFOLD</code></td>
+    <td>All certs <code>UNRESOLVED</code>; nullity-3 seed audit</td>
+    <td>Not a frozen SO(3) reference; not V08 (ADR-033)</td>
+  </tr>
+  <tr>
+    <td><strong>L7</strong></td>
+    <td>deferred</td>
+    <td><code>BLOCKED</code></td>
+    <td><code>UNRESOLVED</code></td>
+    <td>Outside active V05–V09 until multi-component certificates exist</td>
+  </tr>
+</table>
+<p>
+Full ladder readout:
+<a href="decomposition_ladder/index.html">results/decomposition_ladder/index.html</a>
+</p>
+
+<h2 id="crosswalk">L↔V crosswalk</h2>
+<table>
+  <tr><th>Ladder rung</th><th>Active sprint</th><th>Relationship</th></tr>
+  <tr><td>L3</td><td>—</td><td>Planar calibration interface (trusted exact map)</td></tr>
+  <tr><td>L4</td><td>V05</td><td>Wraps V05 closed-mechanism evidence into shared records</td></tr>
+  <tr><td>L5</td><td>V06</td><td>Scaffold interface; V06E closeout (not passed), reconstruction unresolved</td></tr>
+  <tr><td>L6</td><td>V07 then V08</td><td>Scaffold interface; V07A SO(3) freeze remains next science</td></tr>
+  <tr><td>L7</td><td>deferred</td><td>Blocked pending nested-slice / multi-component work</td></tr>
+</table>
+
+<h2 id="hubs">Evidence hubs</h2>
+<ul>
+  <li><a href="spatial4bar_explorer/index.html">Explorer printout</a> — V00–V05A laboratory + cumulative history</li>
+  <li><a href="kinematic_decomposition/index.html">Kinematic decomposition hub</a> — active V05B–E source-chain evidence</li>
+  <li><a href="decomposition_ladder/index.html">Decomposition ladder readout</a> — L3–L7 scaffold interfaces</li>
+</ul>
+<p>
+Key docs:
+<a href="../docs/ROADMAP.md">ROADMAP.md</a> ·
+<a href="../docs/DECISIONS.md">DECISIONS.md</a> (ADR-028–042) ·
+<a href="../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">V05–V09 program</a> ·
+<a href="../docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md">L3–L7 program</a> ·
+<a href="../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+</p>
+
+<h2 id="reproduce">Reproduce</h2>
+<pre>PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results
+PYTHONPATH=src python -m grashof_workspace.decomposition_ladder --outdir results/decomposition_ladder --no-animation</pre>
+<p>
+The ladder readout is generated separately; regenerate both commands after scaffold or
+V05 evidence changes.
+</p>
+
+<p class="meta" style="margin-top:2rem;">
+  Regenerate this page with
+  <code>python -m grashof_workspace.project_dashboard --results-root results</code>.
+</p>
+
+</body>
+</html>

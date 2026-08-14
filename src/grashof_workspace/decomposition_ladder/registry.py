@@ -59,8 +59,8 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
         process_status=ProcessStatus.SCAFFOLD,
         notes=(
             (
-                "Maps to active V05. Proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; "
-                "multi-component EXACT_GLOBAL and other architectures remain unresolved."
+                "Maps to active V05. Proximal exact_u_pair_4r has an independent LOCAL_ONLY "
+                "traced-arc match; complete component correspondence remains unresolved."
             ),
             "The generic orientation image is a curve in SO(3), not full spatial dexterity.",
         ),
@@ -82,9 +82,9 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
         ),
         process_status=ProcessStatus.SCAFFOLD,
         notes=(
-            "Maps to active V06. Architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
-            "Parent geometry/charts remain UNRESOLVED; letter families are candidate tests only.",
-            "Not a 2D parent representation and not pointing-image reconstruction (V06A next).",
+            "Maps to active V06. Direct 2D source-parent construction may proceed independently of L4 acceptance.",
+            "V06A1 parent representation is LOCAL_PATCH at one seed; complete atlas and reconstruction remain UNRESOLVED.",
+            "Letter families are candidate tests only; not pointing-image reconstruction.",
         ),
     ),
     RungSpec(
@@ -102,10 +102,11 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
             "After freezing a decomposition-free SO(3) reference (V07), can nested task "
             "slices and any V08 quotient reconstruct that independent truth?"
         ),
-        process_status=ProcessStatus.PLANNED,
+        process_status=ProcessStatus.SCAFFOLD,
         notes=(
-            "V07-first: independent orientation reference before nested decomposition.",
-            "V08 aligned-roll quotient is a qualified special case after V07 truth exists.",
+            "V07-first architecture-scoped scaffold; L4 closed-mechanism is currently LOCAL_ONLY.",
+            "SO(3) freeze / nested reconstruction still UNRESOLVED; V08 blocked until Gate K3.",
+            "Not a frozen SO(3) reference (V07A next).",
         ),
     ),
     RungSpec(
@@ -265,12 +266,12 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         source_fiber_dimension=1,
         candidate_child_family="architecture-dependent spatial four-bar",
         process_status=ProcessStatus.SCAFFOLD,
-        certificate_status=CertificateStatus.EXACT_ON_COMPONENT,
+        certificate_status=CertificateStatus.LOCAL_ONLY,
         reconstruction_target="Y1 ⊂ SO(3)",
         notes=(
             (
-                "Catalog status EXACT_ON_COMPONENT is scoped to proximal exact_u_pair_4r "
-                "on the compared V05 component; not multi-component EXACT_GLOBAL."
+                "Catalog status LOCAL_ONLY is scoped to the budget-limited traced arc of "
+                "proximal exact_u_pair_4r; complete component correspondence is unverified."
             ),
             (
                 "generic_4r, near-aligned, and non-proximal architectures remain unresolved "
@@ -289,8 +290,8 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="S^2 pointing image",
         notes=(
-            "V06 architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
-            "2D parent representation still required before reconstruction claims (Gate K2).",
+            "V06E partial source-fiber reconstruction; no accepted-child reconstruction (ADR-042).",
+            "Reconstruction still required before reconstruction claims (Gate K2).",
         ),
     ),
     FiberFamilySpec(
@@ -300,11 +301,12 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         constraints=(ORIENTATION_CHART_SLICE_1, ORIENTATION_CHART_SLICE_2),
         source_fiber_dimension=1,
         candidate_child_family="architecture-dependent one-DOF leaf",
-        process_status=ProcessStatus.PLANNED,
+        process_status=ProcessStatus.SCAFFOLD,
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="SO(3) orientation image",
         notes=(
-            "Requires frozen V07 decomposition-free SO(3) reference before reconstruction claims.",
+            "V07 architecture-scoped scaffold; no L4 component certificate is inherited.",
+            "Requires frozen V07 decomposition-free SO(3) reference before reconstruction claims (Gate K3).",
         ),
     ),
     FiberFamilySpec(
