@@ -1,6 +1,6 @@
 # V05A–V05E Audit Corrections
 
-**Status:** independent proximal `exact_u_pair_4r` closed-mechanism solve accepted as `EXACT_ON_COMPONENT`; multi-component/`EXACT_GLOBAL` and other architectures remain unresolved  
+**Status:** independent proximal `exact_u_pair_4r` closed-mechanism solve matches a budget-limited traced arc as `LOCAL_ONLY`; exact axis aggregation remains `EXACT_GLOBAL`  
 **Date:** 2026-08-08
 
 ## Decision
@@ -86,16 +86,17 @@ closed_mechanism_status = UNRESOLVED
 overall status = UNRESOLVED
 ```
 
-After the independent `S_v-U_phys-R-R` closed-mechanism gate (ADR-028), proximal
-`exact_u_pair_4r` may promote:
+After the independent `S_v-U_phys-R-R` comparison, proximal `exact_u_pair_4r`
+currently records:
 
 ```text
-closed_mechanism_status = EXACT_ON_COMPONENT
-overall status = EXACT_ON_COMPONENT
+closed_mechanism_status = LOCAL_ONLY
+overall status = LOCAL_ONLY
 ```
 
-with explicit component scope. Same-source identity residuals remain coordinate-regrouping
-diagnostics only and still cannot promote closed-mechanism status.
+because the accepted numerical trace is budget-limited and complete bidirectional
+source/child component correspondence is not established. Same-source identity residuals
+remain coordinate-regrouping diagnostics only and still cannot promote status.
 
 ### V05E — rejection and boundary suite
 
@@ -126,9 +127,9 @@ The current worked case has a valid parent slice and local `U_v` chart, but its 
 
 The patch clears the source-geometry, continuation, curve-classification, status-separation, strict-JSON, tolerance-validation, and CI-readout defects.
 
-### Gate update (ADR-028)
+### Gate update (ADR-034 narrows ADR-028)
 
-Proximal `exact_u_pair_4r` now passes a scoped closed-mechanism gate:
-`closed_mechanism_status=EXACT_ON_COMPONENT` after an independently instantiated and
-continued `S_v-U_phys-R-R` loop is compared to the source fiber. Multi-component
-`EXACT_GLOBAL`, non-proximal pairs, and other corpus architectures remain unresolved.
+Proximal `exact_u_pair_4r` now has a valid independent closed-loop local comparison, but
+the current source branch is `budget_limited`. It therefore remains `LOCAL_ONLY` until
+source and child components are returned or explicitly bounded and compared in both
+directions. Non-proximal pairs and other corpus architectures remain unresolved.

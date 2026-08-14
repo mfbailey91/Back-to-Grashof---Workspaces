@@ -2,7 +2,7 @@
 
 **Status:** Active index for theory, terminology, plans, and deferred research tracks
 **Project:** Characterization of Manipulator Workspaces
-**Last updated:** 2026-08-07
+**Last updated:** 2026-08-13
 
 ---
 
@@ -42,6 +42,10 @@ It also explains why the planar 3R case produces a four-bar, why a spatial 4R pr
 ---
 
 ## 2. Active Program
+
+### Project printout (so far)
+
+**Root index:** [`../results/index.html`](../results/index.html) — joins active V05–V09 status, optional L3–L7 scaffold crosswalk, and links to the three evidence hubs.
 
 ### [`DECOMPOSITION_LADDER_L3_L7_PROGRAM.md`](DECOMPOSITION_LADDER_L3_L7_PROGRAM.md)
 

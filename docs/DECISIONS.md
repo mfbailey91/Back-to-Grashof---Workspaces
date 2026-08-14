@@ -265,3 +265,44 @@ ADR-026). V06A remains the next scientific step; V05–V09 primacy is unchanged.
 **Reason:** Architecture-scoped interface exercise after the proximal exact-U gate is
 useful, but claiming a complete M=2 parent from a seed audit or 1D fiber placeholders
 would violate the evidence chain.
+
+## ADR-034 — Budget-limited L4 matches are LOCAL_ONLY and reconstruction is target-aware
+
+<!-- L4_TRACED_ARC_SCOPE_HARDENING_2026_08_13 -->
+
+**Decision:** The current proximal `exact_u_pair_4r` independent
+`S_v-U_phys-R-R` comparison remains valid numerical evidence, but its source branch is
+budget-limited and the solver has not established complete bidirectional source/child
+component correspondence. Therefore the closed-mechanism disposition is
+`LOCAL_ONLY`, with scope `local_on_traced_arc:*`; `EXACT_ON_COMPONENT` is reserved for
+a complete explicitly bounded or returned source/child component comparison. Exact
+physical `RR→U_phys` aggregation remains independently `EXACT_GLOBAL`.
+
+For an L4 target `Y1 ⊂ SO(3)`, ladder reconstruction must use the full orientation
+geodesic error, not only pointing error. A local orientation match may be reported as
+`matched_on_traced_arc`, but it does not populate `accepted_fiber_ids`.
+
+The L5 scaffold must not list its one-dimensional placeholder as a discovered
+two-dimensional parent component. Direct V06A source-parent construction may proceed
+without inheriting an L4 component certificate; any decomposition-dependent child or
+reconstruction claim remains gated.
+
+**Reason:** A finite traced arc is evidence for local equivalence, not equality of complete
+connected components. Task-aware metrics and honest parent/component identity prevent a
+numerically good local result from being silently promoted into a global reconstruction.
+
+## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
+
+<!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->
+
+**Decision:** The L6 ladder adapter may promote process status to `SCAFFOLD` with a
+synthetic non-aligned spatial-6R seed audit (`rank Jp=3`, `nullity=3`) and empty
+child/certificate lists whose reconstruction status remains `UNRESOLVED`. This does
+**not** freeze a decomposition-free SO(3) orientation reference (Gate K3 / V07A), does
+not authorize nested orientation-slice reconstruction, and does not start V08
+terminal-roll quotient work. V07A remains the next scientific step; V05–V09 primacy is
+unchanged. L5 `PARENT_CHILD_FAMILIES` must not be reused as an L6 letter corpus.
+
+**Reason:** Architecture-scoped interface exercise is useful after the proximal exact-U
+gate, but claiming an SO(3) parent or V08 readiness from a seed audit would violate
+ADR-013 / ADR-024.

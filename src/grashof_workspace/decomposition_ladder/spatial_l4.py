@@ -64,6 +64,7 @@ Mat = NDArray[np.floating]
 
 _DEFAULT_N_STEPS = 40
 _DEFAULT_STEP_SIZE = 0.03
+_L4_ORIENTATION_TOL_RAD = 5e-2
 
 
 def _status(value: str) -> CertificateStatus:
@@ -202,7 +203,11 @@ def _fiber_record(
     )
 
 
-def _child_from_mechanism(mechanism: IndependentClosedMechanism) -> ChildMechanismRecord:
+def _child_from_mechanism(
+    mechanism: IndependentClosedMechanism,
+    *,
+    status: CertificateStatus,
+) -> ChildMechanismRecord:
     return ChildMechanismRecord(
         child_id=f"{mechanism.architecture_id}_sv_uphys_rr",
         source_fiber_id=mechanism.component_id,
@@ -211,7 +216,7 @@ def _child_from_mechanism(mechanism: IndependentClosedMechanism) -> ChildMechani
         joint_role_sequence=mechanism.joint_role_sequence_semantic,
         expected_mobility=1,
         geometry_provenance="source_derived",
-        status=CertificateStatus.EXACT_ON_COMPONENT,
+        status=status,
         notes=(
             "Semantic roles keep U_phys; explorer tool_a/tool_beta are not L4 task evidence.",
             "Solver chart is cyclic URRS for SpatialFourBarGeometry only.",
@@ -226,6 +231,7 @@ def _certificate_from_v05(
     child_id: str,
     v05_cert: DecompositionCertificate,
     comparison: ClosedMechanismComparison | None,
+    task_map_error: float | None = None,
 ) -> EquivalenceCertificateRecord:
     if comparison is not None and comparison.comparison_mode != "independent_closed_loop":
         closed = CertificateStatus.UNRESOLVED
@@ -236,7 +242,7 @@ def _certificate_from_v05(
         scope = comparison.scope
         closure = _nonneg(comparison.max_closure_residual)
         tangent = _nonneg(comparison.seed_tangent_misalignment)
-        pointing = _nonneg(comparison.max_pointing_error)
+        task_error = _nonneg(task_map_error)
     else:
         closed = _status(v05_cert.closed_mechanism_status)
         reason = v05_cert.failure_or_scope_reason
@@ -255,11 +261,7 @@ def _certificate_from_v05(
             if comparison is not None
             else _nonneg(v05_cert.tangent_subspace_error)
         )
-        pointing = (
-            _nonneg(comparison.max_pointing_error)
-            if comparison is not None
-            else _nonneg(v05_cert.trajectory_pointing_error)
-        )
+        task_error = _nonneg(task_map_error)
 
     return EquivalenceCertificateRecord(
         source_fiber_id=fiber_id,
@@ -271,7 +273,7 @@ def _certificate_from_v05(
         reconstruction_map=v05_cert.inverse_or_reconstruction_map,
         closure_error=closure,
         tangent_error=tangent,
-        task_map_error=pointing,
+        task_map_error=task_error,
         reason=reason,
     )
 
@@ -284,7 +286,14 @@ def _reconstruction_record(
     orientation_error: float | None,
     curve_type: str | None,
 ) -> ReconstructionRecord:
-    accepted = certificate.accepted_for_reconstruction
+    orientation_pass = (
+        orientation_error is not None and orientation_error <= _L4_ORIENTATION_TOL_RAD
+    )
+    accepted = certificate.accepted_for_reconstruction and orientation_pass
+    local_match = (
+        certificate.closed_mechanism_status is CertificateStatus.LOCAL_ONLY
+        and orientation_pass
+    )
     return ReconstructionRecord(
         rung=LadderRung.L4,
         parent_id=parent_id,
@@ -297,22 +306,33 @@ def _reconstruction_record(
         reconstructed_coverage_status=(
             "matched_on_component"
             if accepted
-            else "unresolved_or_rejected_closed_mechanism"
+            else (
+                "matched_on_traced_arc" if local_match else "unresolved_or_rejected_closed_mechanism"
+            )
         ),
         comparison_error=_nonneg(orientation_error),
         process_status=ProcessStatus.SCAFFOLD,
         certificate_status=(
-            CertificateStatus.EXACT_ON_COMPONENT
+            certificate.closed_mechanism_status
             if accepted
-            else CertificateStatus.UNRESOLVED
+            else (
+                CertificateStatus.LOCAL_ONLY if local_match else CertificateStatus.UNRESOLVED
+            )
         ),
         notes=(
-            "Reconstruction is the claimed Y1 orientation/pointing curve on one component.",
+            "Reconstruction target is the full Y1 orientation curve in SO(3).",
+            (
+                f"Full-orientation nearest-neighbor tolerance={_L4_ORIENTATION_TOL_RAD:.3g} rad."
+            ),
             "Not dexterous_workspace / full SO(3) coverage.",
             (
                 "Accepted from existing V05 independent closed-mechanism certificate."
                 if accepted
-                else "Closed-mechanism not accepted; reconstruction remains unresolved."
+                else (
+                    "Numerical orientation match is local to the traced arc; component reconstruction is not accepted."
+                    if local_match
+                    else "Closed-mechanism or orientation metric not accepted; reconstruction remains unresolved."
+                )
             ),
         ),
     )
@@ -370,12 +390,17 @@ def build_spatial_l4_exact_u_pair_bundle(
         sample_count=comparison.source_sample_count,
         task_image_status=orientation.curve_type,
     )
-    child = _child_from_mechanism(mechanism)
+    child_id = f"{mechanism.architecture_id}_sv_uphys_rr"
     certificate = _certificate_from_v05(
         fiber_id=fiber_id,
-        child_id=child.child_id,
+        child_id=child_id,
         v05_cert=v05_cert,
         comparison=comparison,
+        task_map_error=orientation_error,
+    )
+    child = _child_from_mechanism(
+        mechanism,
+        status=certificate.closed_mechanism_status,
     )
     leaf = LeafPredicateRecord(
         child_id=child.child_id,
@@ -410,7 +435,7 @@ def build_spatial_l4_exact_u_pair_bundle(
         max_orientation_error_rad=orientation_error,
         notes=(
             "Existing V05 independent S_v-U_phys-R-R solve wrapped into ladder records.",
-            "Scoped EXACT_ON_COMPONENT only; multi-component EXACT_GLOBAL unverified.",
+            "LOCAL_ONLY on the budget-limited traced arc; complete component correspondence unverified.",
             "Scientific source: docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md / V05D.",
         ),
     )

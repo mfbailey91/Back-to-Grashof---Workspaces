@@ -3,9 +3,9 @@
 **Status:** optional software scaffold subordinate to active V05–V09  
 **Active scientific sequence:** [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)  
 **Project:** Characterization of Manipulator Workspaces  
-**Purpose:** provide shared parent → fiber → child → reconstruction interfaces from the trusted planar 3R calibration through deferred spatial 7R work without demoting the active V05–V09 scientific sequence (proximal exact-U closed-mechanism is already `EXACT_ON_COMPONENT`).
+**Purpose:** provide shared parent → fiber → child → reconstruction interfaces from the trusted planar 3R calibration through deferred spatial 7R work without demoting the active V05–V09 scientific sequence (proximal exact-U currently has a `LOCAL_ONLY` independent traced-arc match).
 
-This document does **not** replace the active V05–V09 program. L4 maps to V05, L5 to V06, L6 is V07-first then V08, and L7 remains BLOCKED pending multi-component / nested-slice certificates beyond the proximal exact-U gate.
+This document does **not** replace the active V05–V09 program. L4 maps to V05, L5 to V06, L6 is V07-first then V08, and L7 remains BLOCKED pending complete-component / nested-slice certificates.
 
 ---
 
@@ -267,11 +267,12 @@ At least one nontrivial source component and one independently solved reduced co
 
 ### Interface status
 
-V05 already issued the independent `S_v-U_phys-R-R` closed-mechanism certificate for proximal
+V05 already issued an independent `S_v-U_phys-R-R` comparison for proximal
 `exact_u_pair_4r`. The ladder adapter `spatial_l4.py` expresses that evidence as shared
 records (`SourceParentRecord`, fiber/child/certificate/leaf/reconstruction) plus V05C
-orientation-curve truth for the claimed component. Catalog fiber status is scoped
-`EXACT_ON_COMPONENT` (not multi-component `EXACT_GLOBAL`). Process remains `SCAFFOLD`.
+orientation-curve truth. Because the present branch is budget-limited and complete
+bidirectional component correspondence is not established, catalog fiber status is
+`LOCAL_ONLY`. Process remains `SCAFFOLD`.
 
 ---
 
@@ -283,13 +284,16 @@ L5 process status is `SCAFFOLD` after the proximal exact-U gate. The adapter
 `spatial_l5.py` plus `v06_corpus.py` provide:
 
 - a synthetic off-axis spatial-5R seed audit (`rank Jp=3`, `nullity=2`);
-- shared parent/fiber/child/certificate/reconstruction placeholders;
+- shared parent/fiber/child/certificate/reconstruction placeholders, without treating the fiber placeholder as a discovered parent component;
 - candidate letter families with both aggregation and closed statuses `UNRESOLVED`;
 - empty reconstruction acceptance (Gate K2 / ADR-026).
 
 This is **not** a complete two-dimensional parent representation and **not**
 pointing-image reconstruction. V06A (`FixedPositionParentResult`) remains the next
 scientific step.
+
+Direct V06A parent construction may proceed independently of L4 component acceptance.
+Decomposition-dependent children and reconstruction remain gated.
 
 ### Goal
 
@@ -336,6 +340,19 @@ The complete parent is represented independently of the child family, and recons
 ---
 
 ## L6 — spatial 6R after independent orientation truth (V07-first)
+
+### Interface status (scaffold)
+
+L6 process status is `SCAFFOLD` after the proximal exact-U gate. The adapter
+`spatial_l6.py` plus `v07_corpus.py` provide:
+
+- a synthetic non-aligned spatial-6R seed audit (`rank Jp=3`, `nullity=3`);
+- shared parent/fiber/reconstruction placeholders;
+- empty children and certificates (architecture-dependent leaves wait on V07 freeze);
+- empty reconstruction acceptance (Gate K3 / ADR-013 / ADR-024 / ADR-026).
+
+This is **not** a frozen SO(3) orientation reference, **not** nested-slice
+reconstruction, and **not** V08. V07A remains the next scientific step.
 
 ### Goal
 

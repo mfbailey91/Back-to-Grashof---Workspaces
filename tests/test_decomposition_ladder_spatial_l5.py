@@ -32,10 +32,12 @@ def test_l5_bundle_shapes_and_unresolved_families() -> None:
     assert bundle.parent.dimension == 2
     assert bundle.parent.target_space == "S^2"
     assert bundle.parent.process_status is ProcessStatus.SCAFFOLD
+    assert bundle.parent.component_ids == ()
     assert "UNRESOLVED" in " ".join(bundle.parent.notes)
 
     assert bundle.fiber_placeholder.sample_count == 0
     assert bundle.fiber_placeholder.source_provenance == "scaffold_only"
+    assert bundle.fiber_placeholder.component_id == "UNRESOLVED_PARENT_COMPONENT"
     assert bundle.seed_audit["rank_jp"] == 3
     assert bundle.seed_audit["nullity_jp"] == 2
     assert bundle.seed_audit["status"] == "PASS"

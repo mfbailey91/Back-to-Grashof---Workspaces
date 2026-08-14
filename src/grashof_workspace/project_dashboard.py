@@ -2,6 +2,7 @@
 
 Writes:
 
+- ``results/index.html`` — project-so-far printout (V05–V09 + L3–L7 crosswalk)
 - ``results/spatial4bar_explorer/index.html`` — cumulative explorer + active ladder
 - ``results/kinematic_decomposition/index.html`` — active-program hub (V05B–E)
 
@@ -16,9 +17,10 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-STATUS_DATE = "2026-08-08"
+STATUS_DATE = "2026-08-13"
 
-# V05_AUDIT_CORRECTION_2026_08_08: V05B–E are audit-corrected MVPs; the V05 decomposition gate remains held.
+# Proximal exact_u_pair_4r closed-mechanism is LOCAL_ONLY on a traced arc (ADR-034);
+# axis aggregation remains EXACT_GLOBAL; EXACT_ON_COMPONENT is reserved.
 
 _SHARED_CSS = """
   body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
@@ -62,13 +64,17 @@ def render_explorer_index_html(*, status_date: str = STATUS_DATE) -> str:
 <p class="meta">
   <strong>Project printout through V05 audit correction</strong> · explorer V00–V05A + kinematic-decomposition ladder<br>
   Artifact roots: <code>results/spatial4bar_explorer/</code> ·
-  <code>results/kinematic_decomposition/</code> · Status date: {status_date}
+  <code>results/kinematic_decomposition/</code> · Status date: {status_date}<br>
+  <a href="../index.html">Project index (so far)</a> ·
+  <a href="../decomposition_ladder/index.html">L3–L7 ladder readout</a>
 </p>
 
 <div class="note">
   Explorer sprints <strong>V00–V05A</strong> remain a <code>mechanism_explorer_only</code> laboratory
   (deferred V10 prep). The <strong>active</strong> source-chain program is kinematic decomposition
-  <strong>V05B–E (audit-corrected MVP; V05 gate held)</strong>; next gate is <strong>V06</strong>.
+  <strong>V05B–E (audit-corrected MVP)</strong> with proximal <code>exact_u_pair_4r</code>
+  closed-mechanism <strong>LOCAL_ONLY</strong> on a budget-limited traced arc; multi-component and other architectures
+  remain unresolved. Direct V06A parent construction may proceed without inheriting an L4 component certificate.
   Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>.
 </div>
 
@@ -105,7 +111,7 @@ The active scientific ladder is now source-chain first:
 <pre>spatial 4R + S_v (off-axis tool)
   → fixed-position fiber (V05B)
   → classified orientation-curve truth (V05C)
-  → exact RR→U aggregation + closed-mechanism EXACT_ON_COMPONENT for exact_u_pair_4r (V05D)
+  → exact RR→U aggregation EXACT_GLOBAL + closed-mechanism LOCAL_ONLY for exact_u_pair_4r (V05D)
   → near-aligned rejection + false-U diagnostic (V05E)
   → V06 architecture-scoped after proximal exact-U gate</pre>
 <p>
@@ -311,8 +317,8 @@ Canonical readout: <a href="v04c/sprint_04c_virtual_u_equivalence.html">v04c/spr
     <td>V05C</td>
   </tr>
   <tr>
-    <td>Exact proximal RR→U axis aggregation is EXACT_GLOBAL as regrouping; closed-mechanism equivalence is EXACT_ON_COMPONENT for proximal exact_u_pair_4r after an independent reduced solve.</td>
-    <td>source-chain certificate / CLOSED_ON_COMPONENT</td>
+    <td>Exact proximal RR→U axis aggregation is EXACT_GLOBAL as regrouping; closed-mechanism equivalence is LOCAL_ONLY for proximal exact_u_pair_4r on a budget-limited traced arc.</td>
+    <td>source-chain certificate / LOCAL_ONLY</td>
     <td>V05D</td>
   </tr>
   <tr>
@@ -348,16 +354,16 @@ Canonical readout:
 </p>
 
 <h2 id="active">Active kinematic decomposition — V05B–E</h2>
-<p class="status pass">AUDIT-CORRECTED MVP — V05 gate CLOSED_ON_COMPONENT (exact_u_pair_4r)</p>
+<p class="status pass">AUDIT-CORRECTED MVP — V05 independent match LOCAL_ONLY (exact_u_pair_4r traced arc)</p>
 <p>
 Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>
 · corrections: <a href="../../docs/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
 </p>
 <pre>V05A corpus (off-axis + terminal-roll control) → V05B fixed-position fiber (audit-corrected MVP)
 V05C orientation-curve classification (audit-corrected MVP)
-V05D exact-axis EXACT_GLOBAL / closed-mechanism EXACT_ON_COMPONENT (exact_u_pair_4r)
+V05D exact-axis EXACT_GLOBAL / closed-mechanism LOCAL_ONLY (exact_u_pair_4r traced arc)
 V05E near-aligned rejection (audit-corrected MVP)
-V05 overall CLOSED_ON_COMPONENT · other architectures UNRESOLVED · V06 architecture-scoped
+V05 overall LOCAL_ONLY · other architectures UNRESOLVED · V06A parent construction not blocked by L4
 V10+ deferred atlas</pre>
 <ul>
   <li>V05B:
@@ -490,7 +496,9 @@ def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE)
 <h1>Kinematic Decomposition</h1>
 <p class="meta">
   <strong>Active source-chain program hub (V05B–E)</strong><br>
-  Artifact root: <code>results/kinematic_decomposition/</code> · Status date: {status_date}
+  Artifact root: <code>results/kinematic_decomposition/</code> · Status date: {status_date}<br>
+  <a href="../index.html">Project index (so far)</a> ·
+  <a href="../decomposition_ladder/index.html">L3–L7 ladder readout</a>
 </p>
 
 <div class="note">
@@ -498,11 +506,11 @@ def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE)
   Exports are <strong>not</strong> coverage certificates for <code>SO(3)</code> or <code>S²</code>.
   Explorer <code>spatial4bar_explorer/v05a</code> remains <code>mechanism_explorer_only</code>
   and is <strong>not</strong> this ladder.
-  <strong>V05 scientific gate: CLOSED_ON_COMPONENT</strong> for proximal
-  <code>exact_u_pair_4r</code> after an independently instantiated and continued
-  reduced closed mechanism. Exact axis aggregation alone is still not
-  closed-mechanism equivalence; multi-component <code>EXACT_GLOBAL</code> and other
-  architectures remain unresolved.
+  <strong>V05 scientific gate: LOCAL_ONLY</strong> for proximal
+  <code>exact_u_pair_4r</code> on a budget-limited independent traced arc.
+  Exact axis aggregation remains <code>EXACT_GLOBAL</code> and is still not
+  closed-mechanism equivalence; complete component correspondence,
+  multi-component <code>EXACT_GLOBAL</code>, and other architectures remain unresolved.
 </div>
 
 <h2>Thesis</h2>
@@ -571,12 +579,195 @@ PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root resu
 
 <h2>Next</h2>
 <p><strong>V06</strong> — spatial 5R fixed-position parent may proceed as architecture-scoped
-scaffold/claim work inheriting the proximal exact-U <code>EXACT_ON_COMPONENT</code> gate.
-Multi-component <code>EXACT_GLOBAL</code> remains unverified.</p>
+scaffold/claim work. Direct V06A source-parent construction does not inherit an L4
+<code>EXACT_ON_COMPONENT</code> certificate (current L4 closed-mechanism is <code>LOCAL_ONLY</code>).
+Multi-component <code>EXACT_GLOBAL</code> remains unverified. L5/L6 ladder scaffolds exist under
+<a href="../decomposition_ladder/index.html">decomposition_ladder</a>; they are interface
+records only, not V06A/V07A science completion.</p>
 
 <p class="meta" style="margin-top:2rem;">
-  Project dashboard (explorer + ladder):
+  Project index (so far):
+  <a href="../index.html">../index.html</a> ·
+  Explorer dashboard:
   <a href="../spatial4bar_explorer/index.html">../spatial4bar_explorer/index.html</a>
+</p>
+
+</body>
+</html>
+"""
+
+
+def render_project_index_html(*, status_date: str = STATUS_DATE) -> str:
+    """Return the root project-so-far printout joining V05-V09 and L3-L7 status."""
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Back to Grashof — project index printout (so far)</title>
+<style>
+{_SHARED_CSS}
+</style>
+</head>
+<body>
+
+<h1>Back to Grashof — project index printout (so far)</h1>
+<p class="meta">
+  <strong>Active scientific sequence:</strong>
+  <code>docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code><br>
+  Optional L3–L7 ladder scaffold is subordinate to that program.
+  Status date: {status_date}
+</p>
+
+<div class="note">
+  This page joins the three evidence hubs. It does not replace them and does not
+  fabricate V06–V09 science artifacts. Proximal <code>exact_u_pair_4r</code>
+  closed-mechanism is <code>LOCAL_ONLY</code> on a traced arc (ADR-034); multi-component
+  <code>EXACT_GLOBAL</code> and other architectures remain unresolved.
+</div>
+
+<h2>Contents</h2>
+<ul class="toc">
+  <li><a href="#v05v09">Active V05–V09 status</a></li>
+  <li><a href="#l3l7">Optional L3–L7 scaffold</a></li>
+  <li><a href="#crosswalk">L↔V crosswalk</a></li>
+  <li><a href="#hubs">Evidence hubs</a></li>
+  <li><a href="#reproduce">Reproduce</a></li>
+</ul>
+
+<h2 id="v05v09">Active V05–V09 status</h2>
+<table>
+  <tr>
+    <th>Sprint</th><th>Source</th><th>Target</th><th>Status</th><th>Primary artifacts</th>
+  </tr>
+  <tr>
+    <td><strong>V05</strong></td>
+    <td>spatial 4R + S_v</td>
+    <td>orientation curve / 1D fiber</td>
+    <td><code>LOCAL_ONLY</code> (proximal <code>exact_u_pair_4r</code> traced-arc match); other architectures unresolved</td>
+    <td>
+      <a href="kinematic_decomposition/index.html">KD hub</a> ·
+      <a href="kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html">V05B</a> ·
+      <a href="kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html">V05C</a> ·
+      <a href="kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">V05D</a> ·
+      <a href="kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html">V05E</a>
+    </td>
+  </tr>
+  <tr>
+    <td><strong>V06</strong></td>
+    <td>spatial 5R + S_v</td>
+    <td>S² pointing parent</td>
+    <td>Next science — V06A <code>FixedPositionParentResult</code> not done; L5 scaffold only</td>
+    <td><a href="decomposition_ladder/index.html">L5 scaffold</a> (interface, not parent charts)</td>
+  </tr>
+  <tr>
+    <td><strong>V07</strong></td>
+    <td>spatial 6R + S_v</td>
+    <td>SO(3) orientation reference</td>
+    <td>Not started — Gate K3 freeze absent; L6 scaffold only</td>
+    <td><a href="decomposition_ladder/index.html">L6 scaffold</a> (seed audit, not frozen SO(3))</td>
+  </tr>
+  <tr>
+    <td><strong>V08</strong></td>
+    <td>aligned 6R quotient</td>
+    <td>pointing + roll vs V07 truth</td>
+    <td>Blocked on V07 reference (Gate K4)</td>
+    <td>—</td>
+  </tr>
+  <tr>
+    <td><strong>V09</strong></td>
+    <td>reconstruction</td>
+    <td>coverage from accepted children</td>
+    <td>Blocked on prior gates (Gate K5)</td>
+    <td>—</td>
+  </tr>
+</table>
+
+<h2 id="l3l7">Optional L3–L7 scaffold</h2>
+<p>
+Process labels (<code>SCAFFOLD</code>, <code>BLOCKED</code>) are separate from certificate
+statuses (<code>EXACT_GLOBAL</code>, <code>EXACT_ON_COMPONENT</code>, <code>LOCAL_ONLY</code>, <code>UNRESOLVED</code>).
+</p>
+<table>
+  <tr>
+    <th>Rung</th><th>Maps to</th><th>Process</th><th>Certificate / evidence</th><th>Notes</th>
+  </tr>
+  <tr>
+    <td><strong>L3</strong></td>
+    <td>planar calibration</td>
+    <td><code>SCAFFOLD</code></td>
+    <td>Map <code>EXACT_GLOBAL</code> at each radius</td>
+    <td>Trusted analytical planar 3R→4R retrofit</td>
+  </tr>
+  <tr>
+    <td><strong>L4</strong></td>
+    <td>V05</td>
+    <td><code>SCAFFOLD</code></td>
+    <td><code>LOCAL_ONLY</code> traced-arc match for proximal exact_u_pair_4r</td>
+    <td>Wraps audited V05D closed-mechanism evidence</td>
+  </tr>
+  <tr>
+    <td><strong>L5</strong></td>
+    <td>V06</td>
+    <td><code>SCAFFOLD</code></td>
+    <td>All certs <code>UNRESOLVED</code>; nullity-2 seed audit</td>
+    <td>Not a 2D parent; not pointing reconstruction (ADR-032)</td>
+  </tr>
+  <tr>
+    <td><strong>L6</strong></td>
+    <td>V07-first</td>
+    <td><code>SCAFFOLD</code></td>
+    <td>All certs <code>UNRESOLVED</code>; nullity-3 seed audit</td>
+    <td>Not a frozen SO(3) reference; not V08 (ADR-033)</td>
+  </tr>
+  <tr>
+    <td><strong>L7</strong></td>
+    <td>deferred</td>
+    <td><code>BLOCKED</code></td>
+    <td><code>UNRESOLVED</code></td>
+    <td>Outside active V05–V09 until multi-component certificates exist</td>
+  </tr>
+</table>
+<p>
+Full ladder readout:
+<a href="decomposition_ladder/index.html">results/decomposition_ladder/index.html</a>
+</p>
+
+<h2 id="crosswalk">L↔V crosswalk</h2>
+<table>
+  <tr><th>Ladder rung</th><th>Active sprint</th><th>Relationship</th></tr>
+  <tr><td>L3</td><td>—</td><td>Planar calibration interface (trusted exact map)</td></tr>
+  <tr><td>L4</td><td>V05</td><td>Wraps V05 closed-mechanism evidence into shared records</td></tr>
+  <tr><td>L5</td><td>V06</td><td>Scaffold interface; V06A parent charts remain next science</td></tr>
+  <tr><td>L6</td><td>V07 then V08</td><td>Scaffold interface; V07A SO(3) freeze remains next science</td></tr>
+  <tr><td>L7</td><td>deferred</td><td>Blocked pending nested-slice / multi-component work</td></tr>
+</table>
+
+<h2 id="hubs">Evidence hubs</h2>
+<ul>
+  <li><a href="spatial4bar_explorer/index.html">Explorer printout</a> — V00–V05A laboratory + cumulative history</li>
+  <li><a href="kinematic_decomposition/index.html">Kinematic decomposition hub</a> — active V05B–E source-chain evidence</li>
+  <li><a href="decomposition_ladder/index.html">Decomposition ladder readout</a> — L3–L7 scaffold interfaces</li>
+</ul>
+<p>
+Key docs:
+<a href="../docs/ROADMAP.md">ROADMAP.md</a> ·
+<a href="../docs/DECISIONS.md">DECISIONS.md</a> (ADR-028–034) ·
+<a href="../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">V05–V09 program</a> ·
+<a href="../docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md">L3–L7 program</a> ·
+<a href="../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+</p>
+
+<h2 id="reproduce">Reproduce</h2>
+<pre>PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results
+PYTHONPATH=src python -m grashof_workspace.decomposition_ladder --outdir results/decomposition_ladder --no-animation</pre>
+<p>
+The ladder readout is generated separately; regenerate both commands after scaffold or
+V05 evidence changes.
+</p>
+
+<p class="meta" style="margin-top:2rem;">
+  Regenerate this page with
+  <code>python -m grashof_workspace.project_dashboard --results-root results</code>.
 </p>
 
 </body>
@@ -588,22 +779,24 @@ def build_project_dashboard(
     results_root: Path,
     *,
     status_date: str = STATUS_DATE,
-) -> tuple[Path, Path]:
-    """Write explorer and kinematic-decomposition dashboard HTML files."""
+) -> tuple[Path, Path, Path]:
+    """Write root, explorer, and kinematic-decomposition dashboard HTML files."""
     results_root = Path(results_root)
     explorer_dir = results_root / "spatial4bar_explorer"
     kd_dir = results_root / "kinematic_decomposition"
     explorer_dir.mkdir(parents=True, exist_ok=True)
     kd_dir.mkdir(parents=True, exist_ok=True)
 
+    root_path = results_root / "index.html"
     explorer_path = explorer_dir / "index.html"
     kd_path = kd_dir / "index.html"
+    root_path.write_text(render_project_index_html(status_date=status_date), encoding="utf-8")
     explorer_path.write_text(render_explorer_index_html(status_date=status_date), encoding="utf-8")
     kd_path.write_text(
         render_kinematic_decomposition_index_html(status_date=status_date),
         encoding="utf-8",
     )
-    return explorer_path, kd_path
+    return root_path, explorer_path, kd_path
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -616,10 +809,11 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--status-date", default=STATUS_DATE)
     args = parser.parse_args(argv)
-    explorer_path, kd_path = build_project_dashboard(
+    root_path, explorer_path, kd_path = build_project_dashboard(
         args.results_root,
         status_date=args.status_date,
     )
+    print(f"Wrote {root_path}")
     print(f"Wrote {explorer_path}")
     print(f"Wrote {kd_path}")
     return 0

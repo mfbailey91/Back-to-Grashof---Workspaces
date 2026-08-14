@@ -75,7 +75,7 @@ def build_spatial_l5_scaffold_bundle(
         task_point=tuple(float(v) for v in audit.p_star),
         dimension=2,
         target_space="S^2",
-        component_ids=(fiber_id,),
+        component_ids=(),
         process_status=ProcessStatus.SCAFFOLD,
         notes=(
             "Scaffold placeholder keyed to a fixed-position seed p*.",
@@ -87,7 +87,7 @@ def build_spatial_l5_scaffold_bundle(
         rung=LadderRung.L5,
         fiber_id=fiber_id,
         parent_id=parent_id,
-        component_id=fiber_id,
+        component_id="UNRESOLVED_PARENT_COMPONENT",
         slice_values=(),
         branch_status="scaffold_placeholder",
         returned=False,
@@ -172,7 +172,10 @@ def build_spatial_l5_scaffold_bundle(
                 "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md."
             ),
             "Next scientific step: V06A FixedPositionParentResult (independent 2D parent).",
-            "Architecture-scoped after proximal exact_u_pair_4r EXACT_ON_COMPONENT gate.",
+            (
+                "Direct V06A parent construction does not depend on L4 component acceptance; "
+                "decomposition-dependent child claims remain blocked."
+            ),
         ),
     )
 

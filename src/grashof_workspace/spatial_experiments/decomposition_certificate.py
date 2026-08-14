@@ -290,8 +290,10 @@ def issue_closed_mechanism_certificate(
     """Promote closed-mechanism status from an independent comparison result.
 
     Refuses promotion when comparison is not an accepted independent closed-loop
-    solve. Identity-on-same-chain mode can never promote. MVP issues only
-    ``EXACT_ON_COMPONENT`` (never multi-component ``EXACT_GLOBAL``).
+    solve. Identity-on-same-chain mode can never promote. A numerically accepted
+    traced arc is ``LOCAL_ONLY`` until the comparison explicitly establishes
+    complete source/child component correspondence. Multi-component
+    ``EXACT_GLOBAL`` remains outside this MVP.
     """
 
     if aggregation_certificate.aggregated is None:
@@ -361,10 +363,22 @@ def issue_closed_mechanism_certificate(
         )
 
     scope = comparison.scope
-    reason = (
-        f"Independent S_v-U_phys-R-R closed mechanism matches the source component "
-        f"over scope={scope}. Multi-component EXACT_GLOBAL remains unverified."
-    )
+    if comparison.component_correspondence_complete:
+        closed_status = "EXACT_ON_COMPONENT"
+        component_correspondence = f"exact_on_component:{scope}"
+        reason = (
+            f"Independent S_v-U_phys-R-R closed mechanism matches the complete "
+            f"source component over scope={scope}. Multi-component EXACT_GLOBAL "
+            "remains unverified."
+        )
+    else:
+        closed_status = "LOCAL_ONLY"
+        component_correspondence = f"local_on_traced_arc:{scope}"
+        reason = (
+            f"Independent S_v-U_phys-R-R closed mechanism matches the numerically "
+            f"traced arc over scope={scope}, but complete bidirectional source/child "
+            "component correspondence has not been established."
+        )
     return DecompositionCertificate(
         source_chain_id=aggregation_certificate.source_chain_id,
         fixed_position_problem_id=aggregation_certificate.fixed_position_problem_id,
@@ -393,11 +407,11 @@ def issue_closed_mechanism_certificate(
         trajectory_position_error_m=comparison.max_position_error_m,
         trajectory_pointing_error=comparison.max_pointing_error,
         trajectory_joint_map_error_rad=comparison.max_joint_map_error_rad,
-        component_correspondence=f"exact_on_component:{scope}",
+        component_correspondence=component_correspondence,
         joint_limit_correspondence=aggregation_certificate.joint_limit_correspondence,
         axis_aggregation_status="EXACT_GLOBAL",
-        closed_mechanism_status="EXACT_ON_COMPONENT",
-        status="EXACT_ON_COMPONENT",
+        closed_mechanism_status=closed_status,
+        status=closed_status,
         failure_or_scope_reason=reason,
         candidates=aggregation_certificate.candidates,
         aggregated=aggregation_certificate.aggregated,

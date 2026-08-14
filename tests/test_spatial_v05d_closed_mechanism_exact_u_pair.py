@@ -47,7 +47,7 @@ def test_aggregation_only_path_remains_unresolved_for_closed_mechanism() -> None
     assert not certificate.evidence["independent_reduced_solve_present"]
 
 
-def test_independent_solve_promotes_exact_on_component() -> None:
+def test_independent_solve_records_local_match_until_component_complete() -> None:
     entry = build_exact_u_pair_4r()
     aggregation = issue_axis_aggregation_certificate(entry.model, entry.regular_q)
     candidate = next(c for c in detect_exact_u_pairs(entry.model) if c.exact_u_candidate)
@@ -57,15 +57,16 @@ def test_independent_solve_promotes_exact_on_component() -> None:
     assert comparison.accepted
     assert comparison.independent_reduced_solve_present
     assert comparison.comparison_mode == "independent_closed_loop"
+    assert not comparison.component_correspondence_complete
     assert comparison.max_position_error_m <= 1e-9
     assert comparison.seed_tangent_misalignment <= 1e-6
 
     certificate = issue_closed_mechanism_certificate(aggregation, comparison)
     assert certificate.axis_aggregation_status == "EXACT_GLOBAL"
-    assert certificate.closed_mechanism_status == "EXACT_ON_COMPONENT"
-    assert certificate.status == "EXACT_ON_COMPONENT"
+    assert certificate.closed_mechanism_status == "LOCAL_ONLY"
+    assert certificate.status == "LOCAL_ONLY"
     assert certificate.evidence["independent_reduced_solve_present"]
-    assert certificate.component_correspondence.startswith("exact_on_component:")
+    assert certificate.component_correspondence.startswith("local_on_traced_arc:")
     assert certificate.trajectory_position_error_m is not None
     assert certificate.tangent_subspace_error is not None
 
@@ -94,11 +95,11 @@ def test_generic_corpus_does_not_promote_closed_mechanism() -> None:
 def test_v05d_readout_reports_scoped_closed_gate(tmp_path) -> None:
     certificates = build_v05d_readout(tmp_path)
     by_id = {certificate.source_chain_id: certificate for certificate in certificates}
-    assert by_id["exact_u_pair_4r"].closed_mechanism_status == "EXACT_ON_COMPONENT"
-    assert by_id["exact_u_pair_4r"].status == "EXACT_ON_COMPONENT"
+    assert by_id["exact_u_pair_4r"].closed_mechanism_status == "LOCAL_ONLY"
+    assert by_id["exact_u_pair_4r"].status == "LOCAL_ONLY"
     assert by_id["generic_4r"].status == "REJECTED"
     html = (tmp_path / "sprint_v05d_axis_aggregation.html").read_text(encoding="utf-8")
-    assert "Scoped gate closed" in html or "EXACT_ON_COMPONENT" in html
+    assert "Independent traced-arc match" in html or "LOCAL_ONLY" in html
     payload = (tmp_path / "data" / "v05d_axis_aggregation.json").read_text(encoding="utf-8")
-    assert "CLOSED_ON_COMPONENT_EXACT_U_PAIR" in payload
+    assert "LOCAL_MATCH_TRACED_ARC_EXACT_U_PAIR" in payload
     assert (tmp_path / "figures" / "v05d_exact_u_pair_4r_source_reduced_overlay.png").exists()

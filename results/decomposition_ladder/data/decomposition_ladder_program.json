@@ -34,7 +34,7 @@
       "active_question": "Can a complete source component and an independently instantiated one-DOF closed mechanism be shown to have the same orientation map?",
       "process_status": "SCAFFOLD",
       "notes": [
-        "Maps to active V05. Proximal exact_u_pair_4r closed-mechanism is EXACT_ON_COMPONENT; multi-component EXACT_GLOBAL and other architectures remain unresolved.",
+        "Maps to active V05. Proximal exact_u_pair_4r has an independent LOCAL_ONLY traced-arc match; complete component correspondence remains unresolved.",
         "The generic orientation image is a curve in SO(3), not full spatial dexterity."
       ]
     },
@@ -52,7 +52,7 @@
       "active_question": "Can the complete two-dimensional pointing parent be reconstructed from a task-derived family of certified one-DOF fibers?",
       "process_status": "SCAFFOLD",
       "notes": [
-        "Maps to active V06. Architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+        "Maps to active V06. Direct 2D source-parent construction may proceed independently of L4 acceptance.",
         "Parent geometry/charts remain UNRESOLVED; letter families are candidate tests only.",
         "Not a 2D parent representation and not pointing-image reconstruction (V06A next)."
       ]
@@ -69,10 +69,11 @@
       "redundancy_slice_count": 0,
       "direct_leaf": false,
       "active_question": "After freezing a decomposition-free SO(3) reference (V07), can nested task slices and any V08 quotient reconstruct that independent truth?",
-      "process_status": "PLANNED",
+      "process_status": "SCAFFOLD",
       "notes": [
-        "V07-first: independent orientation reference before nested decomposition.",
-        "V08 aligned-roll quotient is a qualified special case after V07 truth exists."
+        "V07-first architecture-scoped scaffold; L4 closed-mechanism is currently LOCAL_ONLY.",
+        "SO(3) freeze / nested reconstruction still UNRESOLVED; V08 blocked until Gate K3.",
+        "Not a frozen SO(3) reference (V07A next)."
       ]
     },
     {
@@ -353,10 +354,10 @@
       "source_fiber_dimension": 1,
       "candidate_child_family": "architecture-dependent spatial four-bar",
       "process_status": "SCAFFOLD",
-      "certificate_status": "EXACT_ON_COMPONENT",
+      "certificate_status": "LOCAL_ONLY",
       "reconstruction_target": "Y1 \u2282 SO(3)",
       "notes": [
-        "Catalog status EXACT_ON_COMPONENT is scoped to proximal exact_u_pair_4r on the compared V05 component; not multi-component EXACT_GLOBAL.",
+        "Catalog status LOCAL_ONLY is scoped to the budget-limited traced arc of proximal exact_u_pair_4r; complete component correspondence is unverified.",
         "generic_4r, near-aligned, and non-proximal architectures remain unresolved or rejected for closed-mechanism equivalence."
       ]
     },
@@ -380,7 +381,7 @@
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "S^2 pointing image",
       "notes": [
-        "V06 architecture-scoped scaffold after proximal exact-U EXACT_ON_COMPONENT gate.",
+        "V06 direct-parent scaffold; no L4 component certificate is inherited.",
         "2D parent representation still required before reconstruction claims (Gate K2)."
       ]
     },
@@ -408,11 +409,12 @@
       ],
       "source_fiber_dimension": 1,
       "candidate_child_family": "architecture-dependent one-DOF leaf",
-      "process_status": "PLANNED",
+      "process_status": "SCAFFOLD",
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "SO(3) orientation image",
       "notes": [
-        "Requires frozen V07 decomposition-free SO(3) reference before reconstruction claims."
+        "V07 architecture-scoped scaffold; no L4 component certificate is inherited.",
+        "Requires frozen V07 decomposition-free SO(3) reference before reconstruction claims (Gate K3)."
       ]
     },
     {
@@ -1295,7 +1297,7 @@
           ],
           "expected_mobility": 1,
           "geometry_provenance": "source_derived",
-          "status": "EXACT_ON_COMPONENT",
+          "status": "LOCAL_ONLY",
           "notes": [
             "Semantic roles keep U_phys; explorer tool_a/tool_beta are not L4 task evidence.",
             "Solver chart is cyclic URRS for SpatialFourBarGeometry only.",
@@ -1310,16 +1312,16 @@
           "source_fiber_id": "exact_u_pair_4r_component0",
           "child_id": "exact_u_pair_4r_sv_uphys_rr",
           "axis_aggregation_status": "EXACT_GLOBAL",
-          "closed_mechanism_status": "EXACT_ON_COMPONENT",
-          "status": "EXACT_ON_COMPONENT",
+          "closed_mechanism_status": "LOCAL_ONLY",
+          "status": "LOCAL_ONLY",
           "component_scope": "open_budget_40",
           "coordinate_map": "independent URRS chart physical deltas \u2194 source joint angles (seed-assembled S_v-U_phys-R-R)",
           "reconstruction_map": "source joint angles \u2194 reduced physical deltas; S chart is internal",
           "closure_error": 6.182677544732746e-11,
           "tangent_error": 0.0,
-          "task_map_error": 0.009195729667881935,
-          "reason": "Independent S_v-U_phys-R-R closed mechanism matches the source component over scope=open_budget_40. Multi-component EXACT_GLOBAL remains unverified.",
-          "accepted_for_reconstruction": true
+          "task_map_error": 0.01864719347397013,
+          "reason": "Independent S_v-U_phys-R-R closed mechanism matches the numerically traced arc over scope=open_budget_40, but complete bidirectional source/child component correspondence has not been established.",
+          "accepted_for_reconstruction": false
         },
         "leaf_predicate": {
           "child_id": "exact_u_pair_4r_sv_uphys_rr",
@@ -1337,19 +1339,20 @@
           "rung": "L4",
           "parent_id": "exact_u_pair_4r_fixed_position",
           "target_space": "Y1 \u2282 SO(3)",
-          "accepted_fiber_ids": [
+          "accepted_fiber_ids": [],
+          "unresolved_fiber_ids": [
             "exact_u_pair_4r_component0"
           ],
-          "unresolved_fiber_ids": [],
           "direct_coverage_status": "orientation_curve:NONTRIVIAL_POINTING_CURVE",
-          "reconstructed_coverage_status": "matched_on_component",
+          "reconstructed_coverage_status": "matched_on_traced_arc",
           "comparison_error": 0.01864719347397013,
           "process_status": "SCAFFOLD",
-          "certificate_status": "EXACT_ON_COMPONENT",
+          "certificate_status": "LOCAL_ONLY",
           "notes": [
-            "Reconstruction is the claimed Y1 orientation/pointing curve on one component.",
+            "Reconstruction target is the full Y1 orientation curve in SO(3).",
+            "Full-orientation nearest-neighbor tolerance=0.05 rad.",
             "Not dexterous_workspace / full SO(3) coverage.",
-            "Accepted from existing V05 independent closed-mechanism certificate."
+            "Numerical orientation match is local to the traced arc; component reconstruction is not accepted."
           ]
         },
         "v05_certificate": {
@@ -1406,12 +1409,12 @@
           "trajectory_position_error_m": 9.11865700686194e-12,
           "trajectory_pointing_error": 0.009195729667881935,
           "trajectory_joint_map_error_rad": null,
-          "component_correspondence": "exact_on_component:open_budget_40",
+          "component_correspondence": "local_on_traced_arc:open_budget_40",
           "joint_limit_correspondence": "not_modeled; exact regrouping assumes original coordinate order and identical limits",
           "axis_aggregation_status": "EXACT_GLOBAL",
-          "closed_mechanism_status": "EXACT_ON_COMPONENT",
-          "status": "EXACT_ON_COMPONENT",
-          "failure_or_scope_reason": "Independent S_v-U_phys-R-R closed mechanism matches the source component over scope=open_budget_40. Multi-component EXACT_GLOBAL remains unverified.",
+          "closed_mechanism_status": "LOCAL_ONLY",
+          "status": "LOCAL_ONLY",
+          "failure_or_scope_reason": "Independent S_v-U_phys-R-R closed mechanism matches the numerically traced arc over scope=open_budget_40, but complete bidirectional source/child component correspondence has not been established.",
           "candidates": [
             {
               "pair_index": 0,
@@ -1739,6 +1742,7 @@
               "scope": "open_budget_40",
               "source_branch_status": "budget_limited",
               "source_returned": false,
+              "component_correspondence_complete": false,
               "reduced_step_count": 41,
               "source_sample_count": 81,
               "max_closure_residual": 6.182677544732746e-11,
@@ -1769,6 +1773,7 @@
           "scope": "open_budget_40",
           "source_branch_status": "budget_limited",
           "source_returned": false,
+          "component_correspondence_complete": false,
           "reduced_step_count": 41,
           "source_sample_count": 81,
           "max_closure_residual": 6.182677544732746e-11,
@@ -1842,7 +1847,7 @@
         "max_orientation_error_rad": 0.01864719347397013,
         "notes": [
           "Existing V05 independent S_v-U_phys-R-R solve wrapped into ladder records.",
-          "Scoped EXACT_ON_COMPONENT only; multi-component EXACT_GLOBAL unverified.",
+          "LOCAL_ONLY on the budget-limited traced arc; complete component correspondence unverified.",
           "Scientific source: docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md / V05D."
         ]
       },
@@ -1915,9 +1920,10 @@
           "process_status": "SCAFFOLD",
           "certificate_status": "UNRESOLVED",
           "notes": [
-            "Reconstruction is the claimed Y1 orientation/pointing curve on one component.",
+            "Reconstruction target is the full Y1 orientation curve in SO(3).",
+            "Full-orientation nearest-neighbor tolerance=0.05 rad.",
             "Not dexterous_workspace / full SO(3) coverage.",
-            "Closed-mechanism not accepted; reconstruction remains unresolved."
+            "Closed-mechanism or orientation metric not accepted; reconstruction remains unresolved."
           ]
         },
         "v05_certificate": {
@@ -2282,9 +2288,9 @@
       {
         "architecture_id": "exact_u_pair_4r",
         "axis_aggregation_status": "EXACT_GLOBAL",
-        "closed_mechanism_status": "EXACT_ON_COMPONENT",
+        "closed_mechanism_status": "LOCAL_ONLY",
         "orientation_curve_type": "NONTRIVIAL_POINTING_CURVE",
-        "reconstruction_status": "EXACT_ON_COMPONENT",
+        "reconstruction_status": "LOCAL_ONLY",
         "max_orientation_error_rad": 0.01864719347397013,
         "independent_reduced_solve_present": true
       },
@@ -2315,9 +2321,7 @@
         ],
         "dimension": 2,
         "target_space": "S^2",
-        "component_ids": [
-          "generic_5r_fiber_placeholder"
-        ],
+        "component_ids": [],
         "process_status": "SCAFFOLD",
         "notes": [
           "Scaffold placeholder keyed to a fixed-position seed p*.",
@@ -2329,7 +2333,7 @@
         "rung": "L5",
         "fiber_id": "generic_5r_fiber_placeholder",
         "parent_id": "generic_5r_pointing_parent_scaffold",
-        "component_id": "generic_5r_fiber_placeholder",
+        "component_id": "UNRESOLVED_PARENT_COMPONENT",
         "slice_values": {},
         "dimension": 1,
         "branch_status": "scaffold_placeholder",
@@ -2639,7 +2643,7 @@
       "notes": [
         "L5 scaffold interface under V06; scientific source remains docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md.",
         "Next scientific step: V06A FixedPositionParentResult (independent 2D parent).",
-        "Architecture-scoped after proximal exact_u_pair_4r EXACT_ON_COMPONENT gate."
+        "Direct V06A parent construction does not depend on L4 component acceptance; decomposition-dependent child claims remain blocked."
       ]
     },
     "summary": {
@@ -2660,6 +2664,112 @@
       "reconstruction_status": "UNRESOLVED",
       "accepted_fiber_count": 0,
       "process_status": "SCAFFOLD"
+    }
+  },
+  "l6_scaffold": {
+    "note": "L6 scaffold only: seed nullity-3 audit for generic spatial 6R. Not a frozen SO(3) reference, not nested-slice reconstruction, and not V08. V07A remains the next scientific step.",
+    "v07_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v07",
+    "bundle": {
+      "architecture_id": "generic_6r",
+      "parent": {
+        "rung": "L6",
+        "parent_id": "generic_6r_orientation_parent_scaffold",
+        "source_chain_id": "generic_6r",
+        "task_point": [
+          0.7102260150768773,
+          0.48335309962999995,
+          0.7152107930396603
+        ],
+        "dimension": 3,
+        "target_space": "SO(3)",
+        "component_ids": [
+          "generic_6r_fiber_placeholder"
+        ],
+        "process_status": "SCAFFOLD",
+        "notes": [
+          "Scaffold placeholder keyed to a fixed-position seed p*.",
+          "Orientation parent/charts are UNRESOLVED \u2014 not a frozen SO(3) reference.",
+          "V07A must freeze a decomposition-free SO(3) reference before nested slices / V08."
+        ]
+      },
+      "fiber_placeholder": {
+        "rung": "L6",
+        "fiber_id": "generic_6r_fiber_placeholder",
+        "parent_id": "generic_6r_orientation_parent_scaffold",
+        "component_id": "generic_6r_fiber_placeholder",
+        "slice_values": {},
+        "dimension": 1,
+        "branch_status": "scaffold_placeholder",
+        "returned": false,
+        "source_provenance": "scaffold_only",
+        "sample_count": 0,
+        "task_image_status": "UNRESOLVED_so3_reference_absent",
+        "notes": [
+          "No nested orientation chart leaves (h1,h2) have been continued.",
+          "Placeholder exists so shared L6 interfaces are exercisable without Gate K3 violations."
+        ]
+      },
+      "children": [],
+      "certificates": [],
+      "reconstruction": {
+        "rung": "L6",
+        "parent_id": "generic_6r_orientation_parent_scaffold",
+        "target_space": "SO(3)",
+        "accepted_fiber_ids": [],
+        "unresolved_fiber_ids": [
+          "generic_6r_fiber_placeholder"
+        ],
+        "direct_coverage_status": "UNRESOLVED_no_frozen_so3_reference",
+        "reconstructed_coverage_status": "UNRESOLVED_no_accepted_children",
+        "comparison_error": null,
+        "process_status": "SCAFFOLD",
+        "certificate_status": "UNRESOLVED",
+        "notes": [
+          "Gate K3 / ADR-013: freeze a decomposition-free SO(3) reference before reconstruction.",
+          "ADR-024: a collection of 1D fibers is not the complete M=3 parent.",
+          "ADR-026: descriptor discovery remains blocked until parent image reconstruction succeeds.",
+          "V08 terminal-roll quotient is blocked until the V07 reference exists.",
+          "Reconstruction uses only accepted source-derived children \u2014 none exist yet."
+        ]
+      },
+      "seed_audit": {
+        "architecture_id": "generic_6r",
+        "status": "PASS",
+        "regular": true,
+        "rank_jp": 3,
+        "nullity_jp": 3,
+        "p_star": [
+          0.7102260150768773,
+          0.48335309962999995,
+          0.7152107930396603
+        ],
+        "p_residual_m": 0.0,
+        "motion_signature": "NONTRIVIAL_POINTING_CURVE",
+        "finite_difference_verified": true,
+        "notes": [
+          "Seed audit only; does not represent a frozen SO(3) orientation reference.",
+          "Gate K3 / ADR-013: freeze a decomposition-free SO(3) reference before V08/V09.",
+          "ADR-024: do not treat 1D traces as the M=3 parent."
+        ]
+      },
+      "notes": [
+        "L6 scaffold interface under V07-first mapping; scientific source remains docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md.",
+        "Next scientific step: V07A FixedPositionParentResult / frozen SO(3) reference.",
+        "Architecture-scoped after proximal exact_u_pair_4r LOCAL_ONLY traced-arc match.",
+        "Does not reuse L5 PARENT_CHILD_FAMILIES as an L6 letter corpus."
+      ]
+    },
+    "summary": {
+      "architecture_id": "generic_6r",
+      "seed_rank_jp": 3,
+      "seed_nullity_jp": 3,
+      "seed_status": "PASS",
+      "child_count": 0,
+      "certificate_count": 0,
+      "reconstruction_status": "UNRESOLVED",
+      "accepted_fiber_count": 0,
+      "process_status": "SCAFFOLD",
+      "target_space": "SO(3)"
     }
   }
 }
