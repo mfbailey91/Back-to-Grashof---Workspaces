@@ -19,7 +19,6 @@ from scipy.stats.qmc import Sobol
 from .fixed_position import (
     JACOBIAN_FD_ERROR_TOL,
     JACOBIAN_FD_STEP_RAD,
-    POSITION_RESIDUAL_TOL_M,
 )
 from .implicit_manifold import (
     ChartOverlapRecord,
@@ -129,7 +128,7 @@ class ParentAtlasResult:
     notes: tuple[str, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe({
+        return _json_object({
             "architecture_id": self.architecture_id,
             "p_star": list(self.p_star),
             "representation_status": self.representation_status.value,
@@ -159,6 +158,13 @@ def _json_safe(obj: Any) -> Any:
     if isinstance(obj, float) and not isfinite(obj):
         return None
     return obj
+
+
+def _json_object(obj: dict[str, Any]) -> dict[str, Any]:
+    payload = _json_safe(obj)
+    if not isinstance(payload, dict):
+        raise TypeError("expected a JSON object")
+    return payload
 
 
 def wrap_periodic(x: Array, periodic: tuple[bool, ...]) -> Array:
@@ -324,7 +330,8 @@ def project_to_parent(
 def _sobol_bank(n: int, dim: int, *, seed: int) -> Array:
     engine = Sobol(d=dim, scramble=False, seed=seed)
     u = engine.random(n)
-    return (u * (2.0 * pi)) - pi
+    scaled = (u * (2.0 * pi)) - pi
+    return np.asarray(scaled, dtype=float)
 
 
 def _grow_charts(
@@ -367,10 +374,10 @@ def _grow_charts(
                     )
                 )
             break
-        centers = [np.asarray(c.center, dtype=float) for c in charts]
+        centers = tuple(np.asarray(c.center, dtype=float) for c in charts)
 
-        def _min_d(p: Array) -> float:
-            return min(ambient_distance(p, c, problem.periodic_coordinates) for c in centers)
+        def _min_d(p: Array, _centers: tuple[Array, ...] = centers) -> float:
+            return min(ambient_distance(p, c, problem.periodic_coordinates) for c in _centers)
 
         frontier.sort(key=_min_d)
         candidate = frontier.pop()
@@ -415,10 +422,10 @@ def _grow_charts(
         charts.append(chart)
         radius_now = _adaptive_radius(chart, radius)
         frontier.extend(_ring_vertices(chart))
-        centers = [np.asarray(c.center, dtype=float) for c in charts]
+        centers = tuple(np.asarray(c.center, dtype=float) for c in charts)
         kept: list[Array] = []
         for p in frontier:
-            if _min_d(p) <= dup_tol:
+            if _min_d(p, centers) <= dup_tol:
                 continue
             kept.append(p)
         frontier = kept

@@ -13,15 +13,22 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .v06_corpus import build_exact_two_u_5r, build_generic_5r, build_near_two_u_5r
-from .virtual_u_child import evaluate_v06d2_architecture
+from .serial_chain import SerialRevoluteChain
+from .v06_corpus import (
+    Spatial5RCorpusEntry,
+    build_exact_two_u_5r,
+    build_generic_5r,
+    build_near_two_u_5r,
+)
+from .virtual_u_child import V06D2ArchitectureResult, evaluate_v06d2_architecture
 
 
-def _arm_polyline(chain, q: tuple[float, ...]) -> np.ndarray:
+def _arm_polyline(chain: SerialRevoluteChain, q: tuple[float, ...]) -> np.ndarray:
     axes = chain.current_axes(q)
     state = chain.evaluate(q)
     pts = [np.asarray(ax.r, dtype=float) for ax in axes]
@@ -29,7 +36,7 @@ def _arm_polyline(chain, q: tuple[float, ...]) -> np.ndarray:
     return np.vstack(pts)
 
 
-def _plot(entry, result, outpath: Path) -> None:
+def _plot(entry: Spatial5RCorpusEntry, result: V06D2ArchitectureResult, outpath: Path) -> None:
     fig = plt.figure(figsize=(11.0, 5.2))
     ax_arm = fig.add_subplot(1, 2, 1, projection="3d")
     ax_s2 = fig.add_subplot(1, 2, 2, projection="3d")
@@ -60,7 +67,7 @@ def _plot(entry, result, outpath: Path) -> None:
     plt.close(fig)
 
 
-def render_v06d2_html(payload: dict, *, figure_rel: str) -> str:
+def render_v06d2_html(payload: dict[str, Any], *, figure_rel: str) -> str:
     exact = payload["exact_two_u_5r"]["certificate"]
     near = payload["near_two_u_5r"]["certificate"]
     generic = payload["generic_5r"]["certificate"]

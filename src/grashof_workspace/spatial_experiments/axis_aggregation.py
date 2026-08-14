@@ -321,6 +321,7 @@ def build_suur_multi_aggregation(
             np.linalg.norm(np.asarray(q0, dtype=float) - np.asarray(q_emb, dtype=float))
         ),
     }
+    notes: tuple[str, ...]
     if exact and distinct and not overlapping:
         status = "EXACT_GLOBAL"
         notes = (

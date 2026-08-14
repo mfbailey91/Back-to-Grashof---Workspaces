@@ -16,8 +16,8 @@ from grashof_workspace.spatial_experiments.parent_reconstruction import (
     build_parent_reconstruction,
 )
 from grashof_workspace.spatial_experiments.parent_task_images import (
-    CoverageLabel,
     DEFAULT_ICOSPHERE_LEVEL,
+    CoverageLabel,
     build_source_task_images,
 )
 from grashof_workspace.spatial_experiments.v06_corpus import build_generic_5r

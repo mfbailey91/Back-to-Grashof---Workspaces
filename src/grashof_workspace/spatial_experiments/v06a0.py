@@ -18,10 +18,10 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .implicit_manifold import build_sphere_atlas
+from .implicit_manifold import ManifoldAtlasResult, build_sphere_atlas
 
 
-def _plot_atlas(atlas, outpath: Path) -> None:
+def _plot_atlas(atlas: ManifoldAtlasResult, outpath: Path) -> None:
     fig = plt.figure(figsize=(8.2, 7.2))
     ax = fig.add_subplot(1, 1, 1, projection="3d")
     for chart in atlas.charts:
@@ -47,7 +47,7 @@ def _plot_atlas(atlas, outpath: Path) -> None:
     plt.close(fig)
 
 
-def render_v06a0_html(atlas, *, figure_rel: str) -> str:
+def render_v06a0_html(atlas: ManifoldAtlasResult, *, figure_rel: str) -> str:
     area = "—" if atlas.approximate_area is None else f"{atlas.approximate_area:.4f}"
     target = "—" if atlas.area_target is None else f"{atlas.area_target:.4f}"
     return f"""<!doctype html>

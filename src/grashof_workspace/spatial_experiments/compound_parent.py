@@ -19,6 +19,7 @@ from .axis_aggregation import (
     embed_suur_physical_to_source,
     lift_source_to_suur_physical,
 )
+from .axis_geometry import as_mat3
 from .decomposition_certificate import DecompositionCertificate
 from .fixed_position import JACOBIAN_FD_STEP_RAD, pose_fixed_position_problem
 from .implicit_manifold import (
@@ -36,7 +37,12 @@ from .parent_atlas import build_generic_5r_parent_atlas
 from .parent_local import LOCAL_CHART_RADIUS_RAD, FixedPositionParentProblem
 from .rotations import axis_angle_from_rotation, rotation_about_axis
 from .serial_chain import SerialRevoluteChain
-from .v06_corpus import Spatial5RCorpusEntry, build_exact_two_u_5r, build_generic_5r, build_near_two_u_5r
+from .v06_corpus import (
+    Spatial5RCorpusEntry,
+    build_exact_two_u_5r,
+    build_generic_5r,
+    build_near_two_u_5r,
+)
 
 Array = NDArray[np.floating]
 
@@ -56,6 +62,13 @@ def _json_safe(obj: Any) -> Any:
     if isinstance(obj, float) and not isfinite(obj):
         return None
     return obj
+
+
+def _json_object(obj: dict[str, Any]) -> dict[str, Any]:
+    payload = _json_safe(obj)
+    if not isinstance(payload, dict):
+        raise TypeError("expected a JSON object")
+    return payload
 
 
 def _copy_chain(chain: SerialRevoluteChain) -> SerialRevoluteChain:
@@ -125,7 +138,7 @@ class ClosedCompoundParentProblem:
             independent_chain=independent,
             p_star=posed.p_star,
             q_seed_source=q0,
-            R_seed=tuple(tuple(float(v) for v in row) for row in np.asarray(state.R, dtype=float)),
+            R_seed=as_mat3(state.R),
             problem_id=f"{model.architecture_id}_suur_closed_parent",
         )
 
@@ -192,10 +205,10 @@ def grow_compound_parent_atlas(
                 frontier.append(np.asarray(sample.correction.x, dtype=float))
         if not frontier:
             break
-        centers = [np.asarray(c.center, dtype=float) for c in charts]
+        centers = tuple(np.asarray(c.center, dtype=float) for c in charts)
 
-        def _min_d(p: Array) -> float:
-            return min(ambient_distance(p, c, problem.periodic_coordinates) for c in centers)
+        def _min_d(p: Array, _centers: tuple[Array, ...] = centers) -> float:
+            return min(ambient_distance(p, c, problem.periodic_coordinates) for c in _centers)
 
         frontier.sort(key=_min_d)
         cand = frontier[-1]
@@ -233,7 +246,7 @@ class CompoundParentComparison:
     notes: tuple[str, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "max_closure_residual": self.max_closure_residual,
                 "max_position_error_m": self.max_position_error_m,
@@ -437,7 +450,7 @@ class V06BArchitectureResult:
     source_chain_id: int
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "architecture_id": self.architecture_id,
                 "aggregation": self.aggregation.to_json_dict(),

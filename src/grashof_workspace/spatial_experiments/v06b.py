@@ -14,15 +14,22 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .compound_parent import evaluate_v06b_architecture
-from .v06_corpus import build_exact_two_u_5r, build_generic_5r, build_near_two_u_5r
+from .compound_parent import V06BArchitectureResult, evaluate_v06b_architecture
+from .serial_chain import SerialRevoluteChain
+from .v06_corpus import (
+    Spatial5RCorpusEntry,
+    build_exact_two_u_5r,
+    build_generic_5r,
+    build_near_two_u_5r,
+)
 
 
-def _arm_polyline(chain, q: tuple[float, ...]) -> np.ndarray:
+def _arm_polyline(chain: SerialRevoluteChain, q: tuple[float, ...]) -> np.ndarray:
     axes = chain.current_axes(q)
     state = chain.evaluate(q)
     pts = [np.asarray(ax.r, dtype=float) for ax in axes]
@@ -30,7 +37,12 @@ def _arm_polyline(chain, q: tuple[float, ...]) -> np.ndarray:
     return np.vstack(pts)
 
 
-def _plot(exact_entry, near_entry, exact_result, outpath: Path) -> None:
+def _plot(
+    exact_entry: Spatial5RCorpusEntry,
+    near_entry: Spatial5RCorpusEntry,
+    exact_result: V06BArchitectureResult,
+    outpath: Path,
+) -> None:
     fig = plt.figure(figsize=(11.0, 8.0))
     ax_e = fig.add_subplot(2, 2, 1, projection="3d")
     ax_n = fig.add_subplot(2, 2, 2, projection="3d")
@@ -66,7 +78,7 @@ def _plot(exact_entry, near_entry, exact_result, outpath: Path) -> None:
     plt.close(fig)
 
 
-def render_html(payload: dict, *, figure_rel: str) -> str:
+def render_html(payload: dict[str, Any], *, figure_rel: str) -> str:
     exact = payload["exact_two_u_5r"]["certificate"]
     near = payload["near_two_u_5r"]["certificate"]
     generic = payload["generic_5r"]["certificate"]

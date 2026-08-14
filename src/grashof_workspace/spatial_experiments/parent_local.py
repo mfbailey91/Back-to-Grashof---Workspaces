@@ -13,6 +13,7 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
+from .axis_geometry import as_vec3
 from .fixed_position import (
     JACOBIAN_FD_ERROR_TOL,
     JACOBIAN_FD_STEP_RAD,
@@ -82,7 +83,8 @@ class FixedPositionParentProblem:
     def residual(self, x: Array) -> Array:
         q = tuple(float(v) for v in np.asarray(x, dtype=float).reshape(-1))
         state = self.model.chain.evaluate(q)
-        return np.asarray(state.p, dtype=float) - np.asarray(self.p_star, dtype=float)
+        delta = np.asarray(state.p, dtype=float) - np.asarray(self.p_star, dtype=float)
+        return np.asarray(delta, dtype=float)
 
     def jacobian(self, x: Array) -> Array:
         q = tuple(float(v) for v in np.asarray(x, dtype=float).reshape(-1))
@@ -201,7 +203,7 @@ def _vertex_diagnostics(
         jp_singular_values=report_p.singular_values,
         rank_jd_np=report_d.rank,
         jd_np_singular_values=report_d.singular_values,
-        pointing=tuple(float(v) for v in np.asarray(state.d, dtype=float).reshape(-1)),
+        pointing=as_vec3(state.d),
         condition_number=condition_number,
         accepted=accepted and residual <= POSITION_RESIDUAL_TOL_M,
         rejection_reason=rejection_reason,

@@ -19,13 +19,18 @@ import numpy as np
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 from .parent_atlas import build_generic_5r_parent_atlas
-from .parent_level_sets import build_parent_level_sets
+from .parent_level_sets import ParentLevelSetResult, build_parent_level_sets
 from .parent_reconstruction import ParentReconstructionResult, build_parent_reconstruction
-from .parent_task_images import SphereCellKind, build_source_task_images
+from .parent_task_images import SourceTaskImageBundle, SphereCellKind, build_source_task_images
 from .v06_corpus import build_generic_5r
 
 
-def _plot(images, level_sets, result: ParentReconstructionResult, outpath: Path) -> None:
+def _plot(
+    images: SourceTaskImageBundle,
+    level_sets: ParentLevelSetResult,
+    result: ParentReconstructionResult,
+    outpath: Path,
+) -> None:
     fig = plt.figure(figsize=(11.0, 5.2))
     ax_grid = fig.add_subplot(1, 2, 1, projection="3d")
     ax_child = fig.add_subplot(1, 2, 2, projection="3d")

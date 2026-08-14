@@ -19,6 +19,7 @@ from .axis_aggregation import (
     embed_suur_physical_to_source,
     lift_source_to_suur_physical,
 )
+from .axis_geometry import as_mat3, as_vec3
 from .continuation import wrap_joint_delta
 from .decomposition_certificate import DecompositionCertificate
 from .fixed_position import JACOBIAN_FD_STEP_RAD, pose_fixed_position_problem
@@ -62,6 +63,13 @@ def _json_safe(obj: Any) -> Any:
     return obj
 
 
+def _json_object(obj: dict[str, Any]) -> dict[str, Any]:
+    payload = _json_safe(obj)
+    if not isinstance(payload, dict):
+        raise TypeError("expected a JSON object")
+    return payload
+
+
 def _copy_chain(chain: SerialRevoluteChain) -> SerialRevoluteChain:
     return SerialRevoluteChain(
         home_axes=chain.home_axes,
@@ -97,9 +105,9 @@ def local_virtual_u_axes(
     b = np.cross(k, a)
     b = b / float(np.linalg.norm(b))
     return (
-        tuple(float(v) for v in a),
-        tuple(float(v) for v in b),
-        k,
+        as_vec3(a),
+        as_vec3(b),
+        np.asarray(k, dtype=float),
     )
 
 
@@ -199,7 +207,7 @@ class ClosedUUURProblem:
             chart=chart,
             p_star=posed.p_star,
             q_seed_source=q_seed,
-            R_seed=tuple(tuple(float(v) for v in row) for row in np.asarray(state.R, dtype=float)),
+            R_seed=as_mat3(state.R),
             problem_id=f"{model.architecture_id}_uuur_child",
         )
 
@@ -291,7 +299,7 @@ def _sample(problem: ClosedUUURProblem, x: Array, s: float) -> UUURSample:
         alpha=xt[0],
         beta=xt[1],
         q_source=q,
-        pointing=tuple(float(v) for v in np.asarray(state.d, dtype=float)),
+        pointing=as_vec3(state.d),
         residual=float(np.linalg.norm(problem.residual(x))),
         rank_j=report.rank,
         nullity_j=report.nullity,
@@ -364,7 +372,7 @@ class UUURComparison:
     notes: tuple[str, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "max_closure_residual": self.max_closure_residual,
                 "max_position_error_m": self.max_position_error_m,
@@ -585,7 +593,7 @@ class V06D2ArchitectureResult:
     parent_slice_status: str
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "architecture_id": self.architecture_id,
                 "aggregation": self.aggregation.to_json_dict(),
@@ -640,7 +648,7 @@ def evaluate_v06d2_architecture(
     if chart is None:
         try:
             n = (0.0, 0.0, 1.0)
-            d = tuple(float(v) for v in np.asarray(state0.d, dtype=float))
+            d = as_vec3(state0.d)
             if abs(float(np.dot(d, n))) > 0.95:
                 n = (1.0, 0.0, 0.0)
             chart = build_virtual_u_chart(d, n, pointing_scalar(d, n), posed.p_star)

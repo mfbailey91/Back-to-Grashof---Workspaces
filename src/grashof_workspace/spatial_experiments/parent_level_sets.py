@@ -15,6 +15,7 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
+from .axis_geometry import as_vec3
 from .continuation import wrap_joint_delta
 from .implicit_manifold import ambient_distance, orthonormal_tangent_basis
 from .jacobians import matrix_rank_report, pointing_jacobian, position_jacobian
@@ -51,13 +52,20 @@ def _json_safe(obj: Any) -> Any:
     return obj
 
 
+def _json_object(obj: dict[str, Any]) -> dict[str, Any]:
+    payload = _json_safe(obj)
+    if not isinstance(payload, dict):
+        raise TypeError("expected a JSON object")
+    return payload
+
+
 def choose_slice_normal(d_seed: tuple[float, float, float]) -> tuple[float, float, float]:
     d = np.asarray(d_seed, dtype=float)
     n = np.asarray(N_DEFAULT, dtype=float)
     if abs(float(np.dot(d, n))) > 0.95:
         n = np.asarray(N_FALLBACK, dtype=float)
     n = n / float(np.linalg.norm(n))
-    return tuple(float(v) for v in n)
+    return as_vec3(n)
 
 
 def pointing_scalar(d: tuple[float, float, float] | Array, n: tuple[float, float, float]) -> float:
@@ -74,7 +82,7 @@ def levelset_residual(
     state = model.chain.evaluate(q)
     r_p = np.asarray(state.p, dtype=float) - np.asarray(p_star, dtype=float)
     r_h = np.array((pointing_scalar(state.d, n) - c,), dtype=float)
-    return np.concatenate([r_p, r_h])
+    return np.asarray(np.concatenate([r_p, r_h]), dtype=float)
 
 
 def levelset_jacobian(
@@ -85,7 +93,8 @@ def levelset_jacobian(
     jp = position_jacobian(model.chain, q)
     jd = pointing_jacobian(model.chain, q)
     gh = np.asarray(n, dtype=float).reshape(1, 3) @ jd
-    return np.vstack((jp, gh))
+    stacked = np.vstack((jp, gh))
+    return np.asarray(stacked, dtype=float)
 
 
 def parent_gradient_h(
@@ -96,7 +105,8 @@ def parent_gradient_h(
     jp = position_jacobian(model.chain, q)
     n_p = orthonormal_tangent_basis(jp, expected_nullity=2)
     jd = pointing_jacobian(model.chain, q)
-    return n_p.T @ (jd.T @ np.asarray(n, dtype=float))
+    grad = n_p.T @ (jd.T @ np.asarray(n, dtype=float))
+    return np.asarray(grad, dtype=float)
 
 
 def correct_to_levelset(
@@ -213,7 +223,7 @@ class SourceLevelSetFiber:
     notes: tuple[str, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "fiber_id": self.fiber_id,
                 "parent_id": self.parent_id,
@@ -249,7 +259,7 @@ class ParentLevelSetResult:
     notes: tuple[str, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "architecture_id": self.architecture_id,
                 "parent_id": self.parent_id,
@@ -270,7 +280,8 @@ class ParentLevelSetResult:
 
 def _lerp_wrap(qa: Array, qb: Array, t: float) -> Array:
     delta = wrap_joint_delta(qb, qa)
-    return np.asarray(qa, dtype=float) + float(t) * delta
+    out = np.asarray(qa, dtype=float) + float(t) * delta
+    return np.asarray(out, dtype=float)
 
 
 def _vertex_field(
@@ -342,7 +353,7 @@ def _extract_contours(
         return len(nodes) - 1
 
     for chart in atlas.charts:
-        local: dict[int, tuple[float, VertexScalarRecord | None]] = {}
+        local: dict[int, tuple[float, VertexScalarRecord]] = {}
         for sample in chart.samples:
             if sample.correction.x is None:
                 continue
@@ -419,7 +430,14 @@ def _extract_contours(
     return tuple(components)
 
 
-def _fiber_sample(model: OpenChainModel, q: tuple[float, ...], n, c, p_star, sigma: float) -> FiberSample:
+def _fiber_sample(
+    model: OpenChainModel,
+    q: tuple[float, ...],
+    n: tuple[float, float, float],
+    c: float,
+    p_star: tuple[float, float, float],
+    sigma: float,
+) -> FiberSample:
     state = model.chain.evaluate(q)
     jac = levelset_jacobian(model, q, n)
     report = matrix_rank_report(jac)
@@ -427,7 +445,7 @@ def _fiber_sample(model: OpenChainModel, q: tuple[float, ...], n, c, p_star, sig
     return FiberSample(
         sigma=sigma,
         q=q,
-        pointing=tuple(float(v) for v in np.asarray(state.d, dtype=float)),
+        pointing=as_vec3(state.d),
         quaternion=rotation_matrix_to_quaternion(np.asarray(state.R, dtype=float)),
         rank_jfc=report.rank,
         nullity_jfc=report.nullity,
@@ -445,7 +463,7 @@ def continue_level_set(
     n_steps: int = LEVELSET_STEPS,
     step: float = LEVELSET_STEP,
 ) -> tuple[tuple[FiberSample, ...], str, bool]:
-    q_seed, ok, res0 = correct_to_levelset(model, q0, p_star, n, c)
+    q_seed, ok, _res0 = correct_to_levelset(model, q0, p_star, n, c)
     if not ok:
         return (), "unresolved", False
     jac0 = levelset_jacobian(model, q_seed, n)

@@ -7,6 +7,7 @@ Neither stage is the 2D parent or descriptor-discovery evidence.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from math import isfinite
 from typing import Any
@@ -22,12 +23,14 @@ from .parent_level_sets import (
     CRITICAL_H_TOL,
     ParentLevelSetResult,
     SourceLevelSetFiber,
+    VertexScalarRecord,
     continue_level_set,
 )
 from .parent_task_images import (
     CoverageLabel,
     SourceTaskImageBundle,
     SphereCellKind,
+    SphereGridCell,
 )
 
 Array = NDArray[np.floating]
@@ -55,6 +58,13 @@ def _json_safe(obj: Any) -> Any:
     return obj
 
 
+def _json_object(obj: dict[str, Any]) -> dict[str, Any]:
+    payload = _json_safe(obj)
+    if not isinstance(payload, dict):
+        raise TypeError("expected a JSON object")
+    return payload
+
+
 def _cell_index(barys: Array, d: Array) -> int:
     v = np.asarray(d, dtype=float).reshape(3)
     nrm = float(np.linalg.norm(v))
@@ -64,7 +74,10 @@ def _cell_index(barys: Array, d: Array) -> int:
     return int(np.argmax(barys @ v))
 
 
-def paint_pointing_hits(grid_cells, samples_d: list[tuple[float, float, float]]) -> set[int]:
+def paint_pointing_hits(
+    grid_cells: Sequence[SphereGridCell],
+    samples_d: list[tuple[float, float, float]],
+) -> set[int]:
     barys = np.asarray([c.barycenter for c in grid_cells], dtype=float)
     hits: set[int] = set()
     for d in samples_d:
@@ -80,15 +93,14 @@ def _hausdorff(a: list[Array], b: list[Array]) -> float:
         worst = 0.0
         for p in src:
             best = min(_pointing_geodesic(p, q) for q in dst)
-            if best > worst:
-                worst = best
+            worst = max(worst, best)
         return worst
 
     return max(_one_way(a, b), _one_way(b, a))
 
 
 def _seed_for_c(
-    vertices,
+    vertices: Sequence[VertexScalarRecord],
     c: float,
 ) -> tuple[float, ...] | None:
     for i, va in enumerate(vertices):
@@ -176,7 +188,7 @@ class ReconstructionMetrics:
     excluded_local_only_children: int
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "direct_source_covered_cells": self.direct_covered,
                 "direct_source_uncovered_cells": self.direct_uncovered,
@@ -237,7 +249,7 @@ class ParentReconstructionResult:
     notes: tuple[str, ...]
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "architecture_id": self.architecture_id,
                 "certificate_status": None,

@@ -24,10 +24,11 @@ from .parent_atlas import (
     ParentAtlasResult,
     build_generic_5r_parent_atlas,
 )
+from .serial_chain import SerialRevoluteChain
 from .v06_corpus import build_generic_5r
 
 
-def _arm_polyline(chain, q: tuple[float, ...]) -> np.ndarray:
+def _arm_polyline(chain: SerialRevoluteChain, q: tuple[float, ...]) -> np.ndarray:
     axes = chain.current_axes(q)
     state = chain.evaluate(q)
     pts = [np.asarray(ax.r, dtype=float) for ax in axes]
@@ -35,7 +36,7 @@ def _arm_polyline(chain, q: tuple[float, ...]) -> np.ndarray:
     return np.vstack(pts)
 
 
-def _plot_atlas(result: ParentAtlasResult, chain, outpath: Path) -> None:
+def _plot_atlas(result: ParentAtlasResult, chain: SerialRevoluteChain, outpath: Path) -> None:
     accepted = [v for v in result.vertices if v.accepted]
     fig = plt.figure(figsize=(11.0, 8.0))
     ax_arm = fig.add_subplot(2, 2, 1, projection="3d")

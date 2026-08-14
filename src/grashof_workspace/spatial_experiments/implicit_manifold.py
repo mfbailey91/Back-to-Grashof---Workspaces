@@ -57,12 +57,23 @@ class TaskEvaluation:
 class ImplicitManifoldProblem(Protocol):
     """Dimension-independent implicit manifold F(x)=0 of intrinsic dimension 2."""
 
-    problem_id: str
-    ambient_dimension: int
-    constraint_dimension: int
-    intrinsic_dimension: int
-    coordinate_names: tuple[str, ...]
-    periodic_coordinates: tuple[bool, ...]
+    @property
+    def problem_id(self) -> str: ...
+
+    @property
+    def ambient_dimension(self) -> int: ...
+
+    @property
+    def constraint_dimension(self) -> int: ...
+
+    @property
+    def intrinsic_dimension(self) -> int: ...
+
+    @property
+    def coordinate_names(self) -> tuple[str, ...]: ...
+
+    @property
+    def periodic_coordinates(self) -> tuple[bool, ...]: ...
 
     def residual(self, x: Array) -> Array: ...
 
@@ -149,7 +160,8 @@ def align_tangent_basis(n_ref: Array, n_new: Array) -> Array:
         u = u.copy()
         u[:, -1] *= -1.0
     q = u @ vt
-    return new @ q
+    aligned = np.asarray(new @ q, dtype=float)
+    return aligned
 
 
 def orthonormal_tangent_basis(jacobian: Array, *, expected_nullity: int | None = None) -> Array:
@@ -610,10 +622,10 @@ def grow_manifold_atlas(
 
     frontier: list[Array] = _ring_vertices(seed_chart)
     while frontier and len(charts) < max_charts:
-        centers = [np.asarray(c.center, dtype=float) for c in charts]
+        centers = tuple(np.asarray(c.center, dtype=float) for c in charts)
 
-        def _min_center_dist(p: Array) -> float:
-            return min(ambient_distance(p, c, problem.periodic_coordinates) for c in centers)
+        def _min_center_dist(p: Array, _centers: tuple[Array, ...] = centers) -> float:
+            return min(ambient_distance(p, c, problem.periodic_coordinates) for c in _centers)
 
         frontier.sort(key=_min_center_dist)
         candidate = frontier.pop()
@@ -642,7 +654,7 @@ def grow_manifold_atlas(
             continue
         charts.append(chart)
         frontier.extend(_ring_vertices(chart))
-        centers = [np.asarray(c.center, dtype=float) for c in charts]
+        centers = tuple(np.asarray(c.center, dtype=float) for c in charts)
         kept: list[Array] = []
         for p in frontier:
             if min(ambient_distance(p, c, problem.periodic_coordinates) for c in centers) <= dup_tol:

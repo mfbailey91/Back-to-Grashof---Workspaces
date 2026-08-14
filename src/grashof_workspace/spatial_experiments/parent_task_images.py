@@ -16,6 +16,7 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
+from .axis_geometry import as_mat3, as_vec3
 from .implicit_manifold import ambient_distance
 from .open_chain import OpenChainModel
 from .orientation_image import (
@@ -58,6 +59,13 @@ def _json_safe(obj: Any) -> Any:
     if isinstance(obj, float) and not isfinite(obj):
         return None
     return obj
+
+
+def _json_object(obj: dict[str, Any]) -> dict[str, Any]:
+    payload = _json_safe(obj)
+    if not isinstance(payload, dict):
+        raise TypeError("expected a JSON object")
+    return payload
 
 
 def _clamped_acos(value: float) -> float:
@@ -118,7 +126,7 @@ class ParentOrientationSurfaceResult:
     notes: tuple[str, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "architecture_id": self.architecture_id,
                 "p_star": list(self.p_star),
@@ -227,7 +235,7 @@ class DeclaredResolutionSphereGrid:
         uncovered = sum(1 for c in self.cells if c.kind is SphereCellKind.UNCOVERED)
         ambiguous = sum(1 for c in self.cells if c.kind is SphereCellKind.AMBIGUOUS_BOUNDARY)
         unresolved = sum(1 for c in self.cells if c.kind is SphereCellKind.UNRESOLVED)
-        return _json_safe(
+        return _json_object(
             {
                 "construction": self.construction,
                 "subdivision_level": self.subdivision_level,
@@ -260,7 +268,7 @@ class ParentPointingImageResult:
     notes: tuple[str, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
-        return _json_safe(
+        return _json_object(
             {
                 "architecture_id": self.architecture_id,
                 "p_star": list(self.p_star),
@@ -475,7 +483,7 @@ def _cluster_pointing(
         clusters.append(
             PointingMultiplicityCluster(
                 cluster_id=cid,
-                pointing=tuple(float(v) for v in mean),
+                pointing=as_vec3(mean),
                 distinct_q_count=len(qs),
                 vertex_ids=tuple(members),
             )
@@ -533,7 +541,7 @@ def build_source_task_images(
                     chart_id=chart.chart_id,
                     component_id=component_id,
                     q=q,
-                    R=tuple(tuple(float(v) for v in row) for row in rmat),
+                    R=as_mat3(rmat),
                     quaternion=raw_quats[-1],
                     rotvec=rotation_matrix_to_rotvec(rmat),
                     rank_jp=diag.rank_jp,
@@ -566,8 +574,8 @@ def build_source_task_images(
                 unresolved_faces += 1
                 continue
             a, b, c = ids
-            for u, v in ((a, b), (b, c), (c, a)):
-                pair = (u, v) if u < v else (v, u)
+            for ia, ib in ((a, b), (b, c), (c, a)):
+                pair = (ia, ib) if ia < ib else (ib, ia)
                 if pair not in edge_use:
                     adj_edges.append(pair)
                     geo = _rotation_geodesic(rotations[pair[0]], rotations[pair[1]])
@@ -578,22 +586,22 @@ def build_source_task_images(
             bary = pointing_vecs[a] + pointing_vecs[b] + pointing_vecs[c]
             bn = float(np.linalg.norm(bary))
             bary = bary / bn if bn > 0.0 else bary
-            near_crit = any(
-                vertices[i].rank_jd_np < NEAR_CRITICAL_RANK
-                or (
-                    vertices[i].sigma_min_jd_np is not None
-                    and vertices[i].sigma_min_jd_np < NEAR_SINGULAR_SIGMA_TOL
-                )
-                for i in (a, b, c)
-            )
+            near_crit = False
+            for idx in (a, b, c):
+                sigma = vertices[idx].sigma_min_jd_np
+                if vertices[idx].rank_jd_np < NEAR_CRITICAL_RANK or (
+                    sigma is not None and sigma < NEAR_SINGULAR_SIGMA_TOL
+                ):
+                    near_crit = True
+                    break
             mapped.append(
                 MappedSphericalTriangle(
                     chart_id=chart.chart_id,
                     component_id=component_id,
                     source_face=face,
                     vertex_ids=(a, b, c),
-                    pointing=tuple(tuple(float(v) for v in pointing_vecs[i]) for i in (a, b, c)),
-                    barycenter=tuple(float(v) for v in bary),
+                    pointing=tuple(as_vec3(pointing_vecs[i]) for i in (a, b, c)),
+                    barycenter=as_vec3(bary),
                     unresolved=near_crit,
                 )
             )
@@ -605,11 +613,11 @@ def build_source_task_images(
         if key in index_of:
             center_ids[chart.chart_id] = index_of[key]
     for overlap in atlas.overlaps:
-        ia = center_ids.get(overlap.chart_a)
-        ib = center_ids.get(overlap.chart_b)
-        if ia is None or ib is None:
+        cid_a = center_ids.get(overlap.chart_a)
+        cid_b = center_ids.get(overlap.chart_b)
+        if cid_a is None or cid_b is None:
             continue
-        pair = (ia, ib) if ia < ib else (ib, ia)
+        pair = (cid_a, cid_b) if cid_a < cid_b else (cid_b, cid_a)
         if pair not in edge_use:
             adj_edges.append(pair)
             geo = _rotation_geodesic(rotations[pair[0]], rotations[pair[1]])
@@ -660,8 +668,8 @@ def build_source_task_images(
             PointingBoundaryEdge(
                 vertex_a=a,
                 vertex_b=b,
-                pointing_a=tuple(float(v) for v in pa),
-                pointing_b=tuple(float(v) for v in pb),
+                pointing_a=as_vec3(pa),
+                pointing_b=as_vec3(pb),
                 geodesic_rad=_pointing_geodesic(pa, pb),
                 source="mapped_triangle_boundary",
             )
@@ -670,13 +678,13 @@ def build_source_task_images(
         if fr.q is None:
             continue
         qn = wrap_periodic(np.asarray(fr.q, dtype=float), (True,) * len(fr.q))
-        best = None
-        best_d = None
-        for v in vertices:
-            d = ambient_distance(qn, np.asarray(v.q, dtype=float), (True,) * len(v.q))
-            if best_d is None or d < best_d:
-                best_d = d
-                best = v
+        best: OrientationSurfaceVertex | None = None
+        best_d: float | None = None
+        for vertex in vertices:
+            dist = ambient_distance(qn, np.asarray(vertex.q, dtype=float), (True,) * len(vertex.q))
+            if best_d is None or dist < best_d:
+                best_d = dist
+                best = vertex
         if best is None or best_d is None or best_d > 0.25:
             continue
         dvec = pointing_vecs[best.vertex_id]
@@ -684,8 +692,8 @@ def build_source_task_images(
             PointingBoundaryEdge(
                 vertex_a=best.vertex_id,
                 vertex_b=best.vertex_id,
-                pointing_a=tuple(float(v) for v in dvec),
-                pointing_b=tuple(float(v) for v in dvec),
+                pointing_a=as_vec3(dvec),
+                pointing_b=as_vec3(dvec),
                 geodesic_rad=0.0,
                 source=f"atlas_frontier_{fr.kind.value}",
             )
@@ -698,15 +706,15 @@ def build_source_task_images(
     max_diam = _max_cell_diameter(ico_verts, ico_faces)
     hits: dict[int, list[MappedSphericalTriangle]] = defaultdict(list)
     for tri in mapped:
-        b = np.asarray(tri.barycenter, dtype=float)
-        cell = int(np.argmax(barys @ b))
-        hits[cell].append(tri)
+        bary_pt = np.asarray(tri.barycenter, dtype=float)
+        cell_idx = int(np.argmax(barys @ bary_pt))
+        hits[cell_idx].append(tri)
 
     neighbors: dict[int, set[int]] = defaultdict(set)
     edge_to_faces: dict[tuple[int, int], list[int]] = defaultdict(list)
     for fi, face in enumerate(ico_faces):
-        for u, v in ((face[0], face[1]), (face[1], face[2]), (face[2], face[0])):
-            edge_to_faces[(u, v) if u < v else (v, u)].append(fi)
+        for ia, ib in ((face[0], face[1]), (face[1], face[2]), (face[2], face[0])):
+            edge_to_faces[(ia, ib) if ia < ib else (ib, ia)].append(fi)
     for faces_here in edge_to_faces.values():
         if len(faces_here) == 2:
             a, b = faces_here
@@ -722,9 +730,9 @@ def build_source_task_images(
         periodic = (True,) * 5
         for tri in assigned:
             for vid in tri.vertex_ids:
-                q = np.asarray(vertices[vid].q, dtype=float)
-                if not any(ambient_distance(q, other, periodic) <= 1e-6 for other in qs):
-                    qs.append(q)
+                q_arr = np.asarray(vertices[vid].q, dtype=float)
+                if not any(ambient_distance(q_arr, other, periodic) <= 1e-6 for other in qs):
+                    qs.append(q_arr)
         if unresolved_hit:
             kind = SphereCellKind.UNRESOLVED
         elif hit_n == 0:
@@ -735,8 +743,8 @@ def build_source_task_images(
             SphereGridCell(
                 cell_id=fi,
                 kind=kind,
-                vertices=tuple(tuple(float(x) for x in ico_verts[i]) for i in face),
-                barycenter=tuple(float(x) for x in barys[fi]),
+                vertices=tuple(as_vec3(ico_verts[i]) for i in face),
+                barycenter=as_vec3(barys[fi]),
                 hit_count=hit_n,
                 multiplicity=len(qs),
                 representative_q=None if not qs else tuple(float(v) for v in qs[0]),
@@ -765,7 +773,7 @@ def build_source_task_images(
         cells=tuple(cells),
     )
     coverage = _image_coverage_label(atlas)
-    spherical = tuple(tuple(float(v) for v in p) for p in pointing_vecs)
+    spherical = tuple(as_vec3(p) for p in pointing_vecs)
     orientation = ParentOrientationSurfaceResult(
         architecture_id=atlas.architecture_id,
         p_star=atlas.p_star,
