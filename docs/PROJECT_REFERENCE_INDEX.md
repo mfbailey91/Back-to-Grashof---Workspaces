@@ -78,6 +78,7 @@ V09  validated mechanism predicates and coverage reconstruction
 **V05D MVP readout:** [`../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
 **V05E MVP readout:** [`../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
 **V06A0 software-validation readout:** [`../results/kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html`](../results/kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html) (unit-sphere manifold engine; not a 5R parent).
+**V06A1 local-patch readout:** [`../results/kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html`](../results/kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html) (`LOCAL_PATCH`; not a complete parent).
 Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 

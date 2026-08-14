@@ -299,6 +299,20 @@ numerically good local result from being silently promoted into a global reconst
 
 **Reason:** A collection of numerical charts on an analytical surface is not source-chain evidence. Mixing engine tests with parent certificates would violate Gate K2 / ADR-032.
 
+## ADR-036 — LOCAL_PATCH is a parent-representation status, not a certificate
+
+<!-- V06A1_LOCAL_PATCH_2026_08_13 -->
+
+**Decision:** V06A1 may emit a `FixedPositionParentResult` with representation status
+`LOCAL_PATCH` for one hexagonal chart of `generic_5r`. This is not a complete
+connected component, not `S^2` coverage, not L5 reconstruction, and not a
+`DecompositionCertificate`. L5 process status stays `SCAFFOLD`; fibers, children,
+and reconstruction remain `UNRESOLVED`. `component_ids` stay empty until V06A2
+component discovery.
+
+**Reason:** A visually plausible local chart is not the two-dimensional parent
+(Gate K2). Representation statuses must stay separate from certificate statuses.
+
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
 <!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->

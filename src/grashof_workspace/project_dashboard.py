@@ -578,11 +578,9 @@ PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir res
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V06</strong> — V06A0 validates the generic 2D manifold engine on the unit sphere
-(<code>SOFTWARE_VALIDATION</code> only; ADR-035). The spatial-5R
-<code>FixedPositionParentResult</code> remains V06A1+. Direct V06A source-parent construction
-does not inherit an L4 <code>EXACT_ON_COMPONENT</code> certificate (current L4 closed-mechanism
-is <code>LOCAL_ONLY</code>). L5 reconstruction stays unresolved.
+<p><strong>V06</strong> — V06A1 issued a <code>LOCAL_PATCH</code> hexagonal chart of
+<code>generic_5r</code> (ADR-036). This is not a complete parent component and not
+<code>S^2</code> coverage. V06A2 atlas growth remains next. L5 reconstruction stays unresolved.
 
 <p class="meta" style="margin-top:2rem;">
   Project index (so far):
@@ -655,9 +653,10 @@ def render_project_index_html(*, status_date: str = STATUS_DATE) -> str:
     <td><strong>V06</strong></td>
     <td>spatial 5R + S_v</td>
     <td>S² pointing parent</td>
-    <td>V06A0 manifold engine <code>SOFTWARE_VALIDATION</code> on the unit sphere; V06A <code>FixedPositionParentResult</code> not done; L5 scaffold only</td>
+    <td>V06A1 <code>LOCAL_PATCH</code> on <code>generic_5r</code>; complete parent atlas not done; L5 reconstruction unresolved</td>
     <td>
       <a href="kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html">V06A0</a> ·
+      <a href="kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html">V06A1</a> ·
       <a href="decomposition_ladder/index.html">L5 scaffold</a>
     </td>
   </tr>

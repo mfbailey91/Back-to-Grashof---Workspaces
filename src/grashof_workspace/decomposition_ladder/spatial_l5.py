@@ -1,9 +1,9 @@
-"""L5 scaffold adapter: shared records for V06-mapped spatial 5R work.
+"""L5 adapter: V06-mapped spatial 5R records with an optional local parent patch.
 
-This does **not** construct a two-dimensional fixed-position parent chart, does
-not continue pointing fibers, and does not issue closed-mechanism certificates.
+V06A1 may attach a ``LOCAL_PATCH`` parent-representation summary. This does not
+continue pointing fibers and does not issue closed-mechanism certificates.
 Letter families remain a candidate corpus with ``UNRESOLVED`` statuses
-(Gate K2 / ADR-024 / ADR-026).
+(Gate K2 / ADR-024 / ADR-026 / ADR-036).
 """
 
 from __future__ import annotations
@@ -11,6 +11,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from grashof_workspace.spatial_experiments.parent_local import (
+    build_generic_5r_local_patch,
+    parent_local_summary,
+)
 from grashof_workspace.spatial_experiments.v06_corpus import (
     Spatial5RCorpusEntry,
     audit_fixed_position_seed_5r,
@@ -42,6 +46,7 @@ class SpatialL5ScaffoldBundle:
     certificates: tuple[EquivalenceCertificateRecord, ...]
     reconstruction: ReconstructionRecord
     seed_audit: dict[str, Any]
+    parent_local: dict[str, Any] | None = None
     notes: tuple[str, ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
@@ -53,6 +58,7 @@ class SpatialL5ScaffoldBundle:
             "certificates": [cert.to_dict() for cert in self.certificates],
             "reconstruction": self.reconstruction.to_dict(),
             "seed_audit": self.seed_audit,
+            "parent_local": self.parent_local,
             "notes": list(self.notes),
         }
 
@@ -64,6 +70,8 @@ def build_spatial_l5_scaffold_bundle(
 
     corpus = entry or build_generic_5r()
     audit = audit_fixed_position_seed_5r(corpus)
+    local = build_generic_5r_local_patch(corpus)
+    local_summary = parent_local_summary(local)
     architecture_id = corpus.model.architecture_id
     parent_id = f"{architecture_id}_pointing_parent_scaffold"
     fiber_id = f"{architecture_id}_fiber_placeholder"
@@ -78,9 +86,9 @@ def build_spatial_l5_scaffold_bundle(
         component_ids=(),
         process_status=ProcessStatus.SCAFFOLD,
         notes=(
-            "Scaffold placeholder keyed to a fixed-position seed p*.",
-            "Parent geometry/charts are UNRESOLVED — not a FixedPositionParentResult.",
-            "V06A must construct the complete M=2 parent independently of children.",
+            "V06A1 issued FixedPositionParentResult representation_status=LOCAL_PATCH at one seed.",
+            "Not a complete parent component; component_ids remain empty (ADR-036).",
+            "Complete M=2 atlas and reconstruction remain UNRESOLVED.",
         ),
     )
     fiber = SourceFiberRecord(
@@ -166,12 +174,13 @@ def build_spatial_l5_scaffold_bundle(
         certificates=tuple(certificates),
         reconstruction=reconstruction,
         seed_audit=seed_audit_summary(audit),
+        parent_local=local_summary,
         notes=(
             (
                 "L5 scaffold interface under V06; scientific source remains "
                 "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md."
             ),
-            "Next scientific step: V06A FixedPositionParentResult (independent 2D parent).",
+            "V06A1 LOCAL_PATCH exists; V06A2 atlas and reconstruction remain next.",
             (
                 "Direct V06A parent construction does not depend on L4 component acceptance; "
                 "decomposition-dependent child claims remain blocked."
@@ -186,9 +195,9 @@ def default_l5_scaffold_payload() -> dict[str, Any]:
     bundle = build_spatial_l5_scaffold_bundle()
     return {
         "note": (
-            "L5 scaffold only: seed nullity-2 audit + candidate letter families. "
-            "Not a 2D parent representation and not pointing-image reconstruction. "
-            "V06A remains the next scientific step."
+            "L5 scaffold: V06A1 LOCAL_PATCH at one generic_5r seed plus candidate letter families. "
+            "Not a 2D parent representation (complete atlas still required) and not pointing-image reconstruction. "
+            "V06A2 atlas remains the next scientific step."
         ),
         "v06_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
         "bundle": bundle.to_dict(),
@@ -207,5 +216,6 @@ def default_l5_scaffold_payload() -> dict[str, Any]:
             "reconstruction_status": bundle.reconstruction.certificate_status.value,
             "accepted_fiber_count": len(bundle.reconstruction.accepted_fiber_ids),
             "process_status": bundle.parent.process_status.value,
+            "parent_representation_status": (bundle.parent_local or {}).get("representation_status"),
         },
     }

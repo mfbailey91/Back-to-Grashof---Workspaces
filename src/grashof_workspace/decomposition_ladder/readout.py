@@ -330,11 +330,10 @@ traced arc; generic architectures do not promote a child. Process stays
 <h2>L5 spatial 5R scaffold (V06-mapped)</h2>
 <p>
 Architecture-scoped scaffold after the proximal exact-U gate: synthetic 5R seed audit
-(<code>rank Jp=3</code>, <code>nullity=2</code>) plus candidate letter families. This is
-<strong>not</strong> a 2D parent representation and <strong>not</strong> pointing-image
-reconstruction. All family certificates stay <code>UNRESOLVED</code>. V06A
-(<code>FixedPositionParentResult</code>) remains the next scientific step. Process status
-is <code>SCAFFOLD</code>.
+(<code>rank Jp=3</code>, <code>nullity=2</code>) plus a V06A1 <code>LOCAL_PATCH</code>
+hexagonal chart. This is <strong>not</strong> a complete 2D parent component and
+<strong>not</strong> pointing-image reconstruction. All family certificates stay
+<code>UNRESOLVED</code>. V06A2 atlas remains next. Process status is <code>SCAFFOLD</code>.
 </p>
 <table>
 <tr>
@@ -486,9 +485,9 @@ of one mechanism branch—not two independent mechanism DOFs.
 <li><strong>L3:</strong> planar calibration adapter (trusted exact map).</li>
 <li><strong>L4 / V05:</strong> proximal <code>exact_u_pair_4r</code> independent match is
 <code>LOCAL_ONLY</code> on a traced arc; complete component correspondence remains unresolved.</li>
-<li><strong>L5 / V06:</strong> scaffold interface with nullity-2 seed audit and
-candidate letter families (<code>UNRESOLVED</code>); complete 2D parent + reconstruction
-remain V06A / later science. Direct V06A parent construction may proceed without an L4 component certificate.</li>
+<li><strong>L5 / V06:</strong> V06A1 <code>LOCAL_PATCH</code> plus candidate letter families
+(<code>UNRESOLVED</code> certificates); complete 2D parent atlas + reconstruction remain V06A2+.
+Direct V06A parent construction may proceed without an L4 component certificate.</li>
 <li><strong>L6 / V07:</strong> scaffold interface with nullity-3 seed audit for generic 6R;
 frozen SO(3) reference and nested / V08 work remain V07A+.</li>
 <li><strong>L7:</strong> deferred / BLOCKED pending complete-component and nested-slice

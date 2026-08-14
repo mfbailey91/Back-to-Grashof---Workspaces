@@ -53,8 +53,8 @@
       "process_status": "SCAFFOLD",
       "notes": [
         "Maps to active V06. Direct 2D source-parent construction may proceed independently of L4 acceptance.",
-        "Parent geometry/charts remain UNRESOLVED; letter families are candidate tests only.",
-        "Not a 2D parent representation and not pointing-image reconstruction (V06A next)."
+        "V06A1 parent representation is LOCAL_PATCH at one seed; complete atlas and reconstruction remain UNRESOLVED.",
+        "Letter families are candidate tests only; not pointing-image reconstruction."
       ]
     },
     {
@@ -381,8 +381,8 @@
       "certificate_status": "UNRESOLVED",
       "reconstruction_target": "S^2 pointing image",
       "notes": [
-        "V06 direct-parent scaffold; no L4 component certificate is inherited.",
-        "2D parent representation still required before reconstruction claims (Gate K2)."
+        "V06 direct-parent LOCAL_PATCH at one generic_5r seed (ADR-036).",
+        "Complete 2D parent / reconstruction still required before reconstruction claims (Gate K2)."
       ]
     },
     {
@@ -2306,7 +2306,7 @@
     ]
   },
   "l5_scaffold": {
-    "note": "L5 scaffold only: seed nullity-2 audit + candidate letter families. Not a 2D parent representation and not pointing-image reconstruction. V06A remains the next scientific step.",
+    "note": "L5 scaffold: V06A1 LOCAL_PATCH at one generic_5r seed plus candidate letter families. Not a 2D parent representation (complete atlas still required) and not pointing-image reconstruction. V06A2 atlas remains the next scientific step.",
     "v06_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
     "bundle": {
       "architecture_id": "generic_5r",
@@ -2324,9 +2324,9 @@
         "component_ids": [],
         "process_status": "SCAFFOLD",
         "notes": [
-          "Scaffold placeholder keyed to a fixed-position seed p*.",
-          "Parent geometry/charts are UNRESOLVED \u2014 not a FixedPositionParentResult.",
-          "V06A must construct the complete M=2 parent independently of children."
+          "V06A1 issued FixedPositionParentResult representation_status=LOCAL_PATCH at one seed.",
+          "Not a complete parent component; component_ids remain empty (ADR-036).",
+          "Complete M=2 atlas and reconstruction remain UNRESOLVED."
         ]
       },
       "fiber_placeholder": {
@@ -2640,9 +2640,22 @@
           "Gate K2 / ADR-024: do not treat 1D traces as the M=2 parent."
         ]
       },
+      "parent_local": {
+        "architecture_id": "generic_5r",
+        "representation_status": "LOCAL_PATCH",
+        "chart_id": "generic_5r_local_hex_000",
+        "chart_count": 1,
+        "accepted_sample_count": 7,
+        "max_p_residual_m": 6.09648817500521e-12,
+        "pointing_rank_min": 2,
+        "pointing_rank_max": 2,
+        "component_ids": [],
+        "fiber_ids": [],
+        "joint_limits": "not_modeled"
+      },
       "notes": [
         "L5 scaffold interface under V06; scientific source remains docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md.",
-        "Next scientific step: V06A FixedPositionParentResult (independent 2D parent).",
+        "V06A1 LOCAL_PATCH exists; V06A2 atlas and reconstruction remain next.",
         "Direct V06A parent construction does not depend on L4 component acceptance; decomposition-dependent child claims remain blocked."
       ]
     },
@@ -2663,7 +2676,8 @@
       "all_certificates_unresolved": true,
       "reconstruction_status": "UNRESOLVED",
       "accepted_fiber_count": 0,
-      "process_status": "SCAFFOLD"
+      "process_status": "SCAFFOLD",
+      "parent_representation_status": "LOCAL_PATCH"
     }
   },
   "l6_scaffold": {

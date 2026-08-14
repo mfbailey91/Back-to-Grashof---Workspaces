@@ -116,11 +116,9 @@ PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v05e --outdir res
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V06</strong> — V06A0 validates the generic 2D manifold engine on the unit sphere
-(<code>SOFTWARE_VALIDATION</code> only; ADR-035). The spatial-5R
-<code>FixedPositionParentResult</code> remains V06A1+. Direct V06A source-parent construction
-does not inherit an L4 <code>EXACT_ON_COMPONENT</code> certificate (current L4 closed-mechanism
-is <code>LOCAL_ONLY</code>). L5 reconstruction stays unresolved.
+<p><strong>V06</strong> — V06A1 issued a <code>LOCAL_PATCH</code> hexagonal chart of
+<code>generic_5r</code> (ADR-036). This is not a complete parent component and not
+<code>S^2</code> coverage. V06A2 atlas growth remains next. L5 reconstruction stays unresolved.
 
 <p class="meta" style="margin-top:2rem;">
   Project index (so far):

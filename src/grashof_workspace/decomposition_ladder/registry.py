@@ -83,8 +83,8 @@ RUNG_SPECS: tuple[RungSpec, ...] = (
         process_status=ProcessStatus.SCAFFOLD,
         notes=(
             "Maps to active V06. Direct 2D source-parent construction may proceed independently of L4 acceptance.",
-            "Parent geometry/charts remain UNRESOLVED; letter families are candidate tests only.",
-            "Not a 2D parent representation and not pointing-image reconstruction (V06A next).",
+            "V06A1 parent representation is LOCAL_PATCH at one seed; complete atlas and reconstruction remain UNRESOLVED.",
+            "Letter families are candidate tests only; not pointing-image reconstruction.",
         ),
     ),
     RungSpec(
@@ -290,8 +290,8 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="S^2 pointing image",
         notes=(
-            "V06 direct-parent scaffold; no L4 component certificate is inherited.",
-            "2D parent representation still required before reconstruction claims (Gate K2).",
+            "V06 direct-parent LOCAL_PATCH at one generic_5r seed (ADR-036).",
+            "Complete 2D parent / reconstruction still required before reconstruction claims (Gate K2).",
         ),
     ),
     FiberFamilySpec(
