@@ -31,6 +31,8 @@ CRITICAL_H_TOL = 1e-3
 LEVELSET_NEWTON_ITERS = 20
 LEVELSET_STEPS = 40
 LEVELSET_STEP = 0.05
+SEAM_NODE_TOL = 5e-3
+FIBER_DUP_TOL = 0.35
 N_DEFAULT = (0.0, 0.0, 1.0)
 N_FALLBACK = (1.0, 0.0, 0.0)
 
@@ -363,13 +365,77 @@ def _extract_contours(
     c: float,
     field: dict[tuple[str, int], VertexScalarRecord],
 ) -> tuple[ContourComponent, ...]:
+    if atlas.stitch is not None and atlas.stitch.faces:
+        return _extract_contours_stitched(atlas, model, n, c)
+    return _extract_contours_by_chart(atlas, model, n, c, field)
+
+
+def _extract_contours_stitched(
+    atlas: ParentAtlasResult,
+    model: OpenChainModel,
+    n: tuple[float, float, float],
+    c: float,
+) -> tuple[ContourComponent, ...]:
+    stitch = atlas.stitch
+    assert stitch is not None
+    hs: list[float] = []
+    regular: list[bool] = []
+    for vert in stitch.vertices:
+        state = model.chain.evaluate(vert.q)
+        hs.append(pointing_scalar(state.d, n))
+        try:
+            g = parent_gradient_h(model, vert.q, n)
+            regular.append(float(np.linalg.norm(g)) > EPS_H)
+        except ValueError:
+            regular.append(False)
     nodes: list[tuple[float, ...]] = []
     segments: list[tuple[int, int]] = []
     node_meta: list[str] = []
 
     def _add_node(q: tuple[float, ...], meta: str) -> int:
         for i, existing in enumerate(nodes):
-            if ambient_distance(np.asarray(q), np.asarray(existing), (True,) * 5) < 1e-6:
+            if ambient_distance(np.asarray(q), np.asarray(existing), (True,) * 5) < SEAM_NODE_TOL:
+                return i
+        nodes.append(q)
+        node_meta.append(meta)
+        return len(nodes) - 1
+
+    for face in stitch.faces:
+        crossings: list[int] = []
+        for a, b in ((face[0], face[1]), (face[1], face[2]), (face[2], face[0])):
+            ha, hb = hs[a], hs[b]
+            if (ha - c) * (hb - c) >= 0.0:
+                continue
+            t = (c - ha) / (hb - ha)
+            q_lin = _lerp_wrap(np.asarray(stitch.vertices[a].q), np.asarray(stitch.vertices[b].q), t)
+            q_hat, ok, _res = correct_to_levelset(
+                model, tuple(float(v) for v in q_lin), atlas.p_star, n, c
+            )
+            meta = "ok" if ok else "unresolved"
+            if stitch.vertices[a].global_frontier or stitch.vertices[b].global_frontier:
+                meta = "boundary"
+            if (not regular[a]) or (not regular[b]):
+                meta = "critical"
+            crossings.append(_add_node(q_hat if ok else tuple(float(v) for v in q_lin), meta))
+        if len(crossings) == 2:
+            segments.append((crossings[0], crossings[1]))
+    return _components_from_segments(nodes, segments, node_meta, c)
+
+
+def _extract_contours_by_chart(
+    atlas: ParentAtlasResult,
+    model: OpenChainModel,
+    n: tuple[float, float, float],
+    c: float,
+    field: dict[tuple[str, int], VertexScalarRecord],
+) -> tuple[ContourComponent, ...]:
+    nodes: list[tuple[float, ...]] = []
+    segments: list[tuple[int, int]] = []
+    node_meta: list[str] = []
+
+    def _add_node(q: tuple[float, ...], meta: str) -> int:
+        for i, existing in enumerate(nodes):
+            if ambient_distance(np.asarray(q), np.asarray(existing), (True,) * 5) < SEAM_NODE_TOL:
                 return i
         nodes.append(q)
         node_meta.append(meta)
@@ -406,7 +472,15 @@ def _extract_contours(
                 crossings.append(_add_node(q_hat if ok else tuple(float(v) for v in q_lin), meta))
             if len(crossings) == 2:
                 segments.append((crossings[0], crossings[1]))
+    return _components_from_segments(nodes, segments, node_meta, c)
 
+
+def _components_from_segments(
+    nodes: list[tuple[float, ...]],
+    segments: list[tuple[int, int]],
+    node_meta: list[str],
+    c: float,
+) -> tuple[ContourComponent, ...]:
     adj: dict[int, set[int]] = defaultdict(set)
     for a, b in segments:
         adj[a].add(b)
@@ -446,7 +520,7 @@ def _extract_contours(
                 component_id=f"c{c:.4f}_comp{cid}",
                 kind=kind,
                 seeds=seeds,
-                segment_count=sum(1 for a, b in segments if a in comp and b in comp) // 1,
+                segment_count=sum(1 for a, b in segments if a in comp and b in comp),
             )
         )
         cid += 1
@@ -523,6 +597,42 @@ def continue_level_set(
     return tuple(samples), trace.branch_status, trace.returned
 
 
+def _symmetric_wrapped_set_distance(
+    a: list[Array],
+    b: list[Array],
+    periodic: tuple[bool, ...],
+) -> float:
+    if not a or not b:
+        return float("inf")
+
+    def _one(src: list[Array], dst: list[Array]) -> float:
+        worst = 0.0
+        for q in src:
+            best = min(ambient_distance(q, p, periodic) for p in dst)
+            worst = max(worst, best)
+        return worst
+
+    return max(_one(a, b), _one(b, a))
+
+
+def _dedup_fibers(fibers: list[SourceLevelSetFiber]) -> list[SourceLevelSetFiber]:
+    kept: list[SourceLevelSetFiber] = []
+    periodic = (True,) * 5
+    for fiber in fibers:
+        qs = [np.asarray(s.q, dtype=float) for s in fiber.samples]
+        is_dup = False
+        for prior in kept:
+            if abs(prior.c - fiber.c) > 1e-12:
+                continue
+            ps = [np.asarray(s.q, dtype=float) for s in prior.samples]
+            if _symmetric_wrapped_set_distance(qs, ps, periodic) <= FIBER_DUP_TOL:
+                is_dup = True
+                break
+        if not is_dup:
+            kept.append(fiber)
+    return kept
+
+
 def build_parent_level_sets(
     atlas: ParentAtlasResult,
     model: OpenChainModel,
@@ -587,9 +697,11 @@ def build_parent_level_sets(
                     notes=(
                         "Task-derived h(d)=n·d fiber; not U_v and not the 2D parent.",
                         f"contour_kind={contour.kind.value}",
+                        "One continued branch per global contour after seam stitch (ADR-046).",
                     ),
                 )
             )
+    fibers = _dedup_fibers(fibers)
     return ParentLevelSetResult(
         architecture_id=atlas.architecture_id,
         parent_id=pid,

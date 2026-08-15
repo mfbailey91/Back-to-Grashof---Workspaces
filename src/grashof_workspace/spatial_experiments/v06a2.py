@@ -97,10 +97,11 @@ code {{ font-family: ui-monospace, monospace; }}
 table {{ border-collapse: collapse; }} th,td {{ border:1px solid #bbb; padding:.4rem; text-align:left; }}
 </style></head><body>
 <h1>V06A2 — generic_5r parent atlas</h1>
-<div class="note"><strong>ADR-037.</strong> Representation status
+<div class="note"><strong>ADR-037 / ADR-046.</strong> Representation status
 <code>{result.representation_status.value}</code> is not a complete parent,
 not <code>S^2</code> coverage, and not a <code>DecompositionCertificate</code>.
-Discovery <code>{result.discovery.status.value}</code>. Fibers are empty.
+Discovery <code>{result.discovery.status.value}</code>. Charts are stitched by
+overlap; unattached Sobol projections may grow extra components. Fibers are empty.
 Joint limits are <code>{result.joint_limits}</code>.</div>
 <table>
 <tr><th>charts</th><td>{len(result.charts)}</td></tr>
@@ -109,6 +110,8 @@ Joint limits are <code>{result.joint_limits}</code>.</div>
 <tr><th>component_ids</th><td><code>{comps}</code></td></tr>
 <tr><th>discovery bank / confirm</th><td>{result.discovery.bank_size} / {result.discovery.confirmation_bank_size}</td></tr>
 <tr><th>projected / unattached</th><td>{result.discovery.projected_seed_count} / {result.discovery.unattached_seed_count}</td></tr>
+<tr><th>stitched vertices / faces</th><td>{0 if result.stitch is None else len(result.stitch.vertices)} / {0 if result.stitch is None else len(result.stitch.faces)}</td></tr>
+<tr><th>chart-seam / global-frontier vertices</th><td>{0 if result.stitch is None else result.stitch.chart_seam_count} / {0 if result.stitch is None else result.stitch.global_frontier_count}</td></tr>
 <tr><th>max position residual (m)</th><td>{res}</td></tr>
 <tr><th>seed FD Jp error</th><td>{result.seed_fd_jp_error:.3e} (verified={result.seed_fd_verified})</td></tr>
 <tr><th>fibers</th><td>{len(result.fiber_ids)}</td></tr>

@@ -88,6 +88,7 @@ V09  validated mechanism predicates and coverage reconstruction
 **V06 H0–H2 hardening contract:** [`V06_HARDENING_PATCH.md`](V06_HARDENING_PATCH.md) and **ADR-043** in [`DECISIONS.md`](DECISIONS.md) (conjunctive local child equivalence; unevaluable empty `COVERED` miss metric).
 **V06H3 continuation engine:** [`../src/grashof_workspace/spatial_experiments/branch_continuation.py`](../src/grashof_workspace/spatial_experiments/branch_continuation.py) and **ADR-044** (shared 1D pseudo-arclength).
 **V06H4 D1/D2 migration:** **ADR-045** (level-set and UUUR traces use the H3 corrector; equations unchanged).
+**V06H5 atlas stitch:** **ADR-046** (overlap components, clustered unattached growth, stitched mesh, fiber dedup).
 Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 

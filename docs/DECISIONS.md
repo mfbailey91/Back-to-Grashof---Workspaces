@@ -460,6 +460,24 @@ not V07A authorization. H5 stitching and H6 committed-result regen remain next.
 pseudo-arclength (ADR-044). Re-auditing the child after the numerical fix
 prevents carrying a vacuous pre-H3 disposition (ADR-043).
 
+## ADR-046 — Stitch atlas charts and grow clustered unattached seeds
+
+<!-- V06H5_PARENT_STITCH_2026_08_15 -->
+
+**Decision:** V06A2/H5 clusters projected Sobol seeds before attachment, may
+grow extra atlas components from unattached cluster representatives within a
+declared total chart budget, and assigns component ids from chart-overlap
+connectivity. Vertices and faces are globally deduplicated in wrapped joint
+space. Chart-ring vertices in overlaps are seams, not global frontiers.
+Singular and budget-limited frontiers remain explicit. D1 contours are taken
+on the stitched mesh and continued fibers at the same `c` are deduplicated by
+symmetric wrapped set distance. This is not a closed parent, not `S^2`
+coverage, and not V07A authorization. H6 committed-result regen remains next.
+
+**Reason:** Chart-local rings and unpaired D1 traces cannot decide whether
+extra Sobol projections are new components or overlap duplicates (Gate K2 /
+ADR-037).
+
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
 <!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->

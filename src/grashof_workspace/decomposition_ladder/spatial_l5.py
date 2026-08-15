@@ -139,7 +139,11 @@ def build_spatial_l5_scaffold_bundle(
             f"V06C source images coverage_label={images.pointing.coverage_label.value} (ADR-038).",
             "V06B SUUR parent is not a U_v child and not reconstruction (ADR-039).",
             "V06D1 task-derived source fibers exist; they are not the 2D parent (ADR-040).",
-            "V06E source-fiber paint exists; coverage comparison is unevaluable without COVERED cells (ADR-043).",
+            (
+                "V06E source-fiber paint exists; coverage comparison "
+                f"{'evaluable' if recon.metrics.coverage_comparison_evaluable else 'unevaluable'} "
+                f"(ADR-043); factorization={recon.factorization_status}."
+            ),
             "Descriptor discovery remains blocked. V07A is next.",
         ),
     )
@@ -278,7 +282,7 @@ def build_spatial_l5_scaffold_bundle(
             "ADR-040: task-derived h=c fibers are not reconstruction.",
             "ADR-041: local U_v / UUUR is not reconstruction.",
             "ADR-042: source-fiber cell paint does not unblock reconstruction certificates.",
-            "ADR-043: empty COVERED cells make the miss metric unevaluable; local UUUR is conjunctive.",
+            "ADR-043: empty COVERED cells make the miss metric unevaluable; a nonempty COVERED set does not pass V06.",
         ),
     )
 
@@ -316,9 +320,9 @@ def default_l5_scaffold_payload() -> dict[str, Any]:
     bundle = build_spatial_l5_scaffold_bundle()
     return {
         "note": (
-            "L5 scaffold: V06E coverage comparison is unevaluable (empty COVERED) and accepted-child "
-            "reconstruction is empty. Not a 2D parent completeness claim and not "
-            "pointing-image reconstruction. V07A remains next."
+            "L5 scaffold: V06E accepted-child reconstruction is empty. Coverage comparison "
+            "follows ADR-043 (unevaluable iff COVERED is empty). Not a 2D parent completeness "
+            "claim and not pointing-image reconstruction. V07A remains next."
         ),
         "v06_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
         "bundle": bundle.to_dict(),

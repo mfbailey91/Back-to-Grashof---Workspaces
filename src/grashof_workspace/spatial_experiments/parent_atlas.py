@@ -43,6 +43,8 @@ Array = NDArray[np.floating]
 DEFAULT_MAX_CHARTS = 10
 MIN_CHART_RADIUS_RAD = 0.06
 ATTACH_RADIUS_FACTOR = 2.2
+CLUSTER_RADIUS_FACTOR = 1.5
+VERTEX_DEDUP_FACTOR = 0.25
 DISCOVERY_BANK = 32
 CONFIRM_BANK = 64
 PROJECTION_ITERS = 25
@@ -63,6 +65,7 @@ class FrontierKind(str, Enum):
     OPEN = "OPEN"
     SINGULAR = "SINGULAR"
     BUDGET_LIMITED = "BUDGET_LIMITED"
+    CHART_SEAM = "CHART_SEAM"
 
 
 @dataclass(frozen=True, slots=True)
@@ -106,6 +109,46 @@ class ComponentDiscoveryRecord:
 
 
 @dataclass(frozen=True, slots=True)
+class StitchedVertex:
+    vertex_id: int
+    q: tuple[float, ...]
+    chart_ids: tuple[str, ...]
+    on_chart_ring: bool
+    global_frontier: bool
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return {
+            "vertex_id": self.vertex_id,
+            "q": list(self.q),
+            "chart_ids": list(self.chart_ids),
+            "on_chart_ring": self.on_chart_ring,
+            "global_frontier": self.global_frontier,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class StitchedParentMesh:
+    """Globally deduplicated vertices and faces. Not a closed parent."""
+
+    vertices: tuple[StitchedVertex, ...]
+    faces: tuple[tuple[int, int, int], ...]
+    chart_seam_count: int
+    global_frontier_count: int
+    notes: tuple[str, ...] = ()
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return {
+            "vertex_count": len(self.vertices),
+            "face_count": len(self.faces),
+            "chart_seam_count": self.chart_seam_count,
+            "global_frontier_count": self.global_frontier_count,
+            "vertices": [v.to_json_dict() for v in self.vertices],
+            "faces": [list(f) for f in self.faces],
+            "notes": list(self.notes),
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class ParentAtlasResult:
     """Multi-chart source-parent atlas. Not a DecompositionCertificate."""
 
@@ -119,6 +162,8 @@ class ParentAtlasResult:
     vertices: tuple[ParentVertexDiagnostics, ...]
     frontiers: tuple[FrontierRecord, ...]
     discovery: ComponentDiscoveryRecord
+    stitch: StitchedParentMesh | None
+    chart_components: tuple[tuple[str, str], ...]
     declared_chart_radius: float
     joint_limits: str
     seed_q: tuple[float, ...]
@@ -140,6 +185,8 @@ class ParentAtlasResult:
             "vertices": [v.to_json_dict() for v in self.vertices],
             "frontiers": [item.to_json_dict() for item in self.frontiers],
             "discovery": self.discovery.to_json_dict(),
+            "stitch": None if self.stitch is None else self.stitch.to_json_dict(),
+            "chart_components": [list(pair) for pair in self.chart_components],
             "declared_chart_radius": self.declared_chart_radius,
             "joint_limits": self.joint_limits,
             "seed_q": list(self.seed_q),
@@ -301,6 +348,152 @@ def _chart_adjacency(
     return tuple(recs)
 
 
+def _union_find_components(chart_ids: tuple[str, ...], overlaps: tuple[ChartOverlapRecord, ...]) -> list[list[str]]:
+    parent = {cid: cid for cid in chart_ids}
+
+    def find(x: str) -> str:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    for rec in overlaps:
+        if rec.chart_a not in parent or rec.chart_b not in parent:
+            continue
+        ra, rb = find(rec.chart_a), find(rec.chart_b)
+        if ra != rb:
+            parent[rb] = ra
+    groups: dict[str, list[str]] = {}
+    for cid in chart_ids:
+        groups.setdefault(find(cid), []).append(cid)
+    return [groups[k] for k in sorted(groups)]
+
+
+def _cluster_projected(
+    qs: list[Array],
+    periodic: tuple[bool, ...],
+    radius: float,
+) -> list[Array]:
+    reps: list[Array] = []
+    for q in qs:
+        if any(ambient_distance(q, r, periodic) <= radius for r in reps):
+            continue
+        reps.append(q)
+    return reps
+
+
+def _collect_unattached(
+    problem: FixedPositionParentProblem,
+    charts: list[ChartRecord],
+    banks: tuple[Array, ...],
+    attach_tol: float,
+) -> tuple[int, list[Array]]:
+    centers = [np.asarray(c.center, dtype=float) for c in charts]
+    projected = 0
+    far: list[Array] = []
+    for bank in banks:
+        for row in bank:
+            q_hat, success = project_to_parent(problem, row)
+            if not success:
+                continue
+            projected += 1
+            q_hat = wrap_periodic(q_hat, problem.periodic_coordinates)
+            if not centers:
+                far.append(q_hat)
+                continue
+            dmin = min(ambient_distance(q_hat, c, problem.periodic_coordinates) for c in centers)
+            if dmin > attach_tol:
+                far.append(q_hat)
+    return projected, far
+
+
+def stitch_parent_mesh(
+    problem: FixedPositionParentProblem,
+    charts: tuple[ChartRecord, ...],
+    *,
+    radius: float,
+) -> StitchedParentMesh:
+    periodic = problem.periodic_coordinates
+    dedup = VERTEX_DEDUP_FACTOR * radius
+    qs: list[Array] = []
+    chart_ids: list[set[str]] = []
+    ring_flags: list[bool] = []
+    local_to_global: dict[tuple[str, int], int] = {}
+
+    def _find(q: Array) -> int | None:
+        for i, existing in enumerate(qs):
+            if ambient_distance(q, existing, periodic) <= dedup:
+                return i
+        return None
+
+    for chart in charts:
+        for sample in chart.samples:
+            if not sample.correction.accepted or sample.correction.x is None:
+                continue
+            q = np.asarray(sample.correction.x, dtype=float)
+            idx = _find(q)
+            on_ring = sample.local_index != 0
+            if idx is None:
+                local_to_global[(chart.chart_id, sample.local_index)] = len(qs)
+                qs.append(q)
+                chart_ids.append({chart.chart_id})
+                ring_flags.append(on_ring)
+            else:
+                local_to_global[(chart.chart_id, sample.local_index)] = idx
+                chart_ids[idx].add(chart.chart_id)
+                ring_flags[idx] = ring_flags[idx] or on_ring
+
+    vertices: list[StitchedVertex] = []
+    seam = 0
+    frontier = 0
+    for i, q in enumerate(qs):
+        multi = len(chart_ids[i]) > 1
+        global_front = ring_flags[i] and not multi
+        if ring_flags[i] and multi:
+            seam += 1
+        if global_front:
+            frontier += 1
+        vertices.append(
+            StitchedVertex(
+                vertex_id=i,
+                q=tuple(float(v) for v in q),
+                chart_ids=tuple(sorted(chart_ids[i])),
+                on_chart_ring=ring_flags[i],
+                global_frontier=global_front,
+            )
+        )
+    faces: list[tuple[int, int, int]] = []
+    seen: set[tuple[int, int, int]] = set()
+    for chart in charts:
+        for face in chart.triangles:
+            ids = []
+            skip = False
+            for loc in face:
+                gid = local_to_global.get((chart.chart_id, loc))
+                if gid is None:
+                    skip = True
+                    break
+                ids.append(gid)
+            if skip or len(set(ids)) < 3:
+                continue
+            ordered = tuple(sorted(ids))
+            key = (ordered[0], ordered[1], ordered[2])
+            if key in seen:
+                continue
+            seen.add(key)
+            faces.append((ids[0], ids[1], ids[2]))
+    return StitchedParentMesh(
+        vertices=tuple(vertices),
+        faces=tuple(faces),
+        chart_seam_count=seam,
+        global_frontier_count=frontier,
+        notes=(
+            "Vertices merged in wrapped joint space; chart-ring ≠ global frontier.",
+            "Stitched mesh is not a closed parent component (ADR-046).",
+        ),
+    )
+
+
 def project_to_parent(
     problem: FixedPositionParentProblem,
     q: Array,
@@ -340,12 +533,16 @@ def _grow_charts(
     *,
     radius: float,
     max_charts: int,
+    existing: list[ChartRecord] | None = None,
 ) -> tuple[list[ChartRecord], list[FrontierRecord], bool]:
     dup_tol = 0.7 * radius
-    charts: list[ChartRecord] = []
+    charts: list[ChartRecord] = list(existing or [])
     frontiers: list[FrontierRecord] = []
+    if len(charts) >= max_charts:
+        return charts, frontiers, True
+    start_n = len(charts)
     seed_chart = _try_chart(
-        problem, seed, chart_id="chart_000", radius=radius, n_ref=None
+        problem, seed, chart_id=f"chart_{start_n:03d}", radius=radius, n_ref=None
     )
     if not seed_chart.accepted:
         frontiers.append(
@@ -356,6 +553,12 @@ def _grow_charts(
                 "seed chart rejected after radius shrinks",
             )
         )
+        return charts, frontiers, False
+    try:
+        n_seed = orthonormal_tangent_basis(problem.jacobian(seed), expected_nullity=2)
+    except ValueError:
+        n_seed = np.eye(problem.ambient_dimension)[:, :2]
+    if charts and _is_duplicate(problem, np.asarray(seed_chart.center), n_seed, charts, dup_tol):
         return charts, frontiers, False
     charts.append(seed_chart)
     radius_now = _adaptive_radius(seed_chart, radius)
@@ -433,56 +636,31 @@ def _grow_charts(
 
 
 def _discover_components(
-    problem: FixedPositionParentProblem,
-    charts: list[ChartRecord],
     *,
-    attach_tol: float,
     discovery_bank: int,
     confirmation_bank: int,
     budget_limited: bool,
+    grown_extra: int,
+    remaining_unattached: int,
+    projected: int,
+    component_count: int,
 ) -> ComponentDiscoveryRecord:
-    dim = problem.ambient_dimension
-    primary = _sobol_bank(discovery_bank, dim, seed=1)
-    confirm = _sobol_bank(confirmation_bank, dim, seed=2)
-    centers = [np.asarray(c.center, dtype=float) for c in charts]
-
-    def _attach_count(bank: Array) -> tuple[int, int]:
-        ok = 0
-        far = 0
-        for row in bank:
-            q_hat, success = project_to_parent(problem, row)
-            if not success:
-                continue
-            ok += 1
-            q_hat = wrap_periodic(q_hat, problem.periodic_coordinates)
-            if not centers:
-                far += 1
-                continue
-            dmin = min(
-                ambient_distance(q_hat, c, problem.periodic_coordinates) for c in centers
-            )
-            if dmin > attach_tol:
-                far += 1
-        return ok, far
-
-    p0, u0 = _attach_count(primary)
-    p1, u1 = _attach_count(confirm)
-    projected = p0 + p1
-    unattached = u0 + u1
-    if unattached > 0 and budget_limited:
+    if remaining_unattached > 0 and budget_limited:
         status = ComponentDiscoveryStatus.UNRESOLVED_COMPONENT_DISCOVERY
-    elif u1 > 0:
+    elif remaining_unattached > 0 and grown_extra == 0:
         status = ComponentDiscoveryStatus.NEW_COMPONENT_FOUND_ON_CONFIRMATION
-    elif u0 > 0:
+    elif remaining_unattached > 0:
         status = ComponentDiscoveryStatus.UNRESOLVED_COMPONENT_DISCOVERY
+    elif grown_extra > 0:
+        status = ComponentDiscoveryStatus.NEW_COMPONENT_FOUND_ON_CONFIRMATION
     elif projected > 0:
         status = ComponentDiscoveryStatus.MULTISTART_STABLE_AT_DECLARED_RESOLUTION
     else:
         status = ComponentDiscoveryStatus.ONE_SEED_ONLY
     notes = (
-        "Sobol banks projected by damped minimum-normal steps.",
-        "Unattached projections are not grown into additional atlases in V06A2.",
-        "Unattached seeds on a budget-limited atlas are not proven extra components.",
+        "Sobol banks clustered in wrapped joint space before attachment (ADR-046).",
+        "Unattached cluster representatives may grow extra atlas components within the chart budget.",
+        "Component ids come from chart-overlap connectivity, not from seed count.",
         "Even MULTISTART_STABLE_AT_DECLARED_RESOLUTION is not a closed parent component.",
     )
     return ComponentDiscoveryRecord(
@@ -491,8 +669,8 @@ def _discover_components(
         bank_size=discovery_bank,
         confirmation_bank_size=confirmation_bank,
         projected_seed_count=projected,
-        unattached_seed_count=unattached,
-        component_count=1 if charts else 0,
+        unattached_seed_count=remaining_unattached,
+        component_count=component_count,
         notes=notes,
     )
 
@@ -504,6 +682,7 @@ def build_generic_5r_parent_atlas(
     max_charts: int = DEFAULT_MAX_CHARTS,
     discovery_bank: int = DISCOVERY_BANK,
     confirmation_bank: int = CONFIRM_BANK,
+    max_total_charts: int | None = None,
 ) -> ParentAtlasResult:
     corpus = entry or build_generic_5r()
     model = corpus.model
@@ -513,11 +692,57 @@ def build_generic_5r_parent_atlas(
     jp_fd, _jd = central_difference_jacobians(model.chain, q0, JACOBIAN_FD_STEP_RAD)
     fd_error = float(np.linalg.norm(jp0 - jp_fd, ord="fro"))
     fd_ok = fd_error <= JACOBIAN_FD_ERROR_TOL
+    total_cap = max_total_charts if max_total_charts is not None else 2 * max_charts
 
     charts, frontiers, budget_hit = _grow_charts(
         problem, np.asarray(q0, dtype=float), radius=radius, max_charts=max_charts
     )
+    dim = problem.ambient_dimension
+    primary = _sobol_bank(discovery_bank, dim, seed=1)
+    confirm = _sobol_bank(confirmation_bank, dim, seed=2)
+    attach_tol = ATTACH_RADIUS_FACTOR * radius
+    projected, unattached = _collect_unattached(problem, charts, (primary, confirm), attach_tol)
+    cluster_r = CLUSTER_RADIUS_FACTOR * radius
+    grown_extra = 0
+    for rep in _cluster_projected(unattached, problem.periodic_coordinates, cluster_r):
+        if len(charts) >= total_cap:
+            budget_hit = True
+            break
+        before = len(charts)
+        extra, extra_frontiers, extra_budget = _grow_charts(
+            problem,
+            rep,
+            radius=radius,
+            max_charts=total_cap,
+            existing=charts,
+        )
+        charts = extra
+        frontiers.extend(extra_frontiers)
+        budget_hit = budget_hit or extra_budget
+        if len(charts) > before:
+            grown_extra += 1
+    _, remaining_far = _collect_unattached(problem, charts, (primary, confirm), attach_tol)
+
     overlaps = _chart_adjacency(problem, tuple(charts), overlap_tol=1.2 * radius)
+    groups = _union_find_components(tuple(c.chart_id for c in charts), overlaps)
+    chart_components: list[tuple[str, str]] = []
+    component_ids: list[str] = []
+    for i, group in enumerate(groups):
+        cid = f"{model.architecture_id}_component_{i}"
+        component_ids.append(cid)
+        for chart_id in group:
+            chart_components.append((chart_id, cid))
+    stitch = stitch_parent_mesh(problem, tuple(charts), radius=radius) if charts else None
+    if stitch is not None and stitch.chart_seam_count:
+        frontiers.append(
+            FrontierRecord(
+                FrontierKind.CHART_SEAM,
+                None,
+                None,
+                f"{stitch.chart_seam_count} chart-ring vertices lie in overlap seams",
+            )
+        )
+
     vertices: list[ParentVertexDiagnostics] = []
     for chart in charts:
         for sample in chart.samples:
@@ -544,12 +769,13 @@ def build_generic_5r_parent_atlas(
                 )
 
     discovery = _discover_components(
-        problem,
-        charts,
-        attach_tol=ATTACH_RADIUS_FACTOR * radius,
         discovery_bank=discovery_bank,
         confirmation_bank=confirmation_bank,
         budget_limited=budget_hit,
+        grown_extra=grown_extra,
+        remaining_unattached=len(remaining_far),
+        projected=projected,
+        component_count=len(component_ids),
     )
     accepted_res = [v.p_residual_m for v in vertices if v.accepted and v.p_residual_m is not None]
     open_n = sum(1 for f in frontiers if f.kind is FrontierKind.OPEN)
@@ -558,34 +784,33 @@ def build_generic_5r_parent_atlas(
 
     if not charts:
         status = ParentRepresentationStatus.REJECTED
-        component_ids: tuple[str, ...] = ()
+        component_ids = []
     elif budget_hit or budg_n:
         status = ParentRepresentationStatus.BUDGET_LIMITED
-        component_ids = (f"{model.architecture_id}_component_seed0",)
     elif discovery.unattached_seed_count > 0:
         status = ParentRepresentationStatus.MULTICOMPONENT_UNRESOLVED
-        component_ids = (f"{model.architecture_id}_component_seed0",)
     elif sing_n and not open_n:
         status = ParentRepresentationStatus.SINGULAR_BOUNDARY
-        component_ids = (f"{model.architecture_id}_component_seed0",)
     elif len(charts) == 1:
         status = ParentRepresentationStatus.LOCAL_PATCH
-        component_ids = ()
+        component_ids = []
+        chart_components = []
     else:
         status = ParentRepresentationStatus.ATLAS_OPEN_FRONTIER
-        component_ids = (f"{model.architecture_id}_component_seed0",)
 
     return ParentAtlasResult(
         architecture_id=model.architecture_id,
         p_star=problem.p_star,
         representation_status=status,
-        component_ids=component_ids,
+        component_ids=tuple(component_ids),
         fiber_ids=(),
         charts=tuple(charts),
         overlaps=overlaps,
         vertices=tuple(vertices),
         frontiers=tuple(frontiers),
         discovery=discovery,
+        stitch=stitch,
+        chart_components=tuple(chart_components),
         declared_chart_radius=radius,
         joint_limits="not_modeled",
         seed_q=tuple(float(v) for v in q0),
@@ -593,11 +818,11 @@ def build_generic_5r_parent_atlas(
         seed_fd_verified=fd_ok,
         max_p_residual_m=max(accepted_res) if accepted_res else None,
         notes=(
-            "V06A2 parent atlas grown from one regular generic_5r seed.",
-            f"open_frontiers={open_n}; singular={sing_n}; budget_limited={budg_n}.",
-            f"discovery={discovery.status.value}; projected={discovery.projected_seed_count}.",
-            "Not a complete parent, not S^2 coverage, not a DecompositionCertificate.",
-            "No fibers or closed-mechanism children are emitted.",
+            "V06A2/H5 parent atlas: overlap components and clustered unattached growth (ADR-046).",
+            f"open_frontiers={open_n}; singular={sing_n}; budget_limited={budg_n}; seams={sum(1 for f in frontiers if f.kind is FrontierKind.CHART_SEAM)}.",
+            f"discovery={discovery.status.value}; projected={discovery.projected_seed_count}; extra_grown={grown_extra}.",
+            "Not a complete parent, not S^2 coverage, and not a DecompositionCertificate.",
+            "No fibers or closed-mechanism children are emitted from the atlas builder.",
         ),
     )
 
@@ -618,6 +843,8 @@ def parent_atlas_summary(result: ParentAtlasResult) -> dict[str, Any]:
             1 for f in result.frontiers if f.kind is FrontierKind.BUDGET_LIMITED
         ),
         "unattached_seed_count": result.discovery.unattached_seed_count,
+        "stitched_vertex_count": 0 if result.stitch is None else len(result.stitch.vertices),
+        "stitched_face_count": 0 if result.stitch is None else len(result.stitch.faces),
         "max_p_residual_m": result.max_p_residual_m,
         "joint_limits": result.joint_limits,
     }
