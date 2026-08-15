@@ -86,6 +86,7 @@ V09  validated mechanism predicates and coverage reconstruction
 **V06D2 virtual-U readout:** [`../results/kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html`](../results/kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html) (one UUUR child; not reconstruction).
 **V06E reconstruction readout:** [`../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html`](../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html) (partial source-fiber paint; V06 not passed).
 **V06 H0–H2 hardening contract:** [`V06_HARDENING_PATCH.md`](V06_HARDENING_PATCH.md) and **ADR-043** in [`DECISIONS.md`](DECISIONS.md) (conjunctive local child equivalence; unevaluable empty `COVERED` miss metric).
+**V06H3 continuation engine:** [`../src/grashof_workspace/spatial_experiments/branch_continuation.py`](../src/grashof_workspace/spatial_experiments/branch_continuation.py) and **ADR-044** (shared 1D pseudo-arclength; D1/D2 not migrated).
 Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 

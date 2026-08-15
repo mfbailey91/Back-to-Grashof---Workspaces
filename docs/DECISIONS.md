@@ -428,6 +428,22 @@ fraction from `max(1, 0)` COVERED cells, is a vacuous certificate and a
 vacuous coverage metric. Gate K2 still requires independently reconstructed
 parent task images from accepted children.
 
+## ADR-044 — Shared 1D pseudo-arclength engine is not a D1/D2 migration
+
+<!-- V06H3_BRANCH_CONTINUATION_2026_08_15 -->
+
+**Decision:** V06H3 adds `branch_continuation.py` as shared infrastructure for
+one-dimensional implicit branches: predictor `x_k + ds t_k`, augmented
+corrector `[F(x); t_k^T Δ(x,x_pred)]=0`, step adaptation, and conjunctive
+return (minimum arclength, wrapped state, tangent alignment, branch identity).
+Position-only return detection is forbidden. D1 `continue_level_set` and D2
+`continue_uuur` remain on their existing correctors until V06H4. The engine
+does not issue certificates, reconstruct a parent, or authorize V07A.
+
+**Reason:** Replacing underdetermined D1/D2 correctors before the shared
+augmented solver exists would mix a numerical rewrite with a scientific
+re-audit (Gate K2 / ADR-043).
+
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
 <!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->
