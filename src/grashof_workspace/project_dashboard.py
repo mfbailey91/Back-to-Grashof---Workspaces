@@ -635,8 +635,9 @@ PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root resu
 
 <h2>Next</h2>
 <p><strong>V07</strong> — V06E compared source fibers to the frozen V06C grid
-(ADR-042). Accepted-child reconstruction is empty; factorization is
-<code>no valid recombination</code>; V06 is not passed. V07A remains next.
+(ADR-042 / ADR-043). Coverage comparison is unevaluable when interior
+<code>COVERED</code> cells are empty; factorization is
+<code>unresolved</code>; V06 is not passed. V07A remains next.
 L5 reconstruction stays unresolved.
 
 <p class="meta" style="margin-top:2rem;">

@@ -84,7 +84,9 @@ table {{ border-collapse: collapse; }} th,td {{ border:1px solid #bbb; padding:.
 <div class="note"><strong>ADR-041.</strong> A local <code>(d×n)</code> virtual-U chart plus
 one <code>U_v-U_phys-U_phys-R</code> comparison is not parent completeness, not a
 six-family atlas, and not reconstruction. Child status is issued from the
-certificate, never pre-accepted. Drive is branch arclength <code>s</code>.</div>
+certificate, never pre-accepted. Until H3, <code>s</code> is a tangent-predictor
+branch parameter, not pseudo-arclength. Local equivalence is conjunctive
+(ADR-043).</div>
 <table>
 <tr><th>architecture</th><th>axis_aggregation</th><th>closed_mechanism</th><th>status</th></tr>
 <tr><td><code>exact_two_u_5r</code></td><td>{exact["axis_aggregation_status"]}</td>

@@ -486,7 +486,7 @@ of one mechanism branch—not two independent mechanism DOFs.
 <li><strong>L3:</strong> planar calibration adapter (trusted exact map).</li>
 <li><strong>L4 / V05:</strong> proximal <code>exact_u_pair_4r</code> independent match is
 <code>LOCAL_ONLY</code> on a traced arc; complete component correspondence remains unresolved.</li>
-<li><strong>L5 / V06:</strong> V06E closeout (partial source-fiber reconstruction, empty
+<li><strong>L5 / V06:</strong> V06E closeout (unevaluable coverage comparison, empty
 accepted-child reconstruction); V07A is next.</li>
 <li><strong>L6 / V07:</strong> scaffold interface with nullity-3 seed audit for generic 6R;
 frozen SO(3) reference and nested / V08 work remain V07A+.</li>

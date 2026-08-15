@@ -139,7 +139,7 @@ def build_spatial_l5_scaffold_bundle(
             f"V06C source images coverage_label={images.pointing.coverage_label.value} (ADR-038).",
             "V06B SUUR parent is not a U_v child and not reconstruction (ADR-039).",
             "V06D1 task-derived source fibers exist; they are not the 2D parent (ADR-040).",
-            "V06E source-fiber paint is partial; accepted-child reconstruction is empty (ADR-042).",
+            "V06E source-fiber paint exists; coverage comparison is unevaluable without COVERED cells (ADR-043).",
             "Descriptor discovery remains blocked. V07A is next.",
         ),
     )
@@ -267,7 +267,7 @@ def build_spatial_l5_scaffold_bundle(
         accepted_fiber_ids=(),
         unresolved_fiber_ids=fiber_ids,
         direct_coverage_status=f"SOURCE_{images.pointing.coverage_label.value}",
-        reconstructed_coverage_status="SOURCE_FIBER_PARTIAL_CHILD_EMPTY",
+        reconstructed_coverage_status="SOURCE_FIBER_UNEVALUABLE_CHILD_EMPTY",
         comparison_error=recon.metrics.hausdorff_rad,
         process_status=ProcessStatus.SCAFFOLD,
         certificate_status=CertificateStatus.UNRESOLVED,
@@ -278,6 +278,7 @@ def build_spatial_l5_scaffold_bundle(
             "ADR-040: task-derived h=c fibers are not reconstruction.",
             "ADR-041: local U_v / UUUR is not reconstruction.",
             "ADR-042: source-fiber cell paint does not unblock reconstruction certificates.",
+            "ADR-043: empty COVERED cells make the miss metric unevaluable; local UUUR is conjunctive.",
         ),
     )
 
@@ -315,7 +316,7 @@ def default_l5_scaffold_payload() -> dict[str, Any]:
     bundle = build_spatial_l5_scaffold_bundle()
     return {
         "note": (
-            "L5 scaffold: V06E source-fiber reconstruction is partial and accepted-child "
+            "L5 scaffold: V06E coverage comparison is unevaluable (empty COVERED) and accepted-child "
             "reconstruction is empty. Not a 2D parent completeness claim and not "
             "pointing-image reconstruction. V07A remains next."
         ),

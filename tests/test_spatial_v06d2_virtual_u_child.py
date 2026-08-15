@@ -22,6 +22,7 @@ from grashof_workspace.spatial_experiments.virtual_u_child import (
     CHILD_DIM,
     CONSTRAINT_DIM,
     ClosedUUURProblem,
+    directed_wrapped_set_distance,
     evaluate_v06d2_architecture,
     local_virtual_u_axes,
 )
@@ -48,6 +49,12 @@ def test_local_chart_and_uuur_child() -> None:
     assert exact.certificate.joint_kind_sequence == ("U", "U", "U", "R")
     assert exact.certificate.evidence.get("initialized_accepted") is False
     assert exact.certificate.evidence.get("drive_mode") == "free_branch_s"
+    assert exact.comparison is not None
+    assert exact.comparison.accepted_local is False
+    assert exact.certificate.status == "REJECTED"
+    assert exact.certificate.closed_mechanism_status == "REJECTED"
+    assert exact.comparison.failed_metrics
+    assert "tangent" in exact.comparison.failed_metrics
     assert exact.certificate.status not in {"EXACT_GLOBAL", "EXACT_ON_COMPONENT"}
     blob = json.dumps(exact.to_json_dict(), allow_nan=False)
     assert "curve_type" not in blob or exact.to_json_dict()["curve_type"] is None
@@ -56,6 +63,16 @@ def test_local_chart_and_uuur_child() -> None:
     )
     assert problem.jacobian(np.zeros(CHILD_DIM)).shape == (CONSTRAINT_DIM, CHILD_DIM)
     assert problem.drive_mode == "free_branch_s"
+
+
+def test_directed_distances_are_asymmetric() -> None:
+    periodic = (True, True)
+    src = [np.array([0.0, 0.0]), np.array([0.1, 0.0])]
+    dst = [np.array([0.0, 0.0])]
+    s2c = directed_wrapped_set_distance(src, dst, periodic)
+    c2s = directed_wrapped_set_distance(dst, src, periodic)
+    assert s2c > c2s + 1e-12
+    assert abs(c2s) < 1e-12
 
 
 def test_controls_rejected_and_no_family_sweep() -> None:
@@ -99,5 +116,8 @@ def test_v06d2_readout(tmp_path) -> None:
     payload = json.loads((tmp_path / "data" / "v06d2_virtual_u_child.json").read_text())
     json.dumps(payload, allow_nan=False)
     assert payload["exact_two_u_5r"]["certificate"]["joint_role_sequence"][0] == "U_v"
+    assert payload["exact_two_u_5r"]["certificate"]["status"] == "REJECTED"
+    assert payload["exact_two_u_5r"]["comparison"]["accepted_local"] is False
+    assert "tangent" in payload["exact_two_u_5r"]["comparison"]["failed_metrics"]
     assert payload["generic_5r"]["certificate"]["status"] != "EXACT_GLOBAL"
     assert (tmp_path / "figures" / "v06d2_virtual_u_child.png").is_file()

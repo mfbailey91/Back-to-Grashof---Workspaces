@@ -409,6 +409,25 @@ V07A remains the next scientific slice.
 **Reason:** Gate K2 / ADR-024 reconstruct a parent from an audited accepted
 fiber/child family, not from a stack of open traces (ADR-026 / ADR-038).
 
+## ADR-043 — Conjunctive local equivalence and non-vacuous coverage metrics
+
+<!-- V06H0_H2_SEMANTIC_HARDENING_2026_08_14 -->
+
+**Decision:** `LOCAL_ONLY` for a task-derived UUUR child is conjunctive: every
+named local metric must pass, including independent directed distances
+\(d_{S\to C}\) and \(d_{C\to S}\), `|h-c|`, tangent error, and scoped sample
+support. The virtual-U chart remains `LOCAL_CANDIDATE` until a later global
+chart audit. An empty interior `COVERED` cell population makes the missed-cell
+fraction undefined (`None` / JSON `null`); factorization and reconstruction
+coverage are then `unresolved` / `UNRESOLVED`. Current V06D2/V06E dispositions
+are re-opened under this contract (see `docs/V06_HARDENING_PATCH.md`). H0–H2
+do not rewrite continuation, stitch atlases, or promote `EXACT_*`.
+
+**Reason:** Issuing `LOCAL_ONLY` from a subset of residuals, or a zero miss
+fraction from `max(1, 0)` COVERED cells, is a vacuous certificate and a
+vacuous coverage metric. Gate K2 still requires independently reconstructed
+parent task images from accepted children.
+
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
 <!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->

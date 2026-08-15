@@ -76,6 +76,8 @@ def render_v06e_html(result: ParentReconstructionResult, *, figure_rel: str) -> 
     gate_rows = "".join(
         f"<tr><td>{k}</td><td>{v}</td></tr>" for k, v in result.v06_gate.items()
     )
+    miss = "unevaluable" if m.missed_covered_fraction is None else f"{m.missed_covered_fraction:.3f}"
+    fp = "unevaluable" if m.false_positive_fraction is None else f"{m.false_positive_fraction:.3f}"
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <title>V06E — reconstruction closeout</title>
@@ -86,8 +88,9 @@ code {{ font-family: ui-monospace, monospace; }}
 table {{ border-collapse: collapse; }} th,td {{ border:1px solid #bbb; padding:.4rem; text-align:left; }}
 </style></head><body>
 <h1>V06E — source-fiber vs accepted-child reconstruction</h1>
-<div class="note"><strong>ADR-042.</strong> Painting task-derived fibers onto the frozen
-V06C grid is not parent completeness. Accepted-child reconstruction is empty because
+<div class="note"><strong>ADR-042 / ADR-043.</strong> Painting task-derived fibers onto the frozen
+V06C grid is not parent completeness. Empty interior <code>COVERED</code> cells make the
+miss metric unevaluable. Accepted-child reconstruction is empty because
 no <code>EXACT_GLOBAL</code> / <code>EXACT_ON_COMPONENT</code> children exist.
 Descriptor discovery stays blocked (ADR-026). V06 program gate:
 <strong>not passed</strong>.</div>
@@ -97,7 +100,10 @@ Descriptor discovery stays blocked (ADR-026). V06 program gate:
 <tr><th>complete foliation</th><td>{result.complete_foliation}</td></tr>
 <tr><th>factorization</th><td>{result.factorization_status}</td></tr>
 <tr><th>fiber-hit / missed COVERED fraction</th>
-<td>{m.fiber_hit_cells} / {m.missed_covered_fraction:.3f}</td></tr>
+<td>{m.fiber_hit_cells} / {miss}</td></tr>
+<tr><th>false-positive fraction</th><td>{fp}</td></tr>
+<tr><th>coverage comparison</th>
+<td>{"evaluable" if m.coverage_comparison_evaluable else "unevaluable"} — {m.coverage_comparison_reason}</td></tr>
 <tr><th>accepted children</th><td>{m.accepted_child_count}</td></tr>
 <tr><th>Hausdorff (rad)</th><td>{m.hausdorff_rad}</td></tr>
 <tr><th>icosphere level</th><td>{result.icosphere_level}</td></tr>

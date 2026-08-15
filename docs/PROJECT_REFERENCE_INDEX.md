@@ -85,6 +85,7 @@ V09  validated mechanism predicates and coverage reconstruction
 **V06D1 level-set readout:** [`../results/kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html`](../results/kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html) (task-derived source fibers; not reconstruction).
 **V06D2 virtual-U readout:** [`../results/kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html`](../results/kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html) (one UUUR child; not reconstruction).
 **V06E reconstruction readout:** [`../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html`](../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html) (partial source-fiber paint; V06 not passed).
+**V06 H0–H2 hardening contract:** [`V06_HARDENING_PATCH.md`](V06_HARDENING_PATCH.md) and **ADR-043** in [`DECISIONS.md`](DECISIONS.md) (conjunctive local child equivalence; unevaluable empty `COVERED` miss metric).
 Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 
