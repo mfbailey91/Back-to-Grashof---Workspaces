@@ -16,6 +16,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from .axis_geometry import as_vec3
+from .branch_continuation import continue_implicit_branch
 from .continuation import wrap_joint_delta
 from .implicit_manifold import ambient_distance, orthonormal_tangent_basis
 from .jacobians import matrix_rank_report, pointing_jacobian, position_jacobian
@@ -129,6 +130,28 @@ def correct_to_levelset(
         x = wrap_periodic(x + dq, periodic)
     qt = tuple(float(v) for v in x)
     return qt, False, float(np.linalg.norm(levelset_residual(model, qt, p_star, n, c)))
+
+
+@dataclass(frozen=True, slots=True)
+class PointingLevelSetProblem:
+    """Task-derived 1D branch ``p(q)=p*`` and ``n·d=c``. Equations unchanged."""
+
+    model: OpenChainModel
+    p_star: tuple[float, float, float]
+    n: tuple[float, float, float]
+    c: float
+    problem_id: str
+    ambient_dimension: int = 5
+    constraint_dimension: int = 4
+    periodic_coordinates: tuple[bool, ...] = (True, True, True, True, True)
+
+    def residual(self, x: Array) -> Array:
+        q = tuple(float(v) for v in np.asarray(x, dtype=float).reshape(-1))
+        return levelset_residual(self.model, q, self.p_star, self.n, self.c)
+
+    def jacobian(self, x: Array) -> Array:
+        q = tuple(float(v) for v in np.asarray(x, dtype=float).reshape(-1))
+        return levelset_jacobian(self.model, q, self.n)
 
 
 @dataclass(frozen=True, slots=True)
@@ -470,45 +493,34 @@ def continue_level_set(
     report0 = matrix_rank_report(jac0)
     if report0.rank != 4 or report0.nullity != 1:
         return (_fiber_sample(model, q_seed, n, c, p_star, 0.0),), "singular", False
-    t = orthonormal_tangent_basis(jac0, expected_nullity=1)[:, 0]
-    samples = [_fiber_sample(model, q_seed, n, c, p_star, 0.0)]
-    periodic = (True,) * 5
-    status = "open"
-    returned = False
-    for sign in (1.0, -1.0):
-        q_cur = np.asarray(q_seed, dtype=float)
-        t_cur = t * sign
-        sigma = 0.0
-        for k in range(1, n_steps + 1):
-            q_pred = q_cur + t_cur * step
-            q_hat, ok_step, _ = correct_to_levelset(
-                model, tuple(float(v) for v in q_pred), p_star, n, c
-            )
-            if not ok_step:
-                status = "unresolved"
-                break
-            jac = levelset_jacobian(model, q_hat, n)
-            report = matrix_rank_report(jac)
-            if report.rank != 4:
-                status = "singular"
-                samples.append(_fiber_sample(model, q_hat, n, c, p_star, sign * k * step))
-                break
-            t_new = orthonormal_tangent_basis(jac, expected_nullity=1)[:, 0]
-            if float(np.dot(t_new, t_cur)) < 0.0:
-                t_new = -t_new
-            q_cur = np.asarray(q_hat, dtype=float)
-            t_cur = t_new
-            sigma = sign * k * step
-            samples.append(_fiber_sample(model, q_hat, n, c, p_star, sigma))
-            dist = ambient_distance(q_cur, np.asarray(q_seed), periodic)
-            if k > 8 and dist < 0.08:
-                returned = True
-                status = "returned"
-                break
-        if returned:
-            break
+    problem = PointingLevelSetProblem(
+        model=model,
+        p_star=p_star,
+        n=n,
+        c=c,
+        problem_id=f"{model.architecture_id}_h{c:.4f}",
+    )
+    trace = continue_implicit_branch(
+        problem,
+        np.asarray(q_seed, dtype=float),
+        branch_id=f"{model.architecture_id}_levelset_c{c:.4f}",
+        max_steps=n_steps,
+        step_size=step,
+    )
+    samples = [
+        _fiber_sample(
+            model,
+            tuple(float(v) for v in step.x),
+            n,
+            c,
+            p_star,
+            step.s,
+        )
+        for step in trace.steps
+        if step.accepted and step.x is not None
+    ]
     samples.sort(key=lambda s: s.sigma)
-    return tuple(samples), status, returned
+    return tuple(samples), trace.branch_status, trace.returned
 
 
 def build_parent_level_sets(

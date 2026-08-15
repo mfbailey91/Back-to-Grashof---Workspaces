@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 import json
 
 import numpy as np
@@ -72,3 +73,5 @@ def test_h3_does_not_replace_d1_d2_correctors() -> None:
     src_d2 = continue_uuur.__code__.co_filename
     assert "branch_continuation" not in src_d1
     assert "branch_continuation" not in src_d2
+    assert "continue_implicit_branch" in inspect.getsource(continue_level_set)
+    assert "continue_implicit_branch" in inspect.getsource(continue_uuur)

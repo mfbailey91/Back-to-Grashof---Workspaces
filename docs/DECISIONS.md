@@ -436,13 +436,29 @@ parent task images from accepted children.
 one-dimensional implicit branches: predictor `x_k + ds t_k`, augmented
 corrector `[F(x); t_k^T Δ(x,x_pred)]=0`, step adaptation, and conjunctive
 return (minimum arclength, wrapped state, tangent alignment, branch identity).
-Position-only return detection is forbidden. D1 `continue_level_set` and D2
-`continue_uuur` remain on their existing correctors until V06H4. The engine
-does not issue certificates, reconstruct a parent, or authorize V07A.
+Position-only return detection is forbidden. V06H4 migrates D1/D2 onto this
+engine (ADR-045). The engine itself does not issue certificates, reconstruct a
+parent, or authorize V07A.
 
 **Reason:** Replacing underdetermined D1/D2 correctors before the shared
 augmented solver exists would mix a numerical rewrite with a scientific
 re-audit (Gate K2 / ADR-043).
+
+## ADR-045 — D1/D2 traces use the H3 augmented corrector
+
+<!-- V06H4_D1_D2_MIGRATE_2026_08_15 -->
+
+**Decision:** V06D1 `continue_level_set` and V06D2 `continue_uuur` continue with
+the shared pseudo-arclength engine. Source and child equations are unchanged.
+Seed projection may still use the existing minimum-norm projectors; the
+continuation loop does not. UUUR local status is whatever the conjunctive H1
+audit issues after migration (`REJECTED`, `LOCAL_ONLY`, or `UNRESOLVED`). That
+is not parent completeness, not `EXACT_*` without component correspondence, and
+not V07A authorization. H5 stitching and H6 committed-result regen remain next.
+
+**Reason:** Underdetermined min-norm correction along a 1D fiber is not
+pseudo-arclength (ADR-044). Re-auditing the child after the numerical fix
+prevents carrying a vacuous pre-H3 disposition (ADR-043).
 
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 

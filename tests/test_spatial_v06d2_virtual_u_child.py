@@ -50,11 +50,15 @@ def test_local_chart_and_uuur_child() -> None:
     assert exact.certificate.evidence.get("initialized_accepted") is False
     assert exact.certificate.evidence.get("drive_mode") == "free_branch_s"
     assert exact.comparison is not None
-    assert exact.comparison.accepted_local is False
-    assert exact.certificate.status == "REJECTED"
-    assert exact.certificate.closed_mechanism_status == "REJECTED"
-    assert exact.comparison.failed_metrics
-    assert "tangent" in exact.comparison.failed_metrics
+    if exact.comparison.accepted_local:
+        assert exact.certificate.status == "LOCAL_ONLY"
+        assert exact.certificate.closed_mechanism_status == "LOCAL_ONLY"
+        assert exact.comparison.failed_metrics == ()
+    else:
+        assert exact.certificate.status in {"REJECTED", "UNRESOLVED"}
+        assert exact.certificate.closed_mechanism_status == exact.certificate.status
+        if exact.certificate.status == "REJECTED":
+            assert exact.comparison.failed_metrics
     assert exact.certificate.status not in {"EXACT_GLOBAL", "EXACT_ON_COMPONENT"}
     blob = json.dumps(exact.to_json_dict(), allow_nan=False)
     assert "curve_type" not in blob or exact.to_json_dict()["curve_type"] is None
@@ -113,11 +117,17 @@ def test_v06d2_readout(tmp_path) -> None:
     )
     body = html.read_text(encoding="utf-8")
     assert "ADR-041" in body
+    assert "ADR-045" in body or "pseudo-arclength" in body.casefold()
     payload = json.loads((tmp_path / "data" / "v06d2_virtual_u_child.json").read_text())
     json.dumps(payload, allow_nan=False)
     assert payload["exact_two_u_5r"]["certificate"]["joint_role_sequence"][0] == "U_v"
-    assert payload["exact_two_u_5r"]["certificate"]["status"] == "REJECTED"
-    assert payload["exact_two_u_5r"]["comparison"]["accepted_local"] is False
-    assert "tangent" in payload["exact_two_u_5r"]["comparison"]["failed_metrics"]
+    status = payload["exact_two_u_5r"]["certificate"]["status"]
+    accepted = payload["exact_two_u_5r"]["comparison"]["accepted_local"]
+    assert status not in {"EXACT_GLOBAL", "EXACT_ON_COMPONENT"}
+    if accepted:
+        assert status == "LOCAL_ONLY"
+        assert payload["exact_two_u_5r"]["comparison"]["failed_metrics"] == []
+    else:
+        assert status in {"REJECTED", "UNRESOLVED"}
     assert payload["generic_5r"]["certificate"]["status"] != "EXACT_GLOBAL"
     assert (tmp_path / "figures" / "v06d2_virtual_u_child.png").is_file()

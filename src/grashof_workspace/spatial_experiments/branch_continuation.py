@@ -48,10 +48,17 @@ RETURN_TANGENT_DOT = 0.85
 class ImplicitBranchProblem(Protocol):
     """One-dimensional implicit branch ``F(x)=0`` in ambient coordinates."""
 
-    problem_id: str
-    ambient_dimension: int
-    constraint_dimension: int
-    periodic_coordinates: tuple[bool, ...]
+    @property
+    def problem_id(self) -> str: ...
+
+    @property
+    def ambient_dimension(self) -> int: ...
+
+    @property
+    def constraint_dimension(self) -> int: ...
+
+    @property
+    def periodic_coordinates(self) -> tuple[bool, ...]: ...
 
     def residual(self, x: Array) -> Array: ...
 

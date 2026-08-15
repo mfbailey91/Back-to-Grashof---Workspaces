@@ -21,6 +21,7 @@ from .axis_aggregation import (
     lift_source_to_suur_physical,
 )
 from .axis_geometry import as_mat3, as_vec3
+from .branch_continuation import continue_implicit_branch
 from .continuation import wrap_joint_delta
 from .decomposition_certificate import DecompositionCertificate
 from .fixed_position import JACOBIAN_FD_STEP_RAD, pose_fixed_position_problem
@@ -330,40 +331,20 @@ def continue_uuur(
     report0 = matrix_rank_report(jac0)
     if report0.rank != 6 or report0.nullity != 1:
         return (_sample(problem, x0, 0.0),), "singular", False
-    t = orthonormal_tangent_basis(jac0, expected_nullity=1)[:, 0]
-    samples = [_sample(problem, x0, 0.0)]
-    status = "open"
-    returned = False
-    for sign in (1.0, -1.0):
-        x_cur = np.asarray(x0, dtype=float)
-        t_cur = t * sign
-        for k in range(1, n_steps + 1):
-            x_pred = x_cur + t_cur * step
-            x_hat, ok_step, _ = correct_uuur(problem, x_pred)
-            if not ok_step:
-                status = "unresolved"
-                break
-            jac = problem.jacobian(x_hat)
-            report = matrix_rank_report(jac)
-            if report.rank != 6:
-                status = "singular"
-                samples.append(_sample(problem, x_hat, sign * k * step))
-                break
-            t_new = orthonormal_tangent_basis(jac, expected_nullity=1)[:, 0]
-            if float(np.dot(t_new, t_cur)) < 0.0:
-                t_new = -t_new
-            x_cur = np.asarray(x_hat, dtype=float)
-            t_cur = t_new
-            samples.append(_sample(problem, x_hat, sign * k * step))
-            dist = ambient_distance(x_cur, np.asarray(x0), problem.periodic_coordinates)
-            if k > 8 and dist < 0.08:
-                returned = True
-                status = "returned"
-                break
-        if returned:
-            break
+    trace = continue_implicit_branch(
+        problem,
+        x0,
+        branch_id=f"{problem.problem_id}_uuur",
+        max_steps=n_steps,
+        step_size=step,
+    )
+    samples = [
+        _sample(problem, np.asarray(step.x, dtype=float), step.s)
+        for step in trace.steps
+        if step.accepted and step.x is not None
+    ]
     samples.sort(key=lambda s: s.s)
-    return tuple(samples), status, returned
+    return tuple(samples), trace.branch_status, trace.returned
 
 
 def directed_wrapped_set_distance(
@@ -527,7 +508,7 @@ def compare_fiber_and_child(
         accepted_local=accepted,
         notes=(
             "Bidirectional sample comparison on a budget-limited fiber is not component completeness.",
-            "Until H3, s is a tangent-predictor branch parameter, not pseudo-arclength.",
+            "Drive is pseudo-arclength s from the H3 augmented corrector (ADR-044/ADR-045).",
             "alpha(s) and beta(s) remain coupled outputs of the same branch.",
             "LOCAL_ONLY requires every named metric (ADR-043); do not initialize accepted.",
         ),
