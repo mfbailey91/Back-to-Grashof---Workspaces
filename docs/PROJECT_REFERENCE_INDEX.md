@@ -2,7 +2,7 @@
 
 **Status:** Active index for theory, terminology, plans, and deferred research tracks
 **Project:** Characterization of Manipulator Workspaces
-**Last updated:** 2026-08-13
+**Last updated:** 2026-08-15
 
 ---
 
@@ -79,16 +79,17 @@ V09  validated mechanism predicates and coverage reconstruction
 **V05E MVP readout:** [`../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
 **V06A0 software-validation readout:** [`../results/kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html`](../results/kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html) (unit-sphere manifold engine; not a 5R parent).
 **V06A1 local-patch readout:** [`../results/kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html`](../results/kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html) (`LOCAL_PATCH`; not a complete parent).
-**V06A2 parent-atlas readout:** [`../results/kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html`](../results/kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html) (multi-chart atlas; not a closed component).
+**V06A2 parent-atlas readout:** [`../results/kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html`](../results/kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html) (stitched multi-chart atlas; not a closed component).
 **V06C source-image readout:** [`../results/kinematic_decomposition/v06c/sprint_v06c_source_images.html`](../results/kinematic_decomposition/v06c/sprint_v06c_source_images.html) (orientation surface + pointing image; not S² completeness).
 **V06B compound-parent readout:** [`../results/kinematic_decomposition/v06b/sprint_v06b_compound_parent.html`](../results/kinematic_decomposition/v06b/sprint_v06b_compound_parent.html) (SUUR LOCAL_ONLY; near control REJECTED).
 **V06D1 level-set readout:** [`../results/kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html`](../results/kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html) (task-derived source fibers; not reconstruction).
 **V06D2 virtual-U readout:** [`../results/kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html`](../results/kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html) (one UUUR child; not reconstruction).
-**V06E reconstruction readout:** [`../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html`](../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html) (partial source-fiber paint; V06 not passed).
+**V06E reconstruction readout:** [`../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html`](../results/kinematic_decomposition/v06e/sprint_v06e_reconstruction.html) (source-fiber paint vs V06C grid; no accepted children; V06 not passed).
 **V06 H0–H2 hardening contract:** [`V06_HARDENING_PATCH.md`](V06_HARDENING_PATCH.md) and **ADR-043** in [`DECISIONS.md`](DECISIONS.md) (conjunctive local child equivalence; unevaluable empty `COVERED` miss metric).
 **V06H3 continuation engine:** [`../src/grashof_workspace/spatial_experiments/branch_continuation.py`](../src/grashof_workspace/spatial_experiments/branch_continuation.py) and **ADR-044** (shared 1D pseudo-arclength).
 **V06H4 D1/D2 migration:** **ADR-045** (level-set and UUUR traces use the H3 corrector; equations unchanged).
 **V06H5 atlas stitch:** **ADR-046** (overlap components, clustered unattached growth, stitched mesh, fiber dedup).
+**V06H6 closeout:** **ADR-047** (UUUR rejected; campaign factorization unresolved; V07A held).
 Do not confuse with explorer `results/spatial4bar_explorer/v05a/` (deferred-V10 pointing-slice prep; `mechanism_explorer_only`).
 ### [`ROADMAP.md`](ROADMAP.md)
 

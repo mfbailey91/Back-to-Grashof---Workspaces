@@ -144,7 +144,7 @@ def build_spatial_l5_scaffold_bundle(
                 f"{'evaluable' if recon.metrics.coverage_comparison_evaluable else 'unevaluable'} "
                 f"(ADR-043); factorization={recon.factorization_status}."
             ),
-            "Descriptor discovery remains blocked. V07A is next.",
+            "Descriptor discovery remains blocked. V07A held (ADR-047).",
         ),
     )
     if first is not None:
@@ -309,7 +309,7 @@ def build_spatial_l5_scaffold_bundle(
             "V06B SUUR parent exists; it is not UUUR reconstruction (ADR-039).",
             "V06D1 source fibers exist; they are not U_v children (ADR-040).",
             "V06D2 one UUUR child exists; it is not reconstruction (ADR-041).",
-            "V06E closeout is honest non-pass; V07A is next (ADR-042).",
+            "V06E closeout is honest non-pass; V07A held (ADR-047).",
         ),
     )
 
@@ -322,7 +322,7 @@ def default_l5_scaffold_payload() -> dict[str, Any]:
         "note": (
             "L5 scaffold: V06E accepted-child reconstruction is empty. Coverage comparison "
             "follows ADR-043 (unevaluable iff COVERED is empty). Not a 2D parent completeness "
-            "claim and not pointing-image reconstruction. V07A remains next."
+            "claim and not pointing-image reconstruction. V07A held (ADR-047)."
         ),
         "v06_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
         "bundle": bundle.to_dict(),

@@ -333,7 +333,7 @@ Architecture-scoped scaffold after the proximal exact-U gate: synthetic 5R seed 
 (<code>rank Jp=3</code>, <code>nullity=2</code>) plus V06B SUUR compound-parent audit.
 This is <strong>not</strong> a complete 2D parent component and
 <strong>not</strong> pointing-image reconstruction. All family certificates stay
-<code>UNRESOLVED</code>. V06E source-fiber reconstruction is partial; V07A remains next.
+<code>UNRESOLVED</code>. V06E source-fiber reconstruction is partial; V07A held (ADR-047).
 Process status is <code>SCAFFOLD</code>.
 </p>
 <table>

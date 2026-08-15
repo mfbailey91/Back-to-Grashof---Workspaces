@@ -391,18 +391,22 @@ results/decomposition_ladder
 results/index.html
 ```
 
-## 17. Closeout questions
+## 17. Closeout questions (ADR-047, 2026-08-15)
 
-Answer separately:
+Answered without inventing a pass:
 
-1. Is the represented 5R source parent sufficiently complete for its declared scope?
-2. Are the source pointing fibers valid and globally identified?
-3. Does the present fixed-axis virtual-U child preserve the source fiber?
-4. Is any child accepted for reconstruction?
-5. Is the broader factorization supported, rejected, or unresolved?
-6. Is V07A authorized?
-
-A legitimate closeout is:
+1. **Parent completeness:** No. Stitched atlas (ADR-046) is still
+   `BUDGET_LIMITED`; unattached Sobol seeds remain; not a closed 2D component.
+2. **Source pointing fibers:** Task-derived and H3-continued; seam-stitched
+   and deduplicated. Not a complete foliation or a globally identified fiber
+   family.
+3. **Fixed-axis UUUR vs source fiber:** No. Conjunctive H1 audit still
+   `REJECTED` (failed `h_c` and source-to-child distance on the regenerated
+   D2 artifact). Chart stays `LOCAL_CANDIDATE`.
+4. **Accepted children:** None (`EXACT_*` empty).
+5. **Factorization:** `unresolved` for the campaign (empty accepted children
+   do not earn `no valid recombination`).
+6. **V07A:** Not authorized. Held pending parent/continuation completeness.
 
 ```text
 current fixed-axis UUUR construction rejected;

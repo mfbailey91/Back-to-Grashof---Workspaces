@@ -88,12 +88,13 @@ code {{ font-family: ui-monospace, monospace; }}
 table {{ border-collapse: collapse; }} th,td {{ border:1px solid #bbb; padding:.4rem; text-align:left; }}
 </style></head><body>
 <h1>V06E — source-fiber vs accepted-child reconstruction</h1>
-<div class="note"><strong>ADR-042 / ADR-043.</strong> Painting task-derived fibers onto the frozen
+<div class="note"><strong>ADR-042 / ADR-043 / ADR-047.</strong> Painting task-derived fibers onto the frozen
 V06C grid is not parent completeness. Empty interior <code>COVERED</code> cells make the
-miss metric unevaluable. Accepted-child reconstruction is empty because
-no <code>EXACT_GLOBAL</code> / <code>EXACT_ON_COMPONENT</code> children exist.
+miss metric unevaluable. Empty accepted children keep factorization
+<code>unresolved</code> (not <code>no valid recombination</code>).
+No <code>EXACT_GLOBAL</code> / <code>EXACT_ON_COMPONENT</code> children exist.
 Descriptor discovery stays blocked (ADR-026). V06 program gate:
-<strong>not passed</strong>.</div>
+<strong>not passed</strong>. V07A held.</div>
 <table>
 <tr><th>direct coverage</th><td>{result.coverage_label}</td></tr>
 <tr><th>reconstruction coverage</th><td>{result.reconstruction_coverage}</td></tr>

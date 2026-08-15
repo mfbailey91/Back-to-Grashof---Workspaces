@@ -11,11 +11,13 @@ table { border-collapse: collapse; } th,td { border:1px solid #bbb; padding:.4re
 <div class="note"><strong>ADR-041.</strong> A local <code>(d×n)</code> virtual-U chart plus
 one <code>U_v-U_phys-U_phys-R</code> comparison is not parent completeness, not a
 six-family atlas, and not reconstruction. Child status is issued from the
-certificate, never pre-accepted. Drive is branch arclength <code>s</code>.</div>
+certificate, never pre-accepted. Drive is pseudo-arclength <code>s</code>
+from the H3 augmented corrector (ADR-044 / ADR-045). Local equivalence is
+conjunctive (ADR-043).</div>
 <table>
 <tr><th>architecture</th><th>axis_aggregation</th><th>closed_mechanism</th><th>status</th></tr>
 <tr><td><code>exact_two_u_5r</code></td><td>EXACT_GLOBAL</td>
-<td>LOCAL_ONLY</td><td>LOCAL_ONLY</td></tr>
+<td>REJECTED</td><td>REJECTED</td></tr>
 <tr><td><code>near_two_u_5r</code></td><td>REJECTED</td>
 <td>REJECTED</td><td>REJECTED</td></tr>
 <tr><td><code>generic_5r</code></td><td>REJECTED</td>

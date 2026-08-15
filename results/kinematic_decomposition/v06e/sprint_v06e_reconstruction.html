@@ -8,24 +8,29 @@ code { font-family: ui-monospace, monospace; }
 table { border-collapse: collapse; } th,td { border:1px solid #bbb; padding:.4rem; text-align:left; }
 </style></head><body>
 <h1>V06E — source-fiber vs accepted-child reconstruction</h1>
-<div class="note"><strong>ADR-042.</strong> Painting task-derived fibers onto the frozen
-V06C grid is not parent completeness. Accepted-child reconstruction is empty because
-no <code>EXACT_GLOBAL</code> / <code>EXACT_ON_COMPONENT</code> children exist.
+<div class="note"><strong>ADR-042 / ADR-043 / ADR-047.</strong> Painting task-derived fibers onto the frozen
+V06C grid is not parent completeness. Empty interior <code>COVERED</code> cells make the
+miss metric unevaluable. Empty accepted children keep factorization
+<code>unresolved</code> (not <code>no valid recombination</code>).
+No <code>EXACT_GLOBAL</code> / <code>EXACT_ON_COMPONENT</code> children exist.
 Descriptor discovery stays blocked (ADR-026). V06 program gate:
-<strong>not passed</strong>.</div>
+<strong>not passed</strong>. V07A held.</div>
 <table>
 <tr><th>direct coverage</th><td>PARTIAL_COVERAGE</td></tr>
 <tr><th>reconstruction coverage</th><td>PARTIAL</td></tr>
 <tr><th>complete foliation</th><td>False</td></tr>
-<tr><th>factorization</th><td>no valid recombination</td></tr>
+<tr><th>factorization</th><td>unresolved</td></tr>
 <tr><th>fiber-hit / missed COVERED fraction</th>
-<td>6 / 0.000</td></tr>
+<td>10 / 0.000</td></tr>
+<tr><th>false-positive fraction</th><td>0.013</td></tr>
+<tr><th>coverage comparison</th>
+<td>evaluable — COVERED population nonempty; miss fraction defined</td></tr>
 <tr><th>accepted children</th><td>0</td></tr>
-<tr><th>Hausdorff (rad)</th><td>0.22507835173639007</td></tr>
+<tr><th>Hausdorff (rad)</th><td>0.4220953779491623</td></tr>
 <tr><th>icosphere level</th><td>2</td></tr>
 </table>
 <h2>V06 gate checklist</h2>
-<table><tr><th>item</th><th>met</th></tr><tr><td>independent_2d_source_parent</td><td>True</td></tr><tr><td>frozen_orientation_and_pointing_images</td><td>True</td></tr><tr><td>explicit_task_fiber_provenance</td><td>True</td></tr><tr><td>compound_parent_certified_or_rejected</td><td>True</td></tr><tr><td>source_fiber_reconstruction_compared</td><td>True</td></tr><tr><td>child_reconstruction_only_accepted</td><td>True</td></tr><tr><td>factorization_status_explicit</td><td>True</td></tr><tr><td>coverage_qualified_by_declared_resolution</td><td>True</td></tr><tr><td>critical_unresolved_limits_explicit</td><td>True</td></tr><tr><td>complete_s2_coverage</td><td>False</td></tr><tr><td>accepted_child_factorization</td><td>False</td></tr><tr><td>parent_component_complete</td><td>False</td></tr></table>
+<table><tr><th>item</th><th>met</th></tr><tr><td>independent_2d_source_parent</td><td>True</td></tr><tr><td>frozen_orientation_and_pointing_images</td><td>True</td></tr><tr><td>explicit_task_fiber_provenance</td><td>True</td></tr><tr><td>compound_parent_certified_or_rejected</td><td>True</td></tr><tr><td>source_fiber_cell_paint_generated</td><td>True</td></tr><tr><td>source_fiber_reconstruction_compared</td><td>True</td></tr><tr><td>child_reconstruction_only_accepted</td><td>True</td></tr><tr><td>factorization_status_explicit</td><td>True</td></tr><tr><td>coverage_qualified_by_declared_resolution</td><td>True</td></tr><tr><td>critical_unresolved_limits_explicit</td><td>True</td></tr><tr><td>complete_s2_coverage</td><td>False</td></tr><tr><td>accepted_child_factorization</td><td>False</td></tr><tr><td>parent_component_complete</td><td>False</td></tr></table>
 <p><img src="figures/v06e_reconstruction_comparison.png" alt="V06E reconstruction" style="max-width:720px"></p>
 <h2>Prior V06 artifacts</h2>
 <p>

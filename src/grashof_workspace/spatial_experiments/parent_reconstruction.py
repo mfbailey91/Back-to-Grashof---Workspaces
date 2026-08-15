@@ -408,11 +408,8 @@ def build_parent_reconstruction(
             child_hit_cells=len(child_hits),
             accepted_child_count=accepted_child_count,
         )
+    # ADR-047: empty accepted children never earn "no valid recombination".
     factorization = "unresolved"
-    if metrics.coverage_comparison_evaluable and accepted_child_count == 0:
-        factorization = "no valid recombination"
-    if not metrics.coverage_comparison_evaluable:
-        factorization = "unresolved"
     recon_cov = "UNRESOLVED"
     if metrics.coverage_comparison_evaluable:
         recon_cov = "PARTIAL"
@@ -455,6 +452,7 @@ def build_parent_reconstruction(
             "V06E stage 1 paints source fibers onto the frozen V06C grid (ADR-042).",
             "Non-EXACT_* children (including REJECTED / LOCAL_ONLY) are excluded from stage 2.",
             "Empty COVERED cells make the miss metric unevaluable (ADR-043).",
+            "Empty accepted-child campaign: factorization remains unresolved (ADR-047).",
             "Not S^2 completeness, not exact product, not descriptor discovery (ADR-026).",
             "Joint limits not_modeled.",
         ),

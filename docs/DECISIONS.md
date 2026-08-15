@@ -454,7 +454,7 @@ Seed projection may still use the existing minimum-norm projectors; the
 continuation loop does not. UUUR local status is whatever the conjunctive H1
 audit issues after migration (`REJECTED`, `LOCAL_ONLY`, or `UNRESOLVED`). That
 is not parent completeness, not `EXACT_*` without component correspondence, and
-not V07A authorization. H5 stitching and H6 committed-result regen remain next.
+not V07A authorization.
 
 **Reason:** Underdetermined min-norm correction along a 1D fiber is not
 pseudo-arclength (ADR-044). Re-auditing the child after the numerical fix
@@ -472,11 +472,43 @@ space. Chart-ring vertices in overlaps are seams, not global frontiers.
 Singular and budget-limited frontiers remain explicit. D1 contours are taken
 on the stitched mesh and continued fibers at the same `c` are deduplicated by
 symmetric wrapped set distance. This is not a closed parent, not `S^2`
-coverage, and not V07A authorization. H6 committed-result regen remains next.
+coverage, and not V07A authorization.
 
 **Reason:** Chart-local rings and unpaired D1 traces cannot decide whether
 extra Sobol projections are new components or overlap duplicates (Gate K2 /
 ADR-037).
+
+## ADR-047 — V06H6 closeout: UUUR rejected; factorization unresolved; V07A held
+
+<!-- V06H6_CLOSEOUT_2026_08_15 -->
+
+**Decision:** V06 campaign closeout answers, without inventing a pass:
+
+1. **Parent completeness:** No. The atlas is stitched (ADR-046) but remains
+   `BUDGET_LIMITED`; unattached Sobol seeds remain; this is not a closed 2D
+   component.
+2. **Source pointing fibers:** Task-derived and H3-continued; seam-stitched
+   and deduplicated. Not a complete foliation or a globally identified fiber
+   family.
+3. **Fixed-axis UUUR vs source fiber:** No. The conjunctive H1 audit remains
+   `REJECTED` (failed `h_c` and directed source-to-child distance on the
+   regenerated D2 artifact). Chart status stays `LOCAL_CANDIDATE`.
+4. **Accepted children for reconstruction:** None (`EXACT_*` empty).
+5. **Factorization:** `unresolved` for the campaign. Empty accepted children
+   do not earn `no valid recombination` even if a nonempty `COVERED` cell
+   makes the miss fraction numerically defined (ADR-043 / hardening plan §4).
+6. **V07A:** Not authorized. Held pending parent/continuation completeness.
+
+Canonical line:
+
+```text
+current fixed-axis UUUR construction rejected;
+broader 5R factorization unresolved;
+V07A held pending parent/continuation completion.
+```
+
+**Reason:** Dimension matching, a rejected child, or a defined miss metric is
+not recombination. Descriptor discovery stays blocked (ADR-026).
 
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
