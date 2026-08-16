@@ -16,6 +16,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from .axis_geometry import as_vec3
+from .branch_continuation import continue_implicit_branch
 from .continuation import wrap_joint_delta
 from .implicit_manifold import ambient_distance, orthonormal_tangent_basis
 from .jacobians import matrix_rank_report, pointing_jacobian, position_jacobian
@@ -30,6 +31,8 @@ CRITICAL_H_TOL = 1e-3
 LEVELSET_NEWTON_ITERS = 20
 LEVELSET_STEPS = 40
 LEVELSET_STEP = 0.05
+SEAM_NODE_TOL = 5e-3
+FIBER_DUP_TOL = 0.35
 N_DEFAULT = (0.0, 0.0, 1.0)
 N_FALLBACK = (1.0, 0.0, 0.0)
 
@@ -129,6 +132,28 @@ def correct_to_levelset(
         x = wrap_periodic(x + dq, periodic)
     qt = tuple(float(v) for v in x)
     return qt, False, float(np.linalg.norm(levelset_residual(model, qt, p_star, n, c)))
+
+
+@dataclass(frozen=True, slots=True)
+class PointingLevelSetProblem:
+    """Task-derived 1D branch ``p(q)=p*`` and ``n·d=c``. Equations unchanged."""
+
+    model: OpenChainModel
+    p_star: tuple[float, float, float]
+    n: tuple[float, float, float]
+    c: float
+    problem_id: str
+    ambient_dimension: int = 5
+    constraint_dimension: int = 4
+    periodic_coordinates: tuple[bool, ...] = (True, True, True, True, True)
+
+    def residual(self, x: Array) -> Array:
+        q = tuple(float(v) for v in np.asarray(x, dtype=float).reshape(-1))
+        return levelset_residual(self.model, q, self.p_star, self.n, self.c)
+
+    def jacobian(self, x: Array) -> Array:
+        q = tuple(float(v) for v in np.asarray(x, dtype=float).reshape(-1))
+        return levelset_jacobian(self.model, q, self.n)
 
 
 @dataclass(frozen=True, slots=True)
@@ -340,13 +365,77 @@ def _extract_contours(
     c: float,
     field: dict[tuple[str, int], VertexScalarRecord],
 ) -> tuple[ContourComponent, ...]:
+    if atlas.stitch is not None and atlas.stitch.faces:
+        return _extract_contours_stitched(atlas, model, n, c)
+    return _extract_contours_by_chart(atlas, model, n, c, field)
+
+
+def _extract_contours_stitched(
+    atlas: ParentAtlasResult,
+    model: OpenChainModel,
+    n: tuple[float, float, float],
+    c: float,
+) -> tuple[ContourComponent, ...]:
+    stitch = atlas.stitch
+    assert stitch is not None
+    hs: list[float] = []
+    regular: list[bool] = []
+    for vert in stitch.vertices:
+        state = model.chain.evaluate(vert.q)
+        hs.append(pointing_scalar(state.d, n))
+        try:
+            g = parent_gradient_h(model, vert.q, n)
+            regular.append(float(np.linalg.norm(g)) > EPS_H)
+        except ValueError:
+            regular.append(False)
     nodes: list[tuple[float, ...]] = []
     segments: list[tuple[int, int]] = []
     node_meta: list[str] = []
 
     def _add_node(q: tuple[float, ...], meta: str) -> int:
         for i, existing in enumerate(nodes):
-            if ambient_distance(np.asarray(q), np.asarray(existing), (True,) * 5) < 1e-6:
+            if ambient_distance(np.asarray(q), np.asarray(existing), (True,) * 5) < SEAM_NODE_TOL:
+                return i
+        nodes.append(q)
+        node_meta.append(meta)
+        return len(nodes) - 1
+
+    for face in stitch.faces:
+        crossings: list[int] = []
+        for a, b in ((face[0], face[1]), (face[1], face[2]), (face[2], face[0])):
+            ha, hb = hs[a], hs[b]
+            if (ha - c) * (hb - c) >= 0.0:
+                continue
+            t = (c - ha) / (hb - ha)
+            q_lin = _lerp_wrap(np.asarray(stitch.vertices[a].q), np.asarray(stitch.vertices[b].q), t)
+            q_hat, ok, _res = correct_to_levelset(
+                model, tuple(float(v) for v in q_lin), atlas.p_star, n, c
+            )
+            meta = "ok" if ok else "unresolved"
+            if stitch.vertices[a].global_frontier or stitch.vertices[b].global_frontier:
+                meta = "boundary"
+            if (not regular[a]) or (not regular[b]):
+                meta = "critical"
+            crossings.append(_add_node(q_hat if ok else tuple(float(v) for v in q_lin), meta))
+        if len(crossings) == 2:
+            segments.append((crossings[0], crossings[1]))
+    return _components_from_segments(nodes, segments, node_meta, c)
+
+
+def _extract_contours_by_chart(
+    atlas: ParentAtlasResult,
+    model: OpenChainModel,
+    n: tuple[float, float, float],
+    c: float,
+    field: dict[tuple[str, int], VertexScalarRecord],
+) -> tuple[ContourComponent, ...]:
+    nodes: list[tuple[float, ...]] = []
+    segments: list[tuple[int, int]] = []
+    node_meta: list[str] = []
+
+    def _add_node(q: tuple[float, ...], meta: str) -> int:
+        for i, existing in enumerate(nodes):
+            if ambient_distance(np.asarray(q), np.asarray(existing), (True,) * 5) < SEAM_NODE_TOL:
                 return i
         nodes.append(q)
         node_meta.append(meta)
@@ -383,7 +472,15 @@ def _extract_contours(
                 crossings.append(_add_node(q_hat if ok else tuple(float(v) for v in q_lin), meta))
             if len(crossings) == 2:
                 segments.append((crossings[0], crossings[1]))
+    return _components_from_segments(nodes, segments, node_meta, c)
 
+
+def _components_from_segments(
+    nodes: list[tuple[float, ...]],
+    segments: list[tuple[int, int]],
+    node_meta: list[str],
+    c: float,
+) -> tuple[ContourComponent, ...]:
     adj: dict[int, set[int]] = defaultdict(set)
     for a, b in segments:
         adj[a].add(b)
@@ -423,7 +520,7 @@ def _extract_contours(
                 component_id=f"c{c:.4f}_comp{cid}",
                 kind=kind,
                 seeds=seeds,
-                segment_count=sum(1 for a, b in segments if a in comp and b in comp) // 1,
+                segment_count=sum(1 for a, b in segments if a in comp and b in comp),
             )
         )
         cid += 1
@@ -470,45 +567,70 @@ def continue_level_set(
     report0 = matrix_rank_report(jac0)
     if report0.rank != 4 or report0.nullity != 1:
         return (_fiber_sample(model, q_seed, n, c, p_star, 0.0),), "singular", False
-    t = orthonormal_tangent_basis(jac0, expected_nullity=1)[:, 0]
-    samples = [_fiber_sample(model, q_seed, n, c, p_star, 0.0)]
-    periodic = (True,) * 5
-    status = "open"
-    returned = False
-    for sign in (1.0, -1.0):
-        q_cur = np.asarray(q_seed, dtype=float)
-        t_cur = t * sign
-        sigma = 0.0
-        for k in range(1, n_steps + 1):
-            q_pred = q_cur + t_cur * step
-            q_hat, ok_step, _ = correct_to_levelset(
-                model, tuple(float(v) for v in q_pred), p_star, n, c
-            )
-            if not ok_step:
-                status = "unresolved"
-                break
-            jac = levelset_jacobian(model, q_hat, n)
-            report = matrix_rank_report(jac)
-            if report.rank != 4:
-                status = "singular"
-                samples.append(_fiber_sample(model, q_hat, n, c, p_star, sign * k * step))
-                break
-            t_new = orthonormal_tangent_basis(jac, expected_nullity=1)[:, 0]
-            if float(np.dot(t_new, t_cur)) < 0.0:
-                t_new = -t_new
-            q_cur = np.asarray(q_hat, dtype=float)
-            t_cur = t_new
-            sigma = sign * k * step
-            samples.append(_fiber_sample(model, q_hat, n, c, p_star, sigma))
-            dist = ambient_distance(q_cur, np.asarray(q_seed), periodic)
-            if k > 8 and dist < 0.08:
-                returned = True
-                status = "returned"
-                break
-        if returned:
-            break
+    problem = PointingLevelSetProblem(
+        model=model,
+        p_star=p_star,
+        n=n,
+        c=c,
+        problem_id=f"{model.architecture_id}_h{c:.4f}",
+    )
+    trace = continue_implicit_branch(
+        problem,
+        np.asarray(q_seed, dtype=float),
+        branch_id=f"{model.architecture_id}_levelset_c{c:.4f}",
+        max_steps=n_steps,
+        step_size=step,
+    )
+    samples = [
+        _fiber_sample(
+            model,
+            tuple(float(v) for v in step.x),
+            n,
+            c,
+            p_star,
+            step.s,
+        )
+        for step in trace.steps
+        if step.accepted and step.x is not None
+    ]
     samples.sort(key=lambda s: s.sigma)
-    return tuple(samples), status, returned
+    return tuple(samples), trace.branch_status, trace.returned
+
+
+def _symmetric_wrapped_set_distance(
+    a: list[Array],
+    b: list[Array],
+    periodic: tuple[bool, ...],
+) -> float:
+    if not a or not b:
+        return float("inf")
+
+    def _one(src: list[Array], dst: list[Array]) -> float:
+        worst = 0.0
+        for q in src:
+            best = min(ambient_distance(q, p, periodic) for p in dst)
+            worst = max(worst, best)
+        return worst
+
+    return max(_one(a, b), _one(b, a))
+
+
+def _dedup_fibers(fibers: list[SourceLevelSetFiber]) -> list[SourceLevelSetFiber]:
+    kept: list[SourceLevelSetFiber] = []
+    periodic = (True,) * 5
+    for fiber in fibers:
+        qs = [np.asarray(s.q, dtype=float) for s in fiber.samples]
+        is_dup = False
+        for prior in kept:
+            if abs(prior.c - fiber.c) > 1e-12:
+                continue
+            ps = [np.asarray(s.q, dtype=float) for s in prior.samples]
+            if _symmetric_wrapped_set_distance(qs, ps, periodic) <= FIBER_DUP_TOL:
+                is_dup = True
+                break
+        if not is_dup:
+            kept.append(fiber)
+    return kept
 
 
 def build_parent_level_sets(
@@ -575,9 +697,11 @@ def build_parent_level_sets(
                     notes=(
                         "Task-derived h(d)=n·d fiber; not U_v and not the 2D parent.",
                         f"contour_kind={contour.kind.value}",
+                        "One continued branch per global contour after seam stitch (ADR-046).",
                     ),
                 )
             )
+    fibers = _dedup_fibers(fibers)
     return ParentLevelSetResult(
         architecture_id=atlas.architecture_id,
         parent_id=pid,

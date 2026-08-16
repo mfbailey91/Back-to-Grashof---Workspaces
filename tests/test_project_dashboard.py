@@ -13,7 +13,7 @@ from grashof_workspace.project_dashboard import (
 
 def test_render_project_index_covers_v05_v09_and_l3_l7() -> None:
     html = render_project_index_html()
-    assert STATUS_DATE == "2026-08-13"
+    assert STATUS_DATE == "2026-08-15"
     assert "V05–V09" in html or "V05" in html
     assert "L3–L7" in html or "L3" in html
     assert "LOCAL_ONLY" in html
@@ -46,6 +46,8 @@ def test_render_kd_hub_mentions_certificate_and_next() -> None:
     assert "DecompositionCertificate" in html or "axis_aggregation" in html
     assert "near_aligned" in html or "near-aligned" in html.casefold()
     assert "V06" in html
+    assert "ADR-047" in html
+    assert "V07A held" in html
     assert "mechanism_explorer_only" in html
     assert "LOCAL_ONLY" in html
     assert "../index.html" in html

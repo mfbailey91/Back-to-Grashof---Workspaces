@@ -34,7 +34,7 @@
 <h1>Kinematic Decomposition</h1>
 <p class="meta">
   <strong>Active source-chain program hub (V05B–E)</strong><br>
-  Artifact root: <code>results/kinematic_decomposition/</code> · Status date: 2026-08-13<br>
+  Artifact root: <code>results/kinematic_decomposition/</code> · Status date: 2026-08-15<br>
   <a href="../index.html">Project index (so far)</a> ·
   <a href="../decomposition_ladder/index.html">L3–L7 ladder readout</a>
 </p>
@@ -120,7 +120,7 @@ Docs:
   </tr>
   <tr>
     <td>V06A2</td>
-    <td class="status pass">PARENT ATLAS (not closed)</td>
+    <td class="status pass">STITCHED ATLAS (budget-limited; not closed)</td>
     <td><a href="v06a2/sprint_v06a2_parent_atlas.html">sprint_v06a2_parent_atlas.html</a></td>
     <td><a href="v06a2/data/v06a2_generic_5r_parent_atlas.json">v06a2_generic_5r_parent_atlas.json</a></td>
   </tr>
@@ -144,7 +144,7 @@ Docs:
   </tr>
   <tr>
     <td>V06D2</td>
-    <td class="status pass">ONE UUUR CHILD (not reconstruction)</td>
+    <td class="status pass">ONE UUUR CHILD REJECTED (not reconstruction)</td>
     <td><a href="v06d2/sprint_v06d2_virtual_u_child.html">sprint_v06d2_virtual_u_child.html</a></td>
     <td><a href="v06d2/data/v06d2_virtual_u_child.json">v06d2_virtual_u_child.json</a></td>
   </tr>
@@ -172,9 +172,11 @@ PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06e --outdir res
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V07</strong> — V06E compared source fibers to the frozen V06C grid
-(ADR-042). Accepted-child reconstruction is empty; factorization is
-<code>no valid recombination</code>; V06 is not passed. V07A remains next.
+<p><strong>V07A held</strong> (ADR-047). V06H6 closeout:
+current fixed-axis UUUR construction rejected; broader 5R factorization
+unresolved; V07A held pending parent/continuation completion. Empty interior
+<code>COVERED</code> makes the miss metric unevaluable (ADR-043); a nonempty
+COVERED set does not pass V06. Atlas stitch (ADR-046) is not a closed parent.
 L5 reconstruction stays unresolved.
 
 <p class="meta" style="margin-top:2rem;">

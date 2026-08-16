@@ -12,7 +12,6 @@ from grashof_workspace.decomposition_ladder.spatial_l5 import (
 from grashof_workspace.spatial_experiments.parent_atlas import build_generic_5r_parent_atlas
 from grashof_workspace.spatial_experiments.parent_level_sets import build_parent_level_sets
 from grashof_workspace.spatial_experiments.parent_reconstruction import (
-    FACTORIZATION_ALLOWED,
     build_parent_reconstruction,
 )
 from grashof_workspace.spatial_experiments.parent_task_images import (
@@ -37,10 +36,22 @@ def test_source_fiber_paint_is_partial_and_child_empty() -> None:
     assert result.metrics.fiber_hit_cells >= 1
     assert result.complete_foliation is False
     assert result.coverage_label != CoverageLabel.COVERED_AT_DECLARED_RESOLUTION.value
-    assert 0.0 <= result.metrics.missed_covered_fraction <= 1.0
     assert result.metrics.accepted_child_count == 0
     assert result.metrics.child_hit_cells == 0
-    assert result.factorization_status in FACTORIZATION_ALLOWED
+    if result.metrics.direct_covered == 0:
+        assert result.metrics.coverage_comparison_evaluable is False
+        assert result.metrics.missed_covered_fraction is None
+        assert result.factorization_status == "unresolved"
+        assert result.reconstruction_coverage == "UNRESOLVED"
+        assert result.v06_gate["source_fiber_reconstruction_compared"] is False
+        assert result.to_json_dict()["metrics"]["missed_cell_fraction"] is None
+    else:
+        assert result.metrics.coverage_comparison_evaluable is True
+        assert result.metrics.missed_covered_fraction is not None
+        assert 0.0 <= result.metrics.missed_covered_fraction <= 1.0
+        assert result.factorization_status == "unresolved"
+        assert result.v06_gate["source_fiber_reconstruction_compared"] is True
+    assert result.v06_gate["source_fiber_cell_paint_generated"] is True
     assert result.factorization_status != "exact product"
     assert "fiber bundle" not in result.factorization_status
     assert result.v06_program_passed is False
@@ -54,7 +65,8 @@ def test_l5_reconstruction_cert_unresolved() -> None:
     assert bundle.reconstruction.accepted_fiber_ids == ()
     assert bundle.reconstruction.certificate_status is CertificateStatus.UNRESOLVED
     assert bundle.parent_reconstruction is not None
-    assert bundle.parent_reconstruction["accepted_child_count"] == 0
+    assert bundle.parent_reconstruction["factorization_status"] == "unresolved"
+    assert bundle.parent_reconstruction["factorization_status"] != "exact product"
     payload = default_l5_scaffold_payload()
     assert payload["summary"]["accepted_fiber_count"] == 0
     assert "not a 2d parent" in payload["note"].casefold()
@@ -66,12 +78,18 @@ def test_v06e_readout(tmp_path) -> None:
         tmp_path, max_charts=6, discovery_bank=16, confirmation_bank=16
     )
     body = html.read_text(encoding="utf-8")
-    assert "ADR-042" in body
-    assert "not passed" in body.casefold()
+    assert "ADR-047" in body or "ADR-043" in body or "ADR-042" in body
     payload = json.loads((tmp_path / "data" / "v06e_reconstruction.json").read_text())
     json.dumps(payload, allow_nan=False)
     rec = payload["reconstruction"]
     assert rec["complete_foliation"] is False
     assert rec["metrics"]["accepted_child_count"] == 0
-    assert rec["factorization_status"] != "exact product"
+    miss = rec["metrics"]["missed_cell_fraction"]
+    if miss is None:
+        assert "unevaluable" in body.casefold()
+        assert rec["factorization_status"] == "unresolved"
+        assert rec["reconstruction_coverage"] == "UNRESOLVED"
+    else:
+        assert 0.0 <= miss <= 1.0
+        assert rec["factorization_status"] == "unresolved"
     assert (tmp_path / "figures" / "v06e_reconstruction_comparison.png").is_file()

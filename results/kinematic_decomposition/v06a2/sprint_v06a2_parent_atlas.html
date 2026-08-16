@@ -8,18 +8,21 @@ code { font-family: ui-monospace, monospace; }
 table { border-collapse: collapse; } th,td { border:1px solid #bbb; padding:.4rem; text-align:left; }
 </style></head><body>
 <h1>V06A2 — generic_5r parent atlas</h1>
-<div class="note"><strong>ADR-037.</strong> Representation status
+<div class="note"><strong>ADR-037 / ADR-046.</strong> Representation status
 <code>BUDGET_LIMITED</code> is not a complete parent,
 not <code>S^2</code> coverage, and not a <code>DecompositionCertificate</code>.
-Discovery <code>UNRESOLVED_COMPONENT_DISCOVERY</code>. Fibers are empty.
+Discovery <code>UNRESOLVED_COMPONENT_DISCOVERY</code>. Charts are stitched by
+overlap; unattached Sobol projections may grow extra components. Fibers are empty.
 Joint limits are <code>not_modeled</code>.</div>
 <table>
-<tr><th>charts</th><td>10</td></tr>
-<tr><th>overlaps</th><td>24</td></tr>
-<tr><th>frontiers</th><td>42</td></tr>
-<tr><th>component_ids</th><td><code>generic_5r_component_seed0</code></td></tr>
+<tr><th>charts</th><td>20</td></tr>
+<tr><th>overlaps</th><td>48</td></tr>
+<tr><th>frontiers</th><td>83</td></tr>
+<tr><th>component_ids</th><td><code>generic_5r_component_0, generic_5r_component_1</code></td></tr>
 <tr><th>discovery bank / confirm</th><td>32 / 64</td></tr>
-<tr><th>projected / unattached</th><td>79 / 77</td></tr>
+<tr><th>projected / unattached</th><td>79 / 71</td></tr>
+<tr><th>stitched vertices / faces</th><td>74 / 88</td></tr>
+<tr><th>chart-seam / global-frontier vertices</th><td>52 / 22</td></tr>
 <tr><th>max position residual (m)</th><td>9.656e-11</td></tr>
 <tr><th>seed FD Jp error</th><td>1.627e-10 (verified=True)</td></tr>
 <tr><th>fibers</th><td>0</td></tr>

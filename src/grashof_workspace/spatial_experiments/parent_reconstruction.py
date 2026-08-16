@@ -172,8 +172,10 @@ class ReconstructionMetrics:
     direct_unresolved: int
     fiber_hit_cells: int
     child_hit_cells: int
-    missed_covered_fraction: float
-    false_positive_fraction: float
+    missed_covered_fraction: float | None
+    false_positive_fraction: float | None
+    coverage_comparison_evaluable: bool
+    coverage_comparison_reason: str
     ambiguous_boundary_fraction: float
     hausdorff_rad: float | None
     multiplicity_discrepancy: str
@@ -198,6 +200,8 @@ class ReconstructionMetrics:
                 "accepted_child_reconstructed_cells": self.child_hit_cells,
                 "missed_cell_fraction": self.missed_covered_fraction,
                 "false_positive_fraction": self.false_positive_fraction,
+                "coverage_comparison_evaluable": self.coverage_comparison_evaluable,
+                "coverage_comparison_reason": self.coverage_comparison_reason,
                 "ambiguous_boundary_fraction": self.ambiguous_boundary_fraction,
                 "symmetric_angular_hausdorff_rad": self.hausdorff_rad,
                 "pointing_multiplicity_discrepancy": self.multiplicity_discrepancy,
@@ -218,8 +222,8 @@ class ReconstructionMetrics:
 class RefinementStep:
     c: float
     reason: str
-    missed_fraction_before: float
-    missed_fraction_after: float
+    missed_fraction_before: float | None
+    missed_fraction_after: float | None
 
     def to_json_dict(self) -> dict[str, Any]:
         return {
@@ -288,9 +292,16 @@ def _metrics(
     unresolved = [c for c in cells if c.kind is SphereCellKind.UNRESOLVED]
     missed = [c.cell_id for c in covered if c.cell_id not in fiber_hits]
     fp = [c.cell_id for c in uncovered if c.cell_id in fiber_hits]
-    n_cov = max(1, len(covered))
-    n_unc = max(1, len(uncovered))
     n_cells = max(1, len(cells))
+    if not covered:
+        miss_frac: float | None = None
+        evaluable = False
+        reason = "empty COVERED population; miss fraction undefined (ADR-043)"
+    else:
+        miss_frac = len(missed) / len(covered)
+        evaluable = True
+        reason = "COVERED population nonempty; miss fraction defined"
+    fp_frac: float | None = None if not uncovered else len(fp) / len(uncovered)
     fiber_d = [
         np.asarray(s.pointing, dtype=float)
         for f in fibers
@@ -314,8 +325,10 @@ def _metrics(
         direct_unresolved=len(unresolved),
         fiber_hit_cells=len(fiber_hits),
         child_hit_cells=len(child_hits),
-        missed_covered_fraction=len(missed) / n_cov,
-        false_positive_fraction=len(fp) / n_unc,
+        missed_covered_fraction=miss_frac,
+        false_positive_fraction=fp_frac,
+        coverage_comparison_evaluable=evaluable,
+        coverage_comparison_reason=reason,
         ambiguous_boundary_fraction=len(ambiguous) / n_cells,
         hausdorff_rad=haus,
         multiplicity_discrepancy="unresolved: fiber samples are 1D traces, V06C clusters are 2D atlas vertices",
@@ -361,7 +374,7 @@ def build_parent_reconstruction(
     )
     history: list[RefinementStep] = []
     extra_ids: list[str] = []
-    if missed:
+    if missed and metrics.coverage_comparison_evaluable:
         extra_cs = _extra_slice_values(level_sets)
         before = metrics.missed_covered_fraction
         extra_fibers = _continue_extra_fibers(atlas, model, level_sets, extra_cs)
@@ -395,18 +408,20 @@ def build_parent_reconstruction(
             child_hit_cells=len(child_hits),
             accepted_child_count=accepted_child_count,
         )
-    factorization = "no valid recombination"
-    if accepted_child_count == 0 and metrics.missed_covered_fraction >= 0.99:
-        factorization = "unresolved"
-    recon_cov = "PARTIAL"
-    if images.pointing.coverage_label is CoverageLabel.UNRESOLVED:
-        recon_cov = "UNRESOLVED"
+    # ADR-047: empty accepted children never earn "no valid recombination".
+    factorization = "unresolved"
+    recon_cov = "UNRESOLVED"
+    if metrics.coverage_comparison_evaluable:
+        recon_cov = "PARTIAL"
+        if images.pointing.coverage_label is CoverageLabel.UNRESOLVED:
+            recon_cov = "UNRESOLVED"
     gate = {
         "independent_2d_source_parent": True,
         "frozen_orientation_and_pointing_images": True,
         "explicit_task_fiber_provenance": True,
         "compound_parent_certified_or_rejected": True,
-        "source_fiber_reconstruction_compared": True,
+        "source_fiber_cell_paint_generated": True,
+        "source_fiber_reconstruction_compared": metrics.coverage_comparison_evaluable,
         "child_reconstruction_only_accepted": True,
         "factorization_status_explicit": True,
         "coverage_qualified_by_declared_resolution": True,
@@ -435,7 +450,9 @@ def build_parent_reconstruction(
         extra_fiber_ids=tuple(extra_ids),
         notes=(
             "V06E stage 1 paints source fibers onto the frozen V06C grid (ADR-042).",
-            "V06D2 LOCAL_ONLY UUUR is excluded from stage 2.",
+            "Non-EXACT_* children (including REJECTED / LOCAL_ONLY) are excluded from stage 2.",
+            "Empty COVERED cells make the miss metric unevaluable (ADR-043).",
+            "Empty accepted-child campaign: factorization remains unresolved (ADR-047).",
             "Not S^2 completeness, not exact product, not descriptor discovery (ADR-026).",
             "Joint limits not_modeled.",
         ),
@@ -451,6 +468,8 @@ def reconstruction_summary(result: ParentReconstructionResult) -> dict[str, Any]
         "v06_program_passed": result.v06_program_passed,
         "fiber_hit_cells": result.metrics.fiber_hit_cells,
         "missed_cell_fraction": result.metrics.missed_covered_fraction,
+        "coverage_comparison_evaluable": result.metrics.coverage_comparison_evaluable,
+        "coverage_comparison_reason": result.metrics.coverage_comparison_reason,
         "accepted_child_count": result.metrics.accepted_child_count,
         "hausdorff_rad": result.metrics.hausdorff_rad,
         "certificate_status": None,

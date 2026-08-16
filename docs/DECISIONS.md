@@ -409,6 +409,107 @@ V07A remains the next scientific slice.
 **Reason:** Gate K2 / ADR-024 reconstruct a parent from an audited accepted
 fiber/child family, not from a stack of open traces (ADR-026 / ADR-038).
 
+## ADR-043 — Conjunctive local equivalence and non-vacuous coverage metrics
+
+<!-- V06H0_H2_SEMANTIC_HARDENING_2026_08_14 -->
+
+**Decision:** `LOCAL_ONLY` for a task-derived UUUR child is conjunctive: every
+named local metric must pass, including independent directed distances
+\(d_{S\to C}\) and \(d_{C\to S}\), `|h-c|`, tangent error, and scoped sample
+support. The virtual-U chart remains `LOCAL_CANDIDATE` until a later global
+chart audit. An empty interior `COVERED` cell population makes the missed-cell
+fraction undefined (`None` / JSON `null`); factorization and reconstruction
+coverage are then `unresolved` / `UNRESOLVED`. Current V06D2/V06E dispositions
+are re-opened under this contract (see `docs/V06_HARDENING_PATCH.md`). H0–H2
+do not rewrite continuation, stitch atlases, or promote `EXACT_*`.
+
+**Reason:** Issuing `LOCAL_ONLY` from a subset of residuals, or a zero miss
+fraction from `max(1, 0)` COVERED cells, is a vacuous certificate and a
+vacuous coverage metric. Gate K2 still requires independently reconstructed
+parent task images from accepted children.
+
+## ADR-044 — Shared 1D pseudo-arclength engine is not a D1/D2 migration
+
+<!-- V06H3_BRANCH_CONTINUATION_2026_08_15 -->
+
+**Decision:** V06H3 adds `branch_continuation.py` as shared infrastructure for
+one-dimensional implicit branches: predictor `x_k + ds t_k`, augmented
+corrector `[F(x); t_k^T Δ(x,x_pred)]=0`, step adaptation, and conjunctive
+return (minimum arclength, wrapped state, tangent alignment, branch identity).
+Position-only return detection is forbidden. V06H4 migrates D1/D2 onto this
+engine (ADR-045). The engine itself does not issue certificates, reconstruct a
+parent, or authorize V07A.
+
+**Reason:** Replacing underdetermined D1/D2 correctors before the shared
+augmented solver exists would mix a numerical rewrite with a scientific
+re-audit (Gate K2 / ADR-043).
+
+## ADR-045 — D1/D2 traces use the H3 augmented corrector
+
+<!-- V06H4_D1_D2_MIGRATE_2026_08_15 -->
+
+**Decision:** V06D1 `continue_level_set` and V06D2 `continue_uuur` continue with
+the shared pseudo-arclength engine. Source and child equations are unchanged.
+Seed projection may still use the existing minimum-norm projectors; the
+continuation loop does not. UUUR local status is whatever the conjunctive H1
+audit issues after migration (`REJECTED`, `LOCAL_ONLY`, or `UNRESOLVED`). That
+is not parent completeness, not `EXACT_*` without component correspondence, and
+not V07A authorization.
+
+**Reason:** Underdetermined min-norm correction along a 1D fiber is not
+pseudo-arclength (ADR-044). Re-auditing the child after the numerical fix
+prevents carrying a vacuous pre-H3 disposition (ADR-043).
+
+## ADR-046 — Stitch atlas charts and grow clustered unattached seeds
+
+<!-- V06H5_PARENT_STITCH_2026_08_15 -->
+
+**Decision:** V06A2/H5 clusters projected Sobol seeds before attachment, may
+grow extra atlas components from unattached cluster representatives within a
+declared total chart budget, and assigns component ids from chart-overlap
+connectivity. Vertices and faces are globally deduplicated in wrapped joint
+space. Chart-ring vertices in overlaps are seams, not global frontiers.
+Singular and budget-limited frontiers remain explicit. D1 contours are taken
+on the stitched mesh and continued fibers at the same `c` are deduplicated by
+symmetric wrapped set distance. This is not a closed parent, not `S^2`
+coverage, and not V07A authorization.
+
+**Reason:** Chart-local rings and unpaired D1 traces cannot decide whether
+extra Sobol projections are new components or overlap duplicates (Gate K2 /
+ADR-037).
+
+## ADR-047 — V06H6 closeout: UUUR rejected; factorization unresolved; V07A held
+
+<!-- V06H6_CLOSEOUT_2026_08_15 -->
+
+**Decision:** V06 campaign closeout answers, without inventing a pass:
+
+1. **Parent completeness:** No. The atlas is stitched (ADR-046) but remains
+   `BUDGET_LIMITED`; unattached Sobol seeds remain; this is not a closed 2D
+   component.
+2. **Source pointing fibers:** Task-derived and H3-continued; seam-stitched
+   and deduplicated. Not a complete foliation or a globally identified fiber
+   family.
+3. **Fixed-axis UUUR vs source fiber:** No. The conjunctive H1 audit remains
+   `REJECTED` (failed `h_c` and directed source-to-child distance on the
+   regenerated D2 artifact). Chart status stays `LOCAL_CANDIDATE`.
+4. **Accepted children for reconstruction:** None (`EXACT_*` empty).
+5. **Factorization:** `unresolved` for the campaign. Empty accepted children
+   do not earn `no valid recombination` even if a nonempty `COVERED` cell
+   makes the miss fraction numerically defined (ADR-043 / hardening plan §4).
+6. **V07A:** Not authorized. Held pending parent/continuation completeness.
+
+Canonical line:
+
+```text
+current fixed-axis UUUR construction rejected;
+broader 5R factorization unresolved;
+V07A held pending parent/continuation completion.
+```
+
+**Reason:** Dimension matching, a rejected child, or a defined miss metric is
+not recombination. Descriptor discovery stays blocked (ADR-026).
+
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
 <!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->

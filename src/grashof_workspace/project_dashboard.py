@@ -17,7 +17,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-STATUS_DATE = "2026-08-13"
+STATUS_DATE = "2026-08-15"
 
 # Proximal exact_u_pair_4r closed-mechanism is LOCAL_ONLY on a traced arc (ADR-034);
 # axis aggregation remains EXACT_GLOBAL; EXACT_ON_COMPONENT is reserved.
@@ -582,7 +582,7 @@ Docs:
   </tr>
   <tr>
     <td>V06A2</td>
-    <td class="status pass">PARENT ATLAS (not closed)</td>
+    <td class="status pass">STITCHED ATLAS (budget-limited; not closed)</td>
     <td><a href="v06a2/sprint_v06a2_parent_atlas.html">sprint_v06a2_parent_atlas.html</a></td>
     <td><a href="v06a2/data/v06a2_generic_5r_parent_atlas.json">v06a2_generic_5r_parent_atlas.json</a></td>
   </tr>
@@ -606,7 +606,7 @@ Docs:
   </tr>
   <tr>
     <td>V06D2</td>
-    <td class="status pass">ONE UUUR CHILD (not reconstruction)</td>
+    <td class="status pass">ONE UUUR CHILD REJECTED (not reconstruction)</td>
     <td><a href="v06d2/sprint_v06d2_virtual_u_child.html">sprint_v06d2_virtual_u_child.html</a></td>
     <td><a href="v06d2/data/v06d2_virtual_u_child.json">v06d2_virtual_u_child.json</a></td>
   </tr>
@@ -634,9 +634,11 @@ PYTHONPATH=src python -m grashof_workspace.spatial_experiments.v06e --outdir res
 PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results</pre>
 
 <h2>Next</h2>
-<p><strong>V07</strong> — V06E compared source fibers to the frozen V06C grid
-(ADR-042). Accepted-child reconstruction is empty; factorization is
-<code>no valid recombination</code>; V06 is not passed. V07A remains next.
+<p><strong>V07A held</strong> (ADR-047). V06H6 closeout:
+current fixed-axis UUUR construction rejected; broader 5R factorization
+unresolved; V07A held pending parent/continuation completion. Empty interior
+<code>COVERED</code> makes the miss metric unevaluable (ADR-043); a nonempty
+COVERED set does not pass V06. Atlas stitch (ADR-046) is not a closed parent.
 L5 reconstruction stays unresolved.
 
 <p class="meta" style="margin-top:2rem;">
@@ -710,7 +712,7 @@ def render_project_index_html(*, status_date: str = STATUS_DATE) -> str:
     <td><strong>V06</strong></td>
     <td>spatial 5R + S_v</td>
     <td>S² pointing parent</td>
-    <td>V06E reconstruction closeout (partial source fibers; no accepted children; V06 not passed); V07A next</td>
+    <td>V06H6 closeout (ADR-047): UUUR REJECTED; factorization unresolved; no accepted children; V06 not passed; V07A held</td>
     <td>
       <a href="kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html">V06A0</a> ·
       <a href="kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html">V06A1</a> ·

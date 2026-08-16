@@ -6,6 +6,7 @@ and not reconstruction.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from math import isfinite
 from typing import Any
@@ -20,6 +21,7 @@ from .axis_aggregation import (
     lift_source_to_suur_physical,
 )
 from .axis_geometry import as_mat3, as_vec3
+from .branch_continuation import continue_implicit_branch
 from .continuation import wrap_joint_delta
 from .decomposition_certificate import DecompositionCertificate
 from .fixed_position import JACOBIAN_FD_STEP_RAD, pose_fixed_position_problem
@@ -47,6 +49,16 @@ Array = NDArray[np.floating]
 
 CHILD_DIM = 7
 CONSTRAINT_DIM = 6
+LOCAL_COMPARISON_RADIUS_RAD = 0.5
+MIN_LOCAL_COMPARISON_SAMPLES = 3
+TOL_CLOSURE_RESIDUAL = 1e-6
+TOL_POSITION_M = 1e-8
+TOL_H_C = 1e-5
+TOL_ORIENTATION_RAD = 1e-6
+TOL_POINTING = 1e-6
+TOL_JOINT_MAP_RAD = 1e-8
+TOL_DIRECTED_SET = 5e-2
+TOL_TANGENT = 5e-2
 CHILD_STEPS = 24
 CHILD_STEP = 0.05
 NEWTON_ITERS = 20
@@ -319,40 +331,45 @@ def continue_uuur(
     report0 = matrix_rank_report(jac0)
     if report0.rank != 6 or report0.nullity != 1:
         return (_sample(problem, x0, 0.0),), "singular", False
-    t = orthonormal_tangent_basis(jac0, expected_nullity=1)[:, 0]
-    samples = [_sample(problem, x0, 0.0)]
-    status = "open"
-    returned = False
-    for sign in (1.0, -1.0):
-        x_cur = np.asarray(x0, dtype=float)
-        t_cur = t * sign
-        for k in range(1, n_steps + 1):
-            x_pred = x_cur + t_cur * step
-            x_hat, ok_step, _ = correct_uuur(problem, x_pred)
-            if not ok_step:
-                status = "unresolved"
-                break
-            jac = problem.jacobian(x_hat)
-            report = matrix_rank_report(jac)
-            if report.rank != 6:
-                status = "singular"
-                samples.append(_sample(problem, x_hat, sign * k * step))
-                break
-            t_new = orthonormal_tangent_basis(jac, expected_nullity=1)[:, 0]
-            if float(np.dot(t_new, t_cur)) < 0.0:
-                t_new = -t_new
-            x_cur = np.asarray(x_hat, dtype=float)
-            t_cur = t_new
-            samples.append(_sample(problem, x_hat, sign * k * step))
-            dist = ambient_distance(x_cur, np.asarray(x0), problem.periodic_coordinates)
-            if k > 8 and dist < 0.08:
-                returned = True
-                status = "returned"
-                break
-        if returned:
-            break
+    trace = continue_implicit_branch(
+        problem,
+        x0,
+        branch_id=f"{problem.problem_id}_uuur",
+        max_steps=n_steps,
+        step_size=step,
+    )
+    samples = [
+        _sample(problem, np.asarray(step.x, dtype=float), step.s)
+        for step in trace.steps
+        if step.accepted and step.x is not None
+    ]
     samples.sort(key=lambda s: s.s)
-    return tuple(samples), status, returned
+    return tuple(samples), trace.branch_status, trace.returned
+
+
+def directed_wrapped_set_distance(
+    src: Sequence[Array],
+    dst: Sequence[Array],
+    periodic: tuple[bool, ...],
+) -> float:
+    """Hausdorff one-way: max over src of min wrapped distance into dst."""
+
+    if not src or not dst:
+        return float("inf")
+    worst = 0.0
+    for q in src:
+        best = min(ambient_distance(q, p, periodic) for p in dst)
+        worst = max(worst, best)
+    return worst
+
+
+def _scoped_joint_samples(
+    qs: Sequence[Array],
+    seed: Array,
+    radius: float,
+    periodic: tuple[bool, ...],
+) -> list[Array]:
+    return [q for q in qs if ambient_distance(q, seed, periodic) <= radius]
 
 
 @dataclass(frozen=True, slots=True)
@@ -367,6 +384,10 @@ class UUURComparison:
     child_to_source_distance: float
     tangent_error: float
     sample_count: int
+    source_sample_count: int
+    comparison_scope_radius_rad: float
+    metric_acceptance: tuple[tuple[str, bool], ...]
+    failed_metrics: tuple[str, ...]
     component_correspondence_complete: bool
     accepted_local: bool
     notes: tuple[str, ...] = ()
@@ -384,6 +405,10 @@ class UUURComparison:
                 "child_to_source_distance": self.child_to_source_distance,
                 "tangent_error": self.tangent_error,
                 "sample_count": self.sample_count,
+                "source_sample_count": self.source_sample_count,
+                "comparison_scope_radius_rad": self.comparison_scope_radius_rad,
+                "metric_acceptance": dict(self.metric_acceptance),
+                "failed_metrics": list(self.failed_metrics),
                 "component_correspondence_complete": self.component_correspondence_complete,
                 "accepted_local": self.accepted_local,
                 "notes": list(self.notes),
@@ -397,19 +422,27 @@ def compare_fiber_and_child(
     fiber: SourceLevelSetFiber,
     samples: tuple[UUURSample, ...],
 ) -> UUURComparison:
-    source_qs = [np.asarray(s.q, dtype=float) for s in fiber.samples]
+    periodic5 = (True,) * 5
+    q_seed = np.asarray(problem.q_seed_source, dtype=float)
+    radius = LOCAL_COMPARISON_RADIUS_RAD
+    source_all = [np.asarray(s.q, dtype=float) for s in fiber.samples]
+    child_all = [np.asarray(s.q_source, dtype=float) for s in samples]
+    source_qs = _scoped_joint_samples(source_all, q_seed, radius, periodic5)
+    child_qs = _scoped_joint_samples(child_all, q_seed, radius, periodic5)
+    scoped_samples = [
+        s
+        for s in samples
+        if ambient_distance(np.asarray(s.q_source, dtype=float), q_seed, periodic5) <= radius
+    ]
     closures = []
     pos_err = []
     hc_err = []
     ori_err = []
     pnt_err = []
     joint_err = []
-    s2c = []
-    c2s = []
-    q_seed = np.asarray(problem.q_seed_source, dtype=float)
     n = problem.chart.n
     c = problem.chart.c
-    for sample in samples[:32]:
+    for sample in scoped_samples:
         x = np.asarray(sample.x, dtype=float)
         closures.append(sample.residual)
         q = np.asarray(sample.q_source, dtype=float)
@@ -422,10 +455,8 @@ def compare_fiber_and_child(
         mapped = np.asarray(lift_source_to_suur_physical(tuple(float(v) for v in q)), dtype=float)
         expected = q_seed + x[2:7]
         joint_err.append(float(np.linalg.norm(wrap_joint_delta(mapped, expected))))
-        if source_qs:
-            dist = min(ambient_distance(q, qs, (True,) * 5) for qs in source_qs)
-            c2s.append(dist)
-            s2c.append(dist)
+    s2c = directed_wrapped_set_distance(source_qs, child_qs, periodic5)
+    c2s = directed_wrapped_set_distance(child_qs, source_qs, periodic5)
     seed_src = min(fiber.samples, key=lambda s: abs(s.sigma)) if fiber.samples else None
     tangent_err = float("inf")
     if seed_src is not None:
@@ -440,30 +471,46 @@ def compare_fiber_and_child(
             tangent_err = float(min(np.linalg.norm(phys - t_src), np.linalg.norm(phys + t_src)))
     max_cl = max(closures) if closures else float("inf")
     max_pos = max(pos_err) if pos_err else float("inf")
-    accepted = (
-        bool(samples)
-        and max_cl <= 1e-6
-        and max_pos <= 1e-8
-        and max(ori_err) <= 1e-6
-        and max(pnt_err) <= 1e-6
+    max_hc = max(hc_err) if hc_err else float("inf")
+    max_ori = max(ori_err) if ori_err else float("inf")
+    max_pnt = max(pnt_err) if pnt_err else float("inf")
+    max_joint = max(joint_err) if joint_err else float("inf")
+    metric_acceptance = (
+        ("sample_support", len(source_qs) >= MIN_LOCAL_COMPARISON_SAMPLES and len(child_qs) >= MIN_LOCAL_COMPARISON_SAMPLES),
+        ("closure", max_cl <= TOL_CLOSURE_RESIDUAL),
+        ("position", max_pos <= TOL_POSITION_M),
+        ("h_c", max_hc <= TOL_H_C),
+        ("orientation", max_ori <= TOL_ORIENTATION_RAD),
+        ("pointing", max_pnt <= TOL_POINTING),
+        ("joint_map", max_joint <= TOL_JOINT_MAP_RAD),
+        ("source_to_child", s2c <= TOL_DIRECTED_SET),
+        ("child_to_source", c2s <= TOL_DIRECTED_SET),
+        ("tangent", tangent_err <= TOL_TANGENT),
     )
+    failed = tuple(name for name, ok in metric_acceptance if not ok)
+    accepted = all(ok for _, ok in metric_acceptance)
     return UUURComparison(
         max_closure_residual=max_cl,
         max_position_error_m=max_pos,
-        max_h_c_error=max(hc_err) if hc_err else float("inf"),
-        max_orientation_error_rad=max(ori_err) if ori_err else float("inf"),
-        max_pointing_error=max(pnt_err) if pnt_err else float("inf"),
-        max_joint_map_error_rad=max(joint_err) if joint_err else float("inf"),
-        source_to_child_distance=max(s2c) if s2c else float("inf"),
-        child_to_source_distance=max(c2s) if c2s else float("inf"),
+        max_h_c_error=max_hc,
+        max_orientation_error_rad=max_ori,
+        max_pointing_error=max_pnt,
+        max_joint_map_error_rad=max_joint,
+        source_to_child_distance=s2c,
+        child_to_source_distance=c2s,
         tangent_error=tangent_err,
-        sample_count=len(samples[:32]),
+        sample_count=len(child_qs),
+        source_sample_count=len(source_qs),
+        comparison_scope_radius_rad=radius,
+        metric_acceptance=metric_acceptance,
+        failed_metrics=failed,
         component_correspondence_complete=False,
         accepted_local=accepted,
         notes=(
             "Bidirectional sample comparison on a budget-limited fiber is not component completeness.",
-            "Drive is pseudo-arclength s; alpha(s) and beta(s) are coupled outputs.",
-            "h-c drift and tangent misalignment remain recorded; they block EXACT_ON_COMPONENT.",
+            "Drive is pseudo-arclength s from the H3 augmented corrector (ADR-044/ADR-045).",
+            "alpha(s) and beta(s) remain coupled outputs of the same branch.",
+            "LOCAL_ONLY requires every named metric (ADR-043); do not initialize accepted.",
         ),
     )
 
@@ -530,15 +577,21 @@ def issue_uuur_certificate(
                 "initialized_accepted": False,
             },
         )
-    closed = "LOCAL_ONLY" if comparison.accepted_local else "REJECTED"
+    closed = "REJECTED"
     if comparison.component_correspondence_complete and comparison.accepted_local:
         closed = "EXACT_ON_COMPONENT"
-    reason = (
-        "Independent UUUR child matches the source fiber locally. "
-        "Not a complete component and not reconstruction."
-        if closed == "LOCAL_ONLY"
-        else f"UUUR/source comparison failed (closure={comparison.max_closure_residual:.3e})."
-    )
+    elif comparison.accepted_local:
+        closed = "LOCAL_ONLY"
+    if closed == "LOCAL_ONLY":
+        reason = (
+            "Independent UUUR child matches the source fiber locally on every named metric. "
+            "Not a complete component and not reconstruction."
+        )
+    elif closed == "EXACT_ON_COMPONENT":
+        reason = "Independent UUUR child matches the source fiber on a complete component."
+    else:
+        failed = ", ".join(comparison.failed_metrics) or "unnamed"
+        reason = f"UUUR/source comparison failed on: {failed}."
     return DecompositionCertificate(
         source_chain_id=entry.model.architecture_id,
         fixed_position_problem_id=f"{entry.model.architecture_id}_pstar",

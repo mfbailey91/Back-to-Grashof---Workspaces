@@ -45,6 +45,7 @@ def test_level_sets_regular_slices_and_continuation() -> None:
     assert seed.rank_jfc == 4
     assert seed.nullity_jfc == 1
     assert fiber.provenance == "task-derived"
+    assert fiber.branch_status in {"open", "returned", "singular", "unresolved"}
     json.dumps(result.to_json_dict(), allow_nan=False)
     assert "curve_type" not in json.dumps(result.to_json_dict())
     assert "UUUR" not in json.dumps(result.to_json_dict())

@@ -290,7 +290,7 @@ DEFAULT_FIBER_SPECS: tuple[FiberFamilySpec, ...] = (
         certificate_status=CertificateStatus.UNRESOLVED,
         reconstruction_target="S^2 pointing image",
         notes=(
-            "V06E partial source-fiber reconstruction; no accepted-child reconstruction (ADR-042).",
+            "V06E source-fiber paint; coverage comparison unevaluable without COVERED cells (ADR-043).",
             "Reconstruction still required before reconstruction claims (Gate K2).",
         ),
     ),

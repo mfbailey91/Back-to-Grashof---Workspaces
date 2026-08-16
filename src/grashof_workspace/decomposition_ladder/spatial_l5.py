@@ -139,8 +139,12 @@ def build_spatial_l5_scaffold_bundle(
             f"V06C source images coverage_label={images.pointing.coverage_label.value} (ADR-038).",
             "V06B SUUR parent is not a U_v child and not reconstruction (ADR-039).",
             "V06D1 task-derived source fibers exist; they are not the 2D parent (ADR-040).",
-            "V06E source-fiber paint is partial; accepted-child reconstruction is empty (ADR-042).",
-            "Descriptor discovery remains blocked. V07A is next.",
+            (
+                "V06E source-fiber paint exists; coverage comparison "
+                f"{'evaluable' if recon.metrics.coverage_comparison_evaluable else 'unevaluable'} "
+                f"(ADR-043); factorization={recon.factorization_status}."
+            ),
+            "Descriptor discovery remains blocked. V07A held (ADR-047).",
         ),
     )
     if first is not None:
@@ -267,7 +271,7 @@ def build_spatial_l5_scaffold_bundle(
         accepted_fiber_ids=(),
         unresolved_fiber_ids=fiber_ids,
         direct_coverage_status=f"SOURCE_{images.pointing.coverage_label.value}",
-        reconstructed_coverage_status="SOURCE_FIBER_PARTIAL_CHILD_EMPTY",
+        reconstructed_coverage_status="SOURCE_FIBER_UNEVALUABLE_CHILD_EMPTY",
         comparison_error=recon.metrics.hausdorff_rad,
         process_status=ProcessStatus.SCAFFOLD,
         certificate_status=CertificateStatus.UNRESOLVED,
@@ -278,6 +282,7 @@ def build_spatial_l5_scaffold_bundle(
             "ADR-040: task-derived h=c fibers are not reconstruction.",
             "ADR-041: local U_v / UUUR is not reconstruction.",
             "ADR-042: source-fiber cell paint does not unblock reconstruction certificates.",
+            "ADR-043: empty COVERED cells make the miss metric unevaluable; a nonempty COVERED set does not pass V06.",
         ),
     )
 
@@ -304,7 +309,7 @@ def build_spatial_l5_scaffold_bundle(
             "V06B SUUR parent exists; it is not UUUR reconstruction (ADR-039).",
             "V06D1 source fibers exist; they are not U_v children (ADR-040).",
             "V06D2 one UUUR child exists; it is not reconstruction (ADR-041).",
-            "V06E closeout is honest non-pass; V07A is next (ADR-042).",
+            "V06E closeout is honest non-pass; V07A held (ADR-047).",
         ),
     )
 
@@ -315,9 +320,9 @@ def default_l5_scaffold_payload() -> dict[str, Any]:
     bundle = build_spatial_l5_scaffold_bundle()
     return {
         "note": (
-            "L5 scaffold: V06E source-fiber reconstruction is partial and accepted-child "
-            "reconstruction is empty. Not a 2D parent completeness claim and not "
-            "pointing-image reconstruction. V07A remains next."
+            "L5 scaffold: V06E accepted-child reconstruction is empty. Coverage comparison "
+            "follows ADR-043 (unevaluable iff COVERED is empty). Not a 2D parent completeness "
+            "claim and not pointing-image reconstruction. V07A held (ADR-047)."
         ),
         "v06_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
         "bundle": bundle.to_dict(),

@@ -41,6 +41,15 @@ def test_parent_atlas_grows_charts_without_claiming_closure() -> None:
     json.dumps(payload, allow_nan=False)
     assert result.discovery.bank_size == 16
     assert result.joint_limits == "not_modeled"
+    assert result.stitch is not None
+    assert len(result.stitch.vertices) <= len(result.vertices)
+    assert result.stitch.faces
+    assert result.discovery.component_count == len(result.component_ids) or result.representation_status is ParentRepresentationStatus.LOCAL_PATCH
+    chart_ids = {c.chart_id for c in result.charts}
+    mapped = {pair[0] for pair in result.chart_components}
+    if result.component_ids:
+        assert mapped == chart_ids
+    assert payload["stitch"]["vertex_count"] == len(result.stitch.vertices)
 
 
 def test_l5_bundle_exposes_atlas_without_fibers() -> None:
@@ -66,6 +75,7 @@ def test_v06a2_readout(tmp_path) -> None:
     html = build_v06a2_readout(tmp_path, max_charts=6, discovery_bank=16, confirmation_bank=16)
     body = html.read_text(encoding="utf-8")
     assert "ADR-037" in body
+    assert "ADR-046" in body or "stitched" in body.casefold()
     assert "DecompositionCertificate" in body
     payload = json.loads((tmp_path / "data" / "v06a2_generic_5r_parent_atlas.json").read_text())
     assert payload["fiber_ids"] == []
