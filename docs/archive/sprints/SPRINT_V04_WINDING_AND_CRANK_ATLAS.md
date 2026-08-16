@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V04 — True Winding and Crank Atlas
 
 **Status:** UUUR-first numerical winding  

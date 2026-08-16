@@ -54,7 +54,7 @@ def wrapped_configuration_distance(q: Array, q_ref: Array | None = None) -> floa
 def unwrap_angles(series: Array) -> Array:
     """Nearest-2π unwrap along axis 0 for each coordinate column.
 
-    Named recurrence (docs/SPRINT_V04_WINDING_AND_CRANK_ATLAS.md):
+    Named recurrence (docs/archive/sprints/SPRINT_V04_WINDING_AND_CRANK_ATLAS.md):
     Δ_k = θ_k − θ_{k−1},  θ̃_k = θ̃_{k−1} + (Δ_k − 2π round(Δ_k / 2π)).
     """
     values = np.asarray(series, dtype=float)

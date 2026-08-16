@@ -519,7 +519,9 @@ At regular values, the nested level set
 \{q:p(q)=p^*,\ h_i(q)=c_i\}
 \]
 
-is one-dimensional. This is the common source-fiber construction for the optional L3-L7 ladder scaffold subordinate to the active V05–V09 sequence:
+is one-dimensional. This is the common source-fiber construction for the L3–L7
+decomposition ladder (active architecture; see `docs/theory/DECOMPOSITION_LADDER.md`
+and `docs/CURRENT_STATUS.md`):
 
 ```text
 L3 planar 3R: no additional slice

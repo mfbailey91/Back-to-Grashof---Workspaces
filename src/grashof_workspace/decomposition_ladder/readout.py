@@ -407,11 +407,13 @@ empty until V07A. Process status is <code>SCAFFOLD</code>; reconstruction stays
 </style>
 </head>
 <body>
-<h1>Kinematic Decomposition Ladder — L3 through L7 (optional scaffold)</h1>
+<h1>Kinematic Decomposition Ladder — L3 through L7</h1>
 <p>
-<strong>Active scientific sequence:</strong> <code>docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code>.
-This readout is an optional interface scaffold subordinate to that program. It does not demote
-the V05 scoped closed-mechanism gate or promote L5–L7 claims beyond accepted scope.
+<strong>Active architecture:</strong> <code>docs/theory/DECOMPOSITION_LADDER.md</code>
+(historical V05–V09 plans under <code>docs/archive/programs/</code>).
+Live status: <code>docs/CURRENT_STATUS.md</code>. This readout exercises shared
+ladder interfaces; it does not invent accepted child certificates or complete
+parent claims beyond declared scope.
 </p>
 <p>
 The common implementation contract is: construct the exact fixed-position source parent,

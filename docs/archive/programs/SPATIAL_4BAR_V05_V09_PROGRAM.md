@@ -1,3 +1,8 @@
+> **Historical program document.** This file preserves planning lineage that led to the current decomposition ladder. It is not the active roadmap. See `docs/ROADMAP.md` and `docs/CURRENT_STATUS.md`.
+>
+> **Status label:** see `docs/archive/README.md`.
+
+
 # Spatial 4-Bar Explorer — Historical V05 to V09 Program Plan
 
 > **Status: deferred and remapped.** This file no longer defines the active V05–V09 sequence. The active plan is [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md). The work below is retained as the downstream V10–V14 program after the decomposition-validation gate.

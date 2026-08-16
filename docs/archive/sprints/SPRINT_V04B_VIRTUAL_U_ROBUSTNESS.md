@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V04B — Virtual-U Robustness and Orientation Sweep
 
 **Status:** insertion sprint before V05 descriptor mining  
@@ -47,7 +50,7 @@ It does **not** establish:
 phi is automatically a physical atlas parameter.
 ```
 
-See [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md).
+See [`SPATIAL_POINTING_SLICE_CONTRACT.md`](../../methods/SPATIAL_POINTING_SLICE_CONTRACT.md).
 
 ## V04B tests
 
@@ -111,7 +114,7 @@ order is changed. Differences diagnose coordinate sensitivity. They do not by
 themselves establish a new physical mechanism parameter. For dexterity, the order
 and axes must be fixed by the task-derived pointing-slice construction; this
 diagnostic does not by itself promote axis order or `phi` to physical atlas
-parameters. See [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md).
+parameters. See [`SPATIAL_POINTING_SLICE_CONTRACT.md`](../../methods/SPATIAL_POINTING_SLICE_CONTRACT.md).
 
 ### E. Winding versus angular coverage
 

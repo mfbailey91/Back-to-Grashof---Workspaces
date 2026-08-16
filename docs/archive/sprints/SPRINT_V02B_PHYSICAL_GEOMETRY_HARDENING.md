@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V02B — Physical Geometry Hardening
 
 **Status:** insertion sprint before V03 closure/continuation  

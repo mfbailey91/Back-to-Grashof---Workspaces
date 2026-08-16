@@ -1,10 +1,13 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # V06 Implementation Plan — Spatial 5R Parent and Pointing Reconstruction
 
 **Status:** subordinate implementation plan (does not replace the V05–V09 scientific program)  
 **Scientific rung:** L5  
 **Active sprint:** V06  
 **Assumed base:** branch `4_bar_exploration` after L4 traced-arc `LOCAL_ONLY` (ADR-034)  
-**Scientific source of truth:** [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)
+**Scientific source of truth:** [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](../programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)
 
 ## Governing documents
 

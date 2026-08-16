@@ -1,13 +1,13 @@
 # Kinematic Decomposition Ladder — L3 through L7
 
-**Status:** CANONICAL — active architecture of the research program  
-**Live status ledger:** [`CURRENT_STATUS.md`](CURRENT_STATUS.md)  
-**Future gates:** [`ROADMAP.md`](ROADMAP.md)  
-**Historical V05–V09 planning lineage:** archived under `archive/programs/` (not active roadmap)  
-**Project:** Characterization of Manipulator Workspaces  
+**Status:** CANONICAL — active architecture of the research program
+**Live status ledger:** [`../CURRENT_STATUS.md`](../CURRENT_STATUS.md)
+**Future gates:** [`../ROADMAP.md`](../ROADMAP.md)
+**Historical V05–V09 planning lineage:** archived under `../archive/programs/` (not active roadmap)
+**Project:** Characterization of Manipulator Workspaces
 **Purpose:** define shared parent → fiber → child → reconstruction contracts from the trusted planar 3R calibration through deferred spatial 7R work.
 
-The L3–L7 decomposition ladder is the active architecture of the research program. Historical V05–V09 sprint documents record implementations within this architecture but do not supersede it. This document defines contracts and dependencies; [`CURRENT_STATUS.md`](CURRENT_STATUS.md) records what is implemented.
+The L3–L7 decomposition ladder is the active architecture of the research program. Historical V05–V09 sprint documents record implementations within this architecture but do not supersede it. This document defines contracts and dependencies; [`../CURRENT_STATUS.md`](../CURRENT_STATUS.md) records what is implemented.
 
 ---
 
@@ -161,7 +161,7 @@ and solves all remaining coordinates. It is valid only where
 
 At an alpha turning point, switch to beta or return to pseudo-arclength. The two U coordinates are not two independent mechanism inputs.
 
-See [`U_JOINT_DRIVE_CONTRACT.md`](U_JOINT_DRIVE_CONTRACT.md).
+See [`U_JOINT_DRIVE_CONTRACT.md`](../methods/U_JOINT_DRIVE_CONTRACT.md).
 
 ---
 
@@ -393,7 +393,7 @@ Separate the one excess self-motion dimension from the three-dimensional orienta
 
 ### Status
 
-L7 is outside the active V05–V09 sequence. Software may retain dimensional contracts with `ProcessStatus.BLOCKED`. Do not treat L7 as an active scientific claim until multi-component / nested-slice certificates exist beyond the proximal exact-U gate.
+L7 remains deferred until L6 completion. Software may retain dimensional contracts with `ProcessStatus.BLOCKED`. Do not treat L7 as an active scientific claim until multi-component / nested-slice certificates exist beyond the proximal exact-U gate.
 
 ### Source parent
 

@@ -1,6 +1,6 @@
 # Roadmap
 
-**Status:** ACTIVE (future dependency gates only)  
+**Status:** ACTIVE (future dependency gates only)
 **Authority:** This file is the sole forward plan. Historical sprint numbering lives under `archive/`. Current evidence lives in [CURRENT_STATUS.md](CURRENT_STATUS.md).
 
 ---

@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Research-code rules
 
-1. Treat `docs/MATH_NOTES.md` and `docs/KINEMATIC_DECOMPOSITION_FIXED_POSITION_ORIENTATION_FRAMEWORK.md` as the current mathematical and conceptual sources of truth. Resolve conflicts explicitly in `docs/DECISIONS.md`.
+1. Treat `docs/theory/MATH_NOTES.md` and `docs/theory/FIXED_POSITION_KINEMATIC_DECOMPOSITION.md` as the current mathematical and conceptual sources of truth. Resolve conflicts explicitly in `docs/reference/DECISIONS.md`. Live status: `docs/CURRENT_STATUS.md`.
 2. Preserve the evidence chain:
    ```text
    source chain -> fixed-position problem -> virtual closure -> source image
@@ -50,7 +50,7 @@ alwaysApply: true
 20. Any generated plot, GIF, JSON, or HTML readout must be reproducible from a committed script or CLI command.
 21. During decomposition visualizations, keep the physical source manipulator visible as a transparent reference and show each reduction operation separately.
 22. When uncertain about a mechanism theorem, mark the result unverified or unresolved and add a research note instead of inventing a generalization.
-23. The L3–L7 fixed-position decomposition ladder is the active architecture (`docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` / `docs/theory/DECOMPOSITION_LADDER.md` after cleanup moves). Historical V05–V09 program documents are archived lineage, not the active roadmap. Live status lives in `docs/CURRENT_STATUS.md`; future gates in `docs/ROADMAP.md`.
+23. The L3–L7 fixed-position decomposition ladder is the active architecture (`docs/theory/DECOMPOSITION_LADDER.md`). Historical V05–V09 program documents under `docs/archive/programs/` are archived lineage, not the active roadmap. Live status lives in `docs/CURRENT_STATUS.md`; future gates in `docs/ROADMAP.md`.
 24. Do not demote the L3–L7 ladder beneath archived V05–V09 sprint plans. Mechanism-behavior certificates and coverage stitching (`docs/theory/MECHANISM_BEHAVIOR_AND_STITCHING.md`) govern how four-bar or child results may support workspace claims. Package/CLI name `grashof_workspace` remains historical branding until a separate rename PR.
 25. Keep process/scaffold labels (`PLANNED`, `SCAFFOLD`, `BLOCKED`, `REVIEW`) separate from the six `DecompositionCertificate` statuses. Preserve `axis_aggregation_status` vs `closed_mechanism_status`.
 26. For a one-DOF child containing `U_v`, canonical continuation drives pseudo-arclength `s`; `alpha(s)` and `beta(s)` are coupled outputs from the same branch. Prescribe alpha or beta only as a local chart where its derivative with respect to `s` is nonzero.

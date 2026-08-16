@@ -1,6 +1,6 @@
 # Current Scientific Status
 
-**Status:** ACTIVE ledger (snapshot, not a plan)  
+**Status:** ACTIVE ledger (snapshot, not a plan)
 **Last updated:** 2026-08-16
 
 This is the only live status ledger. Future work belongs in [ROADMAP.md](ROADMAP.md).
@@ -45,7 +45,7 @@ broader 5R factorization unresolved;
 V07A held pending parent/continuation completion.
 ```
 
-See ADR-047 in [DECISIONS.md](DECISIONS.md).
+See ADR-047 in [reference/DECISIONS.md](reference/DECISIONS.md).
 
 ## What is not claimed
 

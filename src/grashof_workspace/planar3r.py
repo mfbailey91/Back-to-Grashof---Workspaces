@@ -189,7 +189,7 @@ class Planar3R:
     ) -> tuple[RadialInterval, ...]:
         """Closed-form radial components of the planar dexterous workspace.
 
-        Conditions (``docs/MATH_NOTES.md`` §3):
+        Conditions (``docs/theory/MATH_NOTES.md`` §3):
 
             |rho - l3| >= |l1 - l2|
             rho + l3 <= l1 + l2

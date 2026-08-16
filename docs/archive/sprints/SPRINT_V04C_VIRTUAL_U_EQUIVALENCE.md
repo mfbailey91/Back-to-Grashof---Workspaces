@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V04C — Virtual-U Equivalence and Fiber Interpretation
 
 **Status:** insertion sprint before V05 descriptor mining
@@ -12,7 +15,7 @@ V04 established continuation-derived winding. V04B then showed two things:
 
 That means V05 must not fit a geometry-to-crank rule until we understand the virtual-`U` parameterization itself. More importantly, the V04B/V04C `phi` sweep is now treated as a **diagnostic coordinate-sensitivity probe**. It does not by itself prove that `phi` parameterizes admissible pointing fibers of the original `S_v` parent.
 
-The blocking contract is [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md): a research-evidence `U_v` must be induced by an explicit scalar pointing constraint on the two-DOF `S_v` parent and must pass parent/fiber equivalence checks.
+The blocking contract is [`SPATIAL_POINTING_SLICE_CONTRACT.md`](../../methods/SPATIAL_POINTING_SLICE_CONTRACT.md): a research-evidence `U_v` must be induced by an explicit scalar pointing constraint on the two-DOF `S_v` parent and must pass parent/fiber equivalence checks.
 
 ## Research questions
 

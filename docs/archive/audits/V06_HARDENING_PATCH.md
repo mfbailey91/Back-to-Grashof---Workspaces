@@ -1,3 +1,6 @@
+> **Historical audit / closeout note.** Not active roadmap. See `docs/CURRENT_STATUS.md` and `docs/reference/DECISIONS.md`.
+
+
 # V06 Hardening Patch Plan
 
 **Project:** Characterization of Manipulator Workspaces  

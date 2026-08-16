@@ -130,7 +130,7 @@ def build_spatial_l6_scaffold_bundle(
         notes=(
             (
                 "L6 scaffold interface under V07-first mapping; scientific source remains "
-                "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md."
+                "docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md."
             ),
             "Next scientific step: V07A FixedPositionParentResult / frozen SO(3) reference.",
             "Architecture-scoped after proximal exact_u_pair_4r LOCAL_ONLY traced-arc match.",
@@ -149,7 +149,7 @@ def default_l6_scaffold_payload() -> dict[str, Any]:
             "Not a frozen SO(3) reference, not nested-slice reconstruction, and not V08. "
             "V07A remains the next scientific step."
         ),
-        "v07_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v07",
+        "v07_program": "docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v07",
         "bundle": bundle.to_dict(),
         "summary": {
             "architecture_id": bundle.architecture_id,

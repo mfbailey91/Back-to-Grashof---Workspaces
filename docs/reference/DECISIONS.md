@@ -166,13 +166,22 @@ with coordinate maps, reconstruction maps, component scope, rank checks, tangent
 
 ---
 
-## ADR-023 — Optional L3–L7 ladder scaffold subordinate to active V05–V09
+## ADR-023 — L3–L7 ladder scaffold (historical; superseded by ADR-048)
 
 <!-- DECOMPOSITION_LADDER_L3_L7_2026_08_12 -->
+<!-- SUPERSEDED by ADR-048 (2026-08-16): ladder is now the active architecture. -->
 
-**Decision:** Keep `docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md` as the active scientific sequence. Treat `docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` as an optional interface scaffold that maps L3→planar calibration, L4→V05, L5→V06, L6→V07-first then V08, and L7 as deferred/BLOCKED until the V05 closed-mechanism gate lifts.
+> **Superseded by ADR-048.** Retained as historical decision text. The L3–L7
+> ladder is now the active architecture; V05–V09 documents are archived lineage.
 
-**Reason:** The dimensional parent→fiber→child contract is reusable, but promoting a parallel “active general program” would demote the audited V05 HOLD and reopen the V05A undifferentiated-PASS failure mode.
+**Decision (historical):** Keep the V05–V09 program Markdown as the then-active
+scientific sequence. Treat the L3–L7 program Markdown as an interface scaffold
+mapping L3→planar calibration, L4→V05, L5→V06, L6→V07-first then V08, and L7 as
+deferred/BLOCKED until the V05 closed-mechanism gate lifts.
+
+**Reason (historical):** The dimensional parent→fiber→child contract is reusable,
+but promoting a parallel general program at that time would have demoted the
+audited V05 HOLD and reopened the V05A undifferentiated-PASS failure mode.
 
 ## ADR-024 — A higher-dimensional parent is reconstructed from an audited fiber family, not assumed to be a product
 
@@ -520,7 +529,7 @@ four-bar behavior descriptor rather than the universal premise. Higher-dimension
 workspace claims require source-derived child families, behavior certificates,
 coverage/compatibility stitching, and independent parent-image validation.
 Historical V05–V09 program documents are archived as lineage; the roadmap is
-rung-centric ([`ROADMAP.md`](ROADMAP.md)); numerical predicates remain permitted
+rung-centric ([`../ROADMAP.md`](../ROADMAP.md)); numerical predicates remain permitted
 when uncertainty and exact fallback are explicit.
 
 **Reason:** The planar reference succeeds because its fixed-position problem is a
@@ -528,9 +537,10 @@ one-DOF four-bar rotatability problem. Spatial source mechanisms have higher
 mobility and require decomposition and reconstruction before a four-bar predicate
 can support a workspace claim.
 
-**Consequence:** Prior “optional/subordinate ladder” language is withdrawn.
-[`CURRENT_STATUS.md`](CURRENT_STATUS.md) is the sole live status ledger.
-[`theory/MECHANISM_BEHAVIOR_AND_STITCHING.md`](theory/MECHANISM_BEHAVIOR_AND_STITCHING.md)
+**Consequence:** Prior wording that treated the ladder as non-primary relative to
+V05–V09 is withdrawn. [`../CURRENT_STATUS.md`](../CURRENT_STATUS.md) is the sole
+live status ledger.
+[`../theory/MECHANISM_BEHAVIOR_AND_STITCHING.md`](../theory/MECHANISM_BEHAVIOR_AND_STITCHING.md)
 states the behavior-certificate and stitching contract.
 
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference

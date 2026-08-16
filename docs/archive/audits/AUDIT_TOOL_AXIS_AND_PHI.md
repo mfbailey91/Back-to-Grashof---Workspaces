@@ -1,3 +1,6 @@
+> **Historical audit / closeout note.** Not active roadmap. See `docs/CURRENT_STATUS.md` and `docs/reference/DECISIONS.md`.
+
+
 # Audit — Tool-A / Tool-B Drive Semantics and the Role of phi
 
 **Status:** corrective audit after V04B  

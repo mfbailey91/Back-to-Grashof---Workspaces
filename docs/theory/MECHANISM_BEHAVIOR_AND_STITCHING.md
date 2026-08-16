@@ -1,8 +1,8 @@
 # Mechanism Behavior and Coverage Stitching
 
-**Status:** CANONICAL theory note  
-**Project:** Characterization of Manipulator Workspaces by Kinematic Decomposition  
-**Purpose:** State the general framework beyond the shorthand phrase “Grashof criterion”  
+**Status:** CANONICAL theory note
+**Project:** Characterization of Manipulator Workspaces by Kinematic Decomposition
+**Purpose:** State the general framework beyond the shorthand phrase “Grashof criterion”
 **Live status ledger:** [`../CURRENT_STATUS.md`](../CURRENT_STATUS.md) (rung implementation status lives there, not here)
 
 ---

@@ -1,3 +1,8 @@
+> **Historical program document.** This file preserves planning lineage that led to the current decomposition ladder. It is not the active roadmap. See `docs/ROADMAP.md` and `docs/CURRENT_STATUS.md`.
+>
+> **Status label:** see `docs/archive/README.md`.
+
+
 # Kinematic Decomposition Program — V05 to V09
 
 **Status:** Active proposed replacement for the spatial-four-bar-first V05–V09 program
@@ -322,7 +327,7 @@ For a regular seed \(q_0\):
 6. distinguish a returned cycle from an open or budget-limited branch.
 
 Software: `src/grashof_workspace/spatial_experiments/{open_chain,fixed_position,fixed_position_continuation,v05_corpus,v05b}.py`.
-Readout: [`results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html`](../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html).
+Readout: [`results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html`](../../../results/kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html).
 Note: ± rays from one seed do not certify full multi-component completeness. V05C–E are implemented on this corpus. Explorer `spatial4bar_explorer/v05a` is not this work package.
 
 ### V05C — orientation-curve truth
@@ -342,7 +347,7 @@ Render and export:
 Do not reduce the orientation curve to a single angle unless the architecture proves a one-parameter subgroup or another valid scalar coordinate.
 
 Software: `src/grashof_workspace/spatial_experiments/{orientation_image,v05c}.py`.
-Readout: [`results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
+Readout: [`results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html`](../../../results/kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html).
 These exports are orientation-curve / pointing-curve truth, not coverage certificates. V05D aggregation certificates and V05E near-aligned rejection are implemented.
 
 ### V05D — exact axis aggregation and candidate spatial four-bar
@@ -361,7 +366,7 @@ For architectures with an exact \(RR\rightarrow U\) pair:
 The existing generic `U/S/R` closure and continuation kernel may be reused, but V05 introduces role-aware source families `S_v-U_phys-R-R`, `S_v-R-U_phys-R`, and `S_v-R-R-U_phys`. Existing `tool_a`/`tool_b` winding semantics must not be reused because the universal joint is physical and the virtual tool closure is spherical.
 
 Software: `src/grashof_workspace/spatial_experiments/{axis_aggregation,decomposition_certificate,v05d}.py`.
-Readout: [`results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
+Readout: [`results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html`](../../../results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html).
 Complete bidirectional source/child component correspondence, non-proximal pair embeddings,
 and multi-component `EXACT_GLOBAL` remain unverified. V05E near-aligned rejection is
 implemented.
@@ -373,7 +378,7 @@ implemented.
 The near-aligned perturbation must be rejected as exact aggregation. The software should show the geometric tolerance and the task error caused by treating it as a universal joint.
 
 Software: `src/grashof_workspace/spatial_experiments/{axis_aggregation,decomposition_certificate,v05_corpus,v05e}.py`.
-Readout: [`results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
+Readout: [`results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html`](../../../results/kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html).
 The forced exact-U surrogate is diagnostic-only and is **not** an `APPROXIMATE` DecompositionCertificate.
 
 ## Deliverables
@@ -422,7 +427,7 @@ M=2,
 
 ## Work packages
 
-Implementation slices (does not replace V06A–E): V06A0 generic 2D manifold engine → V06A1 one local 5R chart → V06A2 parent atlas → V06C source images → V06B compound parent → V06D1/D2 fibers and children → V06E reconstruction. Details: [`V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md`](V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md).
+Implementation slices (does not replace V06A–E): V06A0 generic 2D manifold engine → V06A1 one local 5R chart → V06A2 parent atlas → V06C source images → V06B compound parent → V06D1/D2 fibers and children → V06E reconstruction. Details: [`V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md`](../sprints/V06_SPATIAL_5R_PARENT_AND_POINTING_EXECUTION.md).
 
 ### V06A — two-dimensional parent first
 

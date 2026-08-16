@@ -1,6 +1,6 @@
 # Project Thesis
 
-**Status:** CANONICAL  
+**Status:** CANONICAL
 **Project:** Characterization of Manipulator Workspaces by Kinematic Decomposition
 
 ## Preferred project description

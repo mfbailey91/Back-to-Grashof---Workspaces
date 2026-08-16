@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint 01 — Analytical Planar 3R Workspace
 
 ## Sprint goal

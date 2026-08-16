@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V06 — Descriptor Trend Mining
 
 > **Superseded sprint number:** retained as deferred **V11 descriptor

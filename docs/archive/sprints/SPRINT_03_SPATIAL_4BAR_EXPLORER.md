@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint Plan — Spatial 4-Bar Explorer
 
 > **Current role:** mechanism laboratory through V04C. Geometry, closure,
@@ -268,8 +271,8 @@ shows that the U axes cannot be chosen arbitrarily.  It does not establish
 Before V05 uses UXXX results as dexterity evidence, the `S_v -> U_v` reduction
 must derive the A/B axes from an explicit pointing slice/fiber.  Standalone
 `phi` sweeps remain mechanism-laboratory diagnostics. See
-[`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md) and
-[`AUDIT_TOOL_AXIS_AND_PHI.md`](AUDIT_TOOL_AXIS_AND_PHI.md).
+[`SPATIAL_POINTING_SLICE_CONTRACT.md`](../../methods/SPATIAL_POINTING_SLICE_CONTRACT.md) and
+[`AUDIT_TOOL_AXIS_AND_PHI.md`](../audits/AUDIT_TOOL_AXIS_AND_PHI.md).
 
 ### Deliverables
 - standalone runner `spatial4bar_explorer.v04b`;

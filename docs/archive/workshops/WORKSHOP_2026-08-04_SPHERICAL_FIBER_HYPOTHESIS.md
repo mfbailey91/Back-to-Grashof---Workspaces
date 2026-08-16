@@ -1,3 +1,5 @@
+> **Historical workshop note.** Preserved for lineage; not active authority. See `docs/CURRENT_STATUS.md`.
+
 # Workshop Note: Aligned Terminal-Roll Reduction for Spatial Dexterity
 
 **Date:** 2026-08-04  

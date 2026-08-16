@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V03 — Closure and Continuation Proof
 
 **Status:** refined after V02B geometry hardening  

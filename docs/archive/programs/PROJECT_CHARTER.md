@@ -1,3 +1,8 @@
+> **Historical program document.** This file preserves planning lineage that led to the current decomposition ladder. It is not the active roadmap. See `docs/ROADMAP.md` and `docs/CURRENT_STATUS.md`.
+>
+> **Status label:** see `docs/archive/README.md`.
+
+
 # Project Charter
 
 ## Working title

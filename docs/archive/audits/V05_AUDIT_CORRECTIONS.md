@@ -1,3 +1,6 @@
+> **Historical audit / closeout note.** Not active roadmap. See `docs/CURRENT_STATUS.md` and `docs/reference/DECISIONS.md`.
+
+
 # V05A–V05E Audit Corrections
 
 **Status:** independent proximal `exact_u_pair_4r` closed-mechanism solve matches a budget-limited traced arc as `LOCAL_ONLY`; exact axis aggregation remains `EXACT_GLOBAL`  

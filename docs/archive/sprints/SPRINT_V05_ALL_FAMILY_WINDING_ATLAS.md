@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V05 — All-Family Winding Atlas
 
 > **Superseded sprint number:** retained as the deferred **V10 validated-family
@@ -25,7 +28,7 @@ what returned-cycle winding, angular-coverage, singularity, and unresolved-branc
 - V04 returned-cycle winding classifier;
 - V04B numerical robustness checks;
 - V04C solver-coordinate diagnostics and unresolved/open-branch policy;
-- [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md).
+- [`SPATIAL_POINTING_SLICE_CONTRACT.md`](../../methods/SPATIAL_POINTING_SLICE_CONTRACT.md).
 
 V01/V02 mock classifications remain excluded from research evidence.
 
@@ -52,7 +55,7 @@ Under the old spatial-four-bar-first numbering this was “V05A”; after the ki
 - Restored minimal ATR fiber kernel under `src/grashof_workspace/spatial_experiments/` from `spherical_framework`.
 - Bridge: `spatial4bar_explorer/pointing_slice.py` + runner `spatial4bar_explorer/v05a.py`.
 - Worked MVP: intersecting-pairs **SUUR → UUUR** with explicit `h(d)=n·d=c`, virtual-`U` chart `(R_a,R_b,d)`, and fiber-equivalence **PASS**.
-- Readout: [`results/spatial4bar_explorer/v05a/sprint_05a_pointing_slice_fibers.html`](../results/spatial4bar_explorer/v05a/sprint_05a_pointing_slice_fibers.html).
+- Readout: [`results/spatial4bar_explorer/v05a/sprint_05a_pointing_slice_fibers.html`](../../../results/spatial4bar_explorer/v05a/sprint_05a_pointing_slice_fibers.html).
 - Deferred: SSRR-line parents; family winding atlas (now V10); promoting diagnostic `phi` to a fiber parameter.
 - Note: compound UA/UB frames are orthonormalized seed charts; exact free-SUUR identity beyond the seed remains **unverified**. PASS uses `S_v→U_v` pointing-lift tangent agreement; V03 child nullspace match is diagnostic-only.
 - Standalone / explorer rows remain `mechanism_explorer_only` until certified against the active V05–V09 source-chain program.
@@ -90,7 +93,7 @@ For every family publish:
 - minimum singularity-margin distributions;
 - representative 3D crank, rocker, and near-boundary mechanisms;
 - representative unresolved/open cases;
-- selected branch GIFs that satisfy the task-derived animation contract in [`SPATIAL_POINTING_SLICE_CONTRACT.md`](SPATIAL_POINTING_SLICE_CONTRACT.md): tool point and virtual `S_v` center; pointing direction `d`; derived `R_a` / `R_b` axes; pointing-slice definition / curve; `alpha(s)` and `beta(s)` readouts; and an explicit statement that continuation arclength `s` (not `tool_a`) is the branch parameter unless an input is prescribed;
+- selected branch GIFs that satisfy the task-derived animation contract in [`SPATIAL_POINTING_SLICE_CONTRACT.md`](../../methods/SPATIAL_POINTING_SLICE_CONTRACT.md): tool point and virtual `S_v` center; pointing direction `d`; derived `R_a` / `R_b` axes; pointing-slice definition / curve; `alpha(s)` and `beta(s)` readouts; and an explicit statement that continuation arclength `s` (not `tool_a`) is the branch parameter unless an input is prescribed;
 - geometry cards with the most important physical descriptors.
 
 ## Dataset contract

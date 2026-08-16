@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V08 — Fast Crank Evaluator
 
 > **Superseded sprint number:** retained as deferred **V13 conservative fast

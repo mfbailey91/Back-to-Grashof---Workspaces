@@ -1,3 +1,6 @@
+> **Completed / historical sprint document.** Not active implementation authority. See `docs/CURRENT_STATUS.md` and `docs/ROADMAP.md`.
+
+
 # Sprint V07 — Candidate Spatial Grashof-Like Rules
 
 > **Superseded sprint number:** retained as deferred **V12 candidate-rule
