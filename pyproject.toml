@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "grashof-workspace"
 version = "0.2.0"
-description = "Analytical planar 3R workspace characterization using an equivalent four-bar mechanism"
+description = "Mechanism-based characterization of manipulator orientation capability through fixed-position kinematic decomposition and verified four-bar behavior reconstruction."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

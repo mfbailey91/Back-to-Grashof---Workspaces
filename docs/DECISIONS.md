@@ -510,6 +510,29 @@ V07A held pending parent/continuation completion.
 **Reason:** Dimension matching, a rejected child, or a defined miss metric is
 not recombination. Descriptor discovery stays blocked (ADR-026).
 
+## ADR-048 — Mechanism behavior and coverage stitching are the general framework
+
+<!-- CANONICAL_AUTHORITY_2026_08_16 -->
+
+**Decision:** The project’s active architecture is the L3–L7 fixed-position
+kinematic-decomposition ladder. Grashof classification is treated as one possible
+four-bar behavior descriptor rather than the universal premise. Higher-dimensional
+workspace claims require source-derived child families, behavior certificates,
+coverage/compatibility stitching, and independent parent-image validation.
+Historical V05–V09 program documents are archived as lineage; the roadmap is
+rung-centric ([`ROADMAP.md`](ROADMAP.md)); numerical predicates remain permitted
+when uncertainty and exact fallback are explicit.
+
+**Reason:** The planar reference succeeds because its fixed-position problem is a
+one-DOF four-bar rotatability problem. Spatial source mechanisms have higher
+mobility and require decomposition and reconstruction before a four-bar predicate
+can support a workspace claim.
+
+**Consequence:** Prior “optional/subordinate ladder” language is withdrawn.
+[`CURRENT_STATUS.md`](CURRENT_STATUS.md) is the sole live status ledger.
+[`theory/MECHANISM_BEHAVIOR_AND_STITCHING.md`](theory/MECHANISM_BEHAVIOR_AND_STITCHING.md)
+states the behavior-certificate and stitching contract.
+
 ## ADR-033 — L6 scaffold is not a V07 frozen SO(3) reference
 
 <!-- L6_SCAFFOLD_INTERFACE_2026_08_13 -->
@@ -519,8 +542,9 @@ synthetic non-aligned spatial-6R seed audit (`rank Jp=3`, `nullity=3`) and empty
 child/certificate lists whose reconstruction status remains `UNRESOLVED`. This does
 **not** freeze a decomposition-free SO(3) orientation reference (Gate K3 / V07A), does
 not authorize nested orientation-slice reconstruction, and does not start V08
-terminal-roll quotient work. V07A remains the next scientific step; V05–V09 primacy is
-unchanged. L5 `PARENT_CHILD_FAMILIES` must not be reused as an L6 letter corpus.
+terminal-roll quotient work. V07A remains held pending the independent L6 reference
+gate (ADR-048 / `CURRENT_STATUS.md`). L5 `PARENT_CHILD_FAMILIES` must not be reused
+as an L6 letter corpus.
 
 **Reason:** Architecture-scoped interface exercise is useful after the proximal exact-U
 gate, but claiming an SO(3) parent or V08 readiness from a seed audit would violate

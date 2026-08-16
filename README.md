@@ -1,19 +1,19 @@
-# Back to Grashof — Workspace Characterization by Kinematic Decomposition
+# Back to Grashof — Mechanism-Based Workspace Characterization
 
-A research codebase for characterizing manipulator orientation capability through the virtual closed mechanism obtained when the tool position is fixed.
+A research codebase for characterizing manipulator orientation capability through
+fixed-position kinematic decomposition: fix the tool position, form the exact
+virtual closed source mechanism, certify lower-dimensional mechanism behaviors
+where valid, and reconstruct orientation or pointing coverage under an explicit
+compatibility contract.
 
-The planar 3R result is the trusted analytical reference. The active spatial program now walks sequentially from 4R to 5R to 6R source chains before applying spatial-four-bar predicates.
+## 1. Project question
 
-## Central question
+At a Cartesian point \(p^*\):
 
-For a serial manipulator at a Cartesian point \(p^*\):
-
-1. what configurations remain after enforcing \(p(q)=p^*\)?
+1. what configurations remain after \(p(q)=p^*\)?
 2. what orientation or pointing image do those configurations generate?
-3. can the exact fixed-position mechanism be reduced into lower-dimensional mechanisms?
-4. do intrinsic mechanism properties determine the required global coverage?
-
-The evidence chain is:
+3. can the source mechanism be reduced into verified lower-dimensional families?
+4. do certified mechanism behaviors, under coverage stitching, recover the parent task image?
 
 ```text
 open chain
@@ -21,102 +21,46 @@ open chain
   -> exact virtual closure
   -> orientation/pointing image
   -> certified kinematic decomposition
-  -> mechanism predicate
-  -> explicit reconstruction
+  -> mechanism behavior certificate
+  -> coverage/compatibility stitching
   -> independent workspace validation
 ```
 
-## Trusted planar result
+## 2. Trusted result and current status
 
-For a planar 3R manipulator with link lengths \(l_1,l_2,l_3\), fixing a candidate end-effector position \(p\) closes the chain into a planar four-bar:
+The planar 3R implementation is the trusted analytical reference. The active
+spatial program is the L3–L7 fixed-position decomposition ladder. L5 currently
+has a hardened but incomplete parent implementation, no accepted child family,
+and a rejected fixed-axis `UUUR` hypothesis. L6 and L7 remain blocked/deferred.
 
-- ground: \(d=\|p\|\);
-- designated rotating link: \(l_3\);
-- remaining links: \(l_2,l_1\).
+Live ledger: [`docs/CURRENT_STATUS.md`](docs/CURRENT_STATUS.md).
 
-Let
+## 3. What “Grashof” means here
 
-\[
-r_{\min}=|l_1-l_2|,
-\qquad
-r_{\max}=l_1+l_2,
-\qquad
-\rho=\|p\|.
-\]
+Classical Grashof classification is one mechanism-behavior description used in
+the planar reference. The general program does not assume that every spatial
+workspace admits one universal Grashof inequality.
 
-The point is planar-dexterous exactly when
-
-\[
-|\rho-l_3|\ge r_{\min},
-\qquad
-\rho+l_3\le r_{\max}.
-\]
-
-The implementation keeps exact terminal-link rotatability separate from conventional Grashof classification.
-
-## Active spatial ladder
-
-At regular fixed-position configurations:
+## 4. Repository map
 
 ```text
-spatial 4R -> 4R + S_v, M = 1 -> orientation curve in SO(3)
-spatial 5R -> 5R + S_v, M = 2 -> orientation surface / pointing image in S^2
-spatial 6R -> 6R + S_v, M = 3 -> possible full orientation image in SO(3)
+README.md                 this entry page
+docs/README.md            documentation navigation authority
+docs/PROJECT_THESIS.md    scientific thesis
+docs/CURRENT_STATUS.md    status ledger
+docs/ROADMAP.md           future gates only
+docs/theory/              framework, ladder, stitching, math notes
+docs/methods/             implementation contracts
+docs/reference/           ADRs and evidence index
+docs/archive/             historical programs, sprints, workshops, audits
+src/grashof_workspace/    package (name retained; branding migration deferred)
+tests/                    mathematical and research-contract tests
+results/                  reproducible readouts
 ```
 
-The active plan is:
+Start with [`docs/README.md`](docs/README.md).
 
-```text
-V05  spatial 4R fixed-position fiber and one-DOF decomposition baseline
-V06  spatial 5R fixed-position parent and pointing image
-V07  generic spatial 6R orientation reference
-V08  aligned-roll quotient and task-derived four-bar fibers
-V09  validated mechanism predicates and coverage reconstruction
-```
-
-The earlier all-family spatial-four-bar atlas/rule program is preserved as deferred V10–V14 work after the decomposition-validation gate.
-
-Optional shared L3–L7 interface scaffolding lives in `docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md` and `src/grashof_workspace/decomposition_ladder/`. It is subordinate to the active V05–V09 sequence above. The proximal exact-U L4 case currently records an independent `LOCAL_ONLY` traced-arc match; complete component equivalence remains unresolved.
-
-Direct V06A construction of the two-dimensional 5R source parent may proceed without inheriting an L4 component certificate.
-
-
-## Important terminology
-
-- **spatial 4R serial manipulator:** an open chain with four revolute joints;
-- **spatial four-bar linkage:** a closed one-degree-of-freedom linkage family;
-- **fixed-position fiber:** all configurations satisfying \(p(q)=p^*\);
-- **orientation image:** orientations generated by that fiber;
-- **pointing image:** selected tool-axis directions generated by that fiber;
-- **coverage target:** the orientation set required by the task;
-- **joint-kind sequence / joint-role sequence:** solver topology plus the semantic identity of virtual and physical compound joints;
-- **`S_v`/`U_v`:** virtual task closures; **`S_phys`/`U_phys`:** exact aggregates of physical revolute axes;
-- **decomposition certificate:** evidence that a reduced mechanism is exact, component-limited, local, approximate, rejected, or unresolved.
-
-Matching DOF counts or visually similar topologies do not establish equivalence.
-
-## Scope
-
-Included or active:
-
-- analytical planar 3R reachable/dexterous workspace;
-- exact four-bar assemblability, inversion, and designated-link rotatability;
-- radial mechanism-state atlas and independent sampling validation;
-- physical spatial compound-joint geometry;
-- spatial closure, continuation, returned-cycle, winding, and coverage diagnostics;
-- fixed-position source mechanisms for synthetic spatial 4R/5R/6R chains;
-- orientation/pointing image representations;
-- axis aggregation, symmetry quotient, task slice, and factorization certificates;
-- reproducible PNG/GIF/JSON/HTML readouts.
-
-Deferred until source/decomposition validation:
-
-- broad family descriptor mining and Grashof-like rule claims;
-- fast surrogate classification as a workspace method;
-- industrial URDF corpus;
-- collision, dynamics, force, torque, stiffness, and control capability.
-
-## Quick start
+## 5. Quick start
 
 ```bash
 python -m venv .venv
@@ -129,28 +73,13 @@ grashof-workspace --l1 2.0 --l2 2.0 --l3 1.0 --output workspace.png
 grashof-workspace --atlas --output-dir outputs/atlas
 ```
 
-## Repository map
+Package name, console scripts, and import paths remain `grashof_workspace` /
+`grashof-workspace` in this cleanup; renaming is a separate future PR.
 
-```text
-src/grashof_workspace/
-  fourbar.py                 planar equivalent-loop and Grashof tests
-  planar3r.py                analytical planar workspace kernel
-  atlas.py                   planar atlas and experiment figures
-  plotting.py                planar plots
-  spatial4bar_explorer/      standalone spatial mechanism laboratory
-  # active V05+ adds source-chain/fiber/decomposition modules
+## 6. Scientific claim boundaries
 
-tests/                       mathematical and research-contract tests
-docs/
-  PROJECT_REFERENCE_INDEX.md
-  PROJECT_CHARTER.md
-  MATH_NOTES.md
-  KINEMATIC_DECOMPOSITION_FIXED_POSITION_ORIENTATION_FRAMEWORK.md
-  KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md
-  ROADMAP.md
-  DECISIONS.md
-.github/workflows/           continuous integration
-.cursor/rules/               Cursor research guardrails
-```
-
-Start with [`docs/PROJECT_REFERENCE_INDEX.md`](docs/PROJECT_REFERENCE_INDEX.md) for the current source-of-truth map.
+- Matching DOF counts or visually similar topologies do not establish equivalence.
+- Spatial four-bar explorer results are mechanism-lab evidence, not workspace evidence, without source provenance and reconstruction.
+- A collection of one-dimensional fibers is not a complete higher-dimensional parent.
+- Descriptor discovery and broad atlas rules stay blocked until reconstruction succeeds.
+- `dexterous_workspace` means full declared orientation coverage; pointing-complete is an explicit \(S^2\) claim when roll is excluded.

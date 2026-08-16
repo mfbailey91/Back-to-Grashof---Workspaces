@@ -1,11 +1,13 @@
 # Kinematic Decomposition Ladder — L3 through L7
 
-**Status:** optional software scaffold subordinate to active V05–V09  
-**Active scientific sequence:** [`KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md`](KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md)  
+**Status:** CANONICAL — active architecture of the research program  
+**Live status ledger:** [`CURRENT_STATUS.md`](CURRENT_STATUS.md)  
+**Future gates:** [`ROADMAP.md`](ROADMAP.md)  
+**Historical V05–V09 planning lineage:** archived under `archive/programs/` (not active roadmap)  
 **Project:** Characterization of Manipulator Workspaces  
-**Purpose:** provide shared parent → fiber → child → reconstruction interfaces from the trusted planar 3R calibration through deferred spatial 7R work without demoting the active V05–V09 scientific sequence (proximal exact-U currently has a `LOCAL_ONLY` independent traced-arc match).
+**Purpose:** define shared parent → fiber → child → reconstruction contracts from the trusted planar 3R calibration through deferred spatial 7R work.
 
-This document does **not** replace the active V05–V09 program. L4 maps to V05, L5 to V06, L6 is V07-first then V08, and L7 remains BLOCKED pending complete-component / nested-slice certificates.
+The L3–L7 decomposition ladder is the active architecture of the research program. Historical V05–V09 sprint documents record implementations within this architecture but do not supersede it. This document defines contracts and dependencies; [`CURRENT_STATUS.md`](CURRENT_STATUS.md) records what is implemented.
 
 ---
 
