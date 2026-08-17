@@ -11,20 +11,30 @@ from grashof_workspace.project_dashboard import (
 )
 
 
-def test_render_project_index_covers_v05_v09_and_l3_l7() -> None:
+def test_render_project_index_covers_capabilities_and_l3_l7() -> None:
     html = render_project_index_html()
-    assert STATUS_DATE == "2026-08-15"
-    assert "V05–V09" in html or "V05" in html
+    assert STATUS_DATE == "2026-08-16"
+    assert "capabilities and status" in html.casefold()
     assert "L3–L7" in html or "L3" in html
+    assert "trusted_exact_reference" in html
+    assert "parent_incomplete" in html
     assert "LOCAL_ONLY" in html
-    assert "SCAFFOLD" in html
+    assert "scaffold_only" in html or "SCAFFOLD" in html
     assert "BLOCKED" in html
     assert "L5" in html and "L6" in html and "L7" in html
+    assert "REJECTED" in html
     assert "decomposition_ladder/index.html" in html
     assert "kinematic_decomposition/index.html" in html
     assert "spatial4bar_explorer/index.html" in html
-    assert "frozen SO(3)" in html or "frozen SO" in html
+    assert "SO(3)" in html
     assert "V06A" in html or "V07A" in html
+    assert "CURRENT_STATUS.md" in html
+    assert 'id="animations"' in html
+    assert "v03_uuur_branch.gif" in html
+    assert "v03_urrs_branch.gif" in html
+    assert "v05b_exact_u_pair_4r_fiber.gif" in html
+    assert "v05d_exact_u_pair_4r_overlay.gif" in html
+    assert "mechanism_explorer_only" in html
 
 
 def test_render_explorer_index_mentions_active_ladder() -> None:

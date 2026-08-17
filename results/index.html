@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Back to Grashof — project index printout (so far)</title>
+<title>Back to Grashof — capabilities and status so far</title>
 <style>
 
-  body { font-family: Georgia, "Times New Roman", serif; max-width: 920px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
+  body { font-family: Georgia, "Times New Roman", serif; max-width: 960px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.45; color: #1a1a1a; }
   h1, h2, h3 { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 1.2; }
   h1 { font-size: 1.75rem; margin-bottom: 0.35rem; }
   h2 { margin-top: 2rem; border-bottom: 1px solid #ccc; padding-bottom: 0.25rem; }
@@ -19,7 +19,22 @@
   ul.toc { columns: 2; column-gap: 2rem; }
   .status { font-weight: bold; }
   .pass { color: #0a5; }
+  .hold { color: #a50; }
+  .reject { color: #a10; }
+  .deferred { color: #555; }
   .note { background: #faf7f0; border-left: 3px solid #c4a35a; padding: 0.6rem 0.85rem; margin: 1rem 0; }
+  .cap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+  .cap { border: 1px solid #ccc; padding: 0.65rem 0.8rem; background: #fcfcfc; }
+  .cap h3 { margin: 0 0 0.35rem; font-size: 1rem; }
+  .cap p { margin: 0.25rem 0; font-size: 0.92rem; }
+  .anim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  .anim-grid figure { margin: 0; border: 1px solid #ccc; padding: 0.5rem; background: #fcfcfc; }
+  .anim-grid img { width: 100%; height: auto; display: block; background: #fff; }
+  .anim-grid figcaption { margin-top: 0.4rem; font-size: 0.88rem; color: #333; }
+  @media (max-width: 720px) {
+    .cap-grid, .anim-grid { grid-template-columns: 1fr; }
+    ul.toc { columns: 1; }
+  }
   @media print {
     body { max-width: none; margin: 0; }
     a { color: inherit; text-decoration: none; }
@@ -31,175 +46,265 @@
 </head>
 <body>
 
-<h1>Back to Grashof — project index printout (so far)</h1>
+<h1>Back to Grashof — capabilities and status so far</h1>
 <p class="meta">
-  <strong>Active scientific sequence:</strong>
-  <code>docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code><br>
-  Optional L3–L7 ladder scaffold is subordinate to that program.
-  Status date: 2026-08-15
+  Mechanism-based characterization of manipulator orientation after fixing tool position.<br>
+  <strong>Active architecture:</strong> L3–L7 fixed-position decomposition ladder
+  (<code>docs/theory/DECOMPOSITION_LADDER.md</code>) ·
+  <strong>Status ledger:</strong> <code>docs/CURRENT_STATUS.md</code> ·
+  Status date: 2026-08-16
 </p>
 
 <div class="note">
-  This page joins the three evidence hubs. It does not replace them and does not
-  fabricate V06–V09 science artifacts. Proximal <code>exact_u_pair_4r</code>
-  closed-mechanism is <code>LOCAL_ONLY</code> on a traced arc (ADR-034); multi-component
-  <code>EXACT_GLOBAL</code> and other architectures remain unresolved.
+  This page summarizes <em>what the software and evidence chain can do today</em>,
+  and what they explicitly do <em>not</em> claim. It links to reproducible sprint
+  readouts; it does not invent accepted children, complete parents, or V07 readiness.
 </div>
 
 <h2>Contents</h2>
 <ul class="toc">
-  <li><a href="#v05v09">Active V05–V09 status</a></li>
-  <li><a href="#l3l7">Optional L3–L7 scaffold</a></li>
-  <li><a href="#crosswalk">L↔V crosswalk</a></li>
-  <li><a href="#hubs">Evidence hubs</a></li>
+  <li><a href="#question">Project question</a></li>
+  <li><a href="#animations">Constituent four-bar animations</a></li>
+  <li><a href="#ledger">Rung ledger</a></li>
+  <li><a href="#capabilities">Capabilities by rung</a></li>
+  <li><a href="#negatives">Locked negatives</a></li>
+  <li><a href="#artifacts">Evidence artifacts</a></li>
+  <li><a href="#hubs">Hubs and docs</a></li>
+  <li><a href="#next">What comes next</a></li>
   <li><a href="#reproduce">Reproduce</a></li>
 </ul>
 
-<h2 id="v05v09">Active V05–V09 status</h2>
-<table>
-  <tr>
-    <th>Sprint</th><th>Source</th><th>Target</th><th>Status</th><th>Primary artifacts</th>
-  </tr>
-  <tr>
-    <td><strong>V05</strong></td>
-    <td>spatial 4R + S_v</td>
-    <td>orientation curve / 1D fiber</td>
-    <td><code>LOCAL_ONLY</code> (proximal <code>exact_u_pair_4r</code> traced-arc match); other architectures unresolved</td>
-    <td>
-      <a href="kinematic_decomposition/index.html">KD hub</a> ·
-      <a href="kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html">V05B</a> ·
-      <a href="kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html">V05C</a> ·
-      <a href="kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">V05D</a> ·
-      <a href="kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html">V05E</a>
-    </td>
-  </tr>
-  <tr>
-    <td><strong>V06</strong></td>
-    <td>spatial 5R + S_v</td>
-    <td>S² pointing parent</td>
-    <td>V06H6 closeout (ADR-047): UUUR REJECTED; factorization unresolved; no accepted children; V06 not passed; V07A held</td>
-    <td>
-      <a href="kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html">V06A0</a> ·
-      <a href="kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html">V06A1</a> ·
-      <a href="kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html">V06A2</a> ·
-      <a href="kinematic_decomposition/v06c/sprint_v06c_source_images.html">V06C</a> ·
-      <a href="kinematic_decomposition/v06b/sprint_v06b_compound_parent.html">V06B</a> ·
-      <a href="kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html">V06D1</a> ·
-      <a href="kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html">V06D2</a> ·
-      <a href="kinematic_decomposition/v06e/sprint_v06e_reconstruction.html">V06E</a> ·
-      <a href="decomposition_ladder/index.html">L5 scaffold</a>
-    </td>
-  </tr>
-  <tr>
-    <td><strong>V07</strong></td>
-    <td>spatial 6R + S_v</td>
-    <td>SO(3) orientation reference</td>
-    <td>Not started — Gate K3 freeze absent; L6 scaffold only</td>
-    <td><a href="decomposition_ladder/index.html">L6 scaffold</a> (seed audit, not frozen SO(3))</td>
-  </tr>
-  <tr>
-    <td><strong>V08</strong></td>
-    <td>aligned 6R quotient</td>
-    <td>pointing + roll vs V07 truth</td>
-    <td>Blocked on V07 reference (Gate K4)</td>
-    <td>—</td>
-  </tr>
-  <tr>
-    <td><strong>V09</strong></td>
-    <td>reconstruction</td>
-    <td>coverage from accepted children</td>
-    <td>Blocked on prior gates (Gate K5)</td>
-    <td>—</td>
-  </tr>
-</table>
-
-<h2 id="l3l7">Optional L3–L7 scaffold</h2>
+<h2 id="question">Project question</h2>
 <p>
-Process labels (<code>SCAFFOLD</code>, <code>BLOCKED</code>) are separate from certificate
-statuses (<code>EXACT_GLOBAL</code>, <code>EXACT_ON_COMPONENT</code>, <code>LOCAL_ONLY</code>, <code>UNRESOLVED</code>).
+Fix the tool position, form the exact virtual closed source mechanism, then ask
+whether architecture- or task-derived lower-dimensional mechanism families can
+certify behavior whose task images reconstruct the parent orientation or pointing
+image under an explicit stitching contract.
 </p>
-<table>
-  <tr>
-    <th>Rung</th><th>Maps to</th><th>Process</th><th>Certificate / evidence</th><th>Notes</th>
-  </tr>
-  <tr>
-    <td><strong>L3</strong></td>
-    <td>planar calibration</td>
-    <td><code>SCAFFOLD</code></td>
-    <td>Map <code>EXACT_GLOBAL</code> at each radius</td>
-    <td>Trusted analytical planar 3R→4R retrofit</td>
-  </tr>
-  <tr>
-    <td><strong>L4</strong></td>
-    <td>V05</td>
-    <td><code>SCAFFOLD</code></td>
-    <td><code>LOCAL_ONLY</code> traced-arc match for proximal exact_u_pair_4r</td>
-    <td>Wraps audited V05D closed-mechanism evidence</td>
-  </tr>
-  <tr>
-    <td><strong>L5</strong></td>
-    <td>V06</td>
-    <td><code>SCAFFOLD</code></td>
-    <td>All certs <code>UNRESOLVED</code>; nullity-2 seed audit</td>
-    <td>Not a 2D parent; not pointing reconstruction (ADR-032)</td>
-  </tr>
-  <tr>
-    <td><strong>L6</strong></td>
-    <td>V07-first</td>
-    <td><code>SCAFFOLD</code></td>
-    <td>All certs <code>UNRESOLVED</code>; nullity-3 seed audit</td>
-    <td>Not a frozen SO(3) reference; not V08 (ADR-033)</td>
-  </tr>
-  <tr>
-    <td><strong>L7</strong></td>
-    <td>deferred</td>
-    <td><code>BLOCKED</code></td>
-    <td><code>UNRESOLVED</code></td>
-    <td>Outside active V05–V09 until multi-component certificates exist</td>
-  </tr>
-</table>
+<pre>open chain
+  → fixed-position fiber / parent
+  → exact virtual closure
+  → orientation or pointing image
+  → certified decomposition (when valid)
+  → mechanism behavior certificate
+  → coverage / compatibility stitching
+  → independent validation</pre>
 <p>
-Full ladder readout:
-<a href="decomposition_ladder/index.html">results/decomposition_ladder/index.html</a>
+Classical Grashof classification is one planar four-bar behavior descriptor.
+The program does <strong>not</strong> assume a universal spatial Grashof inequality.
 </p>
 
-<h2 id="crosswalk">L↔V crosswalk</h2>
+<h2 id="animations">Constituent four-bar animations</h2>
+<div class="note">
+  These GIFs show <strong>one-DOF spatial four-bar closures moving along local
+  continuation arclength</strong>. The six ordered families below are the explorer
+  laboratory constituents (<code>mechanism_explorer_only</code>): they are
+  <em>not</em> accepted source-derived children and are not workspace certificates.
+  Source-chain L4 motion (proximal <code>exact_u_pair_4r</code>) is shown separately
+  and remains <code>LOCAL_ONLY</code> on a traced arc.
+</div>
+
+<h3>Explorer lab — six ordered one-DOF families</h3>
+<p>
+Canonical V04 copies of the V03 branch animations. Parameter is continuation
+arclength <code>s</code> (not a prescribed crank input). Highlighted axes are the
+virtual tool chart coordinates <code>tool_a</code> / <code>tool_b</code>.
+Full sprint readout:
+<a href="spatial4bar_explorer/v04/sprint_03_closure_and_continuation.html">V03/V04 closure continuation</a>.
+</p>
+<div class="anim-grid">
+<figure><img src="spatial4bar_explorer/v04/figures/v03_uuur_branch.gif" alt="UUUR animation"><figcaption><code>UUUR</code></figcaption></figure><figure><img src="spatial4bar_explorer/v04/figures/v03_uuru_branch.gif" alt="UURU animation"><figcaption><code>UURU</code></figcaption></figure><figure><img src="spatial4bar_explorer/v04/figures/v03_uruu_branch.gif" alt="URUU animation"><figcaption><code>URUU</code></figcaption></figure><figure><img src="spatial4bar_explorer/v04/figures/v03_usrr_branch.gif" alt="USRR animation"><figcaption><code>USRR</code></figcaption></figure><figure><img src="spatial4bar_explorer/v04/figures/v03_ursr_branch.gif" alt="URSR animation"><figcaption><code>URSR</code></figcaption></figure><figure><img src="spatial4bar_explorer/v04/figures/v03_urrs_branch.gif" alt="URRS animation"><figcaption><code>URRS</code></figcaption></figure>
+</div>
+
+<h3>Source-chain L4 — proximal exact-U spatial 4R</h3>
+<p>
+Fixed-position fiber continuation and independent source/reduced overlay for the
+proximal <code>exact_u_pair_4r</code> architecture (V05B / V05D). Closed-mechanism
+claim remains <code>LOCAL_ONLY</code>.
+</p>
+<div class="anim-grid">
+<figure><img src="kinematic_decomposition/v05b/figures/v05b_exact_u_pair_4r_fiber.gif" alt="exact_u_pair_4r fiber (V05B) animation"><figcaption><code>exact_u_pair_4r fiber (V05B)</code></figcaption></figure><figure><img src="kinematic_decomposition/v05d/figures/v05d_exact_u_pair_4r_overlay.gif" alt="exact_u_pair_4r source/reduced overlay (V05D) animation"><figcaption><code>exact_u_pair_4r source/reduced overlay (V05D)</code></figcaption></figure>
+</div>
+
+<h2 id="ledger">Rung ledger</h2>
 <table>
-  <tr><th>Ladder rung</th><th>Active sprint</th><th>Relationship</th></tr>
-  <tr><td>L3</td><td>—</td><td>Planar calibration interface (trusted exact map)</td></tr>
-  <tr><td>L4</td><td>V05</td><td>Wraps V05 closed-mechanism evidence into shared records</td></tr>
-  <tr><td>L5</td><td>V06</td><td>Scaffold interface; V06E closeout (not passed), reconstruction unresolved</td></tr>
-  <tr><td>L6</td><td>V07 then V08</td><td>Scaffold interface; V07A SO(3) freeze remains next science</td></tr>
-  <tr><td>L7</td><td>deferred</td><td>Blocked pending nested-slice / multi-component work</td></tr>
+  <tr>
+    <th>Rung</th><th>Label</th><th>Strongest supported statement</th><th>Missing gate</th>
+  </tr>
+  <tr>
+    <td><strong>L3</strong> planar 3R</td>
+    <td><code class="status pass">trusted_exact_reference</code></td>
+    <td>Exact fixed-position four-bar reduction and designated-link rotatability recover planar dexterity</td>
+    <td>None for reference role</td>
+  </tr>
+  <tr>
+    <td><strong>L4</strong> spatial 4R</td>
+    <td><code class="status hold">local_only</code></td>
+    <td>One-DOF source / orientation-curve machinery exists; proximal exact-U traced-arc match is <code>LOCAL_ONLY</code></td>
+    <td>Global component-complete certificate</td>
+  </tr>
+  <tr>
+    <td><strong>L5</strong> spatial 5R</td>
+    <td><code class="status hold">parent_incomplete</code></td>
+    <td>Hardened source-parent infrastructure (atlas, images, fibers, one UUUR audit, reconstruction paint)</td>
+    <td>Accepted source-derived child family + reconstruction</td>
+  </tr>
+  <tr>
+    <td><strong>L6</strong> spatial 6R</td>
+    <td><code class="status deferred">scaffold_only</code></td>
+    <td>Dimensional / task contracts and ladder stubs exist</td>
+    <td>Independent <code>SO(3)</code> reference; V07A held</td>
+  </tr>
+  <tr>
+    <td><strong>L7</strong> spatial 7R</td>
+    <td><code class="status deferred">deferred</code> / <code>BLOCKED</code></td>
+    <td>Redundancy / gauge framing only</td>
+    <td>L6 completion</td>
+  </tr>
 </table>
 
-<h2 id="hubs">Evidence hubs</h2>
+<h2 id="capabilities">Capabilities by rung</h2>
+<div class="cap-grid">
+  <div class="cap">
+    <h3>L3 — planar reference <span class="pass">trusted</span></h3>
+    <p>Analytical reachable / dexterous workspace for planar 3R.</p>
+    <p>Exact four-bar assemblability, inversion, designated-link rotatability (Grashof kept separate).</p>
+    <p>CLI: <code>grashof-workspace</code> · atlas / experiment figures.</p>
+  </div>
+  <div class="cap">
+    <h3>L4 — spatial 4R source <span class="hold">local</span></h3>
+    <p>Fixed-position fiber continuation and orientation-curve machinery (V05B–C).</p>
+    <p>Axis aggregation with certificate split; near-aligned rejection (V05D–E).</p>
+    <p>Proximal <code>exact_u_pair_4r</code>: aggregation <code>EXACT_GLOBAL</code>, closed-mechanism <code>LOCAL_ONLY</code> on a traced arc.</p>
+  </div>
+  <div class="cap">
+    <h3>L5 — spatial 5R parent <span class="hold">incomplete</span></h3>
+    <p>Implicit-manifold engine validation (V06A0); local parent patch (V06A1); multi-chart atlas (V06A2).</p>
+    <p>Orientation + pointing images (V06C); task-derived <code>h=c</code> fibers (V06D1); compound SUUR audit (V06B).</p>
+    <p>Shared 1D pseudo-arclength continuation; atlas stitch / component provenance; reconstruction cell paint (V06E).</p>
+    <p><strong>Not yet:</strong> accepted child family, complete parent, S² completeness, factorization theorem.</p>
+  </div>
+  <div class="cap">
+    <h3>Explorer lab <span class="deferred">mechanism_explorer_only</span></h3>
+    <p>Standalone spatial four-bar geometry, closure, winding, and HTML laboratory (V00–V05A).</p>
+    <p>Reusable infrastructure — <strong>not</strong> manipulator-workspace evidence without source provenance and reconstruction.</p>
+  </div>
+  <div class="cap">
+    <h3>Ladder interfaces <span class="deferred">scaffold where incomplete</span></h3>
+    <p>Shared L3–L7 records: parent → fiber → child → certificate → reconstruction payloads.</p>
+    <p>Readout: <a href="decomposition_ladder/index.html">decomposition_ladder/index.html</a>.</p>
+  </div>
+  <div class="cap">
+    <h3>L6 / L7 <span class="deferred">held / deferred</span></h3>
+    <p>Contracts and stubs only. No frozen decomposition-free <code>SO(3)</code> reference.</p>
+    <p>V07A not authorized (ADR-047 / ADR-048).</p>
+  </div>
+</div>
+
+<h2 id="negatives">Locked negatives</h2>
 <ul>
-  <li><a href="spatial4bar_explorer/index.html">Explorer printout</a> — V00–V05A laboratory + cumulative history</li>
-  <li><a href="kinematic_decomposition/index.html">Kinematic decomposition hub</a> — active V05B–E source-chain evidence</li>
-  <li><a href="decomposition_ladder/index.html">Decomposition ladder readout</a> — L3–L7 scaffold interfaces</li>
+  <li>Fixed-axis <code>UUUR</code> child: <code class="reject">REJECTED</code> (not accepted).</li>
+  <li>No L5 child with <code>EXACT_GLOBAL</code> / <code>EXACT_ON_COMPONENT</code>.</li>
+  <li>Campaign factorization remains <code>unresolved</code> (empty accepted children ≠ <code>no valid recombination</code>).</li>
+  <li>Atlas remains <code>BUDGET_LIMITED</code>; stitch topology unresolved / not conforming.</li>
+  <li>Explorer outputs are not workspace certificates.</li>
+  <li>Descriptor discovery / broad Grashof-like atlas rules stay blocked until reconstruction succeeds.</li>
 </ul>
+<pre>current fixed-axis UUUR construction rejected;
+broader 5R factorization unresolved;
+V07A held pending parent/continuation completion.</pre>
+
+<h2 id="artifacts">Evidence artifacts (what exists on disk)</h2>
+<table>
+  <tr><th>Capability slice</th><th>Status</th><th>Primary readout</th></tr>
+  <tr>
+    <td>V05B fixed-position fiber</td>
+    <td>MVP</td>
+    <td><a href="kinematic_decomposition/v05b/sprint_v05b_fixed_position_fiber.html">v05b</a></td>
+  </tr>
+  <tr>
+    <td>V05C orientation curve</td>
+    <td>MVP</td>
+    <td><a href="kinematic_decomposition/v05c/sprint_v05c_orientation_curve.html">v05c</a></td>
+  </tr>
+  <tr>
+    <td>V05D axis aggregation</td>
+    <td>MVP (<code>LOCAL_ONLY</code> closed-mech on proximal exact-U)</td>
+    <td><a href="kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html">v05d</a></td>
+  </tr>
+  <tr>
+    <td>V05E near-aligned rejection</td>
+    <td>MVP</td>
+    <td><a href="kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html">v05e</a></td>
+  </tr>
+  <tr>
+    <td>V06A0 manifold engine</td>
+    <td>software validation only</td>
+    <td><a href="kinematic_decomposition/v06a0/sprint_v06a0_implicit_manifold.html">v06a0</a></td>
+  </tr>
+  <tr>
+    <td>V06A1 local parent patch</td>
+    <td><code>LOCAL_PATCH</code></td>
+    <td><a href="kinematic_decomposition/v06a1/sprint_v06a1_local_parent_patch.html">v06a1</a></td>
+  </tr>
+  <tr>
+    <td>V06A2 parent atlas</td>
+    <td><code>BUDGET_LIMITED</code></td>
+    <td><a href="kinematic_decomposition/v06a2/sprint_v06a2_parent_atlas.html">v06a2</a></td>
+  </tr>
+  <tr>
+    <td>V06C source images</td>
+    <td>partial coverage; not S² complete</td>
+    <td><a href="kinematic_decomposition/v06c/sprint_v06c_source_images.html">v06c</a></td>
+  </tr>
+  <tr>
+    <td>V06B compound SUUR</td>
+    <td>LOCAL_ONLY / controls REJECTED</td>
+    <td><a href="kinematic_decomposition/v06b/sprint_v06b_compound_parent.html">v06b</a></td>
+  </tr>
+  <tr>
+    <td>V06D1 level-set fibers</td>
+    <td>task-derived; not reconstruction</td>
+    <td><a href="kinematic_decomposition/v06d1/sprint_v06d1_level_sets.html">v06d1</a></td>
+  </tr>
+  <tr>
+    <td>V06D2 virtual-U / UUUR</td>
+    <td><code class="reject">REJECTED</code></td>
+    <td><a href="kinematic_decomposition/v06d2/sprint_v06d2_virtual_u_child.html">v06d2</a></td>
+  </tr>
+  <tr>
+    <td>V06E reconstruction paint</td>
+    <td>partial / no accepted children; factorization unresolved</td>
+    <td><a href="kinematic_decomposition/v06e/sprint_v06e_reconstruction.html">v06e</a></td>
+  </tr>
+</table>
+
+<h2 id="hubs">Hubs and documentation</h2>
+<ul>
+  <li><a href="kinematic_decomposition/index.html">Kinematic decomposition hub</a></li>
+  <li><a href="decomposition_ladder/index.html">L3–L7 ladder readout</a></li>
+  <li><a href="spatial4bar_explorer/index.html">Spatial four-bar explorer lab</a> (<code>mechanism_explorer_only</code>)</li>
+  <li>Docs: <a href="../docs/README.md">docs/README.md</a> ·
+    <a href="../docs/CURRENT_STATUS.md">CURRENT_STATUS.md</a> ·
+    <a href="../docs/ROADMAP.md">ROADMAP.md</a> ·
+    <a href="../docs/reference/DECISIONS.md">DECISIONS.md</a></li>
+</ul>
+
+<h2 id="next">What comes next</h2>
 <p>
-Key docs:
-<a href="../docs/ROADMAP.md">ROADMAP.md</a> ·
-<a href="../docs/reference/DECISIONS.md">DECISIONS.md</a> (ADR-028–042) ·
-<a href="../docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">V05–V09 program</a> ·
-<a href="../docs/theory/DECOMPOSITION_LADDER.md">L3–L7 program</a> ·
-<a href="../docs/reference/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+Forward gates live only in <code>docs/ROADMAP.md</code> (R1 behavior certificate → R2 L4 reference →
+R3 L5 stitching MVP → R4–R5 L6 → R6 L7 → R7 atlases/rules after reconstruction).
+</p>
+<p>
+Strongest next scientific candidate after the documentation reset:
+one controlled source parent → one legitimate parameterized child family →
+verified lifts → behavior records → stitching → independent parent comparison.
 </p>
 
-<h2 id="reproduce">Reproduce</h2>
+<h2 id="reproduce">Reproduce this page</h2>
 <pre>PYTHONPATH=src python -m grashof_workspace.project_dashboard --results-root results
 PYTHONPATH=src python -m grashof_workspace.decomposition_ladder --outdir results/decomposition_ladder --no-animation</pre>
-<p>
-The ladder readout is generated separately; regenerate both commands after scaffold or
-V05 evidence changes.
-</p>
-
-<p class="meta" style="margin-top:2rem;">
-  Regenerate this page with
-  <code>python -m grashof_workspace.project_dashboard --results-root results</code>.
-</p>
+<p class="meta">Generated by <code>grashof_workspace.project_dashboard</code>. Status date 2026-08-16.</p>
 
 </body>
 </html>
