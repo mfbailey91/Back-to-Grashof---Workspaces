@@ -155,7 +155,7 @@ def test_ladder_readout_writes_html_json_and_plot(tmp_path) -> None:
     assert paths.animation is None
     html = paths.html.read_text(encoding="utf-8")
     assert "L3 through L7" in html
-    assert "KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md" in html
+    assert "DECOMPOSITION_LADDER.md" in html
     assert "drive the branch parameter" in html or "pseudo-arclength" in html
     assert "UUUR" in html and "SUUR" in html
     assert "candidate test corpus" in html
@@ -164,7 +164,7 @@ def test_ladder_readout_writes_html_json_and_plot(tmp_path) -> None:
     assert "L6 spatial 6R scaffold" in html
     assert "nullity=2" in html or "nullity</th>" in html
     payload = paths.json.read_text(encoding="utf-8")
-    assert "optional_subordinate_to_V05_V09" in payload
+    assert "active_architecture" in payload
     assert '"l5_scaffold"' in payload
     assert '"l6_scaffold"' in payload
     assert '"nullity_jp": 2' in payload or '"seed_nullity_jp": 2' in payload

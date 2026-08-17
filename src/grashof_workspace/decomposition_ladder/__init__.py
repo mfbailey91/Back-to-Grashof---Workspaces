@@ -1,7 +1,8 @@
-"""Reusable source-parent → one-DOF-leaf decomposition ladder scaffold (L3-L7).
+"""Reusable source-parent → one-DOF-leaf decomposition ladder (L3–L7).
 
-This package is an optional scaffold subordinate to the active V05–V09 sequence in
-``docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md``.
+This package implements the active L3–L7 architecture documented in
+``docs/theory/DECOMPOSITION_LADDER.md``. Historical V05–V09 planning lives under
+``docs/archive/programs/``. Live status: ``docs/CURRENT_STATUS.md``.
 """
 
 from .models import (

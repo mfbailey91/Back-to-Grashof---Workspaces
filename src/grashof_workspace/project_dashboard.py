@@ -116,10 +116,10 @@ The active scientific ladder is now source-chain first:
   → V06 architecture-scoped after proximal exact-U gate</pre>
 <p>
 Docs:
-<a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
-· <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
+<a href="../../docs/reference/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+· <a href="../../docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
 · <a href="../../docs/ROADMAP.md">ROADMAP.md</a>
-· explorer notes: <a href="../../docs/SPRINT_03_SPATIAL_4BAR_EXPLORER.md">SPRINT_03_SPATIAL_4BAR_EXPLORER.md</a>
+· explorer notes: <a href="../../docs/archive/sprints/SPRINT_03_SPATIAL_4BAR_EXPLORER.md">SPRINT_03_SPATIAL_4BAR_EXPLORER.md</a>
 </p>
 
 <h2 id="families">Families and tool axes</h2>
@@ -335,7 +335,7 @@ Canonical readout: <a href="v04c/sprint_04c_virtual_u_equivalence.html">v04c/spr
   <li><strong>Open branches:</strong> keep unresolved / budget-limited cases explicit; do not promote budget exhaustion to a topology claim.</li>
   <li><strong>Scope:</strong> decisions apply to the tested canonical UUUR geometry and only to storage / diagnostics — not a proof of physical <code>S_v → U_v</code> fiber equivalence.</li>
   <li><strong>Explorer pointing fibers:</strong> use the task-derived pointing-slice contract
-      (<a href="../../docs/SPATIAL_POINTING_SLICE_CONTRACT.md">SPATIAL_POINTING_SLICE_CONTRACT.md</a>);
+      (<a href="../../docs/methods/SPATIAL_POINTING_SLICE_CONTRACT.md">SPATIAL_POINTING_SLICE_CONTRACT.md</a>);
       arbitrary <code>φ</code> sweeps remain diagnostic-only until mapped to legitimate pointing fibers.</li>
 </ul>
 
@@ -357,7 +357,7 @@ Canonical readout:
 <p class="status pass">AUDIT-CORRECTED MVP — V05 independent match LOCAL_ONLY (exact_u_pair_4r traced arc)</p>
 <p>
 Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>
-· corrections: <a href="../../docs/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
+· corrections: <a href="../../docs/archive/audits/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
 </p>
 <pre>V05A corpus (off-axis + terminal-roll control) → V05B fixed-position fiber (audit-corrected MVP)
 V05C orientation-curve classification (audit-corrected MVP)
@@ -384,8 +384,8 @@ V10+ deferred atlas</pre>
 </ul>
 <p>
 Program docs:
-<a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
-· <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
+<a href="../../docs/reference/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+· <a href="../../docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
 </p>
 
 <h2 id="next">Next: V06 — spatial 5R fixed-position parent</h2>
@@ -523,11 +523,11 @@ def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE)
   → V06 architecture-scoped after proximal exact-U gate</pre>
 <p>
 Docs:
-<a href="../../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
-· <a href="../../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
-· <a href="../../docs/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
-· <a href="../../docs/JACOBIAN_AND_DERIVATIVE_POLICY.md">JACOBIAN_AND_DERIVATIVE_POLICY.md</a>
-· <a href="../../docs/DECISIONS.md">DECISIONS.md</a>
+<a href="../../docs/reference/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+· <a href="../../docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</a>
+· <a href="../../docs/archive/audits/V05_AUDIT_CORRECTIONS.md">V05_AUDIT_CORRECTIONS.md</a>
+· <a href="../../docs/methods/JACOBIAN_AND_DERIVATIVE_POLICY.md">JACOBIAN_AND_DERIVATIVE_POLICY.md</a>
+· <a href="../../docs/reference/DECISIONS.md">DECISIONS.md</a>
 </p>
 
 <h2>V05A corpus</h2>
@@ -669,7 +669,7 @@ def render_project_index_html(*, status_date: str = STATUS_DATE) -> str:
 <h1>Back to Grashof — project index printout (so far)</h1>
 <p class="meta">
   <strong>Active scientific sequence:</strong>
-  <code>docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code><br>
+  <code>docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md</code><br>
   Optional L3–L7 ladder scaffold is subordinate to that program.
   Status date: {status_date}
 </p>
@@ -817,10 +817,10 @@ Full ladder readout:
 <p>
 Key docs:
 <a href="../docs/ROADMAP.md">ROADMAP.md</a> ·
-<a href="../docs/DECISIONS.md">DECISIONS.md</a> (ADR-028–042) ·
-<a href="../docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">V05–V09 program</a> ·
-<a href="../docs/DECOMPOSITION_LADDER_L3_L7_PROGRAM.md">L3–L7 program</a> ·
-<a href="../docs/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
+<a href="../docs/reference/DECISIONS.md">DECISIONS.md</a> (ADR-028–042) ·
+<a href="../docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md">V05–V09 program</a> ·
+<a href="../docs/theory/DECOMPOSITION_LADDER.md">L3–L7 program</a> ·
+<a href="../docs/reference/PROJECT_REFERENCE_INDEX.md">PROJECT_REFERENCE_INDEX.md</a>
 </p>
 
 <h2 id="reproduce">Reproduce</h2>

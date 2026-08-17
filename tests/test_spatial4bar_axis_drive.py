@@ -92,8 +92,8 @@ def test_all_six_families_emit_twelve_a_b_drive_artifacts(tmp_path: Path) -> Non
 
 
 def test_phi_is_labeled_diagnostic_only_in_repo_contract() -> None:
-    v04b_doc = Path("docs/SPRINT_V04B_VIRTUAL_U_ROBUSTNESS.md").read_text(encoding="utf-8")
-    audit = Path("docs/AUDIT_TOOL_AXIS_AND_PHI.md").read_text(encoding="utf-8")
+    v04b_doc = Path("docs/archive/sprints/SPRINT_V04B_VIRTUAL_U_ROBUSTNESS.md").read_text(encoding="utf-8")
+    audit = Path("docs/archive/audits/AUDIT_TOOL_AXIS_AND_PHI.md").read_text(encoding="utf-8")
     v04b_source = Path(
         "src/grashof_workspace/spatial4bar_explorer/v04b.py"
     ).read_text(encoding="utf-8")

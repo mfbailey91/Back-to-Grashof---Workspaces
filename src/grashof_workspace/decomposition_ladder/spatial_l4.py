@@ -436,7 +436,7 @@ def build_spatial_l4_exact_u_pair_bundle(
         notes=(
             "Existing V05 independent S_v-U_phys-R-R solve wrapped into ladder records.",
             "LOCAL_ONLY on the budget-limited traced arc; complete component correspondence unverified.",
-            "Scientific source: docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md / V05D.",
+            "Scientific source: docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md / V05D.",
         ),
     )
 
@@ -549,7 +549,7 @@ def default_l4_equivalence_payload() -> dict[str, Any]:
     return {
         "note": (
             "L4 wraps existing V05 closed-mechanism evidence into shared ladder records. "
-            "Scientific source remains docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md "
+            "Scientific source remains docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md "
             "and results/kinematic_decomposition/v05d/."
         ),
         "v05d_readout": "results/kinematic_decomposition/v05d/sprint_v05d_axis_aggregation.html",

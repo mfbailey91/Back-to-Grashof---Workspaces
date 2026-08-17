@@ -304,7 +304,7 @@ def build_spatial_l5_scaffold_bundle(
         notes=(
             (
                 "L5 scaffold interface under V06; scientific source remains "
-                "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md."
+                "docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md."
             ),
             "V06B SUUR parent exists; it is not UUUR reconstruction (ADR-039).",
             "V06D1 source fibers exist; they are not U_v children (ADR-040).",
@@ -324,7 +324,7 @@ def default_l5_scaffold_payload() -> dict[str, Any]:
             "follows ADR-043 (unevaluable iff COVERED is empty). Not a 2D parent completeness "
             "claim and not pointing-image reconstruction. V07A held (ADR-047)."
         ),
-        "v06_program": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
+        "v06_program": "docs/archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md#sprint-v06",
         "bundle": bundle.to_dict(),
         "summary": {
             "architecture_id": bundle.architecture_id,

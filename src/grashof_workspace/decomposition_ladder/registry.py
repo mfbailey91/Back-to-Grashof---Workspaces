@@ -342,14 +342,14 @@ def program_payload() -> dict[str, Any]:
     """Return the complete machine-readable scaffold for readouts."""
 
     return {
-        "program": "decomposition_ladder_L3_L7_scaffold",
-        "active_sequence": "docs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md",
-        "scaffold_status": "optional_subordinate_to_V05_V09",
+        "program": "decomposition_ladder_L3_L7",
+        "active_sequence": "docs/theory/DECOMPOSITION_LADDER.md",
+        "scaffold_status": "active_architecture",
         "rungs": [spec.to_dict() for spec in RUNG_SPECS],
         "parent_child_families": [spec.to_dict() for spec in PARENT_CHILD_FAMILIES],
         "default_fiber_specs": [spec.to_dict() for spec in DEFAULT_FIBER_SPECS],
         "guardrails": [
-            "V05–V09 remains the active scientific sequence; this ladder is an optional scaffold.",
+            "The L3–L7 ladder is the active architecture; V05–V09 plans are archived lineage.",
             "Construct and validate the source parent before proposing child mechanisms.",
             "A one-dimensional level-set fiber is not automatically a known four-bar family.",
             "Letter/mobility families are candidate corpus entries, not certified parents.",

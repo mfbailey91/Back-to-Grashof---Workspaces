@@ -1,0 +1,42 @@
+# Documentation Guide
+
+**Status:** CANONICAL navigation authority
+
+The canonical project path is:
+
+1. [Project thesis](PROJECT_THESIS.md)
+2. [Current scientific status](CURRENT_STATUS.md)
+3. [Fixed-position kinematic decomposition](theory/FIXED_POSITION_KINEMATIC_DECOMPOSITION.md)
+4. [L3–L7 decomposition ladder](theory/DECOMPOSITION_LADDER.md)
+5. [Mechanism behavior and coverage stitching](theory/MECHANISM_BEHAVIOR_AND_STITCHING.md)
+6. [Roadmap](ROADMAP.md)
+
+Documents under `archive/` preserve the project’s research lineage. They may contain
+superseded plans, rejected hypotheses, or earlier terminology and are not current
+implementation authority.
+
+## Read first (CANONICAL / ACTIVE)
+
+| Document | Label | Role |
+|---|---|---|
+| [PROJECT_THESIS.md](PROJECT_THESIS.md) | CANONICAL | Scientific claim and claim boundaries |
+| [CURRENT_STATUS.md](CURRENT_STATUS.md) | ACTIVE | Trusted / incomplete / rejected / deferred ledger |
+| [theory/FIXED_POSITION_KINEMATIC_DECOMPOSITION.md](theory/FIXED_POSITION_KINEMATIC_DECOMPOSITION.md) | CANONICAL | Primary theoretical framework |
+| [theory/DECOMPOSITION_LADDER.md](theory/DECOMPOSITION_LADDER.md) | CANONICAL | Active architecture and dimensional ladder |
+| [theory/MECHANISM_BEHAVIOR_AND_STITCHING.md](theory/MECHANISM_BEHAVIOR_AND_STITCHING.md) | CANONICAL | Behavior certificates and coverage stitching |
+| [ROADMAP.md](ROADMAP.md) | ACTIVE | Future dependency gates only |
+
+## Methods and reference
+
+| Document | Label | Role |
+|---|---|---|
+| [methods/JACOBIAN_AND_DERIVATIVE_POLICY.md](methods/JACOBIAN_AND_DERIVATIVE_POLICY.md) | REFERENCE | Derivative / FD policy |
+| [methods/SPATIAL_POINTING_SLICE_CONTRACT.md](methods/SPATIAL_POINTING_SLICE_CONTRACT.md) | REFERENCE | Pointing level-set contract |
+| [methods/U_JOINT_DRIVE_CONTRACT.md](methods/U_JOINT_DRIVE_CONTRACT.md) | REFERENCE | Virtual-U drive coordinates |
+| [theory/MATH_NOTES.md](theory/MATH_NOTES.md) | REFERENCE | Mathematical contracts |
+| [reference/DECISIONS.md](reference/DECISIONS.md) | REFERENCE | ADR ledger |
+| [reference/PROJECT_REFERENCE_INDEX.md](reference/PROJECT_REFERENCE_INDEX.md) | REFERENCE | Evidence / provenance index |
+
+## Archive
+
+See [archive/README.md](archive/README.md) for historical programs, sprints, workshops, audits, and experiments. Archive documents are searchable lineage, not active instructions.
