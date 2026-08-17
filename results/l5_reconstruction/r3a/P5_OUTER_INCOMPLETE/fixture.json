@@ -1,0 +1,139 @@
+{
+  "aggregation": {
+    "architecture_id": "positive_control_suru_5r",
+    "axis_aggregation_status": "EXACT_GLOBAL",
+    "candidates": [
+      {
+        "center": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "distance_m": 0.0,
+        "exact_intersecting": true,
+        "exact_orthogonal": true,
+        "exact_u_candidate": true,
+        "joint_a": 0,
+        "joint_b": 1,
+        "orthogonality_abs_dot": 0.0,
+        "pair_index": 0,
+        "parallelism_residual": 1.0,
+        "w_a": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "w_b": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "center": [
+          1.8,
+          0.0,
+          0.0
+        ],
+        "distance_m": 0.0,
+        "exact_intersecting": true,
+        "exact_orthogonal": true,
+        "exact_u_candidate": true,
+        "joint_a": 3,
+        "joint_b": 4,
+        "orthogonality_abs_dot": 0.0,
+        "pair_index": 3,
+        "parallelism_residual": 1.0,
+        "w_a": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "w_b": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ],
+    "certificate_status": null,
+    "family_label": "S_v-U_phys-R-U_phys",
+    "fk_identity_residuals": {
+      "joint_map_residual_rad": 0.0,
+      "pointing_residual": 0.0,
+      "position_residual_m": 0.0,
+      "rotation_frobenius": 0.0
+    },
+    "joint_kind_sequence": [
+      "S",
+      "U",
+      "R",
+      "U"
+    ],
+    "joint_limits": "not_modeled",
+    "joint_role_sequence": [
+      "S_v",
+      "U_phys",
+      "R_phys",
+      "U_phys"
+    ],
+    "notes": [
+      "Exact non-overlapping RR\u2192U_phys regrouping at pairs (0, 3).",
+      "Not an independent closed-mechanism certificate.",
+      "U_v is forbidden in aggregation roles."
+    ],
+    "pair_indices": [
+      0,
+      3
+    ],
+    "u_centers": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        1.8,
+        0.0,
+        0.0
+      ]
+    ]
+  },
+  "completeness": {
+    "complete": false,
+    "formula": "abs(rho-tool_offset) >= r_min and rho+tool_offset <= r_max",
+    "inner_margin_m": 1.250000003529505,
+    "label": "PARTIAL",
+    "outer_margin_m": -0.05000000352950473,
+    "p_star": [
+      1.2881881,
+      -0.80511756,
+      0.64409405
+    ],
+    "rho": 1.6500000035295048
+  },
+  "family_label": "S_v-U_phys-R-U_phys",
+  "nullity_jp": 2,
+  "probe": {
+    "analytical_margin_m": -0.05,
+    "expected_pointing_complete": false,
+    "limiting_boundary": "outer",
+    "p_star": [
+      1.2881881,
+      -0.80511756,
+      0.64409405
+    ],
+    "probe_id": "P5_OUTER_INCOMPLETE",
+    "rho": 1.65,
+    "seed_configuration": null,
+    "seed_pointing_policy": "radial_outward"
+  },
+  "rank_jp": 3,
+  "seed_configuration": [
+    -0.5585993139479954,
+    -0.9574679704697335,
+    1.2775489337217127,
+    7.390867742525348e-17,
+    -0.7211035784155292
+  ]
+}

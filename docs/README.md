@@ -30,6 +30,8 @@ implementation authority.
 
 | Document | Label | Role |
 |---|---|---|
+| [methods/NATURAL_LEAF_FAMILY_CONTRACT.md](methods/NATURAL_LEAF_FAMILY_CONTRACT.md) | ACTIVE METHOD | Source-derived natural mechanism leaves and stitching gates |
+| [methods/R3A_L5_FIVE_POINT_EXECUTION.md](methods/R3A_L5_FIVE_POINT_EXECUTION.md) | ACTIVE EXECUTION | Five-point L5 positive-control implementation program |
 | [methods/JACOBIAN_AND_DERIVATIVE_POLICY.md](methods/JACOBIAN_AND_DERIVATIVE_POLICY.md) | REFERENCE | Derivative / FD policy |
 | [methods/SPATIAL_POINTING_SLICE_CONTRACT.md](methods/SPATIAL_POINTING_SLICE_CONTRACT.md) | REFERENCE | Pointing level-set contract |
 | [methods/U_JOINT_DRIVE_CONTRACT.md](methods/U_JOINT_DRIVE_CONTRACT.md) | REFERENCE | Virtual-U drive coordinates |

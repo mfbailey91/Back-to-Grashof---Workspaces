@@ -559,3 +559,34 @@ as an L6 letter corpus.
 **Reason:** Architecture-scoped interface exercise is useful after the proximal exact-U
 gate, but claiming an SO(3) parent or V08 readiness from a seed audit would violate
 ADR-013 / ADR-024.
+
+## ADR-049 — Natural mechanism leaves may differ from a selected pointing level set
+
+<!-- R3A_NATURAL_LEAF_FAMILY_2026_08_17 -->
+
+**Decision:** Rejection of the current fixed-axis `UUUR` as an `h(d)=c` source-fiber
+match does not reject every `UXXX` child. R3A may construct a source-derived child by
+fixing one exact coordinate of the virtual spherical closure, then continue the
+resulting frozen-geometry one-DOF mechanism along its natural branch. The first
+positive control is `S_v-U_phys-R-U_phys -> U_v-U_phys-R-U_phys` (`SURU -> UURU`)
+using a rotated Z-Y-Z closure chart. The earlier `h=c` family remains a direct
+source-chain stitching control and is not a natural-child acceptance constraint.
+
+**Required evidence:** Every accepted natural leaf must pass source-parent embedding,
+child/source pose agreement, fixed family-coordinate error, component scope,
+re-seeding consistency, family transversality, duplicate/crossing semantics, chart
+overlap, and independent task-image reconstruction. Geometry is immutable over one
+leaf continuation; continuously rederived axes are not one four-bar experiment.
+Only `EXACT_GLOBAL` and `EXACT_ON_COMPONENT` leaves enter accepted reconstruction.
+
+**Reason:** A mechanically valid child may generate a legitimate source-parent curve
+that is different from an arbitrarily chosen pointing latitude. Allowing the exact
+child branch removes an unnecessary task-slice equivalence requirement, but it
+replaces that easy indexing with stronger family-completeness and compatibility
+obligations.
+
+**Consequence:** R3A initially claims at most a controlled, declared-resolution set
+cover. Terms such as `foliation`, `fiber bundle`, or `exact factorization` remain
+reserved until uniqueness, chart transitions, complete parameter intervals, and
+component correspondence are established. Individual chart-specific crank or winding
+behavior is not a workspace predicate until the family reconstruction is validated.

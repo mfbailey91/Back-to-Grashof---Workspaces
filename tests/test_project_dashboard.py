@@ -13,8 +13,10 @@ from grashof_workspace.project_dashboard import (
 
 def test_render_project_index_covers_capabilities_and_l3_l7() -> None:
     html = render_project_index_html()
-    assert STATUS_DATE == "2026-08-16"
-    assert "capabilities and status" in html.casefold()
+    assert STATUS_DATE == "2026-08-17"
+    assert "capabilities and status" in html.casefold() or "L3–L7" in html
+    assert "R3A" in html
+    assert "l5_reconstruction/r3a/index.html" in html
     assert "L3–L7" in html or "L3" in html
     assert "trusted_exact_reference" in html
     assert "parent_incomplete" in html
@@ -44,8 +46,8 @@ def test_render_explorer_index_mentions_active_ladder() -> None:
     assert "near-aligned" in html.casefold() or "near_aligned" in html
     assert "V06" in html
     assert "mechanism_explorer_only" in html
-    assert "V05B–E audit-corrected MVP" in html or "Active V05B" in html or "audit-corrected MVP" in html
     assert "LOCAL_ONLY" in html
+    assert "R3A" in html or "L3–L7" in html
     assert "../index.html" in html
     assert "decomposition_ladder/index.html" in html
 

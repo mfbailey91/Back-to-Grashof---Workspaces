@@ -30,8 +30,9 @@ open chain
 
 The planar 3R implementation is the trusted analytical reference. The active
 spatial program is the L3–L7 fixed-position decomposition ladder. L5 currently
-has a hardened but incomplete parent implementation, no accepted child family,
-and a rejected fixed-axis `UUUR` hypothesis. L6 and L7 remain blocked/deferred.
+has a hardened but incomplete parent, a rejected fixed-axis `UUUR` `h=c`
+equivalence, and an R3A five-point SURU→UURU positive-control program. L6 and
+L7 remain blocked/deferred.
 
 Live ledger: [`docs/CURRENT_STATUS.md`](docs/CURRENT_STATUS.md).
 

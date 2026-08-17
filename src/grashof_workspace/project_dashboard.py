@@ -2,9 +2,12 @@
 
 Writes:
 
-- ``results/index.html`` — capabilities and status readout (so far)
-- ``results/spatial4bar_explorer/index.html`` — cumulative explorer + ladder links
-- ``results/kinematic_decomposition/index.html`` — active-program hub (V05B–E / V06)
+- ``results/index.html`` — L3–L7 capabilities, R3A five-point hub, status readout
+- ``results/spatial4bar_explorer/index.html`` — explorer laboratory lineage
+- ``results/kinematic_decomposition/index.html`` — historical V05B–E / V06 lineage hub
+
+Active scientific authority is the L3–L7 ladder plus the R3A five-point program.
+Historical V05–V09 labels are lineage, not the current roadmap.
 
 Reproducible command::
 
@@ -17,7 +20,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-STATUS_DATE = "2026-08-16"
+STATUS_DATE = "2026-08-17"
 
 # Proximal exact_u_pair_4r closed-mechanism is LOCAL_ONLY on a traced arc (ADR-034);
 # axis aggregation remains EXACT_GLOBAL; EXACT_ON_COMPONENT is reserved.
@@ -115,12 +118,13 @@ def render_explorer_index_html(*, status_date: str = STATUS_DATE) -> str:
 </p>
 
 <div class="note">
-  Explorer sprints <strong>V00–V05A</strong> remain a <code>mechanism_explorer_only</code> laboratory
-  (deferred V10 prep). The <strong>active</strong> source-chain program is kinematic decomposition
-  <strong>V05B–E (audit-corrected MVP)</strong> with proximal <code>exact_u_pair_4r</code>
-  closed-mechanism <strong>LOCAL_ONLY</strong> on a budget-limited traced arc; multi-component and other architectures
-  remain unresolved. Direct V06A parent construction may proceed without inheriting an L4 component certificate.
-  Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>.
+  Explorer sprints <strong>V00–V05A</strong> remain a <code>mechanism_explorer_only</code> laboratory.
+  The <strong>active</strong> scientific program is the L3–L7 fixed-position ladder
+  (<a href="../../docs/CURRENT_STATUS.md">CURRENT_STATUS.md</a>) with R3A five-point natural-leaf
+  reconstruction under L5. Historical V05B–E / V06 readouts stay as lineage; proximal
+  <code>exact_u_pair_4r</code> closed-mechanism remains <strong>LOCAL_ONLY</strong> on a traced arc.
+  Hub: <a href="../kinematic_decomposition/index.html">../kinematic_decomposition/index.html</a>
+  · R3A: <a href="../l5_reconstruction/r3a/index.html">../l5_reconstruction/r3a/index.html</a>.
 </div>
 
 <h2>Contents</h2>
@@ -531,7 +535,7 @@ def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE)
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Kinematic Decomposition — active V05B–E hub</title>
+<title>Kinematic Decomposition — V05B–E / V06 lineage hub</title>
 <style>
 {_SHARED_CSS}
 </style>
@@ -540,10 +544,11 @@ def render_kinematic_decomposition_index_html(*, status_date: str = STATUS_DATE)
 
 <h1>Kinematic Decomposition</h1>
 <p class="meta">
-  <strong>Active source-chain program hub (V05B–E)</strong><br>
+  <strong>Historical V05B–E / V06 lineage hub</strong> · active L5 work is R3A<br>
   Artifact root: <code>results/kinematic_decomposition/</code> · Status date: {status_date}<br>
   <a href="../index.html">Project index (so far)</a> ·
-  <a href="../decomposition_ladder/index.html">L3–L7 ladder readout</a>
+  <a href="../decomposition_ladder/index.html">L3–L7 ladder readout</a> ·
+  <a href="../l5_reconstruction/r3a/index.html">R3A five-point hub</a>
 </p>
 
 <div class="note">
@@ -813,7 +818,7 @@ claim remains <code>LOCAL_ONLY</code>.
   <tr>
     <td><strong>L5</strong> spatial 5R</td>
     <td><code class="status hold">parent_incomplete</code></td>
-    <td>Hardened source-parent infrastructure (atlas, images, fibers, one UUUR audit, reconstruction paint)</td>
+    <td>Hardened source-parent infrastructure; R3A five-point natural-leaf program active; fixed-axis UUUR still rejected as an h=c equivalence</td>
     <td>Accepted source-derived child family + reconstruction</td>
   </tr>
   <tr>
@@ -849,7 +854,8 @@ claim remains <code>LOCAL_ONLY</code>.
     <p>Implicit-manifold engine validation (V06A0); local parent patch (V06A1); multi-chart atlas (V06A2).</p>
     <p>Orientation + pointing images (V06C); task-derived <code>h=c</code> fibers (V06D1); compound SUUR audit (V06B).</p>
     <p>Shared 1D pseudo-arclength continuation; atlas stitch / component provenance; reconstruction cell paint (V06E).</p>
-    <p><strong>Not yet:</strong> accepted child family, complete parent, S² completeness, factorization theorem.</p>
+    <p>R3A five-point hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> — oracle vs direct IK vs stitched h=c vs UURU leaves.</p>
+    <p><strong>Not yet:</strong> general 5R factorization, complete parent, S² completeness theorem. Fixed-axis UUUR remains rejected as an h=c fiber equivalence.</p>
   </div>
   <div class="cap">
     <h3>Explorer lab <span class="deferred">mechanism_explorer_only</span></h3>
@@ -867,6 +873,18 @@ claim remains <code>LOCAL_ONLY</code>.
     <p>V07A not authorized (ADR-047 / ADR-048).</p>
   </div>
 </div>
+
+<h2 id="r3a">R3A five-point pointing reconstruction</h2>
+<p>
+Active L5 execution program. Pointing coverage in <code>S^2</code>, not dexterity.
+Natural children fix one virtual-spherical chart coordinate (<code>SURU → UURU</code>)
+and continue frozen geometry. They are not required to remain on <code>h=c</code>.
+</p>
+<ul>
+  <li>Hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a></li>
+  <li>Contract: <a href="../docs/methods/NATURAL_LEAF_FAMILY_CONTRACT.md">NATURAL_LEAF_FAMILY_CONTRACT.md</a></li>
+  <li>Execution: <a href="../docs/methods/R3A_L5_FIVE_POINT_EXECUTION.md">R3A_L5_FIVE_POINT_EXECUTION.md</a></li>
+</ul>
 
 <h2 id="negatives">Locked negatives</h2>
 <ul>
@@ -903,6 +921,11 @@ V07A held pending parent/continuation completion.</pre>
     <td>V05E near-aligned rejection</td>
     <td>MVP</td>
     <td><a href="kinematic_decomposition/v05e/sprint_v05e_near_aligned_rejection.html">v05e</a></td>
+  </tr>
+  <tr>
+    <td>R3A L5 five-point natural leaves</td>
+    <td>active execution (pointing, not dexterous)</td>
+    <td><a href="l5_reconstruction/r3a/index.html">r3a</a></td>
   </tr>
   <tr>
     <td>V06A0 manifold engine</td>

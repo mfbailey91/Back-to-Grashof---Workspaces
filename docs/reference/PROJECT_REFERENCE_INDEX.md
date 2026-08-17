@@ -2,7 +2,7 @@
 
 **Status:** REFERENCE evidence / provenance index (not the entry page)
 **Project:** Characterization of Manipulator Workspaces
-**Last updated:** 2026-08-16
+**Last updated:** 2026-08-17
 **Start here instead:** [`../README.md`](../README.md) → thesis → current status → ladder → roadmap
 
 ---
@@ -65,6 +65,14 @@ Behavior certificates and coverage-stitching gates beyond Grashof shorthand.
 ### [`../methods/U_JOINT_DRIVE_CONTRACT.md`](../methods/U_JOINT_DRIVE_CONTRACT.md)
 
 Canonical one-DOF U-drive semantics: drive branch parameter `s`; `alpha(s)`/`beta(s)` are coupled outputs.
+
+### [`../methods/NATURAL_LEAF_FAMILY_CONTRACT.md`](../methods/NATURAL_LEAF_FAMILY_CONTRACT.md)
+
+Source-derived natural mechanism leaves versus task-sliced `h=c` controls (ADR-049).
+
+### [`../methods/R3A_L5_FIVE_POINT_EXECUTION.md`](../methods/R3A_L5_FIVE_POINT_EXECUTION.md)
+
+Five-point L5 positive-control execution program. Hub: [`../../results/l5_reconstruction/r3a/index.html`](../../results/l5_reconstruction/r3a/index.html).
 
 ### Archived V05–V09 planning lineage
 

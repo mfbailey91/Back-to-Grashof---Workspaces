@@ -47,17 +47,46 @@
 
 ---
 
-## R3 — L5 family construction and stitching MVP
+## R3 — L5 family construction and stitching
 
-**Question:** Can one narrow architecture/slice family reproduce independent \(S^2\) parent evidence with declared completeness and uncertainty—without the rejected fixed-axis `UUUR` factorization?
+**Question:** Can source-derived one-DOF mechanism families reconstruct independent \(S^2\) pointing evidence with declared completeness and uncertainty?
 
-**Required inputs:** Incomplete but hardened 5R source parent; task- or architecture-derived one-DOF child construction; stitching gates from the behavior note.
+### R3A — Five-point positive-control reconstruction
 
-**Deliverable:** Legitimate parameterized child family, verified lifts, behavior records, union/compatibility reconstruction, independent parent comparison.
+Use an unrestricted idealized `U_shoulder-R_elbow-U_wrist` 5R source with an analytical pointing oracle. Freeze five Cartesian probes: deep pointing-complete, inner-complete, inner-incomplete, outer-complete, and outer-incomplete.
 
-**Pass/fail gate:** One narrow family reconstructs independent parent pointing evidence within declared tolerances.
+Compare four columns:
 
-**Blockers:** No accepted L5 child today; parent still `BUDGET_LIMITED` / incomplete; fixed-axis `UUUR` rejected.
+```text
+analytical direction oracle
+independent source-chain target-direction IK
+stitched source h=c control fibers
+stitched exact virtual-coordinate UURU natural leaves
+```
+
+The natural child fixes one coordinate of an exact virtual-spherical chart, then follows its own frozen-geometry one-DOF branch. It is not required to remain on the earlier `h=c` pointing level set.
+
+**Required inputs:** R1 certificate vocabulary; shared pseudo-arclength continuation; source-chain FK/Jacobians; [methods/NATURAL_LEAF_FAMILY_CONTRACT.md](methods/NATURAL_LEAF_FAMILY_CONTRACT.md).
+
+**Deliverable:** Five-point analytical/numerical truth, source-control reconstruction, exact `UURU` leaf family, re-seeding/transversality/chart audits, accepted-child union, and three-way comparison dashboard.
+
+**Pass/fail gate:** All five direct classifications agree with the analytical oracle; accepted natural leaves reconstruct the direct pointing image within one declared confirmation-cell diameter, with zero strict false positives and stable refinement.
+
+**Blockers:** No accepted L5 child today. The current fixed-axis `UUUR` remains rejected only as the selected `h=c` source-fiber equivalence. R2 may proceed in parallel and is not a hard blocker for this controlled L5 positive control.
+
+Detailed execution: [methods/R3A_L5_FIVE_POINT_EXECUTION.md](methods/R3A_L5_FIVE_POINT_EXECUTION.md).
+
+### R3B — Transfer and falsification
+
+Apply the same direct/source/natural comparison to the existing `exact_two_u_5r`, `generic_5r`, and a near-architecture control. Determine which virtual-coordinate families remain exact, how chart choice changes individual leaf behavior, and whether the accepted family still reconstructs the parent pointing image.
+
+**Pass/fail gate:** At least one non-positive-control architecture reproduces independent parent evidence, or the failure is localized to a documented construction/component/coverage gate.
+
+### R3C — Mechanism behavior compression
+
+Only after R3A or R3B succeeds, test whether winding, crank/rocker, circuit, branch, or a numerical atlas can compress the accepted family result without losing reconstruction provenance.
+
+**R3 completion gate:** One controlled reconstruction must pass before L6 positive-control work begins. General 5R claims and broad rule discovery remain blocked until transfer evidence exists.
 
 ---
 
@@ -71,7 +100,7 @@
 
 **Pass/fail gate:** Component-aware orientation truth for a controlled 6R architecture.
 
-**Blockers:** V07A held; L6 remains `scaffold_only`.
+**Blockers:** R3A controlled reconstruction gate; L6 remains `scaffold_only`. R3B transfer may continue in parallel after the positive-control stitching operation is stable.
 
 ---
 
@@ -85,7 +114,7 @@
 
 **Pass/fail gate:** Agreement over a declared architecture domain.
 
-**Blockers:** R3–R4; roll factorization only after invariance tests.
+**Blockers:** R3 transfer evidence and R4; roll factorization only after invariance tests.
 
 ---
 
