@@ -1,0 +1,354 @@
+"""Source-chain ``h=c`` stitching control. No ``UXXX`` child is instantiated."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+from numpy.typing import NDArray
+
+from grashof_workspace.spatial_experiments.axis_geometry import as_vec3, unit_vector
+from grashof_workspace.spatial_experiments.branch_continuation import continue_implicit_branch
+from grashof_workspace.spatial_experiments.continuation import wrap_joint_delta
+from grashof_workspace.spatial_experiments.implicit_manifold import ambient_distance
+from grashof_workspace.spatial_experiments.parent_atlas import wrap_periodic
+from grashof_workspace.spatial_experiments.parent_level_sets import (
+    PointingLevelSetProblem,
+    correct_to_levelset,
+    pointing_scalar,
+)
+
+from .direct_truth import found_configurations
+from .models import (
+    CampaignConfig,
+    DirectPointingTruth,
+    FixedPointProbe,
+    json_dumps_strict,
+    json_object,
+)
+from .positive_control import PositiveControlArm, build_positive_control_arm
+from .sphere_grid import SphereGrid, build_sphere_grid, paint_pointings
+
+Array = NDArray[np.floating]
+Vec3 = tuple[float, float, float]
+DEDUP_Q_TOL = 0.35
+
+
+def radial_normal(p_star: Vec3 | Array) -> Vec3:
+    arr = np.asarray(p_star, dtype=float).reshape(3)
+    return as_vec3(unit_vector((float(arr[0]), float(arr[1]), float(arr[2])), name="p_star"))
+
+
+def h_value(arm: PositiveControlArm, q: tuple[float, ...], n: Vec3) -> float:
+    state = arm.chain.evaluate(q)
+    return pointing_scalar(state.d, n)
+
+
+def directed_q_distance(
+    a: tuple[tuple[float, ...], ...],
+    b: tuple[tuple[float, ...], ...],
+    *,
+    periodic: tuple[bool, ...] = (True,) * 5,
+) -> float:
+    if not a:
+        return 0.0 if not b else float("inf")
+    if not b:
+        return float("inf")
+    dists = []
+    for qa in a:
+        dists.append(min(float(ambient_distance(np.asarray(qa), np.asarray(qb), periodic)) for qb in b))
+    return max(dists)
+
+
+def symmetric_q_distance(
+    a: tuple[tuple[float, ...], ...],
+    b: tuple[tuple[float, ...], ...],
+) -> float:
+    return max(directed_q_distance(a, b), directed_q_distance(b, a))
+
+
+@dataclass(frozen=True, slots=True)
+class SourceControlFiber:
+    fiber_id: str
+    c: float
+    q_samples: tuple[tuple[float, ...], ...]
+    pointing_samples: tuple[Vec3, ...]
+    branch_status: str
+    returned: bool
+    max_position_residual_m: float
+    max_h_residual: float
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "fiber_id": self.fiber_id,
+                "c": self.c,
+                "sample_count": len(self.q_samples),
+                "q_samples": [list(q) for q in self.q_samples],
+                "pointing_samples": [list(d) for d in self.pointing_samples],
+                "branch_status": self.branch_status,
+                "returned": self.returned,
+                "max_position_residual_m": self.max_position_residual_m,
+                "max_h_residual": self.max_h_residual,
+                "construction_kind": "task_level_set_control",
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class SourceControlResult:
+    probe_id: str
+    n: Vec3
+    c_values: tuple[float, ...]
+    fibers: tuple[SourceControlFiber, ...]
+    pointing_samples: tuple[Vec3, ...]
+    hit_cells: tuple[bool, ...]
+    unresolved_c_intervals: tuple[tuple[float, float], ...]
+    notes: tuple[str, ...]
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "probe_id": self.probe_id,
+                "n": list(self.n),
+                "c_values": list(self.c_values),
+                "fibers": [f.to_json_dict() for f in self.fibers],
+                "pointing_samples": [list(d) for d in self.pointing_samples],
+                "hit_cell_count": int(sum(self.hit_cells)),
+                "unresolved_c_intervals": [list(iv) for iv in self.unresolved_c_intervals],
+                "notes": list(self.notes),
+                "certificate_status": None,
+            }
+        )
+
+
+def choose_c_values(h_samples: tuple[float, ...], count: int) -> tuple[float, ...]:
+    if not h_samples:
+        return tuple(float(x) for x in np.linspace(-0.8, 0.8, count))
+    lo = min(h_samples)
+    hi = max(h_samples)
+    if abs(hi - lo) < 1e-9:
+        return (float(lo),)
+    return tuple(float(x) for x in np.linspace(lo, hi, count))
+
+
+def continue_source_fiber(
+    arm: PositiveControlArm,
+    probe: FixedPointProbe,
+    n: Vec3,
+    c: float,
+    q_seed: tuple[float, ...],
+    *,
+    fiber_id: str,
+    max_steps: int,
+    step_size: float,
+) -> SourceControlFiber:
+    q_proj, ok, _ = correct_to_levelset(arm.model, q_seed, probe.p_star, n, c)
+    if not ok:
+        return SourceControlFiber(
+            fiber_id=fiber_id,
+            c=c,
+            q_samples=(),
+            pointing_samples=(),
+            branch_status="unresolved",
+            returned=False,
+            max_position_residual_m=float("inf"),
+            max_h_residual=float("inf"),
+        )
+    problem = PointingLevelSetProblem(
+        model=arm.model,
+        p_star=probe.p_star,
+        n=n,
+        c=c,
+        problem_id=fiber_id,
+    )
+    trace = continue_implicit_branch(
+        problem,
+        np.asarray(q_proj, dtype=float),
+        branch_id=fiber_id,
+        max_steps=max_steps,
+        step_size=step_size,
+    )
+    qs: list[tuple[float, ...]] = []
+    ds: list[Vec3] = []
+    pos_res: list[float] = []
+    h_res: list[float] = []
+    for step in trace.steps:
+        if not step.accepted or step.x is None:
+            continue
+        q = tuple(float(v) for v in step.x)
+        state = arm.chain.evaluate(q)
+        qs.append(q)
+        ds.append(as_vec3(state.d))
+        pos_res.append(float(np.linalg.norm(np.asarray(state.p) - np.asarray(probe.p_star))))
+        h_res.append(abs(pointing_scalar(state.d, n) - c))
+    return SourceControlFiber(
+        fiber_id=fiber_id,
+        c=c,
+        q_samples=tuple(qs),
+        pointing_samples=tuple(ds),
+        branch_status=trace.branch_status,
+        returned=trace.returned,
+        max_position_residual_m=max(pos_res) if pos_res else float("inf"),
+        max_h_residual=max(h_res) if h_res else float("inf"),
+    )
+
+
+def deduplicate_fibers(fibers: tuple[SourceControlFiber, ...], *, tol: float = DEDUP_Q_TOL) -> tuple[SourceControlFiber, ...]:
+    kept: list[SourceControlFiber] = []
+    for fiber in fibers:
+        if not fiber.q_samples:
+            kept.append(fiber)
+            continue
+        duplicate = False
+        for other in kept:
+            if not other.q_samples or abs(other.c - fiber.c) > 1e-9:
+                continue
+            d_ab = directed_q_distance(fiber.q_samples, other.q_samples)
+            d_ba = directed_q_distance(other.q_samples, fiber.q_samples)
+            if max(d_ab, d_ba) <= tol and abs(d_ab - d_ba) <= tol:
+                duplicate = True
+                break
+        if not duplicate:
+            kept.append(fiber)
+    return tuple(kept)
+
+
+def build_source_control(
+    arm: PositiveControlArm,
+    probe: FixedPointProbe,
+    discovery: DirectPointingTruth,
+    *,
+    c_count: int,
+    confirmation_level: int,
+    max_steps: int = 24,
+    step_size: float = 0.08,
+) -> SourceControlResult:
+    n = radial_normal(probe.p_star)
+    configs = found_configurations(discovery)
+    h_samples = tuple(h_value(arm, q, n) for q in configs)
+    c_values = choose_c_values(h_samples, c_count)
+    fibers: list[SourceControlFiber] = []
+    for i, c in enumerate(c_values):
+        seeds = [q for q in configs if abs(h_value(arm, q, n) - c) <= 0.35] or list(configs[:3])
+        if not seeds and configs:
+            seeds = [min(configs, key=lambda q: abs(h_value(arm, q, n) - c))]
+        for j, seed in enumerate(seeds[:3]):
+            fibers.append(
+                continue_source_fiber(
+                    arm,
+                    probe,
+                    n,
+                    c,
+                    seed,
+                    fiber_id=f"{probe.probe_id}_c{i}_s{j}",
+                    max_steps=max_steps,
+                    step_size=step_size,
+                )
+            )
+    unique = deduplicate_fibers(tuple(fibers))
+    pointings = tuple(d for fiber in unique for d in fiber.pointing_samples)
+    grid = build_sphere_grid(confirmation_level)
+    hits = paint_pointings(grid, pointings)
+    unresolved = tuple((c_values[i], c_values[i + 1]) for i in range(len(c_values) - 1) if not unique)
+    return SourceControlResult(
+        probe_id=probe.probe_id,
+        n=n,
+        c_values=c_values,
+        fibers=unique,
+        pointing_samples=pointings,
+        hit_cells=hits,
+        unresolved_c_intervals=unresolved,
+        notes=(
+            "Source h=c control; not a natural UURU child.",
+            "n = p_star / ||p_star||.",
+        ),
+    )
+
+
+def write_source_control_stage(
+    config: CampaignConfig,
+    outdir: Path,
+    probes: list[FixedPointProbe],
+    *,
+    mode: str,
+    max_steps: int = 16,
+) -> dict[str, Any]:
+    import json
+
+    arm = build_positive_control_arm(config.geometry)
+    budgets = config.mode(mode)
+    records: list[dict[str, Any]] = []
+    for probe in probes:
+        truth_path = outdir / probe.probe_id / "direct_truth.json"
+        if not truth_path.is_file():
+            raise FileNotFoundError(f"missing prerequisite {truth_path}")
+        raw = json.loads(truth_path.read_text(encoding="utf-8"))
+        from .models import (
+            DirectPointingTruth,
+            PointingSolutionCluster,
+            PointingSolveStatus,
+            PointingTargetSolve,
+        )
+
+        def _load_truth(blob: dict[str, Any]) -> DirectPointingTruth:
+            solves = []
+            for item in blob["solves"]:
+                clusters = tuple(
+                    PointingSolutionCluster(
+                        cluster_id=str(c["cluster_id"]),
+                        q_representative=tuple(float(v) for v in c["q_representative"]),
+                        members=tuple(tuple(float(v) for v in m) for m in c["members"]),
+                        seed_sources=tuple(str(s) for s in c["seed_sources"]),
+                        position_residual_m=float(c["position_residual_m"]),
+                        pointing_geodesic_rad=float(c["pointing_geodesic_rad"]),
+                    )
+                    for c in item["clusters"]
+                )
+                solves.append(
+                    PointingTargetSolve(
+                        target_index=int(item["target_index"]),
+                        d_target=as_vec3(tuple(float(v) for v in item["d_target"])),
+                        status=PointingSolveStatus(item["status"]),
+                        clusters=clusters,
+                        best_position_residual_m=item["best_position_residual_m"],
+                        best_pointing_geodesic_rad=item["best_pointing_geodesic_rad"],
+                        n_starts=int(item["n_starts"]),
+                    )
+                )
+            return DirectPointingTruth(
+                probe_id=str(blob["probe_id"]),
+                split=str(blob["split"]),
+                icosphere_level=int(blob["icosphere_level"]),
+                solves=tuple(solves),
+                found_count=int(blob["found_count"]),
+                not_found_count=int(blob["not_found_count"]),
+                unresolved_count=int(blob["unresolved_count"]),
+            )
+
+        discovery = _load_truth(raw["discovery"])
+        result = build_source_control(
+            arm,
+            probe,
+            discovery,
+            c_count=budgets.source_c_value_count,
+            confirmation_level=budgets.confirmation_icosphere_level,
+            max_steps=max_steps,
+        )
+        path = outdir / probe.probe_id / "source_control.json"
+        path.write_text(json_dumps_strict(result.to_json_dict()), encoding="utf-8")
+        records.append({"probe_id": probe.probe_id, "fiber_count": len(result.fibers)})
+        _ = wrap_periodic
+        _ = wrap_joint_delta
+        _ = SphereGrid
+    summary = {
+        "program_id": config.program_id,
+        "config_hash": config.config_hash,
+        "stage": "source-control",
+        "mode": mode,
+        "probes": records,
+    }
+    (outdir / "source_control.json").write_text(json_dumps_strict(summary), encoding="utf-8")
+    return summary

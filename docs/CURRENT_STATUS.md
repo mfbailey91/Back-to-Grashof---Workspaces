@@ -1,7 +1,7 @@
 # Current Scientific Status
 
 **Status:** ACTIVE ledger (snapshot, not a plan)
-**Last updated:** 2026-08-16
+**Last updated:** 2026-08-17
 
 This is the only live status ledger. Future work belongs in [ROADMAP.md](ROADMAP.md).
 
@@ -23,7 +23,7 @@ mechanism_explorer_only
 |---|---|---|---|---|
 | L3 planar 3R | `trusted_exact_reference` | Exact fixed-position four-bar reduction; designated-link rotatability; independent validation | None for reference role | Exact fixed-position four-bar reduction and designated-link rotatability recover planar dexterity |
 | L4 spatial 4R | `local_only` | One-DOF source mechanism and local orientation-curve machinery; proximal exact-U traced-arc match | Global component-complete certificate | One-DOF source mechanism and local orientation-curve machinery exist; global certification remains incomplete |
-| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6) | Accepted source-derived child family and reconstruction | Source-parent and hardening infrastructure exist; fixed-axis `UUUR` child failed; no accepted child family; broader factorization remains unresolved |
+| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control program implemented (oracle, direct IK, h=c stitching, UURU leaf engine) | Accepted source-derived child family reconstructing independent pointing evidence at declared resolution | Source-parent and R3A positive-control machinery exist; fixed-axis `UUUR` remains rejected as an `h=c` equivalence; no general 5R factorization; campaign reconstruction is not an exact global cover |
 | L6 spatial 6R | `scaffold_only` | Dimensional/task contracts and L6 scaffold stubs | Independent full-`SO(3)` reference and proven nesting | Dimensional/task contracts exist; independent full-`SO(3)` reference and reconstruction are not implemented |
 | L7 spatial 7R | `deferred` | Dimensional/gauge framing only | L6 completion and redundancy contract | Redundancy/gauge formulation is architectural only |
 
@@ -40,8 +40,9 @@ mechanism_explorer_only
 ## V06 / L5 closeout line (H6)
 
 ```text
-current fixed-axis UUUR construction rejected;
-broader 5R factorization unresolved;
+current fixed-axis UUUR construction rejected as h=c fiber equivalence;
+R3A SURU→UURU positive-control program implemented at five frozen points;
+general 5R factorization remains unresolved;
 V07A held pending parent/continuation completion.
 ```
 

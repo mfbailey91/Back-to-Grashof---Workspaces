@@ -1,0 +1,33 @@
+{
+  "direct_complete": null,
+  "disposition": "PASS_AT_DECLARED_RESOLUTION",
+  "excluded_child_dispositions": [],
+  "failure_localization": "negative probe correctly refused complete",
+  "natural_leaf_metrics": {
+    "boundary_disagreement_fraction": 0.0875,
+    "false_positive_fraction": 0.0,
+    "hausdorff_rad": null,
+    "max_cell_diameter_rad": 0.32636622180660874,
+    "missed_covered_fraction": 1.0,
+    "reconstructed_hit_count": 0,
+    "refinement_delta": null,
+    "strict_covered_count": 284,
+    "strict_uncovered_count": 8,
+    "unresolved_fraction": 0.0875
+  },
+  "oracle_complete": false,
+  "point_classification": "PARTIAL",
+  "probe_id": "P3_INNER_INCOMPLETE",
+  "source_control_metrics": {
+    "boundary_disagreement_fraction": 0.0875,
+    "false_positive_fraction": 0.0,
+    "hausdorff_rad": null,
+    "max_cell_diameter_rad": 0.32636622180660874,
+    "missed_covered_fraction": 1.0,
+    "reconstructed_hit_count": 0,
+    "refinement_delta": null,
+    "strict_covered_count": 284,
+    "strict_uncovered_count": 8,
+    "unresolved_fraction": 0.0875
+  }
+}

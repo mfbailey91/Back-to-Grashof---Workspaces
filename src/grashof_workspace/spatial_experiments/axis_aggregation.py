@@ -235,12 +235,55 @@ def _kind_role_sequences(
 
 SUUR_PAIR_INDICES = (0, 2)
 SUUR_FAMILY_LABEL = "S_v-U_phys-U_phys-R"
+SURU_PAIR_INDICES = (0, 3)
+SURU_FAMILY_LABEL = "S_v-U_phys-R-U_phys"
+
+
+def multi_u_kind_role_sequences(
+    n_joints: int,
+    pair_indices: tuple[int, ...],
+) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """Role-aware parent letters for non-overlapping RR→U_phys pairs plus S_v."""
+
+    ordered = tuple(sorted(pair_indices))
+    if ordered != pair_indices:
+        raise ValueError("pair_indices must be strictly increasing")
+    if len(set(ordered)) != len(ordered):
+        raise ValueError("pair_indices must be unique")
+    occupied: set[int] = set()
+    for idx in ordered:
+        if idx < 0 or idx + 1 >= n_joints:
+            raise ValueError("pair index out of range")
+        pair = {idx, idx + 1}
+        if occupied & pair:
+            raise ValueError("pair indices overlap")
+        occupied.update(pair)
+    kinds: list[str] = ["S"]
+    roles: list[str] = ["S_v"]
+    i = 0
+    pair_set = set(ordered)
+    while i < n_joints:
+        if i in pair_set:
+            kinds.append("U")
+            roles.append("U_phys")
+            i += 2
+        else:
+            kinds.append("R")
+            roles.append("R_phys")
+            i += 1
+    return tuple(kinds), tuple(roles)
 
 
 def suur_kind_role_sequences() -> tuple[tuple[str, ...], tuple[str, ...]]:
     """Semantic SUUR parent. Not UUUR and not U_v."""
 
-    return ("S", "U", "U", "R"), ("S_v", "U_phys", "U_phys", "R_phys")
+    return multi_u_kind_role_sequences(5, SUUR_PAIR_INDICES)
+
+
+def suru_kind_role_sequences() -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """Semantic SURU parent. Not SUUR and not U_v."""
+
+    return multi_u_kind_role_sequences(5, SURU_PAIR_INDICES)
 
 
 @dataclass(frozen=True, slots=True)
@@ -292,25 +335,48 @@ def embed_suur_physical_to_source(q_physical: tuple[float, ...]) -> tuple[float,
     return q
 
 
-def build_suur_multi_aggregation(
+def lift_source_to_physical_identity(q_source: tuple[float, ...]) -> tuple[float, ...]:
+    """Identity chart: physical scalars are the source angles."""
+
+    return tuple(float(v) for v in q_source)
+
+
+def embed_physical_identity_to_source(q_physical: tuple[float, ...]) -> tuple[float, ...]:
+    return tuple(float(v) for v in q_physical)
+
+
+def build_multi_u_aggregation(
     model: OpenChainModel,
     q0: tuple[float, ...],
+    *,
+    pair_indices: tuple[int, ...],
+    expected_parent_label: str,
 ) -> MultiAggregationRecord:
-    """Assess J1/J2 and J3/J4 as a non-overlapping SUUR regrouping."""
+    """Assess non-overlapping exact RR→U_phys pairs. Emits no closed certificate."""
 
-    if model.n_joints != 5:
-        raise ValueError("SUUR multi-aggregation is defined for spatial 5R")
+    ordered = tuple(sorted(pair_indices))
+    kinds, roles = multi_u_kind_role_sequences(model.n_joints, ordered)
+    family_label = expected_parent_label
     candidates = detect_exact_u_pairs(model, q=None)
-    selected = tuple(c for c in candidates if c.pair_index in SUUR_PAIR_INDICES)
-    kinds, roles = suur_kind_role_sequences()
-    exact = all(c.exact_u_candidate for c in selected) and len(selected) == 2
-    overlapping = selected[0].joint_b == selected[1].joint_a if len(selected) == 2 else True
+    selected = tuple(c for c in candidates if c.pair_index in ordered)
+    exact = all(c.exact_u_candidate for c in selected) and len(selected) == len(ordered)
+    overlapping = False
+    occupied: set[int] = set()
+    for cand in selected:
+        pair = {cand.joint_a, cand.joint_b}
+        if occupied & pair:
+            overlapping = True
+        occupied.update(pair)
     centers = tuple(c.center for c in selected)
     distinct = True
-    if len(centers) == 2:
-        distinct = float(np.linalg.norm(np.asarray(centers[0]) - np.asarray(centers[1]))) > 1e-9
-    q_lift = lift_source_to_suur_physical(q0)
-    q_emb = embed_suur_physical_to_source(q_lift)
+    for i, ci in enumerate(centers):
+        for cj in centers[i + 1 :]:
+            if float(np.linalg.norm(np.asarray(ci) - np.asarray(cj))) <= 1e-9:
+                distinct = False
+    q_lift = lift_source_to_physical_identity(q0)
+    q_emb = embed_physical_identity_to_source(q_lift)
+    if len(q_emb) != model.n_joints:
+        raise ValueError("identity lift length must match n_joints")
     state_s = model.chain.evaluate(q0)
     state_r = model.chain.evaluate(q_emb)
     residuals = {
@@ -325,28 +391,85 @@ def build_suur_multi_aggregation(
     if exact and distinct and not overlapping:
         status = "EXACT_GLOBAL"
         notes = (
-            "Exact non-overlapping J1/J2 and J3/J4 RR→U_phys regrouping.",
-            "Not an independent closed S_v-U_phys-U_phys-R parent certificate.",
-            "SUUR is not UUUR; U_v is forbidden.",
+            f"Exact non-overlapping RR→U_phys regrouping at pairs {ordered}.",
+            "Not an independent closed-mechanism certificate.",
+            "U_v is forbidden in aggregation roles.",
         )
     else:
         status = "REJECTED"
         notes = (
-            "Selected pairs are not two exact non-overlapping U_phys aggregates.",
-            "Independent SUUR closed parent is not instantiated.",
+            "Selected pairs are not exact non-overlapping U_phys aggregates.",
+            "Independent closed parent is not instantiated.",
         )
     return MultiAggregationRecord(
         architecture_id=model.architecture_id,
-        pair_indices=SUUR_PAIR_INDICES,
+        pair_indices=ordered,
         candidates=selected,
         joint_kind_sequence=kinds,
         joint_role_sequence=roles,
-        family_label=SUUR_FAMILY_LABEL,
+        family_label=family_label,
         u_centers=centers,
         fk_identity_residuals=residuals,
         axis_aggregation_status=status,
         joint_limits="not_modeled",
         notes=notes,
+    )
+
+
+def build_suur_multi_aggregation(
+    model: OpenChainModel,
+    q0: tuple[float, ...],
+) -> MultiAggregationRecord:
+    """Assess J1/J2 and J3/J4 as a non-overlapping SUUR regrouping."""
+
+    if model.n_joints != 5:
+        raise ValueError("SUUR multi-aggregation is defined for spatial 5R")
+    record = build_multi_u_aggregation(
+        model,
+        q0,
+        pair_indices=SUUR_PAIR_INDICES,
+        expected_parent_label=SUUR_FAMILY_LABEL,
+    )
+    notes: tuple[str, ...]
+    if record.axis_aggregation_status == "EXACT_GLOBAL":
+        notes = (
+            "Exact non-overlapping J1/J2 and J3/J4 RR→U_phys regrouping.",
+            "Not an independent closed S_v-U_phys-U_phys-R parent certificate.",
+            "SUUR is not UUUR; U_v is forbidden.",
+        )
+    else:
+        notes = (
+            "Selected pairs are not two exact non-overlapping U_phys aggregates.",
+            "Independent SUUR closed parent is not instantiated.",
+        )
+    return MultiAggregationRecord(
+        architecture_id=record.architecture_id,
+        pair_indices=record.pair_indices,
+        candidates=record.candidates,
+        joint_kind_sequence=record.joint_kind_sequence,
+        joint_role_sequence=record.joint_role_sequence,
+        family_label=SUUR_FAMILY_LABEL,
+        u_centers=record.u_centers,
+        fk_identity_residuals=record.fk_identity_residuals,
+        axis_aggregation_status=record.axis_aggregation_status,
+        joint_limits=record.joint_limits,
+        notes=notes,
+    )
+
+
+def build_suru_multi_aggregation(
+    model: OpenChainModel,
+    q0: tuple[float, ...],
+) -> MultiAggregationRecord:
+    """Assess J1/J2 and J4/J5 as a non-overlapping SURU regrouping."""
+
+    if model.n_joints != 5:
+        raise ValueError("SURU multi-aggregation is defined for spatial 5R")
+    return build_multi_u_aggregation(
+        model,
+        q0,
+        pair_indices=SURU_PAIR_INDICES,
+        expected_parent_label=SURU_FAMILY_LABEL,
     )
 
 
