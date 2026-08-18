@@ -59,3 +59,6 @@ def test_certificate_has_no_h_c_and_is_component_scoped() -> None:
         "UNRESOLVED",
     }
     json.loads(text)
+    assert payload["family_admissibility_status"] == "UNRESOLVED"
+    assert payload["accepted_for_reconstruction"] is False
+    assert payload["leaf_component_status"] == payload["closed_mechanism_status"]

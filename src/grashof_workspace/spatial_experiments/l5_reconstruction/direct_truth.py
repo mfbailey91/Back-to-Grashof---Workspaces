@@ -31,6 +31,7 @@ from .models import (
     PointingTargetSolve,
     json_dumps_strict,
     json_object,
+    stage_envelope,
 )
 from .positive_control import (
     PositiveControlArm,
@@ -396,10 +397,12 @@ def write_truth_stage(
         path.write_text(json_dumps_strict(payload), encoding="utf-8")
         records.append({"probe_id": probe.probe_id, "found_confirmation": confirmation.found_count})
     summary = {
-        "program_id": config.program_id,
-        "config_hash": config.config_hash,
-        "stage": "truth",
-        "mode": mode,
+        **stage_envelope(
+            config,
+            stage="truth",
+            mode=mode,
+            probe_ids=tuple(p.probe_id for p in probes),
+        ),
         "probes": records,
     }
     (outdir / "truth.json").write_text(json_dumps_strict(summary), encoding="utf-8")

@@ -27,6 +27,7 @@ from .models import (
     FixedPointProbe,
     json_dumps_strict,
     json_object,
+    stage_envelope,
 )
 from .positive_control import PositiveControlArm, build_positive_control_arm
 from .sphere_grid import SphereGrid, build_sphere_grid, paint_pointings
@@ -344,10 +345,12 @@ def write_source_control_stage(
         _ = wrap_joint_delta
         _ = SphereGrid
     summary = {
-        "program_id": config.program_id,
-        "config_hash": config.config_hash,
-        "stage": "source-control",
-        "mode": mode,
+        **stage_envelope(
+            config,
+            stage="source-control",
+            mode=mode,
+            probe_ids=tuple(p.probe_id for p in probes),
+        ),
         "probes": records,
     }
     (outdir / "source_control.json").write_text(json_dumps_strict(summary), encoding="utf-8")

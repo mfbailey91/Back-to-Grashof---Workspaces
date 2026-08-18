@@ -25,6 +25,7 @@ from .models import (
     ReseedAudit,
     TransversalityAudit,
     json_dumps_strict,
+    stage_envelope,
 )
 from .positive_control import PositiveControlArm, build_positive_control_arm
 from .source_control import directed_q_distance, symmetric_q_distance
@@ -299,10 +300,12 @@ def write_leaves_stage(
         out.write_text(json_dumps_strict(family.to_json_dict()), encoding="utf-8")
         records.append({"probe_id": probe.probe_id, "accepted_count": family.accepted_count})
     summary = {
-        "program_id": config.program_id,
-        "config_hash": config.config_hash,
-        "stage": "leaves",
-        "mode": mode,
+        **stage_envelope(
+            config,
+            stage="leaves",
+            mode=mode,
+            probe_ids=tuple(p.probe_id for p in probes),
+        ),
         "probes": records,
     }
     (outdir / "leaves.json").write_text(json_dumps_strict(summary), encoding="utf-8")

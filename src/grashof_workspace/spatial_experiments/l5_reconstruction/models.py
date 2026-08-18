@@ -45,6 +45,56 @@ class ProcessStageStatus(str, Enum):
     COMPLETE = "COMPLETE"
 
 
+@dataclass(frozen=True, slots=True)
+class StageArtifactRef:
+    stage: str
+    path: str
+    sha256: str
+    config_hash: str
+    mode: str
+    probe_ids: tuple[str, ...]
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "stage": self.stage,
+                "path": self.path,
+                "sha256": self.sha256,
+                "config_hash": self.config_hash,
+                "mode": self.mode,
+                "probe_ids": list(self.probe_ids),
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class StageResult:
+    stage: str
+    stage_status: ProcessStageStatus
+    scientific_disposition: str
+    config_hash: str
+    mode: str
+    probe_ids: tuple[str, ...]
+    inputs: tuple[StageArtifactRef, ...]
+    outputs: tuple[StageArtifactRef, ...]
+    limitations: tuple[str, ...] = ()
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "stage": self.stage,
+                "stage_status": self.stage_status.value,
+                "scientific_disposition": self.scientific_disposition,
+                "config_hash": self.config_hash,
+                "mode": self.mode,
+                "probe_ids": list(self.probe_ids),
+                "inputs": [item.to_json_dict() for item in self.inputs],
+                "outputs": [item.to_json_dict() for item in self.outputs],
+                "limitations": list(self.limitations),
+            }
+        )
+
+
 class PointingSolveStatus(str, Enum):
     FOUND = "FOUND"
     NOT_FOUND_AT_DECLARED_BUDGET = "NOT_FOUND_AT_DECLARED_BUDGET"
@@ -61,6 +111,12 @@ class ReconstructionDisposition(str, Enum):
     PASS_AT_DECLARED_RESOLUTION = "PASS_AT_DECLARED_RESOLUTION"
     PARTIAL = "PARTIAL"
     REJECTED = "REJECTED"
+    UNRESOLVED = "UNRESOLVED"
+
+
+class FamilyAdmissibilityStatus(str, Enum):
+    PASS = "PASS"
+    FAIL = "FAIL"
     UNRESOLVED = "UNRESOLVED"
 
 
@@ -113,6 +169,22 @@ def json_object(payload: dict[str, Any]) -> dict[str, Any]:
 
 def json_dumps_strict(payload: Mapping[str, Any] | dict[str, Any]) -> str:
     return json.dumps(json_object(dict(payload)), indent=2, allow_nan=False, sort_keys=True) + "\n"
+
+
+def stage_envelope(
+    config: CampaignConfig,
+    *,
+    stage: str,
+    mode: str,
+    probe_ids: tuple[str, ...] | list[str],
+) -> dict[str, Any]:
+    return {
+        "program_id": config.program_id,
+        "config_hash": config.config_hash,
+        "stage": stage,
+        "mode": mode,
+        "probe_ids": list(probe_ids),
+    }
 
 
 def _as_vec3(values: Any, *, name: str) -> Vec3:
@@ -453,7 +525,8 @@ class TransversalityAudit:
 class NaturalLeafCertificate:
     spec: NaturalLeafSpec
     construction_status: str
-    closed_mechanism_status: str
+    leaf_component_status: str
+    family_admissibility_status: FamilyAdmissibilityStatus
     component_scope: str
     branch_status: str
     returned: bool
@@ -470,6 +543,10 @@ class NaturalLeafCertificate:
     accepted_for_reconstruction: bool
     failure_or_scope_reason: str
 
+    @property
+    def closed_mechanism_status(self) -> str:
+        return self.leaf_component_status
+
     def to_json_dict(self) -> dict[str, Any]:
         payload = {
             "spec": self.spec.to_json_dict(),
@@ -482,7 +559,9 @@ class NaturalLeafCertificate:
             "joint_role_sequence": list(self.spec.joint_role_sequence),
             "geometry_hash": self.spec.geometry_hash,
             "construction_status": self.construction_status,
-            "closed_mechanism_status": self.closed_mechanism_status,
+            "leaf_component_status": self.leaf_component_status,
+            "closed_mechanism_status": self.leaf_component_status,
+            "family_admissibility_status": self.family_admissibility_status.value,
             "component_scope": self.component_scope,
             "branch_status": self.branch_status,
             "returned": self.returned,
@@ -734,11 +813,13 @@ def empty_stage_statuses() -> dict[str, str]:
 
 
 def empty_campaign_result(config: CampaignConfig) -> FivePointCampaignResult:
+    statuses = empty_stage_statuses()
+    statuses["manifest"] = ProcessStageStatus.COMPLETE.value
     return FivePointCampaignResult(
         program_id=config.program_id,
         config_hash=config.config_hash,
         probe_ids=tuple(p.probe_id for p in config.probes),
-        stage_statuses=empty_stage_statuses(),
+        stage_statuses=statuses,
         comparisons=(),
         disposition=ReconstructionDisposition.UNRESOLVED,
         accepted_reconstruction=False,

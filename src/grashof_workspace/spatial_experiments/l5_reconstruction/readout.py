@@ -7,13 +7,15 @@ from typing import Any
 
 import numpy as np
 
-from .models import CampaignConfig, FixedPointProbe, json_dumps_strict
+from .models import CampaignConfig, FixedPointProbe, json_dumps_strict, stage_envelope
 from .positive_control import (
     build_positive_control_arm,
     evaluate_wrist_center,
     fixture_seed_for_probe,
 )
 from .sphere_grid import build_sphere_grid
+
+SCAFFOLD_WATERMARK = "SCAFFOLD_NO_DATA"
 
 
 def _plot_arm(ax: Any, arm: Any, q: tuple[float, ...], *, alpha: float = 0.35) -> None:
@@ -23,6 +25,24 @@ def _plot_arm(ax: Any, arm: Any, q: tuple[float, ...], *, alpha: float = 0.35) -
     xs, ys, zs = zip(*pts)
     ax.plot(xs, ys, zs, color="#888888", alpha=alpha, linewidth=2.0)
     ax.scatter(xs, ys, zs, color="#444444", alpha=alpha)
+
+
+def _watermark_axes(ax: Any, title: str) -> None:
+    ax.set_title(f"{SCAFFOLD_WATERMARK}\n{title}")
+    ax.text(
+        0.5,
+        0.5,
+        SCAFFOLD_WATERMARK,
+        transform=ax.transAxes,
+        ha="center",
+        va="center",
+        fontsize=16,
+        color="#c0392b",
+        alpha=0.55,
+        rotation=18,
+        fontweight="bold",
+        zorder=10,
+    )
 
 
 def write_probe_figures(
@@ -79,7 +99,7 @@ def write_probe_figures(
     ):
         fig = plt.figure(figsize=(5, 3))
         ax = fig.add_subplot(111)
-        ax.set_title(fname.replace("_", " ").replace(".png", "") + " — pointing")
+        _watermark_axes(ax, fname.replace("_", " ").replace(".png", "") + " — pointing")
         ax.plot([0, 1], [0, 0], color="#888")
         fig.tight_layout()
         fig.savefig(fig_dir / fname, dpi=100)
@@ -91,11 +111,16 @@ def write_probe_figures(
         frames = [Image.open(fig_dir / "arm_geometry.png")]
         frames[0].save(fig_dir / "selected_leaf.gif", save_all=True, append_images=frames, duration=200, loop=0)
         names.append(str(fig_dir / "selected_leaf.gif"))
+    items = "".join(
+        f"<li><img src='figures/{Path(n).name}' alt='{SCAFFOLD_WATERMARK} {Path(n).name}'></li>"
+        for n in names
+    )
     html = f"""<!doctype html><html><head><meta charset="utf-8"><title>{probe.probe_id}</title></head>
 <body><h1>{probe.probe_id} pointing reconstruction</h1>
+<p><strong>{SCAFFOLD_WATERMARK}</strong> — placeholder panels are not reconstruction evidence.</p>
 <p>L5 pointing image in S^2. Not a dexterous SO(3) claim.</p>
 <p>Fixed lambda leaves are frozen-geometry UURU children. h=c is a source control only.</p>
-<ul>{"".join(f"<li>{Path(n).name}</li>" for n in names)}</ul>
+<ul>{items}</ul>
 </body></html>"""
     (outdir / probe.probe_id / "index.html").write_text(html, encoding="utf-8")
     return names
@@ -127,22 +152,25 @@ def write_render_stage(
     fig.tight_layout()
     fig.savefig(summary_path, dpi=120)
     plt.close(fig)
-    index = """<!doctype html><html><head><meta charset="utf-8"><title>R3A five-point hub</title></head>
+    links = "".join(f'<li><a href="{p.probe_id}/index.html">{p.probe_id}</a></li>' for p in probes)
+    index = f"""<!doctype html><html><head><meta charset="utf-8"><title>R3A five-point hub</title></head>
 <body>
 <h1>R3A L5 five-point natural-leaf reconstruction</h1>
 <p>Pointing coverage in S^2. Not dexterity. Fixed-axis UUUR remains rejected as an h=c equivalence.</p>
 <ul>
-""" + "".join(f'<li><a href="{p.probe_id}/index.html">{p.probe_id}</a></li>' for p in probes) + """
+{links}
 </ul>
 <p><a href="campaign.json">campaign.json</a></p>
 </body></html>
 """
     (outdir / "index.html").write_text(index, encoding="utf-8")
     payload = {
-        "program_id": config.program_id,
-        "config_hash": config.config_hash,
-        "stage": "render",
-        "mode": mode,
+        **stage_envelope(
+            config,
+            stage="render",
+            mode=mode,
+            probe_ids=tuple(p.probe_id for p in probes),
+        ),
         "figures": written,
     }
     (outdir / "render.json").write_text(json_dumps_strict(payload), encoding="utf-8")

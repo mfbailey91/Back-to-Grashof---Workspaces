@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -19,9 +20,10 @@ from .models import (
     ThreeWayReconstructionResult,
     empty_stage_statuses,
     json_dumps_strict,
+    stage_envelope,
 )
 from .positive_control import point_completeness_oracle
-from .sphere_grid import build_sphere_grid, classify_cells, pointing_geodesic
+from .sphere_grid import build_sphere_grid, classify_cells, paint_pointings, pointing_geodesic
 
 
 def _fraction(num: int, den: int) -> float | None:
@@ -67,14 +69,11 @@ def pointing_set_metrics(
 
 
 def _load_hits_and_dirs(path: Path) -> tuple[tuple[bool, ...], tuple[tuple[float, float, float], ...]]:
-    import json
-
     blob = json.loads(path.read_text(encoding="utf-8"))
     dirs_raw = blob.get("pointing_samples", [])
     dirs = tuple(as_vec3(item) for item in dirs_raw)
     hits_raw = blob.get("hit_cells")
     if hits_raw is None:
-        # Natural family: paint later from sample pointings.
         return (), dirs
     hits = tuple(bool(v) for v in hits_raw)
     return hits, dirs
@@ -87,25 +86,50 @@ def classify_point(
 ) -> tuple[CompletenessLabel, ReconstructionDisposition, str]:
     if metrics is None:
         return CompletenessLabel.PARTIAL, ReconstructionDisposition.UNRESOLVED, "missing reconstruction metrics"
+    if metrics.reconstructed_hit_count == 0:
+        return CompletenessLabel.PARTIAL, ReconstructionDisposition.PARTIAL, "empty reconstruction cannot pass"
     fp = metrics.false_positive_fraction
     miss = metrics.missed_covered_fraction
-    if fp is not None and fp > config.max_strict_false_positive_fraction:
-        return CompletenessLabel.PARTIAL, ReconstructionDisposition.REJECTED, "strict false positives"
+    miss_threshold = config.max_missed_strict_covered_fraction
+    fp_threshold = config.max_strict_false_positive_fraction
     if oracle_complete:
-        ok_recall = miss is None or miss <= config.max_missed_strict_covered_fraction
+        if fp is not None and fp > fp_threshold:
+            return CompletenessLabel.PARTIAL, ReconstructionDisposition.REJECTED, "strict false positives"
+        ok_recall = miss is not None and miss <= miss_threshold
         ok_haus = (
             metrics.hausdorff_rad is None
-            or metrics.hausdorff_rad <= config.max_hausdorff_in_confirmation_cell_diameters * metrics.max_cell_diameter_rad
+            or metrics.hausdorff_rad
+            <= config.max_hausdorff_in_confirmation_cell_diameters * metrics.max_cell_diameter_rad
         )
-        if ok_recall and ok_haus and (fp is None or fp == 0.0):
-            return CompletenessLabel.COMPLETE, ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION, "positive complete at declared resolution"
+        if ok_recall and ok_haus and fp is not None and fp == 0.0:
+            return (
+                CompletenessLabel.COMPLETE,
+                ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION,
+                "positive complete at declared resolution",
+            )
         return CompletenessLabel.PARTIAL, ReconstructionDisposition.PARTIAL, "positive probe incomplete reconstruction"
-    # Negative probe: must refuse complete and keep some uncovered cells.
     if metrics.strict_uncovered_count == 0:
         return CompletenessLabel.PARTIAL, ReconstructionDisposition.UNRESOLVED, "negative probe has no strict uncovered cells"
-    if fp is None or fp == 0.0:
-        return CompletenessLabel.PARTIAL, ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION, "negative probe correctly refused complete"
-    return CompletenessLabel.PARTIAL, ReconstructionDisposition.REJECTED, "negative probe false complete"
+    if miss is None or miss > miss_threshold:
+        return CompletenessLabel.PARTIAL, ReconstructionDisposition.PARTIAL, "negative probe missed strict covered cells"
+    if fp is None or fp > fp_threshold:
+        return CompletenessLabel.PARTIAL, ReconstructionDisposition.REJECTED, "negative probe false complete"
+    return (
+        CompletenessLabel.PARTIAL,
+        ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION,
+        "negative probe recovered feasible subset and excluded infeasible cells",
+    )
+
+
+def _require_compare_artifacts(outdir: Path, probes: list[FixedPointProbe]) -> None:
+    missing: list[str] = []
+    for probe in probes:
+        for name in ("direct_truth.json", "source_control.json", "natural_family.json"):
+            path = outdir / probe.probe_id / name
+            if not path.is_file():
+                missing.append(str(path))
+    if missing:
+        raise FileNotFoundError("missing compare inputs: " + ", ".join(missing))
 
 
 def write_compare_stage(
@@ -115,12 +139,11 @@ def write_compare_stage(
     *,
     mode: str,
 ) -> dict[str, Any]:
-    import json
-
+    _require_compare_artifacts(outdir, probes)
     budgets = config.mode(mode)
     grid = build_sphere_grid(budgets.confirmation_icosphere_level)
     comparisons: list[ThreeWayReconstructionResult] = []
-    missing_reconstruction_inputs = False
+    probe_ids = tuple(p.probe_id for p in probes)
     for probe in probes:
         oracle = point_completeness_oracle(
             config.geometry, probe.p_star, margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m
@@ -134,56 +157,57 @@ def write_compare_stage(
         src_path = outdir / probe.probe_id / "source_control.json"
         nat_path = outdir / probe.probe_id / "natural_family.json"
         truth_path = outdir / probe.probe_id / "direct_truth.json"
-        if not src_path.is_file() or not nat_path.is_file():
-            missing_reconstruction_inputs = True
-        src_hits, src_dirs = _load_hits_and_dirs(src_path) if src_path.is_file() else (tuple(False for _ in labels), ())
+        src_hits, src_dirs = _load_hits_and_dirs(src_path)
         if src_hits and len(src_hits) != len(labels):
-            src_hits = tuple(False for _ in labels)
+            src_hits = ()
         if not src_hits:
-            from .sphere_grid import paint_pointings
-
             src_hits = paint_pointings(grid, src_dirs) if src_dirs else tuple(False for _ in labels)
-        nat_hits: tuple[bool, ...] = tuple(False for _ in labels)
-        nat_dirs: tuple[tuple[float, float, float], ...] = ()
-        if nat_path.is_file():
-            fam = json.loads(nat_path.read_text(encoding="utf-8"))
-            dirs: list[tuple[float, float, float]] = []
-            for leaf in fam.get("leaves", []):
-                if not leaf.get("accepted_for_reconstruction"):
-                    continue
-                for sample in leaf.get("samples", []):
-                    dirs.append(as_vec3(sample["pointing"]))
-            nat_dirs = tuple(dirs)
-            from .sphere_grid import paint_pointings
-
-            nat_hits = paint_pointings(grid, nat_dirs) if nat_dirs else tuple(False for _ in labels)
+        fam = json.loads(nat_path.read_text(encoding="utf-8"))
+        dirs: list[tuple[float, float, float]] = []
+        for leaf in fam.get("leaves", []):
+            if not leaf.get("accepted_for_reconstruction"):
+                continue
+            for sample in leaf.get("samples", []):
+                dirs.append(as_vec3(sample["pointing"]))
+        nat_dirs = tuple(dirs)
+        nat_hits = paint_pointings(grid, nat_dirs) if nat_dirs else tuple(False for _ in labels)
         covered_dirs = tuple(
-            as_vec3(grid.barycenters[i])
-            for i, lab in enumerate(labels)
-            if lab is CellClass.STRICT_COVERED
+            as_vec3(grid.barycenters[i]) for i, lab in enumerate(labels) if lab is CellClass.STRICT_COVERED
         )
         src_metrics = pointing_set_metrics(
-            labels, src_hits, max_cell_diameter_rad=grid.max_cell_diameter_rad, reconstructed_dirs=src_dirs, covered_dirs=covered_dirs
+            labels,
+            src_hits,
+            max_cell_diameter_rad=grid.max_cell_diameter_rad,
+            reconstructed_dirs=src_dirs,
+            covered_dirs=covered_dirs,
         )
         nat_metrics = pointing_set_metrics(
-            labels, nat_hits, max_cell_diameter_rad=grid.max_cell_diameter_rad, reconstructed_dirs=nat_dirs, covered_dirs=covered_dirs
+            labels,
+            nat_hits,
+            max_cell_diameter_rad=grid.max_cell_diameter_rad,
+            reconstructed_dirs=nat_dirs,
+            covered_dirs=covered_dirs,
         )
-        label, disp, reason = classify_point(oracle.complete, nat_metrics, config)
-        excluded: tuple[str, ...] = ()
-        if nat_path.is_file():
-            fam = json.loads(nat_path.read_text(encoding="utf-8"))
-            excluded = tuple(
-                str(leaf.get("closed_mechanism_status"))
-                for leaf in fam.get("leaves", [])
-                if not leaf.get("accepted_for_reconstruction")
-            )
+        truth = json.loads(truth_path.read_text(encoding="utf-8"))
+        confirmation = truth.get("confirmation", {})
+        unresolved_count = confirmation.get("unresolved_count", 0)
+        if isinstance(unresolved_count, int) and unresolved_count > 0:
+            label: CompletenessLabel = CompletenessLabel.PARTIAL
+            disp = ReconstructionDisposition.UNRESOLVED
+            reason = "confirmation unresolved cells block point classification"
+        else:
+            label, disp, reason = classify_point(oracle.complete, nat_metrics, config)
+        excluded = tuple(
+            str(leaf.get("closed_mechanism_status"))
+            for leaf in fam.get("leaves", [])
+            if not leaf.get("accepted_for_reconstruction")
+        )
         direct_complete: bool | None = None
-        if truth_path.is_file():
-            agreement = json.loads(truth_path.read_text(encoding="utf-8")).get("oracle_agreement", {})
-            misses = agreement.get("n_strict_oracle_feasible_missing")
-            fps = agreement.get("n_strict_oracle_infeasible_found")
-            if isinstance(misses, int) and isinstance(fps, int):
-                direct_complete = (misses == 0 and fps == 0) if oracle.complete else False
+        agreement = truth.get("oracle_agreement", {})
+        misses = agreement.get("n_strict_oracle_feasible_missing")
+        fps = agreement.get("n_strict_oracle_infeasible_found")
+        if isinstance(misses, int) and isinstance(fps, int):
+            direct_complete = (misses == 0 and fps == 0) if oracle.complete else False
         result = ThreeWayReconstructionResult(
             probe_id=probe.probe_id,
             oracle_complete=oracle.complete,
@@ -199,22 +223,19 @@ def write_compare_stage(
         path.write_text(json_dumps_strict(result.to_json_dict()), encoding="utf-8")
         comparisons.append(result)
     all_pass = all(c.disposition is ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION for c in comparisons)
-    notes: tuple[str, ...] = ("R3A three-way comparison at declared confirmation resolution.",)
-    if missing_reconstruction_inputs:
-        notes = (
-            *notes,
-            "Source-control or natural-family artifacts missing; empty reconstruction columns are not a campaign pass.",
-        )
+    notes = ("R3A three-way comparison at declared confirmation resolution.",)
     campaign = FivePointCampaignResult(
         program_id=config.program_id,
         config_hash=config.config_hash,
-        probe_ids=tuple(p.probe_id for p in probes),
+        probe_ids=probe_ids,
         stage_statuses={**empty_stage_statuses(), "compare": ProcessStageStatus.COMPLETE.value},
         comparisons=tuple(comparisons),
         disposition=ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION if all_pass else ReconstructionDisposition.PARTIAL,
         accepted_reconstruction=all_pass,
         notes=notes,
     )
-    (outdir / "campaign.json").write_text(json_dumps_strict(campaign.to_json_dict()), encoding="utf-8")
-    (outdir / "compare.json").write_text(json_dumps_strict(campaign.to_json_dict()), encoding="utf-8")
-    return campaign.to_json_dict()
+    payload = campaign.to_json_dict()
+    payload.update(stage_envelope(config, stage="compare", mode=mode, probe_ids=probe_ids))
+    (outdir / "campaign.json").write_text(json_dumps_strict(payload), encoding="utf-8")
+    (outdir / "compare.json").write_text(json_dumps_strict(payload), encoding="utf-8")
+    return payload

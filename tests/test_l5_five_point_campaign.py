@@ -39,6 +39,23 @@ def test_fixture_and_render_smoke(tmp_path: Path) -> None:
     assert (tmp_path / "index.html").is_file()
     assert (tmp_path / "five_point_summary.png").is_file()
     assert "selected_leaf.gif" not in json.dumps(payload)
+    html = (tmp_path / "P1_DEEP_COMPLETE" / "index.html").read_text(encoding="utf-8")
+    assert "SCAFFOLD_NO_DATA" in html
+    titles = (tmp_path / "P1_DEEP_COMPLETE" / "figures" / "source_control.png").read_bytes()
+    assert titles  # file exists; watermark is in HTML and figure titles
+
+
+def test_compare_without_truth_leaves_raises(tmp_path: Path) -> None:
+    write_manifest(CONFIG, tmp_path)
+    with pytest.raises(FileNotFoundError):
+        run_stage(
+            config_path=CONFIG,
+            outdir=tmp_path,
+            stage="compare",
+            mode="smoke",
+            probe_id=None,
+            resume_from=None,
+        )
 
 
 def test_hash_drift_refuses_resume(tmp_path: Path) -> None:

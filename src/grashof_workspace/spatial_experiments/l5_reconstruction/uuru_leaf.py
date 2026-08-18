@@ -7,6 +7,8 @@ Certificates contain no ``h_c`` field.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass
 
 import numpy as np
@@ -27,7 +29,7 @@ from grashof_workspace.spatial_experiments.rotations import axis_angle_from_rota
 from grashof_workspace.spatial_experiments.serial_chain import SerialRevoluteChain
 
 from .models import (
-    ACCEPTED_CHILD_STATUSES,
+    FamilyAdmissibilityStatus,
     LeafConstructionKind,
     NaturalLeafCertificate,
     NaturalLeafSample,
@@ -54,8 +56,15 @@ def _rotation_error_vec(ra: Array, rb: Array) -> Array:
 
 
 def geometry_hash(chart: SphericalClosureChart, lambda_fixed: float) -> str:
-    blob = f"{chart.chart_id}:{lambda_fixed:.12f}:{chart.basis.tobytes().hex()}"
-    return str(abs(hash(blob)))
+    payload = {
+        "chart_id": chart.chart_id,
+        "sequence": chart.sequence,
+        "basis": np.asarray(chart.basis).round(15).tolist(),
+        "reference": np.asarray(chart.reference).round(15).tolist(),
+        "lambda_fixed": float(lambda_fixed),
+    }
+    blob = json.dumps(payload, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
 @dataclass(frozen=True, slots=True)
@@ -225,7 +234,8 @@ def issue_leaf_certificate(
         return NaturalLeafCertificate(
             spec=spec,
             construction_status="UNRESOLVED",
-            closed_mechanism_status="UNRESOLVED",
+            leaf_component_status="UNRESOLVED",
+            family_admissibility_status=FamilyAdmissibilityStatus.UNRESOLVED,
             component_scope="none",
             branch_status=branch_status,
             returned=returned,
@@ -269,11 +279,11 @@ def issue_leaf_certificate(
         status = "REJECTED"
         scope = "none"
         reason = "embedding or lambda residual failed"
-    accepted = status in ACCEPTED_CHILD_STATUSES
     return NaturalLeafCertificate(
         spec=spec,
         construction_status="virtual_orientation_coordinate",
-        closed_mechanism_status=status,
+        leaf_component_status=status,
+        family_admissibility_status=FamilyAdmissibilityStatus.UNRESOLVED,
         component_scope=scope,
         branch_status=branch_status,
         returned=returned,
@@ -287,7 +297,7 @@ def issue_leaf_certificate(
         reseed=None,
         transversality=None,
         chart_overlap_status="UNRESOLVED",
-        accepted_for_reconstruction=accepted,
+        accepted_for_reconstruction=False,
         failure_or_scope_reason=reason,
     )
 

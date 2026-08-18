@@ -48,6 +48,7 @@ from .models import (
     L5PositiveControlGeometry,
     OracleFeasibility,
     json_dumps_strict,
+    stage_envelope,
 )
 
 Array = NDArray[np.floating]
@@ -263,6 +264,8 @@ def write_fixture_stage(
     config: CampaignConfig,
     outdir: Path,
     probes: list[FixedPointProbe],
+    *,
+    mode: str = "smoke",
 ) -> dict[str, Any]:
     arm = build_positive_control_arm(config.geometry)
     margin = config.tolerances.strict_analytical_boundary_margin_m
@@ -293,9 +296,12 @@ def write_fixture_stage(
         path.write_text(json_dumps_strict(payload), encoding="utf-8")
         records.append(payload)
     summary = {
-        "program_id": config.program_id,
-        "config_hash": config.config_hash,
-        "stage": "fixture",
+        **stage_envelope(
+            config,
+            stage="fixture",
+            mode=mode,
+            probe_ids=tuple(p.probe_id for p in probes),
+        ),
         "probes": records,
     }
     (outdir / "fixture.json").write_text(json_dumps_strict(summary), encoding="utf-8")
