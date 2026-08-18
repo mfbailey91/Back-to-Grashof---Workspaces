@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -11,6 +12,7 @@ from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 from .direct_truth import build_direct_reference_cells
 from .models import (
     CampaignConfig,
+    CampaignMode,
     CellClass,
     CompletenessLabel,
     DirectReferenceCell,
@@ -79,6 +81,99 @@ def pointing_set_metrics(
     )
 
 
+def reconstruction_pass(metrics: PointingSetMetrics | None, config: CampaignConfig) -> bool:
+    """Declared-resolution set gate. ``None`` never means pass."""
+    if metrics is None:
+        return False
+    if metrics.reconstructed_hit_count <= 0:
+        return False
+    if metrics.missed_covered_fraction is None:
+        return False
+    if metrics.missed_covered_fraction > config.max_missed_strict_covered_fraction:
+        return False
+    if metrics.false_positive_fraction is None:
+        return False
+    if metrics.false_positive_fraction > config.max_strict_false_positive_fraction:
+        return False
+    if metrics.hausdorff_rad is None:
+        return False
+    hausdorff_limit = (
+        config.max_hausdorff_in_confirmation_cell_diameters * metrics.max_cell_diameter_rad
+    )
+    if metrics.hausdorff_rad > hausdorff_limit:
+        return False
+    if metrics.refinement_delta is None:
+        return False
+    return metrics.refinement_delta <= config.max_refinement_metric_delta
+
+
+def evaluate_reconstruction_gates(
+    *,
+    direct_vs_oracle: PointingSetMetrics | None,
+    source_vs_direct: PointingSetMetrics | None,
+    natural_vs_direct: PointingSetMetrics | None,
+    source_vs_oracle: PointingSetMetrics | None,
+    natural_vs_oracle: PointingSetMetrics | None,
+    config: CampaignConfig,
+) -> tuple[bool, bool, bool, bool, bool]:
+    return (
+        reconstruction_pass(direct_vs_oracle, config),
+        reconstruction_pass(source_vs_direct, config),
+        reconstruction_pass(natural_vs_direct, config),
+        reconstruction_pass(source_vs_oracle, config),
+        reconstruction_pass(natural_vs_oracle, config),
+    )
+
+
+def _set_gate_failure(
+    metrics: PointingSetMetrics | None,
+    config: CampaignConfig,
+    prefix: str,
+) -> tuple[ReconstructionDisposition, str]:
+    if metrics is None:
+        return ReconstructionDisposition.UNRESOLVED, f"{prefix} missing reconstruction metrics"
+    if metrics.reconstructed_hit_count <= 0:
+        return ReconstructionDisposition.PARTIAL, f"{prefix} empty reconstruction cannot pass"
+    fp = metrics.false_positive_fraction
+    if fp is not None and fp > config.max_strict_false_positive_fraction:
+        return ReconstructionDisposition.REJECTED, f"{prefix} strict false positives"
+    return ReconstructionDisposition.PARTIAL, f"{prefix} set reconstruction gate failed"
+
+
+def classification_matches_oracle(
+    point_classification: CompletenessLabel,
+    expected_complete: bool,
+) -> bool:
+    if expected_complete:
+        return point_classification is CompletenessLabel.COMPLETE
+    return point_classification is CompletenessLabel.PARTIAL
+
+
+def campaign_reconstruction_accepted(
+    comparisons: Sequence[ThreeWayReconstructionResult],
+    probes: Sequence[FixedPointProbe],
+    budgets: CampaignMode,
+    *,
+    require_classification_match: bool = True,
+) -> bool:
+    if not budgets.allows_full_campaign_disposition:
+        return False
+    if len(comparisons) != len(probes):
+        return False
+    by_id = {item.probe_id: item for item in comparisons}
+    for probe in probes:
+        result = by_id.get(probe.probe_id)
+        if result is None:
+            return False
+        if result.disposition is not ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION:
+            return False
+        if require_classification_match and not classification_matches_oracle(
+            result.point_classification, probe.expected_pointing_complete
+        ):
+            return False
+    return True
+
+
 def _load_hits_and_dirs(path: Path) -> tuple[tuple[bool, ...], tuple[tuple[float, float, float], ...]]:
     blob = json.loads(path.read_text(encoding="utf-8"))
     dirs_raw = blob.get("pointing_samples", [])
@@ -125,39 +220,95 @@ def classify_point(
 ) -> tuple[CompletenessLabel, ReconstructionDisposition, str]:
     if metrics is None:
         return CompletenessLabel.PARTIAL, ReconstructionDisposition.UNRESOLVED, "missing reconstruction metrics"
-    if metrics.reconstructed_hit_count == 0:
-        return CompletenessLabel.PARTIAL, ReconstructionDisposition.PARTIAL, "empty reconstruction cannot pass"
-    fp = metrics.false_positive_fraction
-    miss = metrics.missed_covered_fraction
-    miss_threshold = config.max_missed_strict_covered_fraction
-    fp_threshold = config.max_strict_false_positive_fraction
-    if oracle_complete:
-        if fp is not None and fp > fp_threshold:
-            return CompletenessLabel.PARTIAL, ReconstructionDisposition.REJECTED, "strict false positives"
-        ok_recall = miss is not None and miss <= miss_threshold
-        ok_haus = (
-            metrics.hausdorff_rad is None
-            or metrics.hausdorff_rad
-            <= config.max_hausdorff_in_confirmation_cell_diameters * metrics.max_cell_diameter_rad
-        )
-        if ok_recall and ok_haus and fp is not None and fp == 0.0:
+    if not reconstruction_pass(metrics, config):
+        if not oracle_complete and metrics.strict_uncovered_count == 0:
             return (
-                CompletenessLabel.COMPLETE,
-                ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION,
-                "positive complete at declared resolution",
+                CompletenessLabel.PARTIAL,
+                ReconstructionDisposition.UNRESOLVED,
+                "negative probe has no strict uncovered cells",
             )
-        return CompletenessLabel.PARTIAL, ReconstructionDisposition.PARTIAL, "positive probe incomplete reconstruction"
-    if metrics.strict_uncovered_count == 0:
-        return CompletenessLabel.PARTIAL, ReconstructionDisposition.UNRESOLVED, "negative probe has no strict uncovered cells"
-    if miss is None or miss > miss_threshold:
-        return CompletenessLabel.PARTIAL, ReconstructionDisposition.PARTIAL, "negative probe missed strict covered cells"
-    if fp is None or fp > fp_threshold:
-        return CompletenessLabel.PARTIAL, ReconstructionDisposition.REJECTED, "negative probe false complete"
+        disposition, reason = _set_gate_failure(metrics, config, "set reconstruction")
+        return CompletenessLabel.PARTIAL, disposition, reason
+    if oracle_complete:
+        return (
+            CompletenessLabel.COMPLETE,
+            ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION,
+            "positive complete at declared resolution",
+        )
     return (
         CompletenessLabel.PARTIAL,
         ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION,
         "negative probe recovered feasible subset and excluded infeasible cells",
     )
+
+
+def classify_probe_reconstruction(
+    *,
+    oracle_complete: bool,
+    expected_complete: bool,
+    direct_complete: bool | None,
+    direct_vs_oracle: PointingSetMetrics | None,
+    source_vs_direct: PointingSetMetrics | None,
+    natural_vs_direct: PointingSetMetrics | None,
+    source_vs_oracle: PointingSetMetrics | None,
+    natural_vs_oracle: PointingSetMetrics | None,
+    unresolved_family_intervals: tuple[tuple[float, float], ...],
+    unresolved_c_intervals: tuple[tuple[float, float], ...],
+    config: CampaignConfig,
+) -> tuple[CompletenessLabel, ReconstructionDisposition, str]:
+    if direct_complete is None:
+        return (
+            CompletenessLabel.PARTIAL,
+            ReconstructionDisposition.UNRESOLVED,
+            "strict confirmation unresolved cells block point classification",
+        )
+    if not reconstruction_pass(direct_vs_oracle, config):
+        disposition, reason = _set_gate_failure(
+            direct_vs_oracle, config, "direct strict agreement failed; not attributed to the decomposition"
+        )
+        return CompletenessLabel.PARTIAL, disposition, reason
+    source_ok = reconstruction_pass(source_vs_direct, config) and reconstruction_pass(source_vs_oracle, config)
+    if unresolved_c_intervals or not source_ok:
+        failed = source_vs_direct if not reconstruction_pass(source_vs_direct, config) else source_vs_oracle
+        if unresolved_c_intervals:
+            return (
+                CompletenessLabel.PARTIAL,
+                ReconstructionDisposition.UNRESOLVED,
+                "source-control reconstruction failed; unresolved c interval; not attributed to the decomposition",
+            )
+        disposition, _reason = _set_gate_failure(
+            failed, config, "source-control reconstruction failed; not attributed to the decomposition"
+        )
+        return CompletenessLabel.PARTIAL, disposition, _reason
+    if unresolved_family_intervals:
+        return (
+            CompletenessLabel.PARTIAL,
+            ReconstructionDisposition.UNRESOLVED,
+            "blocking unresolved family lambda interval",
+        )
+    natural_ok = reconstruction_pass(natural_vs_direct, config) and reconstruction_pass(natural_vs_oracle, config)
+    if not natural_ok:
+        failed = natural_vs_direct if not reconstruction_pass(natural_vs_direct, config) else natural_vs_oracle
+        disposition, reason = _set_gate_failure(failed, config, "natural-leaf reconstruction failed against direct reference")
+        return CompletenessLabel.PARTIAL, disposition, reason
+    label, disposition, reason = classify_point(oracle_complete, natural_vs_oracle, config)
+    if not classification_matches_oracle(label, expected_complete):
+        return (
+            label,
+            ReconstructionDisposition.REJECTED,
+            "point classification does not match oracle",
+        )
+    return label, disposition, reason
+
+
+def _interval_pairs(raw: object) -> tuple[tuple[float, float], ...]:
+    if not isinstance(raw, list):
+        return ()
+    out: list[tuple[float, float]] = []
+    for item in raw:
+        if isinstance(item, (list, tuple)) and len(item) == 2:
+            out.append((float(item[0]), float(item[1])))
+    return tuple(out)
 
 
 def _require_compare_artifacts(outdir: Path, probes: list[FixedPointProbe]) -> None:
@@ -232,6 +383,9 @@ def write_compare_stage(
         if not src_hits:
             src_hits = paint_pointings(grid, src_dirs) if src_dirs else tuple(False for _ in labels)
         fam = json.loads(nat_path.read_text(encoding="utf-8"))
+        src_blob = json.loads(src_path.read_text(encoding="utf-8"))
+        unresolved_lambda = _interval_pairs(fam.get("unresolved_lambda_intervals"))
+        unresolved_c = _interval_pairs(src_blob.get("unresolved_c_intervals"))
         dirs: list[tuple[float, float, float]] = []
         for leaf in fam.get("leaves", []):
             if not leaf.get("accepted_for_reconstruction"):
@@ -289,12 +443,19 @@ def write_compare_stage(
             covered_dirs=direct_covered,
         )
         direct_complete = direct_complete_from_cells(cells)
-        if direct_complete is None:
-            label: CompletenessLabel = CompletenessLabel.PARTIAL
-            disp = ReconstructionDisposition.UNRESOLVED
-            reason = "strict confirmation unresolved cells block point classification"
-        else:
-            label, disp, reason = classify_point(oracle.complete, nat_vs_oracle, config)
+        label, disp, reason = classify_probe_reconstruction(
+            oracle_complete=oracle.complete,
+            expected_complete=probe.expected_pointing_complete,
+            direct_complete=direct_complete,
+            direct_vs_oracle=direct_vs_oracle,
+            source_vs_direct=src_vs_direct,
+            natural_vs_direct=nat_vs_direct,
+            source_vs_oracle=src_vs_oracle,
+            natural_vs_oracle=nat_vs_oracle,
+            unresolved_family_intervals=unresolved_lambda,
+            unresolved_c_intervals=unresolved_c,
+            config=config,
+        )
         excluded = tuple(
             str(leaf.get("closed_mechanism_status"))
             for leaf in fam.get("leaves", [])
@@ -317,17 +478,33 @@ def write_compare_stage(
         path = outdir / probe.probe_id / "comparison.json"
         path.write_text(json_dumps_strict(result.to_json_dict()), encoding="utf-8")
         comparisons.append(result)
-    all_pass = all(c.disposition is ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION for c in comparisons)
-    notes = ("R3A three-way comparison at declared confirmation resolution.",)
+    require_match = bool(
+        config.raw.get("set_acceptance", {}).get("require_all_five_point_classifications_match_oracle", True)
+    )
+    accepted = campaign_reconstruction_accepted(
+        comparisons,
+        config.probes,
+        budgets,
+        require_classification_match=require_match,
+    )
+    notes = ["R3A three-way comparison at declared confirmation resolution."]
+    if not budgets.allows_full_campaign_disposition:
+        notes.append("Mode does not allow full-campaign disposition.")
+    if not accepted:
+        notes.append("Reconstruction is not accepted at this declared resolution.")
     campaign = FivePointCampaignResult(
         program_id=config.program_id,
         config_hash=config.config_hash,
         probe_ids=probe_ids,
         stage_statuses={**empty_stage_statuses(), "compare": ProcessStageStatus.COMPLETE.value},
         comparisons=tuple(comparisons),
-        disposition=ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION if all_pass else ReconstructionDisposition.PARTIAL,
-        accepted_reconstruction=all_pass,
-        notes=notes,
+        disposition=(
+            ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
+            if accepted
+            else ReconstructionDisposition.PARTIAL
+        ),
+        accepted_reconstruction=accepted,
+        notes=tuple(notes),
     )
     payload = campaign.to_json_dict()
     payload.update(stage_envelope(config, stage="compare", mode=mode, probe_ids=probe_ids))

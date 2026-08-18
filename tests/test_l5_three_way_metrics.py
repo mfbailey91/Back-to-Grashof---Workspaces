@@ -1,22 +1,50 @@
-"""Pointing-set metrics: null fractions when denominators are empty."""
+"""Pointing-set metrics: null fractions when denominators are empty; reconstruction_pass."""
 
 from __future__ import annotations
 
 from grashof_workspace.spatial_experiments.l5_reconstruction.comparison import (
     classify_point,
+    classify_probe_reconstruction,
     direct_complete_from_cells,
     direct_reference_labels,
+    evaluate_reconstruction_gates,
     pointing_set_metrics,
+    reconstruction_pass,
     resolved_direct_mask,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     CellClass,
+    CompletenessLabel,
     DirectReferenceCell,
     OracleFeasibility,
+    PointingSetMetrics,
     PointingSolveStatus,
     ReconstructionDisposition,
     load_campaign_config,
 )
+
+CONFIG = "configs/l5_positive_control_v1.json"
+
+
+def _perfect_metrics() -> PointingSetMetrics:
+    return pointing_set_metrics(
+        (CellClass.STRICT_COVERED, CellClass.STRICT_COVERED, CellClass.STRICT_UNCOVERED),
+        (True, True, False),
+        max_cell_diameter_rad=0.4,
+        reconstructed_dirs=((1.0, 0.0, 0.0), (0.0, 1.0, 0.0)),
+        covered_dirs=((1.0, 0.0, 0.0), (0.0, 1.0, 0.0)),
+        refinement_delta=0.0,
+    )
+
+
+def _empty_metrics() -> PointingSetMetrics:
+    return pointing_set_metrics(
+        (CellClass.STRICT_COVERED, CellClass.STRICT_UNCOVERED, CellClass.STRICT_UNCOVERED),
+        (False, False, False),
+        max_cell_diameter_rad=0.4,
+        reconstructed_dirs=(),
+        covered_dirs=(),
+    )
 
 
 def test_empty_denominators_are_null() -> None:
@@ -35,6 +63,9 @@ def test_empty_denominators_are_null() -> None:
     payload = metrics.to_json_dict()
     assert payload["missed_covered_fraction"] is None
     assert payload["false_positive_fraction"] is None
+    config = load_campaign_config(CONFIG)
+    assert reconstruction_pass(metrics, config) is False
+    assert reconstruction_pass(None, config) is False
 
 
 def test_false_positive_and_miss_fractions() -> None:
@@ -51,30 +82,155 @@ def test_false_positive_and_miss_fractions() -> None:
         max_cell_diameter_rad=0.4,
         reconstructed_dirs=((1.0, 0.0, 0.0),),
         covered_dirs=((1.0, 0.0, 0.0),),
+        refinement_delta=0.0,
     )
     assert metrics.missed_covered_fraction == 0.5
     assert metrics.false_positive_fraction == 0.5
     assert metrics.hausdorff_rad is not None
     assert metrics.hausdorff_rad <= 1e-9
+    config = load_campaign_config(CONFIG)
+    assert reconstruction_pass(metrics, config) is False
+
+
+def test_empty_reconstruction_fails_all_five_gates() -> None:
+    config = load_campaign_config(CONFIG)
+    empty = _empty_metrics()
+    assert reconstruction_pass(empty, config) is False
+    gates = evaluate_reconstruction_gates(
+        direct_vs_oracle=empty,
+        source_vs_direct=empty,
+        natural_vs_direct=empty,
+        source_vs_oracle=empty,
+        natural_vs_oracle=empty,
+        config=config,
+    )
+    assert gates == (False, False, False, False, False)
+    _label, disposition, _reason = classify_point(False, empty, config)
+    assert disposition is not ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
 
 
 def test_empty_negative_probe_reconstruction_does_not_pass() -> None:
-    config = load_campaign_config("configs/l5_positive_control_v1.json")
-    labels = (
-        CellClass.STRICT_COVERED,
-        CellClass.STRICT_UNCOVERED,
-        CellClass.STRICT_UNCOVERED,
-    )
-    empty = pointing_set_metrics(
-        labels,
-        (False, False, False),
-        max_cell_diameter_rad=0.4,
-        reconstructed_dirs=(),
-        covered_dirs=(),
-    )
+    config = load_campaign_config(CONFIG)
+    empty = _empty_metrics()
     assert empty.reconstructed_hit_count == 0
     _label, disposition, _reason = classify_point(False, empty, config)
     assert disposition is not ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
+
+
+def test_synthetic_perfect_reconstruction_passes_all_five_gates() -> None:
+    config = load_campaign_config(CONFIG)
+    perfect = _perfect_metrics()
+    assert reconstruction_pass(perfect, config) is True
+    gates = evaluate_reconstruction_gates(
+        direct_vs_oracle=perfect,
+        source_vs_direct=perfect,
+        natural_vs_direct=perfect,
+        source_vs_oracle=perfect,
+        natural_vs_oracle=perfect,
+        config=config,
+    )
+    assert gates == (True, True, True, True, True)
+    label, disposition, _reason = classify_point(True, perfect, config)
+    assert label is CompletenessLabel.COMPLETE
+    assert disposition is ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
+
+
+def test_none_metric_fields_do_not_pass() -> None:
+    config = load_campaign_config(CONFIG)
+    perfect = _perfect_metrics()
+    missing_haus = PointingSetMetrics(
+        strict_covered_count=perfect.strict_covered_count,
+        strict_uncovered_count=perfect.strict_uncovered_count,
+        reconstructed_hit_count=perfect.reconstructed_hit_count,
+        missed_covered_fraction=0.0,
+        false_positive_fraction=0.0,
+        hausdorff_rad=None,
+        boundary_disagreement_fraction=0.0,
+        unresolved_fraction=0.0,
+        max_cell_diameter_rad=0.4,
+        refinement_delta=0.0,
+    )
+    assert reconstruction_pass(missing_haus, config) is False
+    missing_refine = PointingSetMetrics(
+        strict_covered_count=perfect.strict_covered_count,
+        strict_uncovered_count=perfect.strict_uncovered_count,
+        reconstructed_hit_count=perfect.reconstructed_hit_count,
+        missed_covered_fraction=0.0,
+        false_positive_fraction=0.0,
+        hausdorff_rad=0.0,
+        boundary_disagreement_fraction=0.0,
+        unresolved_fraction=0.0,
+        max_cell_diameter_rad=0.4,
+        refinement_delta=None,
+    )
+    assert reconstruction_pass(missing_refine, config) is False
+
+
+def test_boundary_only_does_not_fabricate_strict_pass() -> None:
+    config = load_campaign_config(CONFIG)
+    metrics = pointing_set_metrics(
+        (CellClass.AMBIGUOUS_BOUNDARY, CellClass.AMBIGUOUS_BOUNDARY),
+        (True, True),
+        max_cell_diameter_rad=0.4,
+        reconstructed_dirs=((1.0, 0.0, 0.0),),
+        covered_dirs=(),
+        refinement_delta=0.0,
+    )
+    assert metrics.missed_covered_fraction is None
+    assert reconstruction_pass(metrics, config) is False
+    _label, disposition, _reason = classify_point(True, metrics, config)
+    assert disposition is not ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
+
+
+def test_negative_probe_pass_is_partial_not_complete() -> None:
+    config = load_campaign_config(CONFIG)
+    perfect = _perfect_metrics()
+    label, disposition, _reason = classify_point(False, perfect, config)
+    assert label is CompletenessLabel.PARTIAL
+    assert disposition is ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
+
+
+def test_source_failure_is_localized_before_natural() -> None:
+    config = load_campaign_config(CONFIG)
+    perfect = _perfect_metrics()
+    empty = _empty_metrics()
+    label, disposition, reason = classify_probe_reconstruction(
+        oracle_complete=True,
+        expected_complete=True,
+        direct_complete=True,
+        direct_vs_oracle=perfect,
+        source_vs_direct=empty,
+        natural_vs_direct=perfect,
+        source_vs_oracle=empty,
+        natural_vs_oracle=perfect,
+        unresolved_family_intervals=(),
+        unresolved_c_intervals=(),
+        config=config,
+    )
+    assert disposition is not ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
+    assert "source" in reason.lower()
+    assert "decomposition" not in reason.lower() or "not attributed" in reason.lower()
+    assert label is CompletenessLabel.PARTIAL
+
+
+def test_unresolved_family_interval_blocks_pass() -> None:
+    config = load_campaign_config(CONFIG)
+    perfect = _perfect_metrics()
+    _label, disposition, reason = classify_probe_reconstruction(
+        oracle_complete=True,
+        expected_complete=True,
+        direct_complete=True,
+        direct_vs_oracle=perfect,
+        source_vs_direct=perfect,
+        natural_vs_direct=perfect,
+        source_vs_oracle=perfect,
+        natural_vs_oracle=perfect,
+        unresolved_family_intervals=((0.0, 0.5),),
+        unresolved_c_intervals=(),
+        config=config,
+    )
+    assert disposition is not ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
+    assert "interval" in reason.lower() or "lambda" in reason.lower() or "family" in reason.lower()
 
 
 def _cell(

@@ -8,7 +8,18 @@ from pathlib import Path
 import pytest
 
 from grashof_workspace.spatial_experiments.l5_reconstruction.cli import run_stage, write_manifest
-from grashof_workspace.spatial_experiments.l5_reconstruction.models import load_campaign_config
+from grashof_workspace.spatial_experiments.l5_reconstruction.comparison import (
+    campaign_reconstruction_accepted,
+    pointing_set_metrics,
+)
+from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
+    CellClass,
+    CompletenessLabel,
+    ReconstructionDisposition,
+    ThreeWayReconstructionResult,
+    load_campaign_config,
+    resolve_stage_budgets,
+)
 from grashof_workspace.spatial_experiments.l5_reconstruction.positive_control import (
     write_fixture_stage,
 )
@@ -79,6 +90,73 @@ def test_hash_drift_refuses_resume(tmp_path: Path) -> None:
             probe_id=None,
             resume_from=bad,
         )
+
+
+def _perfect_metrics():
+    return pointing_set_metrics(
+        (CellClass.STRICT_COVERED, CellClass.STRICT_COVERED, CellClass.STRICT_UNCOVERED),
+        (True, True, False),
+        max_cell_diameter_rad=0.4,
+        reconstructed_dirs=((1.0, 0.0, 0.0), (0.0, 1.0, 0.0)),
+        covered_dirs=((1.0, 0.0, 0.0), (0.0, 1.0, 0.0)),
+        refinement_delta=0.0,
+    )
+
+
+def _passing_comparison(probe_id: str, *, expected_complete: bool) -> ThreeWayReconstructionResult:
+    metrics = _perfect_metrics()
+    label = CompletenessLabel.COMPLETE if expected_complete else CompletenessLabel.PARTIAL
+    return ThreeWayReconstructionResult(
+        probe_id=probe_id,
+        oracle_complete=expected_complete,
+        direct_complete=expected_complete,
+        source_control_metrics=metrics,
+        natural_leaf_metrics=metrics,
+        point_classification=label,
+        disposition=ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION,
+        failure_localization="synthetic pass",
+        direct_vs_oracle=metrics,
+        source_vs_direct=metrics,
+        natural_vs_direct=metrics,
+    )
+
+
+def test_smoke_and_ci_cannot_issue_full_campaign_disposition() -> None:
+    config = load_campaign_config(CONFIG)
+    comparisons = tuple(
+        _passing_comparison(probe.probe_id, expected_complete=probe.expected_pointing_complete)
+        for probe in config.probes
+    )
+    smoke = resolve_stage_budgets(config, "smoke")
+    ci = resolve_stage_budgets(config, "ci")
+    full = resolve_stage_budgets(config, "full")
+    assert campaign_reconstruction_accepted(comparisons, config.probes, smoke) is False
+    assert campaign_reconstruction_accepted(comparisons, config.probes, ci) is False
+    assert campaign_reconstruction_accepted(comparisons, config.probes, full) is True
+
+
+def test_campaign_requires_classification_to_match_oracle() -> None:
+    config = load_campaign_config(CONFIG)
+    full = resolve_stage_budgets(config, "full")
+    comparisons = tuple(
+        _passing_comparison(probe.probe_id, expected_complete=probe.expected_pointing_complete)
+        for probe in config.probes
+    )
+    mismatched = list(comparisons)
+    mismatched[2] = ThreeWayReconstructionResult(
+        probe_id=comparisons[2].probe_id,
+        oracle_complete=False,
+        direct_complete=False,
+        source_control_metrics=comparisons[2].source_control_metrics,
+        natural_leaf_metrics=comparisons[2].natural_leaf_metrics,
+        point_classification=CompletenessLabel.COMPLETE,
+        disposition=ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION,
+        failure_localization="synthetic mismatch",
+        direct_vs_oracle=comparisons[2].direct_vs_oracle,
+        source_vs_direct=comparisons[2].source_vs_direct,
+        natural_vs_direct=comparisons[2].natural_vs_direct,
+    )
+    assert campaign_reconstruction_accepted(tuple(mismatched), config.probes, full) is False
 
 
 @pytest.mark.stress

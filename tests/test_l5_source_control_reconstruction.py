@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from grashof_workspace.spatial_experiments.l5_reconstruction.comparison import pointing_set_metrics
+from grashof_workspace.spatial_experiments.l5_reconstruction.comparison import (
+    pointing_set_metrics,
+    reconstruction_pass,
+)
 from grashof_workspace.spatial_experiments.l5_reconstruction.direct_truth import (
     build_direct_pointing_truth,
 )
@@ -41,10 +44,14 @@ def test_deep_complete_marks_hits_or_explicit_misses() -> None:
         result.hit_cells,
         max_cell_diameter_rad=grid.max_cell_diameter_rad,
         reconstructed_dirs=result.pointing_samples,
-        covered_dirs=tuple(tuple(float(v) for v in grid.barycenters[i]) for i, lab in enumerate(labels) if lab is CellClass.STRICT_COVERED),
+        covered_dirs=tuple(
+            tuple(float(v) for v in grid.barycenters[i])
+            for i, lab in enumerate(labels)
+            if lab is CellClass.STRICT_COVERED
+        ),
     )
-    assert metrics.missed_covered_fraction is None or metrics.missed_covered_fraction <= 1.0
     assert metrics.reconstructed_hit_count >= 0
+    assert reconstruction_pass(metrics, config) is False
 
 
 def test_negative_probe_does_not_become_false_complete() -> None:
@@ -66,5 +73,7 @@ def test_negative_probe_does_not_become_false_complete() -> None:
         reconstructed_dirs=result.pointing_samples,
         covered_dirs=(),
     )
-    assert metrics.false_positive_fraction is None or metrics.false_positive_fraction < 1.0
     assert probe.expected_pointing_complete is False
+    assert reconstruction_pass(metrics, config) is False
+    if metrics.false_positive_fraction is not None:
+        assert metrics.false_positive_fraction <= 1.0
