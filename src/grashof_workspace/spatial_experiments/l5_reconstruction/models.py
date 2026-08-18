@@ -722,6 +722,66 @@ class NaturalLeafCertificate:
 
 
 @dataclass(frozen=True, slots=True)
+class FamilyIntervalRecord:
+    chart_id: str
+    lambda_interval: tuple[float, float]
+    sampled_lambda_values: tuple[float, ...]
+    accepted_leaf_ids: tuple[str, ...]
+    rejected_leaf_ids: tuple[str, ...]
+    unresolved_leaf_ids: tuple[str, ...]
+    duplicate_groups: tuple[tuple[str, ...], ...] = ()
+    critical_values: tuple[float, ...] = ()
+    birth_death_merge_events: tuple[str, ...] = ()
+    interval_status: str = "UNRESOLVED"
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "chart_id": self.chart_id,
+                "lambda_interval": list(self.lambda_interval),
+                "sampled_lambda_values": list(self.sampled_lambda_values),
+                "accepted_leaf_ids": list(self.accepted_leaf_ids),
+                "rejected_leaf_ids": list(self.rejected_leaf_ids),
+                "unresolved_leaf_ids": list(self.unresolved_leaf_ids),
+                "duplicate_groups": [list(group) for group in self.duplicate_groups],
+                "critical_values": list(self.critical_values),
+                "birth_death_merge_events": list(self.birth_death_merge_events),
+                "interval_status": self.interval_status,
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class SourceControlCRecord:
+    c: float
+    expected_seed_count: int
+    projected_seed_count: int
+    continued_component_count: int
+    returned_count: int
+    open_count: int
+    singular_count: int
+    unresolved_count: int
+    deduplicated_component_ids: tuple[str, ...]
+    parameter_interval_status: str
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "c": self.c,
+                "expected_seed_count": self.expected_seed_count,
+                "projected_seed_count": self.projected_seed_count,
+                "continued_component_count": self.continued_component_count,
+                "returned_count": self.returned_count,
+                "open_count": self.open_count,
+                "singular_count": self.singular_count,
+                "unresolved_count": self.unresolved_count,
+                "deduplicated_component_ids": list(self.deduplicated_component_ids),
+                "parameter_interval_status": self.parameter_interval_status,
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class LeafFamilyResult:
     probe_id: str
     leaves: tuple[NaturalLeafCertificate, ...]
@@ -733,6 +793,7 @@ class LeafFamilyResult:
     neighbor_audits: tuple[TransversalityAudit, ...] = ()
     chart_overlap: ChartOverlapAudit | None = None
     duplicate_classifications: tuple[str, ...] = ()
+    lambda_intervals: tuple[FamilyIntervalRecord, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -743,6 +804,7 @@ class LeafFamilyResult:
                 "duplicate_count": self.duplicate_count,
                 "chart_overlap_status": self.chart_overlap_status,
                 "unresolved_lambda_intervals": [list(iv) for iv in self.unresolved_lambda_intervals],
+                "lambda_intervals": [item.to_json_dict() for item in self.lambda_intervals],
                 "neighbor_audits": [item.to_json_dict() for item in self.neighbor_audits],
                 "chart_overlap": None if self.chart_overlap is None else self.chart_overlap.to_json_dict(),
                 "duplicate_classifications": list(self.duplicate_classifications),
@@ -868,6 +930,8 @@ class CampaignMode:
     natural_lambda_bin_count_per_chart: int
     max_natural_leaves_per_probe: int
     reseed_samples_per_leaf: int
+    continuation_steps: int
+    allows_full_campaign_disposition: bool
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -881,8 +945,15 @@ class CampaignMode:
                 "natural_lambda_bin_count_per_chart": self.natural_lambda_bin_count_per_chart,
                 "max_natural_leaves_per_probe": self.max_natural_leaves_per_probe,
                 "reseed_samples_per_leaf": self.reseed_samples_per_leaf,
+                "continuation_steps": self.continuation_steps,
+                "allows_full_campaign_disposition": self.allows_full_campaign_disposition,
             }
         )
+
+
+def resolve_stage_budgets(config: CampaignConfig, mode: str) -> CampaignMode:
+    """Return frozen mode budgets with no silent clipping."""
+    return config.mode(mode)
 
 
 @dataclass(frozen=True, slots=True)
@@ -1053,6 +1124,8 @@ def load_campaign_config(path: Path | str) -> CampaignConfig:
             natural_lambda_bin_count_per_chart=int(spec["natural_lambda_bin_count_per_chart"]),
             max_natural_leaves_per_probe=int(spec["max_natural_leaves_per_probe"]),
             reseed_samples_per_leaf=int(spec["reseed_samples_per_leaf"]),
+            continuation_steps=int(spec["continuation_steps"]),
+            allows_full_campaign_disposition=bool(spec["allows_full_campaign_disposition"]),
         )
         for name, spec in raw["campaign_modes"].items()
     }

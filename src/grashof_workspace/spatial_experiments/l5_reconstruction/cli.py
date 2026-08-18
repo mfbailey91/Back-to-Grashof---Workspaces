@@ -203,7 +203,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--stage", choices=STAGES, default="manifest")
-    parser.add_argument("--mode", choices=("smoke", "full"), default="smoke")
+    parser.add_argument("--mode", choices=("smoke", "full", "ci"), default="smoke")
     parser.add_argument("--probe", dest="probe_id", default=None)
     parser.add_argument("--resume-from", type=Path, default=None)
     return parser

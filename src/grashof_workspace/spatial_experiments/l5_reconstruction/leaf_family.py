@@ -25,6 +25,7 @@ from .models import (
     ChartOverlapAudit,
     DirectPointingTruth,
     FamilyAdmissibilityStatus,
+    FamilyIntervalRecord,
     FixedPointProbe,
     LeafFamilyResult,
     LeafPairStatus,
@@ -34,6 +35,7 @@ from .models import (
     ReseedAudit,
     TransversalityAudit,
     json_dumps_strict,
+    resolve_stage_budgets,
     stage_envelope,
 )
 from .positive_control import PositiveControlArm, build_positive_control_arm
@@ -742,6 +744,74 @@ def recompute_family_acceptance(
     return tuple(updated)
 
 
+def _lambda_bin_index(value: float, n_bins: int) -> int:
+    wrapped = float(np.arctan2(np.sin(value), np.cos(value)))
+    return int(np.floor((wrapped + np.pi) / (2.0 * np.pi) * n_bins)) % n_bins
+
+
+def circular_lambda_bin_edges(n_bins: int) -> tuple[tuple[float, float], ...]:
+    if n_bins <= 0:
+        return ()
+    width = 2.0 * np.pi / n_bins
+    edges: list[tuple[float, float]] = []
+    for i in range(n_bins):
+        lo = -np.pi + i * width
+        hi = np.pi if i + 1 == n_bins else -np.pi + (i + 1) * width
+        edges.append((float(lo), float(hi)))
+    return tuple(edges)
+
+
+def audit_family_intervals(
+    leaves: tuple[NaturalLeafCertificate, ...],
+    *,
+    n_bins: int,
+    chart_ids: tuple[str, ...],
+    duplicate_groups: tuple[tuple[str, ...], ...] = (),
+) -> tuple[FamilyIntervalRecord, ...]:
+    edges = circular_lambda_bin_edges(n_bins)
+    records: list[FamilyIntervalRecord] = []
+    for chart_id in chart_ids:
+        chart_leaves = tuple(leaf for leaf in leaves if leaf.spec.chart_id == chart_id)
+        for i, (lo, hi) in enumerate(edges):
+            members = tuple(
+                leaf
+                for leaf in chart_leaves
+                if _lambda_bin_index(leaf.spec.lambda_fixed, n_bins) == i
+            )
+            accepted = tuple(leaf.spec.leaf_id for leaf in members if leaf.accepted_for_reconstruction)
+            rejected = tuple(leaf.spec.leaf_id for leaf in members if leaf.leaf_component_status == "REJECTED")
+            unresolved = tuple(
+                leaf.spec.leaf_id
+                for leaf in members
+                if leaf.spec.leaf_id not in accepted and leaf.spec.leaf_id not in rejected
+            )
+            sampled = tuple(leaf.spec.lambda_fixed for leaf in members)
+            critical = tuple(
+                leaf.spec.lambda_fixed
+                for leaf in members
+                if any(sample.chart_singularity for sample in leaf.samples)
+            )
+            if accepted:
+                status = "COMPLETE"
+            else:
+                status = "UNRESOLVED"
+            records.append(
+                FamilyIntervalRecord(
+                    chart_id=chart_id,
+                    lambda_interval=(lo, hi),
+                    sampled_lambda_values=sampled,
+                    accepted_leaf_ids=accepted,
+                    rejected_leaf_ids=rejected,
+                    unresolved_leaf_ids=unresolved,
+                    duplicate_groups=duplicate_groups,
+                    critical_values=critical,
+                    birth_death_merge_events=(),
+                    interval_status=status,
+                )
+            )
+    return tuple(records)
+
+
 def discover_leaf_family(
     arm: PositiveControlArm,
     probe: FixedPointProbe,
@@ -752,10 +822,12 @@ def discover_leaf_family(
     max_steps: int = 12,
     max_leaves: int | None = None,
     lambda_bins: int | None = None,
+    reseed_count: int | None = None,
 ) -> LeafFamilyResult:
     qs = found_configurations(discovery)
     n_bins = lambda_bins if lambda_bins is not None else config.mode("smoke").natural_lambda_bin_count_per_chart
     cap = max_leaves if max_leaves is not None else config.mode("smoke").max_natural_leaves_per_probe
+    n_reseed = reseed_count if reseed_count is not None else config.mode("smoke").reseed_samples_per_leaf
     works: list[LeafWorkRecord] = []
     for chart in charts:
         lams: list[float] = []
@@ -807,6 +879,7 @@ def discover_leaf_family(
                     max_steps=max_steps,
                     original_returned=returned,
                     original_branch_status=status,
+                    reseed_count=n_reseed,
                 )
                 family_status = (
                     FamilyAdmissibilityStatus.FAIL
@@ -851,6 +924,17 @@ def discover_leaf_family(
         neighbor_audits,
         overlap,
     )
+    chart_ids = tuple(dict.fromkeys(item.spec.chart_id for item in leaves))
+    lambda_intervals = audit_family_intervals(
+        leaves,
+        n_bins=n_bins,
+        chart_ids=chart_ids,
+    )
+    unresolved_lambda = tuple(
+        item.lambda_interval for item in lambda_intervals if item.interval_status == "UNRESOLVED"
+    )
+    if unresolved_lambda:
+        leaves = tuple(replace(leaf, accepted_for_reconstruction=False) for leaf in leaves)
     accepted = sum(1 for leaf in leaves if leaf.accepted_for_reconstruction)
     return LeafFamilyResult(
         probe_id=probe.probe_id,
@@ -858,14 +942,17 @@ def discover_leaf_family(
         accepted_count=accepted,
         duplicate_count=dup,
         chart_overlap_status=overlap.status,
-        unresolved_lambda_intervals=(),
+        unresolved_lambda_intervals=unresolved_lambda,
         notes=(
             "Discovery-only lambda clustering; confirmation freeze is the caller's duty.",
             "Neighbor transversality uses child Jacobians; chart overlap is source-Q correspondence.",
+            "Circular lambda bins; empty or open bins are unresolved; not a global foliation.",
+            "birth/death/merge events are not classified.",
         ),
         neighbor_audits=neighbor_audits,
         chart_overlap=overlap,
         duplicate_classifications=tuple(item.value for item in labels),
+        lambda_intervals=lambda_intervals,
     )
 
 
@@ -875,7 +962,6 @@ def write_leaves_stage(
     probes: list[FixedPointProbe],
     *,
     mode: str,
-    max_steps: int = 12,
 ) -> dict[str, Any]:
     import json
 
@@ -888,7 +974,7 @@ def write_leaves_stage(
 
     arm = build_positive_control_arm(config.geometry)
     charts = charts_from_config(config.charts)
-    budgets = config.mode(mode)
+    budgets = resolve_stage_budgets(config, mode)
     records: list[dict[str, Any]] = []
     for probe in probes:
         path = outdir / probe.probe_id / "direct_truth.json"
@@ -934,9 +1020,10 @@ def write_leaves_stage(
             discovery,
             charts,
             config,
-            max_steps=max_steps,
-            max_leaves=min(6, budgets.max_natural_leaves_per_probe),
-            lambda_bins=min(5, budgets.natural_lambda_bin_count_per_chart),
+            max_steps=budgets.continuation_steps,
+            max_leaves=budgets.max_natural_leaves_per_probe,
+            lambda_bins=budgets.natural_lambda_bin_count_per_chart,
+            reseed_count=budgets.reseed_samples_per_leaf,
         )
         out = outdir / probe.probe_id / "natural_family.json"
         out.write_text(json_dumps_strict(family.to_json_dict()), encoding="utf-8")
@@ -949,6 +1036,10 @@ def write_leaves_stage(
             probe_ids=tuple(p.probe_id for p in probes),
         ),
         "probes": records,
+        "allows_full_campaign_disposition": budgets.allows_full_campaign_disposition,
+        "limitations": []
+        if budgets.allows_full_campaign_disposition
+        else ["mode cannot issue full-campaign disposition"],
     }
     (outdir / "leaves.json").write_text(json_dumps_strict(summary), encoding="utf-8")
     return summary

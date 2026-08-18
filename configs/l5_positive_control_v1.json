@@ -102,6 +102,18 @@
     "discovery_only_refinement": true
   },
   "campaign_modes": {
+    "ci": {
+      "discovery_icosphere_level": 0,
+      "confirmation_icosphere_level": 1,
+      "sobol_seed_count_per_target": 8,
+      "max_nfev_per_start": 40,
+      "source_c_value_count": 3,
+      "natural_lambda_bin_count_per_chart": 3,
+      "max_natural_leaves_per_probe": 4,
+      "reseed_samples_per_leaf": 3,
+      "continuation_steps": 6,
+      "allows_full_campaign_disposition": false
+    },
     "smoke": {
       "discovery_icosphere_level": 1,
       "confirmation_icosphere_level": 2,
@@ -110,7 +122,9 @@
       "source_c_value_count": 5,
       "natural_lambda_bin_count_per_chart": 5,
       "max_natural_leaves_per_probe": 12,
-      "reseed_samples_per_leaf": 3
+      "reseed_samples_per_leaf": 3,
+      "continuation_steps": 12,
+      "allows_full_campaign_disposition": false
     },
     "full": {
       "discovery_icosphere_level": 2,
@@ -120,7 +134,9 @@
       "source_c_value_count": 17,
       "natural_lambda_bin_count_per_chart": 13,
       "max_natural_leaves_per_probe": 36,
-      "reseed_samples_per_leaf": 3
+      "reseed_samples_per_leaf": 3,
+      "continuation_steps": 48,
+      "allows_full_campaign_disposition": true
     }
   },
   "tolerances": {
