@@ -135,6 +135,7 @@ def run_stage(
     mode: str,
     probe_id: str | None,
     resume_from: Path | None,
+    probe_ids: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     config = load_campaign_config(config_path)
     outdir.mkdir(parents=True, exist_ok=True)
@@ -149,8 +150,10 @@ def run_stage(
         path = write_manifest(config_path, outdir, mode=mode)
         return _read_json(path)
 
-    _load_manifest(outdir, config.config_hash)
-    probes = [config.probe(probe_id)] if probe_id else list(config.probes)
+    if stage != "all":
+        _load_manifest(outdir, config.config_hash)
+    selected = list(probe_ids) if probe_ids else ([probe_id] if probe_id else [])
+    probes = [config.probe(pid) for pid in selected] if selected else list(config.probes)
     probe_ids = tuple(p.probe_id for p in probes)
     if stage != "all":
         _require_prerequisites(outdir, stage, config_hash=config.config_hash, mode=mode, probe_ids=probe_ids)
@@ -178,7 +181,7 @@ def run_stage(
     if stage == "render":
         from .readout import write_render_stage
 
-        return write_render_stage(config, outdir, probes, mode=mode, generate_gif=mode == "full")
+        return write_render_stage(config, outdir, probes, mode=mode, generate_gif=False)
     if stage == "all":
         write_manifest(config_path, outdir, mode=mode)
         from .comparison import write_compare_stage
@@ -204,7 +207,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--stage", choices=STAGES, default="manifest")
     parser.add_argument("--mode", choices=("smoke", "full", "ci"), default="smoke")
-    parser.add_argument("--probe", dest="probe_id", default=None)
+    parser.add_argument("--probe", dest="probe_ids", action="append", default=None)
     parser.add_argument("--resume-from", type=Path, default=None)
     return parser
 
@@ -216,8 +219,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         outdir=args.outdir,
         stage=args.stage,
         mode=args.mode,
-        probe_id=args.probe_id,
+        probe_id=None,
         resume_from=args.resume_from,
+        probe_ids=args.probe_ids,
     )
     print(json_dumps_strict({"stage": args.stage, "program_id": payload.get("program_id")}))
     return 0

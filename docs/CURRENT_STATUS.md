@@ -1,7 +1,7 @@
 # Current Scientific Status
 
 **Status:** ACTIVE ledger (snapshot, not a plan)
-**Last updated:** 2026-08-17 (R3A-H5)
+**Last updated:** 2026-08-17 (R3A-H6)
 
 This is the only live status ledger. Future work belongs in [ROADMAP.md](ROADMAP.md).
 
@@ -23,7 +23,7 @@ mechanism_explorer_only
 |---|---|---|---|---|
 | L3 planar 3R | `trusted_exact_reference` | Exact fixed-position four-bar reduction; designated-link rotatability; independent validation | None for reference role | Exact fixed-position four-bar reduction and designated-link rotatability recover planar dexterity |
 | L4 spatial 4R | `local_only` | One-DOF source mechanism and local orientation-curve machinery; proximal exact-U traced-arc match | Global component-complete certificate | One-DOF source mechanism and local orientation-curve machinery exist; global certification remains incomplete |
-| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software; R3A-H0–H5 evidence gates; reconstruction-pass law with `None` never meaning pass; smoke/ci cannot issue full-campaign disposition | Evidence readout (H6); accepted reconstruction remains false | Positive-control geometry, oracle, direct IK, h=c control, frozen-lambda UURU branches, confirmation-cell column, re-seeding, child-Jacobian neighbor transversality, source-Q chart overlap, family/source-control interval gaps, and an honest reconstruction-pass law exist; empty or `None` metrics cannot pass; a finite sample bank is not a complete global foliation; campaign artifacts are not an accepted reconstruction |
+| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software; R3A-H0–H6 evidence gates; JSON-backed readout or explicit `SCAFFOLD_NO_DATA`; reduced P1/P3 `ci` smoke; reconstruction-pass law with `None` never meaning pass; smoke/ci cannot issue full-campaign disposition | Accepted reconstruction remains false | Positive-control geometry, oracle, direct IK, h=c control, frozen-lambda UURU branches, confirmation-cell column, re-seeding, child-Jacobian neighbor transversality, source-Q chart overlap, family/source-control interval gaps, reconstruction-pass law, and evidence readout exist; empty or `None` metrics cannot pass; a finite sample bank is not a complete global foliation; campaign artifacts are not an accepted reconstruction; committed `results/` hub is not regenerated |
 | L6 spatial 6R | `scaffold_only` | Dimensional/task contracts and L6 scaffold stubs | Independent full-`SO(3)` reference and proven nesting | Dimensional/task contracts exist; independent full-`SO(3)` reference and reconstruction are not implemented |
 | L7 spatial 7R | `deferred` | Dimensional/gauge framing only | L6 completion and redundancy contract | Redundancy/gauge formulation is architectural only |
 
@@ -43,9 +43,10 @@ mechanism_explorer_only
 ```text
 current fixed-axis UUUR construction rejected as h=c fiber equivalence;
 R3A SURU→UURU positive-control software implemented at five frozen points;
-R3A-H0/H1/H2/H3/H4/H5 evidence semantics, confirmation-cell column, real re-seeding,
+R3A-H0/H1/H2/H3/H4/H5/H6 evidence semantics, confirmation-cell column, real re-seeding,
 child-tangent transversality, source-Q chart overlap, interval completeness records,
-and reconstruction-pass law landed; empty reconstruction cannot pass; None never means pass;
+reconstruction-pass law, JSON-backed readout, and P1/P3 ci smoke landed;
+empty reconstruction cannot pass; None never means pass; ci/smoke cannot accept;
 end-to-end reconstruction not yet accepted; results/ not regenerated;
 general 5R factorization remains unresolved;
 V07A held pending parent/continuation completion.

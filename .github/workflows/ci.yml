@@ -38,6 +38,15 @@ jobs:
           python -m grashof_workspace.spatial_experiments.v05c --outdir outputs/v05c --n-steps 8 --step-size 0.03
           python -m grashof_workspace.spatial_experiments.v05d --outdir outputs/v05d
           python -m grashof_workspace.spatial_experiments.v05e --outdir outputs/v05e --n-fiber-steps 8 --fiber-step-size 0.03
+      - name: R3A P1/P3 ci smoke
+        env:
+          MPLBACKEND: Agg
+        run: |
+          python -m grashof_workspace.spatial_experiments.l5_reconstruction.cli \
+            --config configs/l5_positive_control_v1.json \
+            --outdir outputs/r3a_hardening_smoke \
+            --stage all --mode ci \
+            --probe P1_DEEP_COMPLETE --probe P3_INNER_INCOMPLETE
       - name: Atlas generation
         run: grashof-workspace --atlas --output-dir outputs/atlas
       - name: Upload diagnostic artifacts

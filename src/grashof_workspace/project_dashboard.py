@@ -818,8 +818,8 @@ claim remains <code>LOCAL_ONLY</code>.
   <tr>
     <td><strong>L5</strong> spatial 5R</td>
     <td><code class="status hold">parent_incomplete</code></td>
-    <td>Hardened source-parent infrastructure; R3A five-point natural-leaf program active; fixed-axis UUUR still rejected as an h=c equivalence</td>
-    <td>Accepted source-derived child family + reconstruction</td>
+    <td>Hardened source-parent infrastructure; R3A five-point kernels and H0–H6 evidence gates implemented; reconstruction not accepted; fixed-axis UUUR still rejected as an h=c equivalence</td>
+    <td>Accepted source-derived child reconstruction</td>
   </tr>
   <tr>
     <td><strong>L6</strong> spatial 6R</td>
@@ -854,7 +854,7 @@ claim remains <code>LOCAL_ONLY</code>.
     <p>Implicit-manifold engine validation (V06A0); local parent patch (V06A1); multi-chart atlas (V06A2).</p>
     <p>Orientation + pointing images (V06C); task-derived <code>h=c</code> fibers (V06D1); compound SUUR audit (V06B).</p>
     <p>Shared 1D pseudo-arclength continuation; atlas stitch / component provenance; reconstruction cell paint (V06E).</p>
-    <p>R3A five-point hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> — oracle vs direct IK vs stitched h=c vs UURU leaves.</p>
+    <p>R3A five-point hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> — implemented kernels (oracle, direct IK, h=c control, UURU leaves). Reconstruction is not accepted. The committed hub may still be a pre-H6 scaffold until a later full run is regenerated.</p>
     <p><strong>Not yet:</strong> general 5R factorization, complete parent, S² completeness theorem. Fixed-axis UUUR remains rejected as an h=c fiber equivalence.</p>
   </div>
   <div class="cap">
@@ -876,12 +876,14 @@ claim remains <code>LOCAL_ONLY</code>.
 
 <h2 id="r3a">R3A five-point pointing reconstruction</h2>
 <p>
-Active L5 execution program. Pointing coverage in <code>S^2</code>, not dexterity.
+Implemented L5 execution program, not an accepted reconstruction. Pointing coverage in <code>S^2</code>, not dexterity.
 Natural children fix one virtual-spherical chart coordinate (<code>SURU → UURU</code>)
 and continue frozen geometry. They are not required to remain on <code>h=c</code>.
+R3A-H0–H6 gates exist; <code>ci</code>/<code>smoke</code> cannot issue full-campaign disposition.
+R3B and L6 remain held.
 </p>
 <ul>
-  <li>Hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a></li>
+  <li>Hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> (committed copy may be stale scaffold)</li>
   <li>Contract: <a href="../docs/methods/NATURAL_LEAF_FAMILY_CONTRACT.md">NATURAL_LEAF_FAMILY_CONTRACT.md</a></li>
   <li>Execution: <a href="../docs/methods/R3A_L5_FIVE_POINT_EXECUTION.md">R3A_L5_FIVE_POINT_EXECUTION.md</a></li>
 </ul>
@@ -924,7 +926,7 @@ V07A held pending parent/continuation completion.</pre>
   </tr>
   <tr>
     <td>R3A L5 five-point natural leaves</td>
-    <td>active execution (pointing, not dexterous)</td>
+    <td>implemented kernels; reconstruction not accepted</td>
     <td><a href="l5_reconstruction/r3a/index.html">r3a</a></td>
   </tr>
   <tr>
