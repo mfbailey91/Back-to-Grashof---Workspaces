@@ -1,6 +1,8 @@
-"""Pointing-set metrics: null fractions when denominators are empty; reconstruction_pass."""
+"""Pointing-set metrics: denominator-aware states; reconstruction_pass."""
 
 from __future__ import annotations
+
+from dataclasses import replace
 
 from grashof_workspace.spatial_experiments.l5_reconstruction.comparison import (
     classify_point,
@@ -16,10 +18,12 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     CellClass,
     CompletenessLabel,
     DirectReferenceCell,
+    MetricState,
     OracleFeasibility,
     PointingSetMetrics,
     PointingSolveStatus,
     ReconstructionDisposition,
+    ScalarMetric,
     load_campaign_config,
 )
 
@@ -47,7 +51,7 @@ def _empty_metrics() -> PointingSetMetrics:
     )
 
 
-def test_empty_denominators_are_null() -> None:
+def test_empty_denominators_are_not_applicable() -> None:
     labels = (CellClass.AMBIGUOUS_BOUNDARY, CellClass.AMBIGUOUS_BOUNDARY)
     hits = (False, True)
     metrics = pointing_set_metrics(
@@ -57,11 +61,15 @@ def test_empty_denominators_are_null() -> None:
         reconstructed_dirs=(),
         covered_dirs=(),
     )
+    assert metrics.missed_covered.state is MetricState.NOT_APPLICABLE
+    assert metrics.false_positive.state is MetricState.NOT_APPLICABLE
+    assert metrics.hausdorff.state is MetricState.NOT_APPLICABLE
     assert metrics.missed_covered_fraction is None
     assert metrics.false_positive_fraction is None
     assert metrics.hausdorff_rad is None
     payload = metrics.to_json_dict()
     assert payload["missed_covered_fraction"] is None
+    assert payload["missed_covered_fraction_state"] == "NOT_APPLICABLE"
     assert payload["false_positive_fraction"] is None
     config = load_campaign_config(CONFIG)
     assert reconstruction_pass(metrics, config) is False
@@ -138,32 +146,12 @@ def test_synthetic_perfect_reconstruction_passes_all_five_gates() -> None:
 def test_none_metric_fields_do_not_pass() -> None:
     config = load_campaign_config(CONFIG)
     perfect = _perfect_metrics()
-    missing_haus = PointingSetMetrics(
-        strict_covered_count=perfect.strict_covered_count,
-        strict_uncovered_count=perfect.strict_uncovered_count,
-        reconstructed_hit_count=perfect.reconstructed_hit_count,
-        missed_covered_fraction=0.0,
-        false_positive_fraction=0.0,
-        hausdorff_rad=None,
-        boundary_disagreement_fraction=0.0,
-        unresolved_fraction=0.0,
-        max_cell_diameter_rad=0.4,
-        refinement_delta=0.0,
-    )
+    missing_haus = replace(perfect, hausdorff=ScalarMetric.unevaluable("missing hausdorff"))
     assert reconstruction_pass(missing_haus, config) is False
-    missing_refine = PointingSetMetrics(
-        strict_covered_count=perfect.strict_covered_count,
-        strict_uncovered_count=perfect.strict_uncovered_count,
-        reconstructed_hit_count=perfect.reconstructed_hit_count,
-        missed_covered_fraction=0.0,
-        false_positive_fraction=0.0,
-        hausdorff_rad=0.0,
-        boundary_disagreement_fraction=0.0,
-        unresolved_fraction=0.0,
-        max_cell_diameter_rad=0.4,
-        refinement_delta=None,
-    )
+    missing_refine = replace(perfect, refinement=ScalarMetric.unevaluable("missing refinement"))
     assert reconstruction_pass(missing_refine, config) is False
+    assert missing_refine.refinement_delta is None
+    assert missing_refine.refinement.state is MetricState.UNEVALUABLE
 
 
 def test_boundary_only_does_not_fabricate_strict_pass() -> None:
@@ -177,6 +165,8 @@ def test_boundary_only_does_not_fabricate_strict_pass() -> None:
         refinement_delta=0.0,
     )
     assert metrics.missed_covered_fraction is None
+    assert metrics.false_positive.state is MetricState.NOT_APPLICABLE
+    assert metrics.hausdorff.state is MetricState.FAILED_VALUE
     assert reconstruction_pass(metrics, config) is False
     _label, disposition, _reason = classify_point(True, metrics, config)
     assert disposition is not ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
@@ -330,3 +320,61 @@ def test_direct_source_natural_masks_remain_independent() -> None:
     assert vs_direct.missed_covered_fraction == 0.5
     assert vs_direct.false_positive_fraction == 1.0
     assert direct_complete_from_cells(cells) is False
+
+
+def test_complete_reference_no_uncovered_cells_can_pass_fp_gate() -> None:
+    config = load_campaign_config(CONFIG)
+    dirs = ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0))
+    metrics = pointing_set_metrics(
+        (CellClass.STRICT_COVERED, CellClass.STRICT_COVERED),
+        (True, True),
+        max_cell_diameter_rad=0.4,
+        reconstructed_dirs=dirs,
+        covered_dirs=dirs,
+        refinement_delta=0.0,
+    )
+    assert metrics.strict_uncovered_count == 0
+    assert metrics.false_positive.state is MetricState.NOT_APPLICABLE
+    assert metrics.false_positive_fraction is None
+    assert metrics.missed_covered.state is MetricState.VALUE
+    assert metrics.missed_covered_fraction == 0.0
+    assert reconstruction_pass(metrics, config) is True
+
+
+def test_partial_reference_still_requires_recall_and_precision() -> None:
+    config = load_campaign_config(CONFIG)
+    metrics = pointing_set_metrics(
+        (
+            CellClass.STRICT_COVERED,
+            CellClass.STRICT_COVERED,
+            CellClass.STRICT_UNCOVERED,
+            CellClass.STRICT_UNCOVERED,
+        ),
+        (True, False, False, False),
+        max_cell_diameter_rad=0.4,
+        reconstructed_dirs=((1.0, 0.0, 0.0),),
+        covered_dirs=((1.0, 0.0, 0.0), (0.0, 1.0, 0.0)),
+        refinement_delta=0.0,
+    )
+    assert metrics.missed_covered.state is MetricState.VALUE
+    assert metrics.false_positive.state is MetricState.VALUE
+    assert metrics.missed_covered_fraction == 0.5
+    assert reconstruction_pass(metrics, config) is False
+
+
+def test_empty_reconstruction_has_failed_hausdorff_not_missing_hausdorff() -> None:
+    config = load_campaign_config(CONFIG)
+    metrics = pointing_set_metrics(
+        (CellClass.STRICT_COVERED, CellClass.STRICT_UNCOVERED),
+        (False, False),
+        max_cell_diameter_rad=0.4,
+        reconstructed_dirs=(),
+        covered_dirs=((1.0, 0.0, 0.0),),
+        refinement_delta=0.0,
+    )
+    assert metrics.hausdorff.state is MetricState.FAILED_VALUE
+    assert metrics.hausdorff_rad is None
+    payload = metrics.to_json_dict()
+    assert payload["hausdorff_rad"] is None
+    assert payload["hausdorff_rad_state"] == "FAILED_VALUE"
+    assert reconstruction_pass(metrics, config) is False

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Sequence
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -18,12 +19,14 @@ from .models import (
     DirectReferenceCell,
     FivePointCampaignResult,
     FixedPointProbe,
+    MetricState,
     OracleFeasibility,
     PointingSetMetrics,
     PointingSolveStatus,
     PointingTargetSolve,
     ProcessStageStatus,
     ReconstructionDisposition,
+    ScalarMetric,
     ThreeWayReconstructionResult,
     empty_stage_statuses,
     json_dumps_strict,
@@ -39,10 +42,41 @@ from .sphere_grid import (
 )
 
 
-def _fraction(num: int, den: int) -> float | None:
+def fraction_metric(num: int, den: int, *, zero_denominator_reason: str) -> ScalarMetric:
     if den <= 0:
-        return None
-    return float(num) / float(den)
+        return ScalarMetric.not_applicable(zero_denominator_reason)
+    return ScalarMetric.computed(float(num) / float(den))
+
+
+def metric_within_limit(metric: ScalarMetric, limit: float) -> bool:
+    if metric.state is MetricState.NOT_APPLICABLE:
+        return True
+    if metric.state is not MetricState.VALUE or metric.value is None:
+        return False
+    return metric.value <= limit
+
+
+def hausdorff_metric(
+    reconstructed_dirs: tuple[tuple[float, float, float], ...],
+    covered_dirs: tuple[tuple[float, float, float], ...],
+) -> ScalarMetric:
+    if reconstructed_dirs and covered_dirs:
+        d_ab = max(min(pointing_geodesic(a, b) for b in covered_dirs) for a in reconstructed_dirs)
+        d_ba = max(min(pointing_geodesic(b, a) for a in reconstructed_dirs) for b in covered_dirs)
+        return ScalarMetric.computed(max(d_ab, d_ba))
+    if covered_dirs and not reconstructed_dirs:
+        return ScalarMetric.failed("empty reconstruction")
+    if reconstructed_dirs and not covered_dirs:
+        return ScalarMetric.failed("reconstruction over empty reference")
+    return ScalarMetric.not_applicable("both sets empty")
+
+
+def _refinement_from_optional(refinement_delta: float | None, refinement: ScalarMetric | None) -> ScalarMetric:
+    if refinement is not None:
+        return refinement
+    if refinement_delta is None:
+        return ScalarMetric.unevaluable("refinement not computed")
+    return ScalarMetric.computed(float(refinement_delta))
 
 
 def pointing_set_metrics(
@@ -53,58 +87,159 @@ def pointing_set_metrics(
     reconstructed_dirs: tuple[tuple[float, float, float], ...],
     covered_dirs: tuple[tuple[float, float, float], ...],
     refinement_delta: float | None = None,
+    refinement: ScalarMetric | None = None,
+    coarse_metrics: PointingSetMetrics | None = None,
 ) -> PointingSetMetrics:
     if len(labels) != len(reconstructed_hits):
         raise ValueError("hit mask length must match cell labels")
     strict_cov = [i for i, lab in enumerate(labels) if lab is CellClass.STRICT_COVERED]
     strict_unc = [i for i, lab in enumerate(labels) if lab is CellClass.STRICT_UNCOVERED]
-    hit_cov = sum(1 for i in strict_cov if reconstructed_hits[i])
-    miss_cov = len(strict_cov) - hit_cov
+    miss_cov = sum(1 for i in strict_cov if not reconstructed_hits[i])
     false_pos = sum(1 for i in strict_unc if reconstructed_hits[i])
-    hausdorff: float | None = None
-    if reconstructed_dirs and covered_dirs:
-        d_ab = max(min(pointing_geodesic(a, b) for b in covered_dirs) for a in reconstructed_dirs)
-        d_ba = max(min(pointing_geodesic(b, a) for a in reconstructed_dirs) for b in covered_dirs)
-        hausdorff = max(d_ab, d_ba)
     unresolved = sum(1 for lab in labels if lab is CellClass.AMBIGUOUS_BOUNDARY)
     return PointingSetMetrics(
         strict_covered_count=len(strict_cov),
         strict_uncovered_count=len(strict_unc),
         reconstructed_hit_count=int(sum(reconstructed_hits)),
-        missed_covered_fraction=_fraction(miss_cov, len(strict_cov)),
-        false_positive_fraction=_fraction(false_pos, len(strict_unc)),
-        hausdorff_rad=hausdorff,
-        boundary_disagreement_fraction=_fraction(unresolved, len(labels)),
+        missed_covered=fraction_metric(
+            miss_cov, len(strict_cov), zero_denominator_reason="no strict covered cells"
+        ),
+        false_positive=fraction_metric(
+            false_pos, len(strict_unc), zero_denominator_reason="no strict uncovered cells"
+        ),
+        hausdorff=hausdorff_metric(reconstructed_dirs, covered_dirs),
+        boundary_disagreement_fraction=fraction_metric(
+            unresolved, len(labels), zero_denominator_reason="empty label set"
+        ).value
+        if labels
+        else None,
         unresolved_fraction=float(unresolved) / float(max(1, len(labels))),
         max_cell_diameter_rad=max_cell_diameter_rad,
-        refinement_delta=refinement_delta,
+        refinement=_refinement_from_optional(refinement_delta, refinement),
+        coarse_metrics=coarse_metrics,
     )
 
 
+def evaluate_set_on_grid(
+    *,
+    grid: SphereGrid,
+    reference_labels: tuple[CellClass, ...],
+    reconstructed_dirs: tuple[tuple[float, float, float], ...],
+    reference_dirs: tuple[tuple[float, float, float], ...],
+) -> PointingSetMetrics:
+    if len(reference_labels) != len(grid.faces):
+        raise ValueError("reference labels must match grid faces")
+    hits = paint_pointings(grid, reconstructed_dirs) if reconstructed_dirs else tuple(False for _ in grid.faces)
+    return pointing_set_metrics(
+        reference_labels,
+        hits,
+        max_cell_diameter_rad=grid.max_cell_diameter_rad,
+        reconstructed_dirs=reconstructed_dirs,
+        covered_dirs=reference_dirs,
+    )
+
+
+def _normalized_hausdorff(metrics: PointingSetMetrics) -> ScalarMetric:
+    if metrics.hausdorff.state is not MetricState.VALUE or metrics.hausdorff.value is None:
+        return metrics.hausdorff
+    if metrics.max_cell_diameter_rad <= 0.0:
+        return ScalarMetric.unevaluable("nonpositive cell diameter")
+    return ScalarMetric.computed(
+        metrics.hausdorff.value / metrics.max_cell_diameter_rad, "normalized by cell diameter"
+    )
+
+
+def compute_refinement_delta(coarse: PointingSetMetrics, fine: PointingSetMetrics) -> ScalarMetric:
+    pairs = (
+        (coarse.missed_covered, fine.missed_covered),
+        (coarse.false_positive, fine.false_positive),
+        (_normalized_hausdorff(coarse), _normalized_hausdorff(fine)),
+    )
+    deltas: list[float] = []
+    for coarse_metric, fine_metric in pairs:
+        if coarse_metric.state is MetricState.NOT_APPLICABLE and fine_metric.state is MetricState.NOT_APPLICABLE:
+            continue
+        if (
+            coarse_metric.state is MetricState.VALUE
+            and fine_metric.state is MetricState.VALUE
+            and coarse_metric.value is not None
+            and fine_metric.value is not None
+        ):
+            coarse_value = coarse_metric.value
+            fine_value = fine_metric.value
+            deltas.append(abs(fine_value - coarse_value))
+            continue
+        states = {coarse_metric.state, fine_metric.state}
+        if states == {MetricState.VALUE, MetricState.NOT_APPLICABLE}:
+            return ScalarMetric.unevaluable("VALUE/NOT_APPLICABLE refinement transition")
+        if MetricState.UNEVALUABLE in states:
+            return ScalarMetric.unevaluable("component metric unevaluable")
+        if MetricState.FAILED_VALUE in states:
+            return ScalarMetric.unevaluable("component metric failed")
+        return ScalarMetric.unevaluable("incompatible metric states")
+    if not deltas:
+        return ScalarMetric.computed(0.0, "all compared metrics not applicable")
+    return ScalarMetric.computed(max(deltas), "max absolute metric change")
+
+
+def attach_two_resolution_metrics(
+    fine: PointingSetMetrics,
+    coarse: PointingSetMetrics,
+) -> PointingSetMetrics:
+    return replace(fine, refinement=compute_refinement_delta(coarse, fine), coarse_metrics=coarse)
+
+
+def covered_dirs_from_labels(
+    grid: SphereGrid,
+    labels: tuple[CellClass, ...],
+) -> tuple[tuple[float, float, float], ...]:
+    return tuple(
+        as_vec3(grid.barycenters[i]) for i, lab in enumerate(labels) if lab is CellClass.STRICT_COVERED
+    )
+
+
+def direct_labels_from_found_dirs(
+    grid: SphereGrid,
+    oracle_labels: tuple[CellClass, ...],
+    found_dirs: tuple[tuple[float, float, float], ...],
+) -> tuple[CellClass, ...]:
+    if len(oracle_labels) != len(grid.faces):
+        raise ValueError("oracle labels must match grid faces")
+    hits = paint_pointings(grid, found_dirs) if found_dirs else tuple(False for _ in grid.faces)
+    labels: list[CellClass] = []
+    for oracle, hit in zip(oracle_labels, hits, strict=True):
+        if oracle is CellClass.AMBIGUOUS_BOUNDARY:
+            labels.append(CellClass.AMBIGUOUS_BOUNDARY)
+        elif hit:
+            labels.append(CellClass.STRICT_COVERED)
+        else:
+            labels.append(CellClass.STRICT_UNCOVERED)
+    return tuple(labels)
+
+
 def reconstruction_pass(metrics: PointingSetMetrics | None, config: CampaignConfig) -> bool:
-    """Declared-resolution set gate. ``None`` never means pass."""
+    """Declared-resolution set gate. ``None`` and unevaluable metrics never pass."""
     if metrics is None:
         return False
     if metrics.reconstructed_hit_count <= 0:
         return False
-    if metrics.missed_covered_fraction is None:
+    if (
+        metrics.missed_covered.state is MetricState.NOT_APPLICABLE
+        and metrics.false_positive.state is MetricState.NOT_APPLICABLE
+    ):
         return False
-    if metrics.missed_covered_fraction > config.max_missed_strict_covered_fraction:
+    if not metric_within_limit(metrics.missed_covered, config.max_missed_strict_covered_fraction):
         return False
-    if metrics.false_positive_fraction is None:
+    if not metric_within_limit(metrics.false_positive, config.max_strict_false_positive_fraction):
         return False
-    if metrics.false_positive_fraction > config.max_strict_false_positive_fraction:
-        return False
-    if metrics.hausdorff_rad is None:
+    if metrics.hausdorff.state is not MetricState.VALUE or metrics.hausdorff.value is None:
         return False
     hausdorff_limit = (
         config.max_hausdorff_in_confirmation_cell_diameters * metrics.max_cell_diameter_rad
     )
-    if metrics.hausdorff_rad > hausdorff_limit:
+    if metrics.hausdorff.value > hausdorff_limit:
         return False
-    if metrics.refinement_delta is None:
-        return False
-    return metrics.refinement_delta <= config.max_refinement_metric_delta
+    return metric_within_limit(metrics.refinement, config.max_refinement_metric_delta)
 
 
 def evaluate_reconstruction_gates(
@@ -134,8 +269,12 @@ def _set_gate_failure(
         return ReconstructionDisposition.UNRESOLVED, f"{prefix} missing reconstruction metrics"
     if metrics.reconstructed_hit_count <= 0:
         return ReconstructionDisposition.PARTIAL, f"{prefix} empty reconstruction cannot pass"
-    fp = metrics.false_positive_fraction
-    if fp is not None and fp > config.max_strict_false_positive_fraction:
+    if metrics.hausdorff.state is MetricState.FAILED_VALUE:
+        return ReconstructionDisposition.PARTIAL, f"{prefix} {metrics.hausdorff.reason}"
+    if metrics.refinement.state is MetricState.UNEVALUABLE:
+        return ReconstructionDisposition.UNRESOLVED, f"{prefix} refinement unevaluable"
+    fp = metrics.false_positive
+    if fp.state is MetricState.VALUE and fp.value is not None and fp.value > config.max_strict_false_positive_fraction:
         return ReconstructionDisposition.REJECTED, f"{prefix} strict false positives"
     return ReconstructionDisposition.PARTIAL, f"{prefix} set reconstruction gate failed"
 
@@ -361,7 +500,10 @@ def write_compare_stage(
 ) -> dict[str, Any]:
     _require_compare_artifacts(outdir, probes)
     budgets = config.mode(mode)
+    if budgets.confirmation_icosphere_level < 1:
+        raise ValueError("two-resolution refinement requires confirmation_icosphere_level >= 1")
     grid = build_sphere_grid(budgets.confirmation_icosphere_level)
+    coarse_grid = build_sphere_grid(budgets.confirmation_icosphere_level - 1)
     comparisons: list[ThreeWayReconstructionResult] = []
     probe_ids = tuple(p.probe_id for p in probes)
     for probe in probes:
@@ -370,6 +512,12 @@ def write_compare_stage(
         )
         labels = classify_cells(
             grid,
+            config.geometry,
+            probe.p_star,
+            margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
+        )
+        coarse_oracle_labels = classify_cells(
+            coarse_grid,
             config.geometry,
             probe.p_star,
             margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
@@ -398,49 +546,47 @@ def write_compare_stage(
         cells = _load_confirmation_cells(truth, grid, labels)
         direct_hits = resolved_direct_mask(cells)
         direct_labels = direct_reference_labels(cells)
-        oracle_covered = tuple(
-            as_vec3(grid.barycenters[i]) for i, lab in enumerate(labels) if lab is CellClass.STRICT_COVERED
-        )
+        oracle_covered = covered_dirs_from_labels(grid, labels)
+        coarse_oracle_covered = covered_dirs_from_labels(coarse_grid, coarse_oracle_labels)
         direct_covered = tuple(
             cell.vertex_or_barycenter_direction for cell in cells if cell.direct_status is PointingSolveStatus.FOUND
         )
-        direct_dirs = tuple(
-            cell.vertex_or_barycenter_direction for cell in cells if cell.direct_status is PointingSolveStatus.FOUND
+        direct_dirs = direct_covered
+        coarse_direct_labels = direct_labels_from_found_dirs(coarse_grid, coarse_oracle_labels, direct_dirs)
+
+        def _column(
+            fine_labels: tuple[CellClass, ...],
+            fine_hits: tuple[bool, ...],
+            reconstructed_dirs: tuple[tuple[float, float, float], ...],
+            fine_covered: tuple[tuple[float, float, float], ...],
+            coarse_labels: tuple[CellClass, ...],
+            coarse_covered: tuple[tuple[float, float, float], ...],
+        ) -> PointingSetMetrics:
+            fine = pointing_set_metrics(
+                fine_labels,
+                fine_hits,
+                max_cell_diameter_rad=grid.max_cell_diameter_rad,
+                reconstructed_dirs=reconstructed_dirs,
+                covered_dirs=fine_covered,
+            )
+            coarse = evaluate_set_on_grid(
+                grid=coarse_grid,
+                reference_labels=coarse_labels,
+                reconstructed_dirs=reconstructed_dirs,
+                reference_dirs=coarse_covered,
+            )
+            return attach_two_resolution_metrics(fine, coarse)
+
+        src_vs_oracle = _column(labels, src_hits, src_dirs, oracle_covered, coarse_oracle_labels, coarse_oracle_covered)
+        nat_vs_oracle = _column(labels, nat_hits, nat_dirs, oracle_covered, coarse_oracle_labels, coarse_oracle_covered)
+        direct_vs_oracle = _column(
+            labels, direct_hits, direct_dirs, oracle_covered, coarse_oracle_labels, coarse_oracle_covered
         )
-        src_vs_oracle = pointing_set_metrics(
-            labels,
-            src_hits,
-            max_cell_diameter_rad=grid.max_cell_diameter_rad,
-            reconstructed_dirs=src_dirs,
-            covered_dirs=oracle_covered,
+        src_vs_direct = _column(
+            direct_labels, src_hits, src_dirs, direct_covered, coarse_direct_labels, direct_covered
         )
-        nat_vs_oracle = pointing_set_metrics(
-            labels,
-            nat_hits,
-            max_cell_diameter_rad=grid.max_cell_diameter_rad,
-            reconstructed_dirs=nat_dirs,
-            covered_dirs=oracle_covered,
-        )
-        direct_vs_oracle = pointing_set_metrics(
-            labels,
-            direct_hits,
-            max_cell_diameter_rad=grid.max_cell_diameter_rad,
-            reconstructed_dirs=direct_dirs,
-            covered_dirs=oracle_covered,
-        )
-        src_vs_direct = pointing_set_metrics(
-            direct_labels,
-            src_hits,
-            max_cell_diameter_rad=grid.max_cell_diameter_rad,
-            reconstructed_dirs=src_dirs,
-            covered_dirs=direct_covered,
-        )
-        nat_vs_direct = pointing_set_metrics(
-            direct_labels,
-            nat_hits,
-            max_cell_diameter_rad=grid.max_cell_diameter_rad,
-            reconstructed_dirs=nat_dirs,
-            covered_dirs=direct_covered,
+        nat_vs_direct = _column(
+            direct_labels, nat_hits, nat_dirs, direct_covered, coarse_direct_labels, direct_covered
         )
         direct_complete = direct_complete_from_cells(cells)
         label, disp, reason = classify_probe_reconstruction(

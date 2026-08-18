@@ -146,6 +146,74 @@ class CellClass(str, Enum):
     AMBIGUOUS_BOUNDARY = "AMBIGUOUS_BOUNDARY"
 
 
+class MetricState(str, Enum):
+    """Applicability of one comparison scalar. ``None`` is not a pass/fail."""
+
+    VALUE = "VALUE"
+    NOT_APPLICABLE = "NOT_APPLICABLE"
+    UNEVALUABLE = "UNEVALUABLE"
+    FAILED_VALUE = "FAILED_VALUE"
+
+
+@dataclass(frozen=True, slots=True)
+class ScalarMetric:
+    state: MetricState
+    value: float | None
+    reason: str
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object({"state": self.state.value, "value": self.value, "reason": self.reason})
+
+    @classmethod
+    def computed(cls, value: float, reason: str = "computed") -> ScalarMetric:
+        return cls(MetricState.VALUE, float(value), reason)
+
+    @classmethod
+    def not_applicable(cls, reason: str) -> ScalarMetric:
+        return cls(MetricState.NOT_APPLICABLE, None, reason)
+
+    @classmethod
+    def unevaluable(cls, reason: str) -> ScalarMetric:
+        return cls(MetricState.UNEVALUABLE, None, reason)
+
+    @classmethod
+    def failed(cls, reason: str) -> ScalarMetric:
+        return cls(MetricState.FAILED_VALUE, None, reason)
+
+    @classmethod
+    def from_json_fields(
+        cls,
+        blob: Mapping[str, Any],
+        name: str,
+        *,
+        default_unevaluable_reason: str = "legacy null metric",
+    ) -> ScalarMetric:
+        """Load ``<name>`` plus optional ``<name>_state`` / ``<name>_reason``.
+
+        Pre-H7 JSON (numeric only) is ``VALUE`` when present and ``UNEVALUABLE``
+        when null. Missing refinement is never treated as a pass.
+        """
+
+        raw_state = blob.get(f"{name}_state")
+        raw_value = blob.get(name)
+        raw_reason = blob.get(f"{name}_reason")
+        reason = str(raw_reason) if raw_reason else ""
+        if raw_state is None:
+            if raw_value is None:
+                return cls.unevaluable(reason or default_unevaluable_reason)
+            return cls.computed(float(raw_value), reason or "legacy numeric")
+        state = MetricState(str(raw_state))
+        value = None if raw_value is None else float(raw_value)
+        if not reason:
+            reason = {
+                MetricState.VALUE: "loaded",
+                MetricState.NOT_APPLICABLE: "not applicable",
+                MetricState.UNEVALUABLE: "unevaluable",
+                MetricState.FAILED_VALUE: "failed",
+            }[state]
+        return cls(state, value, reason)
+
+
 def json_safe(obj: Any) -> Any:
     """Recursively replace non-finite floats with ``None``."""
 
@@ -819,28 +887,83 @@ class PointingSetMetrics:
     strict_covered_count: int
     strict_uncovered_count: int
     reconstructed_hit_count: int
-    missed_covered_fraction: float | None
-    false_positive_fraction: float | None
-    hausdorff_rad: float | None
+    missed_covered: ScalarMetric
+    false_positive: ScalarMetric
+    hausdorff: ScalarMetric
     boundary_disagreement_fraction: float | None
     unresolved_fraction: float
     max_cell_diameter_rad: float
-    refinement_delta: float | None
+    refinement: ScalarMetric
+    coarse_metrics: PointingSetMetrics | None = None
 
-    def to_json_dict(self) -> dict[str, Any]:
-        return json_object(
-            {
-                "strict_covered_count": self.strict_covered_count,
-                "strict_uncovered_count": self.strict_uncovered_count,
-                "reconstructed_hit_count": self.reconstructed_hit_count,
-                "missed_covered_fraction": self.missed_covered_fraction,
-                "false_positive_fraction": self.false_positive_fraction,
-                "hausdorff_rad": self.hausdorff_rad,
-                "boundary_disagreement_fraction": self.boundary_disagreement_fraction,
-                "unresolved_fraction": self.unresolved_fraction,
-                "max_cell_diameter_rad": self.max_cell_diameter_rad,
-                "refinement_delta": self.refinement_delta,
-            }
+    @property
+    def missed_covered_fraction(self) -> float | None:
+        return self.missed_covered.value if self.missed_covered.state is MetricState.VALUE else None
+
+    @property
+    def false_positive_fraction(self) -> float | None:
+        return self.false_positive.value if self.false_positive.state is MetricState.VALUE else None
+
+    @property
+    def hausdorff_rad(self) -> float | None:
+        return self.hausdorff.value if self.hausdorff.state is MetricState.VALUE else None
+
+    @property
+    def refinement_delta(self) -> float | None:
+        return self.refinement.value if self.refinement.state is MetricState.VALUE else None
+
+    def _scalar_json(self, name: str, metric: ScalarMetric) -> dict[str, Any]:
+        return {
+            name: metric.value if metric.state is MetricState.VALUE else None,
+            f"{name}_state": metric.state.value,
+            f"{name}_reason": metric.reason,
+        }
+
+    def to_json_dict(self, *, nested: bool = False) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "strict_covered_count": self.strict_covered_count,
+            "strict_uncovered_count": self.strict_uncovered_count,
+            "reconstructed_hit_count": self.reconstructed_hit_count,
+            **self._scalar_json("missed_covered_fraction", self.missed_covered),
+            **self._scalar_json("false_positive_fraction", self.false_positive),
+            **self._scalar_json("hausdorff_rad", self.hausdorff),
+            "boundary_disagreement_fraction": self.boundary_disagreement_fraction,
+            "unresolved_fraction": self.unresolved_fraction,
+            "max_cell_diameter_rad": self.max_cell_diameter_rad,
+            **self._scalar_json("refinement_delta", self.refinement),
+            "refinement": self.refinement.to_json_dict(),
+        }
+        if not nested:
+            payload["fine"] = self.to_json_dict(nested=True)
+            payload["coarse"] = None if self.coarse_metrics is None else self.coarse_metrics.to_json_dict(nested=True)
+        return json_object(payload)
+
+    @classmethod
+    def from_json_dict(cls, blob: Mapping[str, Any]) -> PointingSetMetrics:
+        coarse_raw = blob.get("coarse")
+        coarse = None
+        if isinstance(coarse_raw, dict):
+            coarse = cls.from_json_dict(coarse_raw)
+        return cls(
+            strict_covered_count=int(blob["strict_covered_count"]),
+            strict_uncovered_count=int(blob["strict_uncovered_count"]),
+            reconstructed_hit_count=int(blob["reconstructed_hit_count"]),
+            missed_covered=ScalarMetric.from_json_fields(blob, "missed_covered_fraction"),
+            false_positive=ScalarMetric.from_json_fields(blob, "false_positive_fraction"),
+            hausdorff=ScalarMetric.from_json_fields(blob, "hausdorff_rad"),
+            boundary_disagreement_fraction=(
+                None
+                if blob.get("boundary_disagreement_fraction") is None
+                else float(blob["boundary_disagreement_fraction"])
+            ),
+            unresolved_fraction=float(blob.get("unresolved_fraction", 0.0)),
+            max_cell_diameter_rad=float(blob["max_cell_diameter_rad"]),
+            refinement=ScalarMetric.from_json_fields(
+                blob,
+                "refinement_delta",
+                default_unevaluable_reason="legacy null refinement",
+            ),
+            coarse_metrics=coarse,
         )
 
 

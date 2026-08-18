@@ -15,7 +15,14 @@ import numpy as np
 
 from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 
-from .models import CampaignConfig, CellClass, FixedPointProbe, json_dumps_strict, stage_envelope
+from .models import (
+    CampaignConfig,
+    CellClass,
+    FixedPointProbe,
+    PointingSetMetrics,
+    json_dumps_strict,
+    stage_envelope,
+)
 from .positive_control import (
     build_positive_control_arm,
     evaluate_wrist_center,
@@ -42,6 +49,28 @@ def _load_json(path: Path) -> dict[str, Any] | None:
         return None
     blob = json.loads(path.read_text(encoding="utf-8"))
     return blob if isinstance(blob, dict) else None
+
+
+COMPARISON_METRIC_KEYS = (
+    "direct_vs_oracle",
+    "source_vs_direct",
+    "natural_vs_direct",
+    "source_control_metrics",
+    "natural_leaf_metrics",
+    "source_vs_oracle",
+    "natural_vs_oracle",
+)
+
+
+def comparison_metrics_from_json(blob: dict[str, Any] | None, key: str) -> PointingSetMetrics | None:
+    """Load one comparison column. Pre-H7 numeric JSON is VALUE; null is UNEVALUABLE."""
+
+    if not isinstance(blob, dict):
+        return None
+    raw = blob.get(key)
+    if not isinstance(raw, dict):
+        return None
+    return PointingSetMetrics.from_json_dict(raw)
 
 
 def _plot_arm(ax: Any, arm: Any, q: tuple[float, ...], *, alpha: float = 0.35, color: str = "#888888") -> None:
@@ -176,6 +205,8 @@ def write_probe_figures(
     disposition = "UNRESOLVED"
     if isinstance(comparison, dict):
         disposition = str(comparison.get("disposition", disposition))
+        for key in COMPARISON_METRIC_KEYS:
+            comparison_metrics_from_json(comparison, key)
     elif isinstance(campaign, dict):
         disposition = str(campaign.get("disposition", disposition))
     accepted_leaves, excluded_leaves = _leaf_groups(family)
