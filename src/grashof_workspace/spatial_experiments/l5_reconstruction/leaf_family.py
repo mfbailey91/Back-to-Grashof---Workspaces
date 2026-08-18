@@ -19,9 +19,12 @@ from .direct_truth import found_configurations
 from .models import (
     CampaignConfig,
     DirectPointingTruth,
+    FamilyAdmissibilityStatus,
     FixedPointProbe,
     LeafFamilyResult,
     NaturalLeafCertificate,
+    NaturalLeafSample,
+    ReseedAttempt,
     ReseedAudit,
     TransversalityAudit,
     json_dumps_strict,
@@ -29,12 +32,16 @@ from .models import (
 )
 from .positive_control import PositiveControlArm, build_positive_control_arm
 from .source_control import directed_q_distance, symmetric_q_distance
+from .sphere_grid import pointing_geodesic
 from .spherical_chart import SphericalClosureChart, charts_from_config
 from .uuru_leaf import (
+    ClosedUURULeafProblem,
+    child_tangent,
     continue_uuru_leaf,
     issue_leaf_certificate,
     leaf_spec_for,
     problem_from_source_seed,
+    tangent_principal_angle,
 )
 
 
@@ -56,24 +63,215 @@ def cluster_circular(values: tuple[float, ...], n_bins: int) -> tuple[tuple[floa
     return tuple(out)
 
 
-def reseed_audit(
-    q_samples: tuple[tuple[float, ...], ...],
-    pointing: tuple[tuple[float, float, float], ...],
+def _wrap_angle(a: float, b: float) -> float:
+    return abs(float(np.arctan2(np.sin(a - b), np.cos(a - b))))
+
+
+def choose_arclength_samples(
+    samples: tuple[NaturalLeafSample, ...],
+    count: int = 3,
+) -> tuple[NaturalLeafSample, ...]:
+    ordered = tuple(sorted(samples, key=lambda item: item.s))
+    if len(ordered) <= count:
+        return ordered
+    if count <= 1:
+        return (ordered[0],)
+    start, mid, end = 0, len(ordered) // 2, len(ordered) - 1
+    picks = (start, mid, end) if count == 3 else tuple(
+        round(i * (len(ordered) - 1) / (count - 1)) for i in range(count)
+    )
+    seen: set[int] = set()
+    out: list[NaturalLeafSample] = []
+    for idx in picks:
+        if idx in seen:
+            continue
+        seen.add(idx)
+        out.append(ordered[idx])
+    return tuple(out)
+
+
+def directed_pointing_distance(
+    a: tuple[tuple[float, float, float], ...],
+    b: tuple[tuple[float, float, float], ...],
+) -> float:
+    if not a:
+        return 0.0 if not b else float("inf")
+    if not b:
+        return float("inf")
+    return max(min(pointing_geodesic(x, y) for y in b) for x in a)
+
+
+def audit_reseeded_component(
+    arm: PositiveControlArm,
+    chart: SphericalClosureChart,
+    original_problem: ClosedUURULeafProblem,
+    original_samples: tuple[NaturalLeafSample, ...],
     *,
     q_tol: float,
     p_tol: float,
+    lambda_tol: float,
+    max_steps: int,
+    step_size: float = 0.08,
+    tangent_tol: float = 0.05,
+    lambda_fixed: float | None = None,
+    original_returned: bool | None = None,
+    original_branch_status: str | None = None,
+    reseed_count: int = 3,
 ) -> ReseedAudit:
-    if len(q_samples) < 3:
-        return ReseedAudit("UNRESOLVED", len(q_samples), None, None, ("fewer than three samples",))
-    idxs = (0, len(q_samples) // 2, len(q_samples) - 1)
-    q_d = 0.0
-    p_d = 0.0
-    for i in idxs:
-        q_d = max(q_d, float(ambient_distance(np.asarray(q_samples[i]), np.asarray(q_samples[i]), (True,) * 5)))
-        p_d = max(p_d, 0.0)
-    status = "PASS" if q_d <= q_tol and p_d <= p_tol else "FAIL"
-    _ = pointing
-    return ReseedAudit(status, 3, q_d, p_d, ("reseed compared start/mid/end samples on the same branch",))
+    forced = original_problem.lambda_fixed if lambda_fixed is None else float(lambda_fixed)
+    lambda_shift = _wrap_angle(forced, original_problem.lambda_fixed)
+    budget_truncated = max_steps < 3 and len(original_samples) >= 3
+    if len(original_samples) < 3:
+        return ReseedAudit(
+            status="UNRESOLVED",
+            n_reseeds=len(original_samples),
+            max_symmetric_q_distance_rad=None,
+            max_pointing_distance_rad=None,
+            notes=("fewer than three samples; reseed cannot pass",),
+            attempts=(),
+            max_tangent_error=None,
+            all_component_ids_match=None,
+        )
+    chosen = choose_arclength_samples(original_samples, reseed_count)
+    labels = ("start", "mid", "end")
+    attempts: list[ReseedAttempt] = []
+    for label, sample in zip(labels, chosen, strict=False):
+        notes: list[str] = ["independent ClosedUURULeafProblem rebuild"]
+        if sample.chart_singularity:
+            attempts.append(
+                ReseedAttempt(
+                    reseed_id=label,
+                    seed_s=sample.s,
+                    lambda_error_rad=lambda_shift,
+                    symmetric_wrapped_q_distance_rad=None,
+                    symmetric_pointing_distance_rad=None,
+                    tangent_error=None,
+                    returned_match=None,
+                    branch_status_match=None,
+                    component_identity=None,
+                    status="UNRESOLVED",
+                    notes=("chart-singular reseed",),
+                )
+            )
+            continue
+        rebuilt = problem_from_source_seed(
+            arm,
+            chart,
+            sample.q_source,
+            original_problem.p_star,
+            leaf_id=f"{original_problem.problem_id}_{label}",
+            lambda_fixed=forced,
+        )
+        if rebuilt is None:
+            status = "FAIL" if lambda_shift > lambda_tol else "UNRESOLVED"
+            attempts.append(
+                ReseedAttempt(
+                    reseed_id=label,
+                    seed_s=sample.s,
+                    lambda_error_rad=lambda_shift,
+                    symmetric_wrapped_q_distance_rad=None,
+                    symmetric_pointing_distance_rad=None,
+                    tangent_error=None,
+                    returned_match=None,
+                    branch_status_match=None,
+                    component_identity=False,
+                    status=status,
+                    notes=("rebuild returned None",),
+                )
+            )
+            continue
+        problem_i, x_i = rebuilt
+        reseeded_samples, branch_status, returned = continue_uuru_leaf(
+            problem_i, x_i, max_steps=max_steps, step_size=step_size
+        )
+        seed_q_err = float(
+            ambient_distance(
+                np.asarray(sample.q_source, dtype=float),
+                np.asarray(problem_i.physical_q(x_i), dtype=float),
+                (True,) * 5,
+            )
+        )
+        seed_state = problem_i.independent_chain.evaluate(problem_i.physical_q(x_i))
+        seed_p_err = pointing_geodesic(sample.pointing, as_vec3(seed_state.d))
+        half_width = float(step_size) * float(max(1, max_steps))
+        local_orig = tuple(item for item in original_samples if abs(item.s - sample.s) <= half_width)
+        reseeded_q = tuple(item.q_source for item in reseeded_samples)
+        reseeded_p = tuple(item.pointing for item in reseeded_samples)
+        q_cover = directed_q_distance(tuple(item.q_source for item in local_orig), reseeded_q) if reseeded_q else None
+        p_cover = directed_pointing_distance(tuple(item.pointing for item in local_orig), reseeded_p) if reseeded_p else None
+        q_dist = seed_q_err
+        p_dist = seed_p_err
+        if q_cover is not None and q_cover > q_tol:
+            notes.append("open-branch trace sampling is not a self-distance")
+        if p_cover is not None and p_cover > p_tol:
+            notes.append("open-branch pointing cover is a sampling diagnostic")
+        tangent_err: float | None = None
+        try:
+            t0 = child_tangent(original_problem, np.asarray(sample.x, dtype=float))
+            t1 = child_tangent(problem_i, x_i)
+            tangent_err = tangent_principal_angle(t0, t1)
+        except (ValueError, np.linalg.LinAlgError):
+            notes.append("child tangent unresolved")
+        lam_err = _wrap_angle(problem_i.lambda_fixed, original_problem.lambda_fixed)
+        returned_match = None if original_returned is None else returned == original_returned
+        branch_match = None if original_branch_status is None else branch_status == original_branch_status
+        seed_ok = seed_q_err <= q_tol and seed_p_err <= p_tol
+        t_ok = tangent_err is not None and tangent_err <= tangent_tol
+        lam_ok = lam_err <= lambda_tol
+        if budget_truncated:
+            status = "UNRESOLVED"
+            notes.append("truncated continuation budget")
+            identity = False
+        elif not lam_ok:
+            status = "FAIL"
+            notes.append("forced lambda mismatch")
+            identity = False
+        elif tangent_err is None:
+            status = "UNRESOLVED"
+            identity = False
+        elif not (seed_ok and t_ok):
+            status = "FAIL"
+            identity = False
+        else:
+            status = "PASS"
+            identity = True
+            notes.append("identity from seed reconstruction and child tangent")
+        attempts.append(
+            ReseedAttempt(
+                reseed_id=label,
+                seed_s=sample.s,
+                lambda_error_rad=lam_err,
+                symmetric_wrapped_q_distance_rad=q_dist,
+                symmetric_pointing_distance_rad=p_dist,
+                tangent_error=tangent_err,
+                returned_match=returned_match,
+                branch_status_match=branch_match,
+                component_identity=identity,
+                status=status,
+                notes=tuple(notes),
+            )
+        )
+    statuses = {item.status for item in attempts}
+    if "FAIL" in statuses:
+        agg = "FAIL"
+    elif "UNRESOLVED" in statuses or not attempts:
+        agg = "UNRESOLVED"
+    else:
+        agg = "PASS"
+    q_vals = [item.symmetric_wrapped_q_distance_rad for item in attempts if item.symmetric_wrapped_q_distance_rad is not None]
+    p_vals = [item.symmetric_pointing_distance_rad for item in attempts if item.symmetric_pointing_distance_rad is not None]
+    t_vals = [item.tangent_error for item in attempts if item.tangent_error is not None]
+    identities = [item.component_identity for item in attempts]
+    return ReseedAudit(
+        status=agg,
+        n_reseeds=len(attempts),
+        max_symmetric_q_distance_rad=None if not q_vals else max(q_vals),
+        max_pointing_distance_rad=None if not p_vals else max(p_vals),
+        notes=("independent start/mid/end rebuilds; no self-comparison",),
+        attempts=tuple(attempts),
+        max_tangent_error=None if not t_vals else max(t_vals),
+        all_component_ids_match=all(identities) if identities else None,
+    )
 
 
 def estimate_transversality(
@@ -170,15 +368,28 @@ def discover_leaf_family(
                 closure_tol=config.tolerances.closed_loop_residual,
             )
             if samples:
-                q_s = tuple(s.q_source for s in samples)
-                p_s = tuple(s.pointing for s in samples)
-                reseed = reseed_audit(
-                    q_s,
-                    p_s,
+                reseed = audit_reseeded_component(
+                    arm,
+                    chart,
+                    problem,
+                    samples,
                     q_tol=config.tolerances.reseed_symmetric_q_distance_rad,
                     p_tol=config.tolerances.reseed_pointing_distance_rad,
+                    lambda_tol=config.tolerances.family_coordinate_error_rad,
+                    max_steps=max_steps,
+                    original_returned=returned,
+                    original_branch_status=status,
                 )
-                cert = replace(cert, reseed=reseed)
+                family_status = (
+                    FamilyAdmissibilityStatus.FAIL
+                    if reseed.status == "FAIL"
+                    else FamilyAdmissibilityStatus.UNRESOLVED
+                )
+                cert = replace(
+                    cert,
+                    reseed=reseed,
+                    family_admissibility_status=family_status,
+                )
             leaves.append(cert)
             _ = mean_lam
     unique: list[NaturalLeafCertificate] = []

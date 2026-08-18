@@ -533,20 +533,68 @@ class NaturalLeafSample:
 
 
 @dataclass(frozen=True, slots=True)
+class ReseedAttempt:
+    reseed_id: str
+    seed_s: float
+    lambda_error_rad: float | None
+    symmetric_wrapped_q_distance_rad: float | None
+    symmetric_pointing_distance_rad: float | None
+    tangent_error: float | None
+    returned_match: bool | None
+    branch_status_match: bool | None
+    component_identity: bool | None
+    status: str
+    notes: tuple[str, ...] = ()
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "reseed_id": self.reseed_id,
+                "seed_s": self.seed_s,
+                "lambda_error_rad": self.lambda_error_rad,
+                "symmetric_wrapped_q_distance_rad": self.symmetric_wrapped_q_distance_rad,
+                "symmetric_pointing_distance_rad": self.symmetric_pointing_distance_rad,
+                "tangent_error": self.tangent_error,
+                "returned_match": self.returned_match,
+                "branch_status_match": self.branch_status_match,
+                "component_identity": self.component_identity,
+                "status": self.status,
+                "notes": list(self.notes),
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class ReseedAudit:
     status: str
     n_reseeds: int
     max_symmetric_q_distance_rad: float | None
     max_pointing_distance_rad: float | None
     notes: tuple[str, ...] = ()
+    attempts: tuple[ReseedAttempt, ...] = ()
+    max_tangent_error: float | None = None
+    all_component_ids_match: bool | None = None
+
+    @property
+    def reseed_status(self) -> str:
+        return self.status
+
+    @property
+    def max_symmetric_pointing_distance_rad(self) -> float | None:
+        return self.max_pointing_distance_rad
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
             {
                 "status": self.status,
+                "reseed_status": self.status,
                 "n_reseeds": self.n_reseeds,
                 "max_symmetric_q_distance_rad": self.max_symmetric_q_distance_rad,
                 "max_pointing_distance_rad": self.max_pointing_distance_rad,
+                "max_symmetric_pointing_distance_rad": self.max_pointing_distance_rad,
+                "max_tangent_error": self.max_tangent_error,
+                "all_component_ids_match": self.all_component_ids_match,
+                "attempts": [item.to_json_dict() for item in self.attempts],
                 "notes": list(self.notes),
             }
         )

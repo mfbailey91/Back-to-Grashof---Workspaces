@@ -18,6 +18,7 @@ from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 from grashof_workspace.spatial_experiments.branch_continuation import continue_implicit_branch
 from grashof_workspace.spatial_experiments.continuation import wrap_joint_delta
 from grashof_workspace.spatial_experiments.fixed_position import JACOBIAN_FD_STEP_RAD
+from grashof_workspace.spatial_experiments.implicit_manifold import orthonormal_tangent_basis
 from grashof_workspace.spatial_experiments.jacobians import matrix_rank_report
 from grashof_workspace.spatial_experiments.open_chain import OpenChainModel
 from grashof_workspace.spatial_experiments.orientation_image import (
@@ -136,16 +137,18 @@ def problem_from_source_seed(
     p_star: tuple[float, float, float],
     *,
     leaf_id: str,
+    lambda_fixed: float | None = None,
 ) -> tuple[ClosedUURULeafProblem, Array] | None:
     state = arm.chain.evaluate(q_source)
     coords = chart.decompose(state.R)
     if coords.singular:
         return None
+    frozen = float(coords.lam if lambda_fixed is None else lambda_fixed)
     problem = ClosedUURULeafProblem(
         source=arm.model,
         independent_chain=_copy_chain(arm.chain),
         chart=chart,
-        lambda_fixed=coords.lam,
+        lambda_fixed=frozen,
         p_star=p_star,
         problem_id=leaf_id,
     )
@@ -154,6 +157,25 @@ def problem_from_source_seed(
     if not ok:
         return None
     return problem, x
+
+
+def child_tangent(problem: ClosedUURULeafProblem, x: Array) -> Array:
+    basis = orthonormal_tangent_basis(problem.jacobian(x), expected_nullity=1)
+    phys = np.asarray(basis[:, 0][2:7], dtype=float)
+    norm = float(np.linalg.norm(phys))
+    if norm <= 0.0:
+        raise ValueError("physical child tangent vanished")
+    return phys / norm
+
+
+def tangent_principal_angle(a: Array, b: Array) -> float:
+    ua = np.asarray(a, dtype=float).reshape(-1)
+    ub = np.asarray(b, dtype=float).reshape(-1)
+    na = float(np.linalg.norm(ua))
+    nb = float(np.linalg.norm(ub))
+    if na <= 0.0 or nb <= 0.0:
+        raise ValueError("tangent vanished")
+    return float(np.arccos(float(np.clip(abs(np.dot(ua / na, ub / nb)), 0.0, 1.0))))
 
 
 def _sample(problem: ClosedUURULeafProblem, x: Array, s: float) -> NaturalLeafSample:
