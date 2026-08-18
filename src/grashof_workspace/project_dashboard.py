@@ -854,7 +854,7 @@ claim remains <code>LOCAL_ONLY</code>.
     <p>Implicit-manifold engine validation (V06A0); local parent patch (V06A1); multi-chart atlas (V06A2).</p>
     <p>Orientation + pointing images (V06C); task-derived <code>h=c</code> fibers (V06D1); compound SUUR audit (V06B).</p>
     <p>Shared 1D pseudo-arclength continuation; atlas stitch / component provenance; reconstruction cell paint (V06E).</p>
-    <p>R3A five-point hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> — implemented kernels (oracle, direct IK, h=c control, UURU leaves). Reconstruction is not accepted. The committed hub may still be a pre-H6 scaffold until a later full run is regenerated.</p>
+    <p>R3A five-point hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> — implemented kernels (oracle, direct IK, h=c control, UURU leaves). Full-mode hub regenerated as <code>PARTIAL</code>. Reconstruction is not accepted.</p>
     <p><strong>Not yet:</strong> general 5R factorization, complete parent, S² completeness theorem. Fixed-axis UUUR remains rejected as an h=c fiber equivalence.</p>
   </div>
   <div class="cap">
@@ -883,7 +883,7 @@ R3A-H0–H6 gates exist; <code>ci</code>/<code>smoke</code> cannot issue full-ca
 R3B and L6 remain held.
 </p>
 <ul>
-  <li>Hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> (committed copy may be stale scaffold)</li>
+  <li>Hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> (full-mode <code>PARTIAL</code>; reconstruction not accepted)</li>
   <li>Contract: <a href="../docs/methods/NATURAL_LEAF_FAMILY_CONTRACT.md">NATURAL_LEAF_FAMILY_CONTRACT.md</a></li>
   <li>Execution: <a href="../docs/methods/R3A_L5_FIVE_POINT_EXECUTION.md">R3A_L5_FIVE_POINT_EXECUTION.md</a></li>
 </ul>
@@ -926,7 +926,7 @@ V07A held pending parent/continuation completion.</pre>
   </tr>
   <tr>
     <td>R3A L5 five-point natural leaves</td>
-    <td>implemented kernels; reconstruction not accepted</td>
+    <td>implemented kernels; full-mode hub <code>PARTIAL</code>; reconstruction not accepted</td>
     <td><a href="l5_reconstruction/r3a/index.html">r3a</a></td>
   </tr>
   <tr>

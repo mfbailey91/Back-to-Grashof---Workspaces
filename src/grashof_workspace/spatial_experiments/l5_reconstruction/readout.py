@@ -457,7 +457,7 @@ def write_render_stage(
 <h1>R3A L5 five-point natural-leaf reconstruction</h1>
 <p>Pointing coverage in S^2. Not dexterity. Fixed-axis UUUR remains rejected as an h=c equivalence.</p>
 <p>mode={mode} config_hash={config.config_hash} stage_status=COMPLETE scientific_disposition={disposition} accepted_reconstruction={accepted}</p>
-<p>A ci/smoke campaign cannot issue full-campaign disposition. Reconstruction is not accepted unless a full five-point run passes.</p>
+<p>A ci/smoke campaign cannot issue full-campaign disposition. Reconstruction is not accepted unless campaign.json records accepted_reconstruction=true.</p>
 <ul>
 {links}
 </ul>
