@@ -120,6 +120,18 @@ class FamilyAdmissibilityStatus(str, Enum):
     UNRESOLVED = "UNRESOLVED"
 
 
+class ReseedScope(str, Enum):
+    LOCAL = "LOCAL"
+    COMPONENT = "COMPONENT"
+
+
+class ReseedDisposition(str, Enum):
+    LOCAL_PASS = "LOCAL_PASS"
+    COMPONENT_PASS = "COMPONENT_PASS"
+    FAIL = "FAIL"
+    UNRESOLVED = "UNRESOLVED"
+
+
 class LeafPairStatus(str, Enum):
     DUPLICATE_SAME_COMPONENT = "DUPLICATE_SAME_COMPONENT"
     DISTINCT_COMPATIBLE = "DISTINCT_COMPATIBLE"
@@ -612,29 +624,70 @@ class NaturalLeafSample:
 class ReseedAttempt:
     reseed_id: str
     seed_s: float
-    lambda_error_rad: float | None
-    symmetric_wrapped_q_distance_rad: float | None
-    symmetric_pointing_distance_rad: float | None
-    tangent_error: float | None
-    returned_match: bool | None
+    local_seed_q_error: float | None
+    local_seed_pointing_error: float | None
+    local_lambda_error: float | None
+    local_tangent_error: float | None
+    symmetric_branch_q_distance: float | None
+    symmetric_branch_pointing_distance: float | None
+    return_status_match: bool | None
     branch_status_match: bool | None
-    component_identity: bool | None
-    status: str
+    circuit_or_component_match: bool | None
+    scope: ReseedScope
+    disposition: ReseedDisposition
     notes: tuple[str, ...] = ()
+
+    @property
+    def lambda_error_rad(self) -> float | None:
+        return self.local_lambda_error
+
+    @property
+    def tangent_error(self) -> float | None:
+        return self.local_tangent_error
+
+    @property
+    def returned_match(self) -> bool | None:
+        return self.return_status_match
+
+    @property
+    def component_identity(self) -> bool | None:
+        return self.circuit_or_component_match
+
+    @property
+    def status(self) -> str:
+        return self.disposition.value
+
+    @property
+    def symmetric_wrapped_q_distance_rad(self) -> float | None:
+        return self.symmetric_branch_q_distance
+
+    @property
+    def symmetric_pointing_distance_rad(self) -> float | None:
+        return self.symmetric_branch_pointing_distance
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
             {
                 "reseed_id": self.reseed_id,
                 "seed_s": self.seed_s,
-                "lambda_error_rad": self.lambda_error_rad,
-                "symmetric_wrapped_q_distance_rad": self.symmetric_wrapped_q_distance_rad,
-                "symmetric_pointing_distance_rad": self.symmetric_pointing_distance_rad,
-                "tangent_error": self.tangent_error,
-                "returned_match": self.returned_match,
+                "local_seed_q_error": self.local_seed_q_error,
+                "local_seed_pointing_error": self.local_seed_pointing_error,
+                "local_lambda_error": self.local_lambda_error,
+                "lambda_error_rad": self.local_lambda_error,
+                "local_tangent_error": self.local_tangent_error,
+                "tangent_error": self.local_tangent_error,
+                "symmetric_branch_q_distance": self.symmetric_branch_q_distance,
+                "symmetric_wrapped_q_distance_rad": self.symmetric_branch_q_distance,
+                "symmetric_branch_pointing_distance": self.symmetric_branch_pointing_distance,
+                "symmetric_pointing_distance_rad": self.symmetric_branch_pointing_distance,
+                "return_status_match": self.return_status_match,
+                "returned_match": self.return_status_match,
                 "branch_status_match": self.branch_status_match,
-                "component_identity": self.component_identity,
-                "status": self.status,
+                "circuit_or_component_match": self.circuit_or_component_match,
+                "component_identity": self.circuit_or_component_match,
+                "scope": self.scope.value,
+                "disposition": self.disposition.value,
+                "status": self.disposition.value,
                 "notes": list(self.notes),
             }
         )
@@ -642,7 +695,7 @@ class ReseedAttempt:
 
 @dataclass(frozen=True, slots=True)
 class ReseedAudit:
-    status: str
+    disposition: ReseedDisposition
     n_reseeds: int
     max_symmetric_q_distance_rad: float | None
     max_pointing_distance_rad: float | None
@@ -650,10 +703,16 @@ class ReseedAudit:
     attempts: tuple[ReseedAttempt, ...] = ()
     max_tangent_error: float | None = None
     all_component_ids_match: bool | None = None
+    max_local_seed_q_error: float | None = None
+    max_local_seed_pointing_error: float | None = None
+
+    @property
+    def status(self) -> str:
+        return self.disposition.value
 
     @property
     def reseed_status(self) -> str:
-        return self.status
+        return self.disposition.value
 
     @property
     def max_symmetric_pointing_distance_rad(self) -> float | None:
@@ -662,12 +721,15 @@ class ReseedAudit:
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
             {
-                "status": self.status,
-                "reseed_status": self.status,
+                "status": self.disposition.value,
+                "disposition": self.disposition.value,
+                "reseed_status": self.disposition.value,
                 "n_reseeds": self.n_reseeds,
                 "max_symmetric_q_distance_rad": self.max_symmetric_q_distance_rad,
                 "max_pointing_distance_rad": self.max_pointing_distance_rad,
                 "max_symmetric_pointing_distance_rad": self.max_pointing_distance_rad,
+                "max_local_seed_q_error": self.max_local_seed_q_error,
+                "max_local_seed_pointing_error": self.max_local_seed_pointing_error,
                 "max_tangent_error": self.max_tangent_error,
                 "all_component_ids_match": self.all_component_ids_match,
                 "attempts": [item.to_json_dict() for item in self.attempts],
@@ -712,6 +774,10 @@ class ChartOverlapAudit:
     component_identity: bool | None = None
     pointing_set_correspondence: bool | None = None
     notes: tuple[str, ...] = ()
+    required: bool = True
+    claim_scope: str = "multi_chart_declared_domain"
+    chart_id_a: str | None = None
+    chart_id_b: str | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -723,6 +789,10 @@ class ChartOverlapAudit:
                 "family_parameter_correspondence": self.family_parameter_correspondence,
                 "component_identity": self.component_identity,
                 "pointing_set_correspondence": self.pointing_set_correspondence,
+                "required": self.required,
+                "claim_scope": self.claim_scope,
+                "chart_id_a": self.chart_id_a,
+                "chart_id_b": self.chart_id_b,
                 "notes": list(self.notes),
             }
         )
@@ -860,6 +930,7 @@ class LeafFamilyResult:
     notes: tuple[str, ...] = ()
     neighbor_audits: tuple[TransversalityAudit, ...] = ()
     chart_overlap: ChartOverlapAudit | None = None
+    chart_overlap_audits: tuple[ChartOverlapAudit, ...] = ()
     duplicate_classifications: tuple[str, ...] = ()
     lambda_intervals: tuple[FamilyIntervalRecord, ...] = ()
 
@@ -875,6 +946,7 @@ class LeafFamilyResult:
                 "lambda_intervals": [item.to_json_dict() for item in self.lambda_intervals],
                 "neighbor_audits": [item.to_json_dict() for item in self.neighbor_audits],
                 "chart_overlap": None if self.chart_overlap is None else self.chart_overlap.to_json_dict(),
+                "chart_overlap_audits": [item.to_json_dict() for item in self.chart_overlap_audits],
                 "duplicate_classifications": list(self.duplicate_classifications),
                 "notes": list(self.notes),
                 "certificate_status": None,

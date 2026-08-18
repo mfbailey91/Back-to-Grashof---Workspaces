@@ -33,13 +33,15 @@ from .models import (
     NaturalLeafSample,
     ReseedAttempt,
     ReseedAudit,
+    ReseedDisposition,
+    ReseedScope,
     TransversalityAudit,
     json_dumps_strict,
     resolve_stage_budgets,
     stage_envelope,
 )
 from .positive_control import PositiveControlArm, build_positive_control_arm
-from .source_control import directed_q_distance, symmetric_q_distance
+from .source_control import symmetric_q_distance
 from .sphere_grid import pointing_geodesic
 from .spherical_chart import SphericalClosureChart, charts_from_config
 from .uuru_leaf import (
@@ -109,6 +111,157 @@ def directed_pointing_distance(
     return max(min(pointing_geodesic(x, y) for y in b) for x in a)
 
 
+def symmetric_pointing_distance(
+    a: tuple[tuple[float, float, float], ...],
+    b: tuple[tuple[float, float, float], ...],
+) -> float:
+    return max(directed_pointing_distance(a, b), directed_pointing_distance(b, a))
+
+
+def classify_reseed_attempt(
+    *,
+    lambda_ok: bool,
+    seed_q_ok: bool,
+    seed_pointing_ok: bool,
+    tangent_ok: bool,
+    tangent_unresolved: bool = False,
+    singular: bool = False,
+    rebuild_failed: bool = False,
+    budget_truncated: bool = False,
+    original_returned: bool | None,
+    reseeded_returned: bool,
+    original_branch_status: str | None,
+    reseeded_branch_status: str,
+    symmetric_q: float | None,
+    symmetric_p: float | None,
+    q_tol: float,
+    p_tol: float,
+) -> tuple[ReseedScope, ReseedDisposition, bool | None, bool | None, bool | None, tuple[str, ...]]:
+    """Local seed consistency vs complete-component identity."""
+
+    notes: list[str] = []
+    returned_match = None if original_returned is None else reseeded_returned == original_returned
+    branch_match = None if original_branch_status is None else reseeded_branch_status == original_branch_status
+    if singular:
+        return (
+            ReseedScope.LOCAL,
+            ReseedDisposition.UNRESOLVED,
+            returned_match,
+            branch_match,
+            None,
+            ("chart-singular reseed",),
+        )
+    if rebuild_failed:
+        if not lambda_ok:
+            return (
+                ReseedScope.LOCAL,
+                ReseedDisposition.FAIL,
+                returned_match,
+                branch_match,
+                False,
+                ("rebuild returned None", "forced lambda mismatch"),
+            )
+        return (
+            ReseedScope.LOCAL,
+            ReseedDisposition.UNRESOLVED,
+            returned_match,
+            branch_match,
+            False,
+            ("rebuild returned None",),
+        )
+    if budget_truncated:
+        return (
+            ReseedScope.LOCAL,
+            ReseedDisposition.UNRESOLVED,
+            returned_match,
+            branch_match,
+            False,
+            ("truncated continuation budget",),
+        )
+    if not lambda_ok:
+        return (
+            ReseedScope.LOCAL,
+            ReseedDisposition.FAIL,
+            returned_match,
+            branch_match,
+            False,
+            ("forced lambda mismatch",),
+        )
+    if tangent_unresolved:
+        return (
+            ReseedScope.LOCAL,
+            ReseedDisposition.UNRESOLVED,
+            returned_match,
+            branch_match,
+            False,
+            ("child tangent unresolved",),
+        )
+    local_pass = lambda_ok and seed_q_ok and seed_pointing_ok and tangent_ok
+    if not local_pass:
+        return (
+            ReseedScope.LOCAL,
+            ReseedDisposition.FAIL,
+            returned_match,
+            branch_match,
+            False,
+            ("local seed or tangent mismatch",),
+        )
+    notes.append("local seed reconstruction and child tangent")
+    open_or_unknown = original_returned is not True or not reseeded_returned
+    symmetric_q_ok = symmetric_q is not None and symmetric_q <= q_tol
+    symmetric_p_ok = symmetric_p is not None and symmetric_p <= p_tol
+    identity = bool(
+        returned_match is True
+        and branch_match is True
+        and original_returned is True
+        and reseeded_returned
+        and symmetric_q_ok
+        and symmetric_p_ok
+    )
+    if open_or_unknown:
+        notes.append("open or unknown return; component identity forbidden")
+        return (
+            ReseedScope.LOCAL,
+            ReseedDisposition.LOCAL_PASS,
+            returned_match,
+            branch_match,
+            False,
+            tuple(notes),
+        )
+    if not (symmetric_q_ok and symmetric_p_ok and returned_match is True and branch_match is True and identity):
+        notes.append("local pass without symmetric branch-set identity")
+        return (
+            ReseedScope.LOCAL,
+            ReseedDisposition.LOCAL_PASS,
+            returned_match,
+            branch_match,
+            False,
+            tuple(notes),
+        )
+    notes.append("symmetric branch-set and circuit identity")
+    return (
+        ReseedScope.COMPONENT,
+        ReseedDisposition.COMPONENT_PASS,
+        returned_match,
+        branch_match,
+        True,
+        tuple(notes),
+    )
+
+
+def aggregate_reseed_disposition(attempts: tuple[ReseedAttempt, ...] | list[ReseedAttempt]) -> ReseedDisposition:
+    if not attempts:
+        return ReseedDisposition.UNRESOLVED
+    statuses = {item.disposition for item in attempts}
+    if ReseedDisposition.FAIL in statuses:
+        return ReseedDisposition.FAIL
+    if ReseedDisposition.UNRESOLVED in statuses:
+        return ReseedDisposition.UNRESOLVED
+    if statuses == {ReseedDisposition.COMPONENT_PASS}:
+        return ReseedDisposition.COMPONENT_PASS
+    return ReseedDisposition.LOCAL_PASS
+
+
 def audit_reseeded_component(
     arm: PositiveControlArm,
     chart: SphericalClosureChart,
@@ -129,9 +282,11 @@ def audit_reseeded_component(
     forced = original_problem.lambda_fixed if lambda_fixed is None else float(lambda_fixed)
     lambda_shift = _wrap_angle(forced, original_problem.lambda_fixed)
     budget_truncated = max_steps < 3 and len(original_samples) >= 3
+    original_q = tuple(item.q_source for item in original_samples)
+    original_p = tuple(item.pointing for item in original_samples)
     if len(original_samples) < 3:
         return ReseedAudit(
-            status="UNRESOLVED",
+            disposition=ReseedDisposition.UNRESOLVED,
             n_reseeds=len(original_samples),
             max_symmetric_q_distance_rad=None,
             max_pointing_distance_rad=None,
@@ -146,19 +301,37 @@ def audit_reseeded_component(
     for label, sample in zip(labels, chosen, strict=False):
         notes: list[str] = ["independent ClosedUURULeafProblem rebuild"]
         if sample.chart_singularity:
+            scope, disposition, returned_match, branch_match, identity, extra = classify_reseed_attempt(
+                lambda_ok=lambda_shift <= lambda_tol,
+                seed_q_ok=False,
+                seed_pointing_ok=False,
+                tangent_ok=False,
+                singular=True,
+                original_returned=original_returned,
+                reseeded_returned=False,
+                original_branch_status=original_branch_status,
+                reseeded_branch_status="unresolved",
+                symmetric_q=None,
+                symmetric_p=None,
+                q_tol=q_tol,
+                p_tol=p_tol,
+            )
             attempts.append(
                 ReseedAttempt(
                     reseed_id=label,
                     seed_s=sample.s,
-                    lambda_error_rad=lambda_shift,
-                    symmetric_wrapped_q_distance_rad=None,
-                    symmetric_pointing_distance_rad=None,
-                    tangent_error=None,
-                    returned_match=None,
-                    branch_status_match=None,
-                    component_identity=None,
-                    status="UNRESOLVED",
-                    notes=("chart-singular reseed",),
+                    local_seed_q_error=None,
+                    local_seed_pointing_error=None,
+                    local_lambda_error=lambda_shift,
+                    local_tangent_error=None,
+                    symmetric_branch_q_distance=None,
+                    symmetric_branch_pointing_distance=None,
+                    return_status_match=returned_match,
+                    branch_status_match=branch_match,
+                    circuit_or_component_match=identity,
+                    scope=scope,
+                    disposition=disposition,
+                    notes=extra,
                 )
             )
             continue
@@ -171,20 +344,37 @@ def audit_reseeded_component(
             lambda_fixed=forced,
         )
         if rebuilt is None:
-            status = "FAIL" if lambda_shift > lambda_tol else "UNRESOLVED"
+            scope, disposition, returned_match, branch_match, identity, extra = classify_reseed_attempt(
+                lambda_ok=lambda_shift <= lambda_tol,
+                seed_q_ok=False,
+                seed_pointing_ok=False,
+                tangent_ok=False,
+                rebuild_failed=True,
+                original_returned=original_returned,
+                reseeded_returned=False,
+                original_branch_status=original_branch_status,
+                reseeded_branch_status="unresolved",
+                symmetric_q=None,
+                symmetric_p=None,
+                q_tol=q_tol,
+                p_tol=p_tol,
+            )
             attempts.append(
                 ReseedAttempt(
                     reseed_id=label,
                     seed_s=sample.s,
-                    lambda_error_rad=lambda_shift,
-                    symmetric_wrapped_q_distance_rad=None,
-                    symmetric_pointing_distance_rad=None,
-                    tangent_error=None,
-                    returned_match=None,
-                    branch_status_match=None,
-                    component_identity=False,
-                    status=status,
-                    notes=("rebuild returned None",),
+                    local_seed_q_error=None,
+                    local_seed_pointing_error=None,
+                    local_lambda_error=lambda_shift,
+                    local_tangent_error=None,
+                    symmetric_branch_q_distance=None,
+                    symmetric_branch_pointing_distance=None,
+                    return_status_match=returned_match,
+                    branch_status_match=branch_match,
+                    circuit_or_component_match=identity,
+                    scope=scope,
+                    disposition=disposition,
+                    notes=(*notes, *extra),
                 )
             )
             continue
@@ -201,84 +391,78 @@ def audit_reseeded_component(
         )
         seed_state = problem_i.independent_chain.evaluate(problem_i.physical_q(x_i))
         seed_p_err = pointing_geodesic(sample.pointing, as_vec3(seed_state.d))
-        half_width = float(step_size) * float(max(1, max_steps))
-        local_orig = tuple(item for item in original_samples if abs(item.s - sample.s) <= half_width)
         reseeded_q = tuple(item.q_source for item in reseeded_samples)
         reseeded_p = tuple(item.pointing for item in reseeded_samples)
-        q_cover = directed_q_distance(tuple(item.q_source for item in local_orig), reseeded_q) if reseeded_q else None
-        p_cover = directed_pointing_distance(tuple(item.pointing for item in local_orig), reseeded_p) if reseeded_p else None
-        q_dist = seed_q_err
-        p_dist = seed_p_err
-        if q_cover is not None and q_cover > q_tol:
-            notes.append("open-branch trace sampling is not a self-distance")
-        if p_cover is not None and p_cover > p_tol:
-            notes.append("open-branch pointing cover is a sampling diagnostic")
+        q_sym = symmetric_q_distance(original_q, reseeded_q) if reseeded_q else None
+        p_sym = symmetric_pointing_distance(original_p, reseeded_p) if reseeded_p else None
         tangent_err: float | None = None
+        tangent_unresolved = False
         try:
             t0 = child_tangent(original_problem, np.asarray(sample.x, dtype=float))
             t1 = child_tangent(problem_i, x_i)
             tangent_err = tangent_principal_angle(t0, t1)
         except (ValueError, np.linalg.LinAlgError):
+            tangent_unresolved = True
             notes.append("child tangent unresolved")
         lam_err = _wrap_angle(problem_i.lambda_fixed, original_problem.lambda_fixed)
-        returned_match = None if original_returned is None else returned == original_returned
-        branch_match = None if original_branch_status is None else branch_status == original_branch_status
-        seed_ok = seed_q_err <= q_tol and seed_p_err <= p_tol
-        t_ok = tangent_err is not None and tangent_err <= tangent_tol
-        lam_ok = lam_err <= lambda_tol
-        if budget_truncated:
-            status = "UNRESOLVED"
-            notes.append("truncated continuation budget")
-            identity = False
-        elif not lam_ok:
-            status = "FAIL"
-            notes.append("forced lambda mismatch")
-            identity = False
-        elif tangent_err is None:
-            status = "UNRESOLVED"
-            identity = False
-        elif not (seed_ok and t_ok):
-            status = "FAIL"
-            identity = False
-        else:
-            status = "PASS"
-            identity = True
-            notes.append("identity from seed reconstruction and child tangent")
+        scope, disposition, returned_match, branch_match, identity, extra = classify_reseed_attempt(
+            lambda_ok=lam_err <= lambda_tol,
+            seed_q_ok=seed_q_err <= q_tol,
+            seed_pointing_ok=seed_p_err <= p_tol,
+            tangent_ok=tangent_err is not None and tangent_err <= tangent_tol,
+            tangent_unresolved=tangent_unresolved,
+            budget_truncated=budget_truncated,
+            original_returned=original_returned,
+            reseeded_returned=returned,
+            original_branch_status=original_branch_status,
+            reseeded_branch_status=branch_status,
+            symmetric_q=q_sym,
+            symmetric_p=p_sym,
+            q_tol=q_tol,
+            p_tol=p_tol,
+        )
         attempts.append(
             ReseedAttempt(
                 reseed_id=label,
                 seed_s=sample.s,
-                lambda_error_rad=lam_err,
-                symmetric_wrapped_q_distance_rad=q_dist,
-                symmetric_pointing_distance_rad=p_dist,
-                tangent_error=tangent_err,
-                returned_match=returned_match,
+                local_seed_q_error=seed_q_err,
+                local_seed_pointing_error=seed_p_err,
+                local_lambda_error=lam_err,
+                local_tangent_error=tangent_err,
+                symmetric_branch_q_distance=q_sym,
+                symmetric_branch_pointing_distance=p_sym,
+                return_status_match=returned_match,
                 branch_status_match=branch_match,
-                component_identity=identity,
-                status=status,
-                notes=tuple(notes),
+                circuit_or_component_match=identity,
+                scope=scope,
+                disposition=disposition,
+                notes=(*notes, *extra),
             )
         )
-    statuses = {item.status for item in attempts}
-    if "FAIL" in statuses:
-        agg = "FAIL"
-    elif "UNRESOLVED" in statuses or not attempts:
-        agg = "UNRESOLVED"
-    else:
-        agg = "PASS"
-    q_vals = [item.symmetric_wrapped_q_distance_rad for item in attempts if item.symmetric_wrapped_q_distance_rad is not None]
-    p_vals = [item.symmetric_pointing_distance_rad for item in attempts if item.symmetric_pointing_distance_rad is not None]
-    t_vals = [item.tangent_error for item in attempts if item.tangent_error is not None]
-    identities = [item.component_identity for item in attempts]
+    agg = aggregate_reseed_disposition(attempts)
+    q_vals = [item.symmetric_branch_q_distance for item in attempts if item.symmetric_branch_q_distance is not None]
+    p_vals = [
+        item.symmetric_branch_pointing_distance
+        for item in attempts
+        if item.symmetric_branch_pointing_distance is not None
+    ]
+    t_vals = [item.local_tangent_error for item in attempts if item.local_tangent_error is not None]
+    seed_q_vals = [item.local_seed_q_error for item in attempts if item.local_seed_q_error is not None]
+    seed_p_vals = [item.local_seed_pointing_error for item in attempts if item.local_seed_pointing_error is not None]
+    identities = [item.circuit_or_component_match for item in attempts]
     return ReseedAudit(
-        status=agg,
+        disposition=agg,
         n_reseeds=len(attempts),
         max_symmetric_q_distance_rad=None if not q_vals else max(q_vals),
         max_pointing_distance_rad=None if not p_vals else max(p_vals),
-        notes=("independent start/mid/end rebuilds; no self-comparison",),
+        notes=(
+            "independent start/mid/end rebuilds; seed errors are local; symmetric distances are branch-set",
+        ),
         attempts=tuple(attempts),
         max_tangent_error=None if not t_vals else max(t_vals),
         all_component_ids_match=all(identities) if identities else None,
+        max_local_seed_q_error=None if not seed_q_vals else max(seed_q_vals),
+        max_local_seed_pointing_error=None if not seed_p_vals else max(seed_p_vals),
     )
 
 
@@ -644,6 +828,47 @@ def audit_chart_overlap(
     )
 
 
+def _stamp_chart_overlap(
+    audit: ChartOverlapAudit,
+    *,
+    chart_id_a: str | None,
+    chart_id_b: str | None,
+    required: bool,
+    claim_scope: str,
+) -> ChartOverlapAudit:
+    return replace(
+        audit,
+        chart_id_a=chart_id_a,
+        chart_id_b=chart_id_b,
+        required=required,
+        claim_scope=claim_scope,
+    )
+
+
+def summarize_chart_overlap(audits: tuple[ChartOverlapAudit, ...] | list[ChartOverlapAudit]) -> ChartOverlapAudit:
+    items = tuple(audits)
+    required = tuple(item for item in items if item.required)
+    if not required:
+        if items:
+            return items[0]
+        return ChartOverlapAudit(
+            status="UNRESOLVED",
+            required=False,
+            claim_scope="declared_chart_domain_only",
+            notes=("no required chart pairs",),
+        )
+    incompatible = tuple(item for item in required if item.status == "INCOMPATIBLE")
+    if incompatible:
+        return incompatible[0]
+    unresolved = tuple(item for item in required if item.status == "UNRESOLVED")
+    if unresolved:
+        return unresolved[0]
+    compatible = tuple(item for item in required if item.status == "COMPATIBLE")
+    if compatible:
+        return compatible[0]
+    return required[0]
+
+
 def _family_chart_overlap(
     arm: PositiveControlArm,
     works: tuple[LeafWorkRecord, ...],
@@ -652,13 +877,20 @@ def _family_chart_overlap(
     rotation_tol: float,
     pointing_tol: float,
     lambda_tol: float,
-) -> ChartOverlapAudit:
+) -> tuple[ChartOverlapAudit, ...]:
     by_chart: dict[str, list[LeafWorkRecord]] = {}
     for work in works:
         by_chart.setdefault(work.chart.chart_id, []).append(work)
     chart_ids = list(by_chart)
     if len(chart_ids) < 2:
-        return ChartOverlapAudit(status="UNRESOLVED", notes=("fewer than two charts",))
+        return (
+            ChartOverlapAudit(
+                status="UNRESOLVED",
+                required=False,
+                claim_scope="declared_chart_domain_only",
+                notes=("fewer than two charts",),
+            ),
+        )
     audits: list[ChartOverlapAudit] = []
     for i, id_a in enumerate(chart_ids):
         for id_b in chart_ids[i + 1 :]:
@@ -668,77 +900,115 @@ def _family_chart_overlap(
             qs_b = tuple(sample.q_source for work in group_b for sample in work.certificate.samples)
             p_a = tuple(sample.pointing for work in group_a for sample in work.certificate.samples)
             p_b = tuple(sample.pointing for work in group_b for sample in work.certificate.samples)
+            raw = audit_chart_overlap(
+                arm,
+                group_a[0].chart,
+                group_b[0].chart,
+                qs_a,
+                qs_b,
+                p_a,
+                p_b,
+                lambda_a=group_a[0].lambda_fixed,
+                lambda_b=group_b[0].lambda_fixed,
+                q_tol=q_tol,
+                rotation_tol=rotation_tol,
+                pointing_tol=pointing_tol,
+                lambda_tol=lambda_tol,
+            )
             audits.append(
-                audit_chart_overlap(
-                    arm,
-                    group_a[0].chart,
-                    group_b[0].chart,
-                    qs_a,
-                    qs_b,
-                    p_a,
-                    p_b,
-                    lambda_a=group_a[0].lambda_fixed,
-                    lambda_b=group_b[0].lambda_fixed,
-                    q_tol=q_tol,
-                    rotation_tol=rotation_tol,
-                    pointing_tol=pointing_tol,
-                    lambda_tol=lambda_tol,
+                _stamp_chart_overlap(
+                    raw,
+                    chart_id_a=id_a,
+                    chart_id_b=id_b,
+                    required=True,
+                    claim_scope="multi_chart_declared_domain",
                 )
             )
     if not audits:
-        return ChartOverlapAudit(status="UNRESOLVED", notes=("no cross-chart pairs",))
-    incompatible = tuple(item for item in audits if item.status == "INCOMPATIBLE")
-    if incompatible:
-        return incompatible[0]
-    compatible = tuple(item for item in audits if item.status == "COMPATIBLE")
-    if compatible:
-        return compatible[0]
-    return audits[0]
+        return (
+            ChartOverlapAudit(
+                status="UNRESOLVED",
+                required=False,
+                claim_scope="declared_chart_domain_only",
+                notes=("no cross-chart pairs",),
+            ),
+        )
+    return tuple(audits)
+
+
+def neighbor_audits_by_leaf(
+    audits: tuple[TransversalityAudit, ...] | list[TransversalityAudit],
+) -> dict[str, list[TransversalityAudit]]:
+    out: dict[str, list[TransversalityAudit]] = {}
+    for item in audits:
+        for leaf_id in (item.leaf_id_a, item.leaf_id_b):
+            if leaf_id:
+                out.setdefault(leaf_id, []).append(item)
+    return out
+
+
+def chart_audits_by_leaf(
+    leaves: tuple[NaturalLeafCertificate, ...],
+    audits: tuple[ChartOverlapAudit, ...] | list[ChartOverlapAudit],
+) -> dict[str, list[ChartOverlapAudit]]:
+    out: dict[str, list[ChartOverlapAudit]] = {leaf.spec.leaf_id: [] for leaf in leaves}
+    for leaf in leaves:
+        chart_id = leaf.spec.chart_id
+        for audit in audits:
+            ids = {audit.chart_id_a, audit.chart_id_b} - {None}
+            if not ids or chart_id in ids:
+                out[leaf.spec.leaf_id].append(audit)
+    return out
+
+
+def _as_overlap_audits(
+    overlap: ChartOverlapAudit | tuple[ChartOverlapAudit, ...] | list[ChartOverlapAudit],
+) -> tuple[ChartOverlapAudit, ...]:
+    if isinstance(overlap, ChartOverlapAudit):
+        return (overlap,)
+    return tuple(overlap)
 
 
 def recompute_family_acceptance(
     leaves: tuple[NaturalLeafCertificate, ...],
     neighbor_audits: tuple[TransversalityAudit, ...],
-    overlap: ChartOverlapAudit,
+    overlap: ChartOverlapAudit | tuple[ChartOverlapAudit, ...] | list[ChartOverlapAudit],
 ) -> tuple[NaturalLeafCertificate, ...]:
-    neighbor_statuses = {item.status for item in neighbor_audits}
-    neighbor_fail = "FAIL" in neighbor_statuses
-    neighbor_all_pass = bool(neighbor_audits) and neighbor_statuses <= {"PASS"}
-    overlap_fail = overlap.status == "INCOMPATIBLE"
-    overlap_ok = overlap.status in {"COMPATIBLE", "UNRESOLVED"}
+    overlap_audits = _as_overlap_audits(overlap)
+    neighbors = neighbor_audits_by_leaf(neighbor_audits)
+    charts = chart_audits_by_leaf(leaves, overlap_audits)
     updated: list[NaturalLeafCertificate] = []
     for leaf in leaves:
-        reseed_status = None if leaf.reseed is None else leaf.reseed.status
-        if reseed_status == "FAIL" or neighbor_fail or overlap_fail:
+        leaf_id = leaf.spec.leaf_id
+        incident_neighbors = neighbors.get(leaf_id, [])
+        incident_charts = charts.get(leaf_id, [])
+        reseed_disp = None if leaf.reseed is None else leaf.reseed.disposition
+        reseed_ok = reseed_disp is ReseedDisposition.COMPONENT_PASS
+        neighbor_fail = any(item.status == "FAIL" for item in incident_neighbors)
+        neighbor_ok = bool(incident_neighbors) and all(item.status == "PASS" for item in incident_neighbors)
+        required_charts = [item for item in incident_charts if item.required]
+        chart_fail = any(item.status == "INCOMPATIBLE" for item in required_charts)
+        chart_ok = all(item.status == "COMPATIBLE" for item in required_charts)
+        if reseed_disp is ReseedDisposition.FAIL or neighbor_fail or chart_fail:
             family = FamilyAdmissibilityStatus.FAIL
-        elif reseed_status == "PASS" and neighbor_all_pass and overlap_ok:
+        elif reseed_ok and neighbor_ok and chart_ok:
             family = FamilyAdmissibilityStatus.PASS
         else:
             family = FamilyAdmissibilityStatus.UNRESOLVED
         component_ok = leaf.leaf_component_status in ACCEPTED_CHILD_STATUSES
-        accepted = bool(component_ok and family is FamilyAdmissibilityStatus.PASS and neighbor_all_pass)
+        accepted = bool(component_ok and reseed_ok and neighbor_ok and chart_ok)
         stamp = next(
-            (
-                item
-                for item in neighbor_audits
-                if item.status == "FAIL" and leaf.spec.leaf_id in {item.leaf_id_a, item.leaf_id_b}
-            ),
-            next(
-                (
-                    item
-                    for item in neighbor_audits
-                    if leaf.spec.leaf_id in {item.leaf_id_a, item.leaf_id_b}
-                ),
-                None,
-            ),
+            (item for item in incident_neighbors if item.status == "FAIL"),
+            next(iter(incident_neighbors), None),
         )
+        summary = summarize_chart_overlap(incident_charts if incident_charts else overlap_audits)
         updated.append(
             replace(
                 leaf,
                 family_admissibility_status=family,
                 accepted_for_reconstruction=accepted,
                 transversality=stamp if stamp is not None else leaf.transversality,
-                chart_overlap_status=overlap.status,
+                chart_overlap_status=summary.status,
             )
         )
     return tuple(updated)
@@ -883,7 +1153,7 @@ def discover_leaf_family(
                 )
                 family_status = (
                     FamilyAdmissibilityStatus.FAIL
-                    if reseed.status == "FAIL"
+                    if reseed.disposition is ReseedDisposition.FAIL
                     else FamilyAdmissibilityStatus.UNRESOLVED
                 )
                 cert = replace(
@@ -911,7 +1181,7 @@ def discover_leaf_family(
         unique_works,
         sigma_min=config.tolerances.minimum_transversality_sigma,
     )
-    overlap = _family_chart_overlap(
+    overlap_audits = _family_chart_overlap(
         arm,
         unique_works,
         q_tol=config.tolerances.leaf_duplicate_distance_rad,
@@ -919,10 +1189,11 @@ def discover_leaf_family(
         pointing_tol=config.tolerances.pointing_geodesic_rad,
         lambda_tol=config.tolerances.family_coordinate_error_rad,
     )
+    overlap = summarize_chart_overlap(overlap_audits)
     leaves = recompute_family_acceptance(
         tuple(item.certificate for item in unique_works),
         neighbor_audits,
-        overlap,
+        overlap_audits,
     )
     chart_ids = tuple(dict.fromkeys(item.spec.chart_id for item in leaves))
     lambda_intervals = audit_family_intervals(
@@ -951,6 +1222,7 @@ def discover_leaf_family(
         ),
         neighbor_audits=neighbor_audits,
         chart_overlap=overlap,
+        chart_overlap_audits=overlap_audits,
         duplicate_classifications=tuple(item.value for item in labels),
         lambda_intervals=lambda_intervals,
     )

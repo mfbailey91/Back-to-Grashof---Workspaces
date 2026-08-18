@@ -250,13 +250,18 @@ def test_one_bad_neighbor_prevents_family_pass() -> None:
         lambda_a=work_b.lambda_fixed,
         lambda_b=work_a.lambda_fixed + 1.0,
     )
-    overlap = ChartOverlapAudit(status="UNRESOLVED")
+    overlap = ChartOverlapAudit(status="COMPATIBLE", required=False, claim_scope="declared_chart_domain_only")
     updated = recompute_family_acceptance(
         (work_a.certificate, work_b.certificate, cert_c),
         (pass_ab, fail_bc),
         overlap,
     )
-    assert all(leaf.family_admissibility_status is FamilyAdmissibilityStatus.FAIL for leaf in updated)
+    by_id = {leaf.spec.leaf_id: leaf for leaf in updated}
+    id_a = work_a.certificate.spec.leaf_id
+    id_b = work_b.certificate.spec.leaf_id
+    assert by_id[id_a].family_admissibility_status is not FamilyAdmissibilityStatus.FAIL
+    assert by_id[id_b].family_admissibility_status is FamilyAdmissibilityStatus.FAIL
+    assert by_id["leaf_c"].family_admissibility_status is FamilyAdmissibilityStatus.FAIL
     assert all(leaf.accepted_for_reconstruction is False for leaf in updated)
 
 

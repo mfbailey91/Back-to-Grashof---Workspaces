@@ -9,6 +9,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.leaf_family import 
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     FamilyAdmissibilityStatus,
+    ReseedDisposition,
     load_campaign_config,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.positive_control import (
@@ -60,10 +61,13 @@ def test_same_component_reseed_is_not_self_distance() -> None:
     seed_s = [item.seed_s for item in audit.attempts]
     assert seed_s[0] <= seed_s[1] <= seed_s[2]
     assert {item.reseed_id for item in audit.attempts} == {"start", "mid", "end"}
-    assert audit.status == "PASS"
-    assert audit.reseed_status == "PASS"
+    assert audit.disposition is ReseedDisposition.LOCAL_PASS
+    assert audit.status == "LOCAL_PASS"
+    assert audit.reseed_status == "LOCAL_PASS"
+    assert audit.disposition is not ReseedDisposition.COMPONENT_PASS
     assert audit.max_symmetric_q_distance_rad is not None
-    notes = " ".join(audit.notes)
+    assert audit.attempts[0].local_seed_q_error is not None
+    notes = " ".join(audit.notes) + " " + " ".join(" ".join(item.notes) for item in audit.attempts)
     assert "independent" in notes.lower()
     assert audit.attempts[0].seed_s != audit.attempts[-1].seed_s
     spec = leaf_spec_for("P1_DEEP_COMPLETE", chart, problem.lambda_fixed, problem.p_star, problem.problem_id)
@@ -98,7 +102,9 @@ def test_wrong_lambda_reseed_fails() -> None:
         lambda_fixed=float(problem.lambda_fixed + 0.4),
     )
     assert audit.status == "FAIL"
+    assert audit.disposition is ReseedDisposition.FAIL
     assert audit.reseed_status != "PASS"
+    assert audit.reseed_status != "COMPONENT_PASS"
 
 
 def test_fewer_than_three_samples_is_unresolved() -> None:
@@ -115,6 +121,7 @@ def test_fewer_than_three_samples_is_unresolved() -> None:
         step_size=0.08,
     )
     assert audit.status == "UNRESOLVED"
+    assert audit.disposition is ReseedDisposition.UNRESOLVED
     assert audit.status != "PASS"
 
 
@@ -132,6 +139,8 @@ def test_truncated_budget_is_unresolved() -> None:
         step_size=0.08,
     )
     assert audit.status == "UNRESOLVED"
+    assert audit.disposition is ReseedDisposition.UNRESOLVED
+    assert audit.disposition is not ReseedDisposition.COMPONENT_PASS
     assert audit.status != "PASS"
 
 
@@ -157,3 +166,25 @@ def test_forced_lambda_is_preserved_on_rebuild() -> None:
     assert forced.lambda_fixed == problem.lambda_fixed
     assert id(forced.independent_chain) != id(arm.chain)
     assert float(np.linalg.norm(forced.residual(_xf))) <= 1e-8
+
+
+def test_open_reseed_can_local_pass_but_not_component_pass() -> None:
+    config, arm, chart, problem, samples, status, _returned = _continued_leaf(max_steps=8)
+    audit = audit_reseeded_component(
+        arm,
+        chart,
+        problem,
+        samples,
+        q_tol=config.tolerances.reseed_symmetric_q_distance_rad,
+        p_tol=config.tolerances.reseed_pointing_distance_rad,
+        lambda_tol=config.tolerances.family_coordinate_error_rad,
+        max_steps=8,
+        step_size=0.08,
+        original_returned=False,
+        original_branch_status=status,
+    )
+    assert audit.disposition is ReseedDisposition.LOCAL_PASS
+    assert audit.disposition is not ReseedDisposition.COMPONENT_PASS
+    assert all(item.circuit_or_component_match is not True for item in audit.attempts)
+    assert all(item.local_seed_q_error is not None for item in audit.attempts)
+    assert any(item.symmetric_branch_q_distance is not None for item in audit.attempts)
