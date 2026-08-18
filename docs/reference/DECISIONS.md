@@ -629,3 +629,15 @@ the natural-leaf hypothesis.
 `parent_incomplete`; no accepted L5 reconstruction, foliation, exact factorization,
 or workspace rule is issued until the hardening closeout passes. The numerical
 virtual-crank atlas remains downstream of reconstruction provenance.
+
+## ADR-051 — R3A acceptance metrics distinguish not-applicable from unevaluable evidence
+
+<!-- R3A_H7_H10_FOLLOWUP_2026_08_18 DRAFT until H10 closeout -->
+
+**Status:** DRAFT (H7–H10 follow-up; not a reconstruction closeout)
+
+**Decision:** A missing numerical value is not sufficient to determine pass/fail. R3A comparison metrics carry explicit `VALUE`, `NOT_APPLICABLE`, or `UNEVALUABLE` state. Zero-denominator metrics such as false-positive fraction on an all-covered reference are `NOT_APPLICABLE`; missing refinement is `UNEVALUABLE`. Full-campaign acceptance requires a computed refinement comparison, leaf-scoped family admissibility, declared chart responsibility, resolved required parameter intervals, and content-addressed artifacts.
+
+**Reason:** Treating every `None` as failure makes valid complete coverage impossible, while treating every `None` as pass fabricates evidence. Explicit applicability preserves conservative gates without making the intended theorem untestable.
+
+**Consequence:** R3A-H0–H6 artifacts remain valid historical diagnostics but are re-evaluated under H7–H10 before any controlled cover is accepted. R3B and L6 remain held. This ADR stays draft until the H10 closeout records the first failing scientific column or a declared-resolution controlled cover.

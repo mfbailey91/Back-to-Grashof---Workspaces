@@ -96,6 +96,21 @@ real evidence visualizations and reduced end-to-end CI
 
 Hardening execution: [methods/R3A_HARDENING_EXECUTION.md](methods/R3A_HARDENING_EXECUTION.md).
 
+#### R3A-H7–H10 — Full-mode acceptance and family-scope follow-up
+
+H0–H6 landed an honest unaccepted full-mode hub. Before any controlled cover may be accepted, distinguish not-applicable from unevaluable metrics, compute two-resolution refinement, scope re-seeding and family admission per leaf, freeze chart responsibility and parameter-domain completeness, and compact campaign artifacts.
+
+```text
+H7  metric applicability + actual refinement
+H8  component-scoped re-seeding + leaf-scoped admission
+H9  chart responsibility + parameter-domain completeness
+H10 artifact authority + compact full-campaign closeout
+```
+
+**Pass/fail gate:** A complete-sphere reference can pass the false-positive sub-gate; missing refinement remains unevaluable; `ci`/`smoke` cannot accept; an honest first-failing-column closeout is valid. R3B and L6 remain held.
+
+Follow-up execution: [methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md](methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md).
+
 ### R3B — Transfer and falsification
 
 Apply the same direct/source/natural comparison to the existing `exact_two_u_5r`, `generic_5r`, and a near-architecture control. Determine which virtual-coordinate families remain exact, how chart choice changes individual leaf behavior, and whether the accepted family still reconstructs the parent pointing image.

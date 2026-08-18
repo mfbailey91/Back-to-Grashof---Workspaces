@@ -2,7 +2,8 @@
 
 **Base branch:** `main` at or after `959463b4bec24c9a9fc2240142d0f4cfc189f8d2`  
 **Recommended branch:** `r3a-hardening-evidence-gates`  
-**Authority:** `docs/methods/R3A_HARDENING_EXECUTION.md`
+**Authority:** `docs/methods/R3A_HARDENING_EXECUTION.md`  
+**Successor:** `docs/methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md`
 
 ---
 

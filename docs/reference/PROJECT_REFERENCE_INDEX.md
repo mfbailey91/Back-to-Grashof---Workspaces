@@ -76,7 +76,11 @@ Five-point L5 positive-control execution program. Hub: [`../../results/l5_recons
 
 ### [`../methods/R3A_HARDENING_EXECUTION.md`](../methods/R3A_HARDENING_EXECUTION.md)
 
-R3A-H evidence-hardening gate: evaluative family audits, independent direct reference, and stage artifact authority (ADR-050). Guide: [`CURSOR_GUIDE_R3A_HARDENING.md`](../methods/CURSOR_GUIDE_R3A_HARDENING.md).
+R3A-H0–H6 evidence-hardening contract: evaluative family audits, independent direct reference, and stage artifact authority (ADR-050). Guide: [`CURSOR_GUIDE_R3A_HARDENING.md`](../methods/CURSOR_GUIDE_R3A_HARDENING.md).
+
+### [`../methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md`](../methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md)
+
+R3A-H7–H10 follow-up: metric applicability, two-resolution refinement, leaf-scoped admission, chart responsibility, and compact artifact closeout (ADR-051 draft). Guide: [`CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md`](../methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md).
 
 ### Archived V05–V09 planning lineage
 

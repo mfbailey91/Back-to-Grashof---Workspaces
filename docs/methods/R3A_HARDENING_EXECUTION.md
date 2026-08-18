@@ -5,8 +5,9 @@
 **Base:** `main` after PR #17 (`959463b4bec24c9a9fc2240142d0f4cfc189f8d2`)  
 **Scientific rung:** L5 spatial 5R  
 **Program:** R3A five-point `SURU -> UURU` positive control  
-**Status:** ACTIVE HARDENING PLAN  
-**Primary target:** Make the existing R3A implementation capable of issuing an honest declared-resolution reconstruction result.
+**Status:** H0–H6 CONTRACT (superseded as the live gate by R3A-H7–H10)  
+**Primary target:** Make the existing R3A implementation capable of issuing an honest declared-resolution reconstruction result.  
+**Successor:** [R3A_H7_H10_FOLLOWUP_EXECUTION.md](R3A_H7_H10_FOLLOWUP_EXECUTION.md)
 
 ---
 
