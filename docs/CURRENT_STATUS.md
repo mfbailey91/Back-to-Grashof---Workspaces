@@ -1,7 +1,7 @@
 # Current Scientific Status
 
 **Status:** ACTIVE ledger (snapshot, not a plan)
-**Last updated:** 2026-08-17
+**Last updated:** 2026-08-17 (R3A-H plan)
 
 This is the only live status ledger. Future work belongs in [ROADMAP.md](ROADMAP.md).
 
@@ -23,14 +23,14 @@ mechanism_explorer_only
 |---|---|---|---|---|
 | L3 planar 3R | `trusted_exact_reference` | Exact fixed-position four-bar reduction; designated-link rotatability; independent validation | None for reference role | Exact fixed-position four-bar reduction and designated-link rotatability recover planar dexterity |
 | L4 spatial 4R | `local_only` | One-DOF source mechanism and local orientation-curve machinery; proximal exact-U traced-arc match | Global component-complete certificate | One-DOF source mechanism and local orientation-curve machinery exist; global certification remains incomplete |
-| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control program implemented (oracle, direct IK, h=c stitching, UURU leaf engine) | Accepted source-derived child family reconstructing independent pointing evidence at declared resolution | Source-parent and R3A positive-control machinery exist; fixed-axis `UUUR` remains rejected as an `h=c` equivalence; no general 5R factorization; campaign reconstruction is not an exact global cover |
+| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software and kernels implemented | Real re-seeding, child-tangent transversality, chart/family completeness, independent direct-reference comparison, and an accepted source-derived child reconstruction | Positive-control geometry, oracle, direct IK, h=c control, and frozen-lambda UURU branch kernels exist; current family audits and campaign artifacts are not yet sufficient for an accepted reconstruction |
 | L6 spatial 6R | `scaffold_only` | Dimensional/task contracts and L6 scaffold stubs | Independent full-`SO(3)` reference and proven nesting | Dimensional/task contracts exist; independent full-`SO(3)` reference and reconstruction are not implemented |
 | L7 spatial 7R | `deferred` | Dimensional/gauge framing only | L6 completion and redundancy contract | Redundancy/gauge formulation is architectural only |
 
 ## Required negative statements
 
 - No fixed-axis `UUUR` child is accepted (`REJECTED` / `rejected_hypothesis`).
-- No L5 child family is currently accepted (`EXACT_GLOBAL` / `EXACT_ON_COMPONENT` empty).
+- No L5 child family is currently accepted for reconstruction; an exact returned component is not admissible until R3A-H family gates pass.
 - Campaign factorization remains `unresolved`; empty accepted children do not earn `no valid recombination`.
 - V07 / L6 implementation is held pending parent/continuation completeness and an independent orientation reference.
 - Spatial-four-bar explorer outputs are `mechanism_explorer_only` laboratory evidence, not manipulator-workspace evidence, until source-chain provenance and reconstruction exist.
@@ -41,7 +41,8 @@ mechanism_explorer_only
 
 ```text
 current fixed-axis UUUR construction rejected as h=c fiber equivalence;
-R3A SURU→UURU positive-control program implemented at five frozen points;
+R3A SURU→UURU positive-control software implemented at five frozen points;
+R3A-H evidence hardening active; end-to-end reconstruction not yet accepted;
 general 5R factorization remains unresolved;
 V07A held pending parent/continuation completion.
 ```
@@ -54,5 +55,6 @@ See ADR-047 in [reference/DECISIONS.md](reference/DECISIONS.md).
 - Conforming global parent triangulation
 - Accepted UUUR or other L5 child equivalence
 - Complete \(S^2\) coverage
+- Evaluative re-seeding, transversality, or chart-overlap certificates from the current R3A scaffold
 - Descriptor discovery or broad spatial-four-bar atlas as workspace method
 - Authorization to begin V07A
