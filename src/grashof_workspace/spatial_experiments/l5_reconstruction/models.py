@@ -373,6 +373,55 @@ class PointingTargetSolve:
 
 
 @dataclass(frozen=True, slots=True)
+class DirectReferenceCell:
+    cell_id: str
+    vertex_or_barycenter_direction: Vec3
+    oracle_status: OracleFeasibility
+    direct_status: PointingSolveStatus
+    direct_cluster_count: int
+    best_position_residual_m: float | None
+    best_pointing_error_rad: float | None
+    strict_reference_eligible: bool
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "cell_id": self.cell_id,
+                "vertex_or_barycenter_direction": list(self.vertex_or_barycenter_direction),
+                "oracle_status": self.oracle_status.value,
+                "direct_status": self.direct_status.value,
+                "direct_cluster_count": self.direct_cluster_count,
+                "best_position_residual_m": self.best_position_residual_m,
+                "best_pointing_error_rad": self.best_pointing_error_rad,
+                "strict_reference_eligible": self.strict_reference_eligible,
+            }
+        )
+
+    @classmethod
+    def from_json_dict(cls, payload: Mapping[str, Any]) -> DirectReferenceCell:
+        return cls(
+            cell_id=str(payload["cell_id"]),
+            vertex_or_barycenter_direction=_as_vec3(
+                payload["vertex_or_barycenter_direction"], name="vertex_or_barycenter_direction"
+            ),
+            oracle_status=OracleFeasibility(str(payload["oracle_status"])),
+            direct_status=PointingSolveStatus(str(payload["direct_status"])),
+            direct_cluster_count=int(payload["direct_cluster_count"]),
+            best_position_residual_m=(
+                None
+                if payload.get("best_position_residual_m") is None
+                else float(payload["best_position_residual_m"])
+            ),
+            best_pointing_error_rad=(
+                None
+                if payload.get("best_pointing_error_rad") is None
+                else float(payload["best_pointing_error_rad"])
+            ),
+            strict_reference_eligible=bool(payload["strict_reference_eligible"]),
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class DirectPointingTruth:
     probe_id: str
     split: str
@@ -648,19 +697,36 @@ class ThreeWayReconstructionResult:
     disposition: ReconstructionDisposition
     failure_localization: str
     excluded_child_dispositions: tuple[str, ...] = ()
+    direct_vs_oracle: PointingSetMetrics | None = None
+    source_vs_direct: PointingSetMetrics | None = None
+    natural_vs_direct: PointingSetMetrics | None = None
+
+    @property
+    def source_vs_oracle(self) -> PointingSetMetrics | None:
+        return self.source_control_metrics
+
+    @property
+    def natural_vs_oracle(self) -> PointingSetMetrics | None:
+        return self.natural_leaf_metrics
 
     def to_json_dict(self) -> dict[str, Any]:
+        def _metrics(item: PointingSetMetrics | None) -> dict[str, Any] | None:
+            return None if item is None else item.to_json_dict()
+
+        source_vs_oracle = _metrics(self.source_control_metrics)
+        natural_vs_oracle = _metrics(self.natural_leaf_metrics)
         return json_object(
             {
                 "probe_id": self.probe_id,
                 "oracle_complete": self.oracle_complete,
                 "direct_complete": self.direct_complete,
-                "source_control_metrics": None
-                if self.source_control_metrics is None
-                else self.source_control_metrics.to_json_dict(),
-                "natural_leaf_metrics": None
-                if self.natural_leaf_metrics is None
-                else self.natural_leaf_metrics.to_json_dict(),
+                "source_control_metrics": source_vs_oracle,
+                "natural_leaf_metrics": natural_vs_oracle,
+                "direct_vs_oracle": _metrics(self.direct_vs_oracle),
+                "source_vs_direct": _metrics(self.source_vs_direct),
+                "natural_vs_direct": _metrics(self.natural_vs_direct),
+                "source_vs_oracle": source_vs_oracle,
+                "natural_vs_oracle": natural_vs_oracle,
                 "point_classification": self.point_classification.value,
                 "disposition": self.disposition.value,
                 "failure_localization": self.failure_localization,

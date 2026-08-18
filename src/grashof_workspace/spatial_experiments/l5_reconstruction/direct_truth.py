@@ -23,7 +23,9 @@ from grashof_workspace.spatial_experiments.serial_chain import SerialRevoluteCha
 
 from .models import (
     CampaignConfig,
+    CellClass,
     DirectPointingTruth,
+    DirectReferenceCell,
     FixedPointProbe,
     OracleFeasibility,
     PointingSolutionCluster,
@@ -39,7 +41,7 @@ from .positive_control import (
     build_positive_control_arm,
     direction_oracle,
 )
-from .sphere_grid import build_sphere_grid, pointing_geodesic
+from .sphere_grid import SphereGrid, build_sphere_grid, classify_cells, pointing_geodesic
 
 Array = NDArray[np.floating]
 Vec3 = tuple[float, float, float]
@@ -316,7 +318,8 @@ def compare_direct_truth_to_oracle(
         if (
             oracle.feasibility is OracleFeasibility.FEASIBLE
             and oracle.margin_m >= margin_tol_m
-            and solve.status is PointingSolveStatus.NOT_FOUND_AT_DECLARED_BUDGET
+            and solve.status
+            in {PointingSolveStatus.NOT_FOUND_AT_DECLARED_BUDGET, PointingSolveStatus.UNRESOLVED}
         ):
             misses += 1
     return DirectOracleAgreement(
@@ -327,6 +330,77 @@ def compare_direct_truth_to_oracle(
             "Oracle comparison is post-solve and does not rewrite numerical statuses.",
             "NOT_FOUND_AT_DECLARED_BUDGET is distinct from oracle UNREACHABLE.",
         ),
+    )
+
+
+def oracle_status_from_cell_class(label: CellClass) -> OracleFeasibility:
+    if label is CellClass.STRICT_COVERED:
+        return OracleFeasibility.FEASIBLE
+    if label is CellClass.STRICT_UNCOVERED:
+        return OracleFeasibility.INFEASIBLE
+    return OracleFeasibility.BOUNDARY
+
+
+def _best_found_vertex(solves: list[PointingTargetSolve]) -> tuple[int, float | None, float | None]:
+    found = [item for item in solves if item.status is PointingSolveStatus.FOUND]
+    if not found:
+        return 0, None, None
+    best = min(
+        found,
+        key=lambda item: (
+            item.best_pointing_geodesic_rad if item.best_pointing_geodesic_rad is not None else float("inf"),
+            item.best_position_residual_m if item.best_position_residual_m is not None else float("inf"),
+        ),
+    )
+    cluster_count = sum(len(item.clusters) for item in found)
+    return cluster_count, best.best_position_residual_m, best.best_pointing_geodesic_rad
+
+
+def build_direct_reference_cells(
+    grid: SphereGrid,
+    labels: tuple[CellClass, ...],
+    solves: tuple[PointingTargetSolve, ...] | list[PointingTargetSolve],
+) -> tuple[DirectReferenceCell, ...]:
+    if len(labels) != len(grid.faces):
+        raise ValueError("cell labels must match grid faces")
+    by_index = {solve.target_index: solve for solve in solves}
+    cells: list[DirectReferenceCell] = []
+    for i, face in enumerate(grid.faces):
+        vertex_solves = [by_index.get(vid) for vid in face]
+        if any(item is None or item.status is PointingSolveStatus.UNRESOLVED for item in vertex_solves):
+            status = PointingSolveStatus.UNRESOLVED
+            n_clusters, pos, pnt = 0, None, None
+        elif any(item.status is PointingSolveStatus.FOUND for item in vertex_solves if item is not None):
+            status = PointingSolveStatus.FOUND
+            present = [item for item in vertex_solves if item is not None]
+            n_clusters, pos, pnt = _best_found_vertex(present)
+        else:
+            status = PointingSolveStatus.NOT_FOUND_AT_DECLARED_BUDGET
+            n_clusters, pos, pnt = 0, None, None
+        oracle = oracle_status_from_cell_class(labels[i])
+        eligible = oracle is not OracleFeasibility.BOUNDARY and status is not PointingSolveStatus.UNRESOLVED
+        bary = grid.barycenters[i]
+        cells.append(
+            DirectReferenceCell(
+                cell_id=f"face_{i}",
+                vertex_or_barycenter_direction=(float(bary[0]), float(bary[1]), float(bary[2])),
+                oracle_status=oracle,
+                direct_status=status,
+                direct_cluster_count=n_clusters,
+                best_position_residual_m=pos,
+                best_pointing_error_rad=pnt,
+                strict_reference_eligible=eligible,
+            )
+        )
+    return tuple(cells)
+
+
+def unresolved_strict_count(cells: tuple[DirectReferenceCell, ...]) -> int:
+    return sum(
+        1
+        for cell in cells
+        if cell.oracle_status is not OracleFeasibility.BOUNDARY
+        and cell.direct_status is PointingSolveStatus.UNRESOLVED
     )
 
 
@@ -386,11 +460,21 @@ def write_truth_stage(
             probe.p_star,
             margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
         )
+        confirm_grid = build_sphere_grid(budgets.confirmation_icosphere_level)
+        labels = classify_cells(
+            confirm_grid,
+            config.geometry,
+            probe.p_star,
+            margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
+        )
+        cells = build_direct_reference_cells(confirm_grid, labels, confirmation.solves)
         payload = {
             "probe_id": probe.probe_id,
             "discovery": discovery.to_json_dict(),
             "confirmation": confirmation.to_json_dict(),
             "oracle_agreement": agreement.to_json_dict(),
+            "confirmation_cells": [cell.to_json_dict() for cell in cells],
+            "direct_unresolved_strict_count": unresolved_strict_count(cells),
         }
         path = outdir / probe.probe_id / "direct_truth.json"
         path.parent.mkdir(parents=True, exist_ok=True)

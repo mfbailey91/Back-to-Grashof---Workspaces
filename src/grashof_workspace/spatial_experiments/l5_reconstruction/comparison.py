@@ -8,13 +8,18 @@ from typing import Any
 
 from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 
+from .direct_truth import build_direct_reference_cells
 from .models import (
     CampaignConfig,
     CellClass,
     CompletenessLabel,
+    DirectReferenceCell,
     FivePointCampaignResult,
     FixedPointProbe,
+    OracleFeasibility,
     PointingSetMetrics,
+    PointingSolveStatus,
+    PointingTargetSolve,
     ProcessStageStatus,
     ReconstructionDisposition,
     ThreeWayReconstructionResult,
@@ -23,7 +28,13 @@ from .models import (
     stage_envelope,
 )
 from .positive_control import point_completeness_oracle
-from .sphere_grid import build_sphere_grid, classify_cells, paint_pointings, pointing_geodesic
+from .sphere_grid import (
+    SphereGrid,
+    build_sphere_grid,
+    classify_cells,
+    paint_pointings,
+    pointing_geodesic,
+)
 
 
 def _fraction(num: int, den: int) -> float | None:
@@ -79,6 +90,34 @@ def _load_hits_and_dirs(path: Path) -> tuple[tuple[bool, ...], tuple[tuple[float
     return hits, dirs
 
 
+def resolved_direct_mask(cells: tuple[DirectReferenceCell, ...]) -> tuple[bool, ...]:
+    return tuple(cell.direct_status is PointingSolveStatus.FOUND for cell in cells)
+
+
+def direct_reference_labels(cells: tuple[DirectReferenceCell, ...]) -> tuple[CellClass, ...]:
+    labels: list[CellClass] = []
+    for cell in cells:
+        if not cell.strict_reference_eligible:
+            labels.append(CellClass.AMBIGUOUS_BOUNDARY)
+        elif cell.direct_status is PointingSolveStatus.FOUND:
+            labels.append(CellClass.STRICT_COVERED)
+        else:
+            labels.append(CellClass.STRICT_UNCOVERED)
+    return tuple(labels)
+
+
+def direct_complete_from_cells(cells: tuple[DirectReferenceCell, ...]) -> bool | None:
+    strict = [cell for cell in cells if cell.oracle_status is not OracleFeasibility.BOUNDARY]
+    if any(cell.direct_status is PointingSolveStatus.UNRESOLVED for cell in strict):
+        return None
+    for cell in strict:
+        if cell.oracle_status is OracleFeasibility.FEASIBLE and cell.direct_status is not PointingSolveStatus.FOUND:
+            return False
+        if cell.oracle_status is OracleFeasibility.INFEASIBLE and cell.direct_status is PointingSolveStatus.FOUND:
+            return False
+    return True
+
+
 def classify_point(
     oracle_complete: bool,
     metrics: PointingSetMetrics | None,
@@ -132,6 +171,36 @@ def _require_compare_artifacts(outdir: Path, probes: list[FixedPointProbe]) -> N
         raise FileNotFoundError("missing compare inputs: " + ", ".join(missing))
 
 
+def _solve_stub(item: dict[str, Any]) -> PointingTargetSolve:
+    pos = item.get("best_position_residual_m")
+    geo = item.get("best_pointing_geodesic_rad")
+    return PointingTargetSolve(
+        target_index=int(item["target_index"]),
+        d_target=as_vec3(item["d_target"]),
+        status=PointingSolveStatus(str(item["status"])),
+        clusters=(),
+        best_position_residual_m=None if pos is None else float(pos),
+        best_pointing_geodesic_rad=None if geo is None else float(geo),
+        n_starts=int(item.get("n_starts", 0)),
+    )
+
+
+def _load_confirmation_cells(
+    truth: dict[str, Any],
+    grid: SphereGrid,
+    labels: tuple[CellClass, ...],
+) -> tuple[DirectReferenceCell, ...]:
+    raw = truth.get("confirmation_cells")
+    if isinstance(raw, list) and raw:
+        cells = tuple(DirectReferenceCell.from_json_dict(item) for item in raw if isinstance(item, dict))
+        if len(cells) == len(labels):
+            return cells
+    confirmation = truth.get("confirmation", {})
+    solves_raw = confirmation.get("solves", []) if isinstance(confirmation, dict) else []
+    solves = tuple(_solve_stub(item) for item in solves_raw if isinstance(item, dict))
+    return build_direct_reference_cells(grid, labels, solves)
+
+
 def write_compare_stage(
     config: CampaignConfig,
     outdir: Path,
@@ -171,53 +240,79 @@ def write_compare_stage(
                 dirs.append(as_vec3(sample["pointing"]))
         nat_dirs = tuple(dirs)
         nat_hits = paint_pointings(grid, nat_dirs) if nat_dirs else tuple(False for _ in labels)
-        covered_dirs = tuple(
+        truth = json.loads(truth_path.read_text(encoding="utf-8"))
+        cells = _load_confirmation_cells(truth, grid, labels)
+        direct_hits = resolved_direct_mask(cells)
+        direct_labels = direct_reference_labels(cells)
+        oracle_covered = tuple(
             as_vec3(grid.barycenters[i]) for i, lab in enumerate(labels) if lab is CellClass.STRICT_COVERED
         )
-        src_metrics = pointing_set_metrics(
+        direct_covered = tuple(
+            cell.vertex_or_barycenter_direction for cell in cells if cell.direct_status is PointingSolveStatus.FOUND
+        )
+        direct_dirs = tuple(
+            cell.vertex_or_barycenter_direction for cell in cells if cell.direct_status is PointingSolveStatus.FOUND
+        )
+        src_vs_oracle = pointing_set_metrics(
             labels,
             src_hits,
             max_cell_diameter_rad=grid.max_cell_diameter_rad,
             reconstructed_dirs=src_dirs,
-            covered_dirs=covered_dirs,
+            covered_dirs=oracle_covered,
         )
-        nat_metrics = pointing_set_metrics(
+        nat_vs_oracle = pointing_set_metrics(
             labels,
             nat_hits,
             max_cell_diameter_rad=grid.max_cell_diameter_rad,
             reconstructed_dirs=nat_dirs,
-            covered_dirs=covered_dirs,
+            covered_dirs=oracle_covered,
         )
-        truth = json.loads(truth_path.read_text(encoding="utf-8"))
-        confirmation = truth.get("confirmation", {})
-        unresolved_count = confirmation.get("unresolved_count", 0)
-        if isinstance(unresolved_count, int) and unresolved_count > 0:
+        direct_vs_oracle = pointing_set_metrics(
+            labels,
+            direct_hits,
+            max_cell_diameter_rad=grid.max_cell_diameter_rad,
+            reconstructed_dirs=direct_dirs,
+            covered_dirs=oracle_covered,
+        )
+        src_vs_direct = pointing_set_metrics(
+            direct_labels,
+            src_hits,
+            max_cell_diameter_rad=grid.max_cell_diameter_rad,
+            reconstructed_dirs=src_dirs,
+            covered_dirs=direct_covered,
+        )
+        nat_vs_direct = pointing_set_metrics(
+            direct_labels,
+            nat_hits,
+            max_cell_diameter_rad=grid.max_cell_diameter_rad,
+            reconstructed_dirs=nat_dirs,
+            covered_dirs=direct_covered,
+        )
+        direct_complete = direct_complete_from_cells(cells)
+        if direct_complete is None:
             label: CompletenessLabel = CompletenessLabel.PARTIAL
             disp = ReconstructionDisposition.UNRESOLVED
-            reason = "confirmation unresolved cells block point classification"
+            reason = "strict confirmation unresolved cells block point classification"
         else:
-            label, disp, reason = classify_point(oracle.complete, nat_metrics, config)
+            label, disp, reason = classify_point(oracle.complete, nat_vs_oracle, config)
         excluded = tuple(
             str(leaf.get("closed_mechanism_status"))
             for leaf in fam.get("leaves", [])
             if not leaf.get("accepted_for_reconstruction")
         )
-        direct_complete: bool | None = None
-        agreement = truth.get("oracle_agreement", {})
-        misses = agreement.get("n_strict_oracle_feasible_missing")
-        fps = agreement.get("n_strict_oracle_infeasible_found")
-        if isinstance(misses, int) and isinstance(fps, int):
-            direct_complete = (misses == 0 and fps == 0) if oracle.complete else False
         result = ThreeWayReconstructionResult(
             probe_id=probe.probe_id,
             oracle_complete=oracle.complete,
             direct_complete=direct_complete,
-            source_control_metrics=src_metrics,
-            natural_leaf_metrics=nat_metrics,
+            source_control_metrics=src_vs_oracle,
+            natural_leaf_metrics=nat_vs_oracle,
             point_classification=label,
             disposition=disp,
             failure_localization=reason,
             excluded_child_dispositions=excluded,
+            direct_vs_oracle=direct_vs_oracle,
+            source_vs_direct=src_vs_direct,
+            natural_vs_direct=nat_vs_direct,
         )
         path = outdir / probe.probe_id / "comparison.json"
         path.write_text(json_dumps_strict(result.to_json_dict()), encoding="utf-8")

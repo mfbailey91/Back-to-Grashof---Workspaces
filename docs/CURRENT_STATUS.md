@@ -1,7 +1,7 @@
 # Current Scientific Status
 
 **Status:** ACTIVE ledger (snapshot, not a plan)
-**Last updated:** 2026-08-17 (R3A-H plan)
+**Last updated:** 2026-08-17 (R3A-H1)
 
 This is the only live status ledger. Future work belongs in [ROADMAP.md](ROADMAP.md).
 
@@ -23,7 +23,7 @@ mechanism_explorer_only
 |---|---|---|---|---|
 | L3 planar 3R | `trusted_exact_reference` | Exact fixed-position four-bar reduction; designated-link rotatability; independent validation | None for reference role | Exact fixed-position four-bar reduction and designated-link rotatability recover planar dexterity |
 | L4 spatial 4R | `local_only` | One-DOF source mechanism and local orientation-curve machinery; proximal exact-U traced-arc match | Global component-complete certificate | One-DOF source mechanism and local orientation-curve machinery exist; global certification remains incomplete |
-| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software and kernels implemented | Real re-seeding, child-tangent transversality, chart/family completeness, independent direct-reference comparison, and an accepted source-derived child reconstruction | Positive-control geometry, oracle, direct IK, h=c control, and frozen-lambda UURU branch kernels exist; current family audits and campaign artifacts are not yet sufficient for an accepted reconstruction |
+| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software; R3A-H0 stage DAG; independent confirmation-cell direct-reference column | Real re-seeding, child-tangent transversality, chart/family completeness, and an accepted source-derived child reconstruction | Positive-control geometry, oracle, direct IK, h=c control, frozen-lambda UURU branch kernels, and an independent confirmation-cell column exist; current family audits and campaign artifacts are not yet sufficient for an accepted reconstruction |
 | L6 spatial 6R | `scaffold_only` | Dimensional/task contracts and L6 scaffold stubs | Independent full-`SO(3)` reference and proven nesting | Dimensional/task contracts exist; independent full-`SO(3)` reference and reconstruction are not implemented |
 | L7 spatial 7R | `deferred` | Dimensional/gauge framing only | L6 completion and redundancy contract | Redundancy/gauge formulation is architectural only |
 
@@ -42,7 +42,8 @@ mechanism_explorer_only
 ```text
 current fixed-axis UUUR construction rejected as h=c fiber equivalence;
 R3A SURU→UURU positive-control software implemented at five frozen points;
-R3A-H evidence hardening active; end-to-end reconstruction not yet accepted;
+R3A-H0/H1 evidence semantics and independent confirmation-cell column landed;
+end-to-end reconstruction not yet accepted; results/ not regenerated;
 general 5R factorization remains unresolved;
 V07A held pending parent/continuation completion.
 ```
