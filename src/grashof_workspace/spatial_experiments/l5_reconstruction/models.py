@@ -120,6 +120,14 @@ class FamilyAdmissibilityStatus(str, Enum):
     UNRESOLVED = "UNRESOLVED"
 
 
+class LeafPairStatus(str, Enum):
+    DUPLICATE_SAME_COMPONENT = "DUPLICATE_SAME_COMPONENT"
+    DISTINCT_COMPATIBLE = "DISTINCT_COMPATIBLE"
+    CROSSING_DIFFERENT_TANGENT = "CROSSING_DIFFERENT_TANGENT"
+    INCOMPATIBLE_COMPONENT = "INCOMPATIBLE_COMPONENT"
+    UNRESOLVED = "UNRESOLVED"
+
+
 class CompletenessLabel(str, Enum):
     COMPLETE = "COMPLETE"
     PARTIAL = "PARTIAL"
@@ -606,6 +614,10 @@ class TransversalityAudit:
     sigma_min: float | None
     rank_span: int | None
     notes: tuple[str, ...] = ()
+    leaf_id_a: str | None = None
+    leaf_id_b: str | None = None
+    lambda_a: float | None = None
+    lambda_b: float | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -613,6 +625,36 @@ class TransversalityAudit:
                 "status": self.status,
                 "sigma_min": self.sigma_min,
                 "rank_span": self.rank_span,
+                "leaf_id_a": self.leaf_id_a,
+                "leaf_id_b": self.leaf_id_b,
+                "lambda_a": self.lambda_a,
+                "lambda_b": self.lambda_b,
+                "notes": list(self.notes),
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ChartOverlapAudit:
+    status: str
+    source_q_correspondence: bool | None = None
+    recovered_rotation_correspondence: bool | None = None
+    chart_coordinate_transform: bool | None = None
+    family_parameter_correspondence: bool | None = None
+    component_identity: bool | None = None
+    pointing_set_correspondence: bool | None = None
+    notes: tuple[str, ...] = ()
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "status": self.status,
+                "source_q_correspondence": self.source_q_correspondence,
+                "recovered_rotation_correspondence": self.recovered_rotation_correspondence,
+                "chart_coordinate_transform": self.chart_coordinate_transform,
+                "family_parameter_correspondence": self.family_parameter_correspondence,
+                "component_identity": self.component_identity,
+                "pointing_set_correspondence": self.pointing_set_correspondence,
                 "notes": list(self.notes),
             }
         )
@@ -688,6 +730,9 @@ class LeafFamilyResult:
     chart_overlap_status: str
     unresolved_lambda_intervals: tuple[tuple[float, float], ...]
     notes: tuple[str, ...] = ()
+    neighbor_audits: tuple[TransversalityAudit, ...] = ()
+    chart_overlap: ChartOverlapAudit | None = None
+    duplicate_classifications: tuple[str, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -698,6 +743,9 @@ class LeafFamilyResult:
                 "duplicate_count": self.duplicate_count,
                 "chart_overlap_status": self.chart_overlap_status,
                 "unresolved_lambda_intervals": [list(iv) for iv in self.unresolved_lambda_intervals],
+                "neighbor_audits": [item.to_json_dict() for item in self.neighbor_audits],
+                "chart_overlap": None if self.chart_overlap is None else self.chart_overlap.to_json_dict(),
+                "duplicate_classifications": list(self.duplicate_classifications),
                 "notes": list(self.notes),
                 "certificate_status": None,
             }
