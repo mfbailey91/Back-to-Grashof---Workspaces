@@ -16,7 +16,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     ReseedScope,
     TransversalityAudit,
 )
-from tests.test_l5_leaf_transversality import _two_neighbor_works
+from test_l5_leaf_transversality import _two_neighbor_works
 
 
 def test_component_pass_requires_symmetric_branch_distances() -> None:
