@@ -132,6 +132,31 @@ class ReseedDisposition(str, Enum):
     UNRESOLVED = "UNRESOLVED"
 
 
+class IntervalStatus(str, Enum):
+    """Finite-domain coverage of one declared chart-by-lambda bin.
+
+    ``SAMPLED_ADMISSIBLE`` is not a complete foliation, and is never ``COMPLETE``.
+    """
+
+    UNSAMPLED = "UNSAMPLED"
+    SAMPLED_LOCAL = "SAMPLED_LOCAL"
+    SAMPLED_COMPONENT = "SAMPLED_COMPONENT"
+    SAMPLED_ADMISSIBLE = "SAMPLED_ADMISSIBLE"
+    CRITICAL_OR_BOUNDARY = "CRITICAL_OR_BOUNDARY"
+    UNRESOLVED = "UNRESOLVED"
+    NOT_REQUIRED = "NOT_REQUIRED"
+
+
+class SourceIntervalStatus(str, Enum):
+    """Per-c source-control evidence. Not a component-completeness theorem."""
+
+    RETURNED_COMPONENT_FOUND = "RETURNED_COMPONENT_FOUND"
+    OPEN_ONLY = "OPEN_ONLY"
+    SINGULAR = "SINGULAR"
+    UNRESOLVED = "UNRESOLVED"
+    COMPONENT_COMPLETE = "COMPONENT_COMPLETE"
+
+
 class LeafPairStatus(str, Enum):
     DUPLICATE_SAME_COMPONENT = "DUPLICATE_SAME_COMPONENT"
     DISTINCT_COMPATIBLE = "DISTINCT_COMPATIBLE"
@@ -144,6 +169,28 @@ class CompletenessLabel(str, Enum):
     COMPLETE = "COMPLETE"
     PARTIAL = "PARTIAL"
     BOUNDARY = "BOUNDARY"
+
+
+@dataclass(frozen=True, slots=True)
+class ChartAtlasPolicy:
+    policy_id: str
+    chart_ids: tuple[str, ...]
+    canonical_assignment: str
+    singularity_margin: float
+    overlap_margin: float
+    claim_scope: str
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "policy_id": self.policy_id,
+                "chart_ids": list(self.chart_ids),
+                "canonical_assignment": self.canonical_assignment,
+                "singularity_margin": self.singularity_margin,
+                "overlap_margin": self.overlap_margin,
+                "claim_scope": self.claim_scope,
+            }
+        )
 
 
 class OracleFeasibility(str, Enum):
@@ -819,6 +866,7 @@ class NaturalLeafCertificate:
     chart_overlap_status: str
     accepted_for_reconstruction: bool
     failure_or_scope_reason: str
+    responsible_chart_id: str | None = None
 
     @property
     def closed_mechanism_status(self) -> str:
@@ -855,6 +903,7 @@ class NaturalLeafCertificate:
             "chart_overlap_status": self.chart_overlap_status,
             "accepted_for_reconstruction": self.accepted_for_reconstruction,
             "failure_or_scope_reason": self.failure_or_scope_reason,
+            "responsible_chart_id": self.responsible_chart_id,
         }
         return json_object(payload)
 
@@ -870,9 +919,20 @@ class FamilyIntervalRecord:
     duplicate_groups: tuple[tuple[str, ...], ...] = ()
     critical_values: tuple[float, ...] = ()
     birth_death_merge_events: tuple[str, ...] = ()
-    interval_status: str = "UNRESOLVED"
+    interval_status: IntervalStatus = IntervalStatus.UNSAMPLED
+    required: bool = False
+    seed_count: int = 0
+    leaf_count: int = 0
+    component_status_counts: dict[str, int] | None = None
+    admissibility_status_counts: dict[str, int] | None = None
+    budget_exhausted: bool = False
 
     def to_json_dict(self) -> dict[str, Any]:
+        status = (
+            self.interval_status.value
+            if isinstance(self.interval_status, IntervalStatus)
+            else str(self.interval_status)
+        )
         return json_object(
             {
                 "chart_id": self.chart_id,
@@ -884,7 +944,13 @@ class FamilyIntervalRecord:
                 "duplicate_groups": [list(group) for group in self.duplicate_groups],
                 "critical_values": list(self.critical_values),
                 "birth_death_merge_events": list(self.birth_death_merge_events),
-                "interval_status": self.interval_status,
+                "interval_status": status,
+                "required": self.required,
+                "seed_count": self.seed_count,
+                "leaf_count": self.leaf_count,
+                "component_status_counts": dict(self.component_status_counts or {}),
+                "admissibility_status_counts": dict(self.admissibility_status_counts or {}),
+                "budget_exhausted": self.budget_exhausted,
             }
         )
 
@@ -1123,6 +1189,7 @@ class CampaignMode:
     max_nfev_per_start: int
     source_c_value_count: int
     natural_lambda_bin_count_per_chart: int
+    max_natural_leaves_per_chart: int
     max_natural_leaves_per_probe: int
     reseed_samples_per_leaf: int
     continuation_steps: int
@@ -1138,6 +1205,7 @@ class CampaignMode:
                 "max_nfev_per_start": self.max_nfev_per_start,
                 "source_c_value_count": self.source_c_value_count,
                 "natural_lambda_bin_count_per_chart": self.natural_lambda_bin_count_per_chart,
+                "max_natural_leaves_per_chart": self.max_natural_leaves_per_chart,
                 "max_natural_leaves_per_probe": self.max_natural_leaves_per_probe,
                 "reseed_samples_per_leaf": self.reseed_samples_per_leaf,
                 "continuation_steps": self.continuation_steps,
@@ -1197,6 +1265,7 @@ class CampaignConfig:
     geometry: L5PositiveControlGeometry
     probes: tuple[FixedPointProbe, ...]
     charts: tuple[SphericalClosureChartRecord, ...]
+    chart_atlas_policy: ChartAtlasPolicy
     modes: dict[str, CampaignMode]
     tolerances: CampaignTolerances
     accepted_child_statuses: tuple[str, ...]
@@ -1218,6 +1287,7 @@ class CampaignConfig:
                 "geometry": self.geometry.to_json_dict(),
                 "probes": [p.to_json_dict() for p in self.probes],
                 "charts": [c.to_json_dict() for c in self.charts],
+                "chart_atlas_policy": self.chart_atlas_policy.to_json_dict(),
                 "modes": {k: v.to_json_dict() for k, v in self.modes.items()},
                 "tolerances": self.tolerances.to_json_dict(),
                 "accepted_child_statuses": list(self.accepted_child_statuses),
@@ -1317,6 +1387,7 @@ def load_campaign_config(path: Path | str) -> CampaignConfig:
             max_nfev_per_start=int(spec["max_nfev_per_start"]),
             source_c_value_count=int(spec["source_c_value_count"]),
             natural_lambda_bin_count_per_chart=int(spec["natural_lambda_bin_count_per_chart"]),
+            max_natural_leaves_per_chart=int(spec["max_natural_leaves_per_chart"]),
             max_natural_leaves_per_probe=int(spec["max_natural_leaves_per_probe"]),
             reseed_samples_per_leaf=int(spec["reseed_samples_per_leaf"]),
             continuation_steps=int(spec["continuation_steps"]),
@@ -1324,6 +1395,33 @@ def load_campaign_config(path: Path | str) -> CampaignConfig:
         )
         for name, spec in raw["campaign_modes"].items()
     }
+    n_charts = len(charts)
+    for mode in modes.values():
+        if mode.max_natural_leaves_per_chart < mode.natural_lambda_bin_count_per_chart:
+            raise ValueError(
+                f"{mode.name}: max_natural_leaves_per_chart must cover declared bins "
+                f"({mode.natural_lambda_bin_count_per_chart})"
+            )
+        expected_probe_cap = n_charts * mode.max_natural_leaves_per_chart
+        if mode.max_natural_leaves_per_probe != expected_probe_cap:
+            raise ValueError(
+                f"{mode.name}: max_natural_leaves_per_probe must equal n_charts * "
+                f"max_natural_leaves_per_chart ({expected_probe_cap}), "
+                f"got {mode.max_natural_leaves_per_probe}"
+            )
+    policy_raw = raw["chart_atlas_policy"]
+    declared_ids = tuple(item.chart_id for item in charts)
+    policy_ids = tuple(str(x) for x in policy_raw.get("chart_ids", declared_ids))
+    if policy_ids != declared_ids:
+        raise ValueError("chart_atlas_policy.chart_ids must match virtual_spherical_charts order")
+    chart_atlas_policy = ChartAtlasPolicy(
+        policy_id=str(policy_raw["policy_id"]),
+        chart_ids=policy_ids,
+        canonical_assignment=str(policy_raw["canonical_assignment"]),
+        singularity_margin=float(policy_raw["singularity_margin"]),
+        overlap_margin=float(policy_raw["overlap_margin"]),
+        claim_scope=str(policy_raw["claim_scope"]),
+    )
     tol = raw["tolerances"]
     tolerances = CampaignTolerances(
         axis_intersection_m=float(tol["axis_intersection_m"]),
@@ -1350,6 +1448,7 @@ def load_campaign_config(path: Path | str) -> CampaignConfig:
         geometry=geometry,
         probes=probes,
         charts=charts,
+        chart_atlas_policy=chart_atlas_policy,
         modes=modes,
         tolerances=tolerances,
         accepted_child_statuses=tuple(str(x) for x in accept["accepted_child_statuses"]),

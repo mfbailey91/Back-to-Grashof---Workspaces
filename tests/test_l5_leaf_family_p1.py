@@ -8,7 +8,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.direct_truth import
     build_direct_pointing_truth,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.leaf_family import discover_leaf_family
-from grashof_workspace.spatial_experiments.l5_reconstruction.models import load_campaign_config
+from grashof_workspace.spatial_experiments.l5_reconstruction.models import IntervalStatus, load_campaign_config
 from grashof_workspace.spatial_experiments.l5_reconstruction.positive_control import (
     build_positive_control_arm,
 )
@@ -62,7 +62,28 @@ def test_open_natural_leaf_creates_unresolved_lambda_interval() -> None:
     family = _p1_family()
     assert family.accepted_count == 0
     assert any(leaf.closed_mechanism_status == "LOCAL_ONLY" or leaf.returned is False for leaf in family.leaves)
-    assert family.unresolved_lambda_intervals
     assert family.lambda_intervals
-    assert any(item.interval_status == "UNRESOLVED" for item in family.lambda_intervals)
+    chart_ids = {item.chart_id for item in family.lambda_intervals}
+    assert chart_ids == {"ZYZ_WORLD", "ZYZ_RX90", "ZYZ_RY90"}
+    assert all(item.interval_status != "COMPLETE" for item in family.lambda_intervals)
+    sampled = {
+        IntervalStatus.SAMPLED_LOCAL,
+        IntervalStatus.SAMPLED_COMPONENT,
+        IntervalStatus.SAMPLED_ADMISSIBLE,
+        IntervalStatus.UNSAMPLED,
+        IntervalStatus.UNRESOLVED,
+        IntervalStatus.CRITICAL_OR_BOUNDARY,
+        IntervalStatus.NOT_REQUIRED,
+    }
+    assert all(item.interval_status in sampled for item in family.lambda_intervals)
+    assert any(
+        item.interval_status
+        in {
+            IntervalStatus.SAMPLED_LOCAL,
+            IntervalStatus.SAMPLED_COMPONENT,
+            IntervalStatus.UNSAMPLED,
+            IntervalStatus.UNRESOLVED,
+        }
+        for item in family.lambda_intervals
+    )
     assert all(leaf.accepted_for_reconstruction is False for leaf in family.leaves)

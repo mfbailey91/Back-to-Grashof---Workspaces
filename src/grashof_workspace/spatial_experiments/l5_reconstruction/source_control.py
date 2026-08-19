@@ -26,6 +26,7 @@ from .models import (
     DirectPointingTruth,
     FixedPointProbe,
     SourceControlCRecord,
+    SourceIntervalStatus,
     json_dumps_strict,
     json_object,
     resolve_stage_budgets,
@@ -37,6 +38,29 @@ from .sphere_grid import SphereGrid, build_sphere_grid, paint_pointings
 Array = NDArray[np.floating]
 Vec3 = tuple[float, float, float]
 DEDUP_Q_TOL = 0.35
+COVERED_SOURCE_INTERVAL_STATUSES = frozenset(
+    {
+        SourceIntervalStatus.RETURNED_COMPONENT_FOUND,
+        SourceIntervalStatus.COMPONENT_COMPLETE,
+    }
+)
+
+
+def classify_source_interval_status(
+    *,
+    returned_count: int,
+    open_count: int,
+    singular_count: int,
+) -> SourceIntervalStatus:
+    """Evidence at one ``c``. Never emits ``COMPONENT_COMPLETE``."""
+
+    if returned_count > 0:
+        return SourceIntervalStatus.RETURNED_COMPONENT_FOUND
+    if open_count > 0:
+        return SourceIntervalStatus.OPEN_ONLY
+    if singular_count > 0:
+        return SourceIntervalStatus.SINGULAR
+    return SourceIntervalStatus.UNRESOLVED
 
 
 def radial_normal(p_star: Vec3 | Array) -> Vec3:
@@ -136,11 +160,15 @@ def unresolved_c_intervals_from_records(
     """Neighbor spans of c bins that are missing, open, singular, or unresolved."""
     if not c_values:
         return ()
+    covered = {status.value for status in COVERED_SOURCE_INTERVAL_STATUSES}
     by_c = {float(item.c): item for item in records}
     out: list[tuple[float, float]] = []
     for i, c in enumerate(c_values):
         rec = by_c.get(float(c))
-        if rec is not None and rec.parameter_interval_status != "UNRESOLVED":
+        status = None if rec is None else rec.parameter_interval_status
+        if isinstance(status, SourceIntervalStatus):
+            status = status.value
+        if rec is not None and status in covered:
             continue
         lo = c_values[i - 1] if i > 0 else c
         hi = c_values[i + 1] if i + 1 < len(c_values) else c
@@ -176,7 +204,11 @@ def summarize_c_records(
         unresolved = sum(1 for kind in kinds if kind == "unresolved")
         continued = sum(1 for item in group if item.q_samples)
         unique_ids = tuple(item.fiber_id for item in unique if abs(item.c - c) <= 1e-12 and item.q_samples)
-        status = "UNRESOLVED" if returned == 0 else "COMPLETE"
+        status = classify_source_interval_status(
+            returned_count=returned,
+            open_count=open_count,
+            singular_count=singular,
+        )
         records.append(
             SourceControlCRecord(
                 c=float(c),
@@ -188,7 +220,7 @@ def summarize_c_records(
                 singular_count=singular,
                 unresolved_count=unresolved,
                 deduplicated_component_ids=unique_ids,
-                parameter_interval_status=status,
+                parameter_interval_status=status.value,
             )
         )
     return tuple(records)

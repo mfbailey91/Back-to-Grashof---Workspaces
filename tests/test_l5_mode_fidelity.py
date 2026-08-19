@@ -29,11 +29,15 @@ def test_full_mode_honors_frozen_budgets() -> None:
     assert budgets.max_nfev_per_start == spec["max_nfev_per_start"]
     assert budgets.source_c_value_count == spec["source_c_value_count"]
     assert budgets.natural_lambda_bin_count_per_chart == spec["natural_lambda_bin_count_per_chart"]
+    assert budgets.max_natural_leaves_per_chart == spec["max_natural_leaves_per_chart"]
     assert budgets.max_natural_leaves_per_probe == spec["max_natural_leaves_per_probe"]
     assert budgets.reseed_samples_per_leaf == spec["reseed_samples_per_leaf"]
     assert budgets.continuation_steps == spec["continuation_steps"]
     assert budgets.natural_lambda_bin_count_per_chart == full.natural_lambda_bin_count_per_chart
+    assert budgets.max_natural_leaves_per_chart == full.max_natural_leaves_per_chart
     assert budgets.max_natural_leaves_per_probe == full.max_natural_leaves_per_probe
+    assert budgets.max_natural_leaves_per_probe == len(config.charts) * full.max_natural_leaves_per_chart
+    assert budgets.max_natural_leaves_per_chart >= full.natural_lambda_bin_count_per_chart
     assert budgets.continuation_steps == full.continuation_steps
     assert budgets.max_natural_leaves_per_probe != min(6, full.max_natural_leaves_per_probe)
     assert budgets.natural_lambda_bin_count_per_chart != min(5, full.natural_lambda_bin_count_per_chart)
@@ -49,6 +53,7 @@ def test_ci_override_is_labeled_and_cannot_produce_full_campaign_disposition() -
     assert ci.allows_full_campaign_disposition is False
     assert full.allows_full_campaign_disposition is True
     assert budgets.source_c_value_count != full.source_c_value_count
+    assert budgets.max_natural_leaves_per_chart < full.max_natural_leaves_per_chart
     assert budgets.max_natural_leaves_per_probe < full.max_natural_leaves_per_probe
     parser = build_parser()
     args = parser.parse_args(["--config", str(CONFIG), "--outdir", "tmp", "--mode", "ci"])

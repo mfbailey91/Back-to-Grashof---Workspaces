@@ -19,6 +19,7 @@ from .models import (
     CampaignConfig,
     CellClass,
     FixedPointProbe,
+    IntervalStatus,
     PointingSetMetrics,
     json_dumps_strict,
     stage_envelope,
@@ -399,23 +400,49 @@ def write_probe_figures(
 
     fig = plt.figure(figsize=(6, 3.6))
     ax = fig.add_subplot(111)
-    lambdas = [
-        float(leaf.get("family_parameter_value", leaf.get("spec", {}).get("lambda_fixed", 0.0)))
-        for leaf in all_leaves
-        if isinstance(leaf, dict)
-    ]
+    intervals = family.get("lambda_intervals", []) if isinstance(family, dict) else []
     unresolved = family.get("unresolved_lambda_intervals", []) if isinstance(family, dict) else []
-    if lambdas or unresolved:
-        if lambdas:
-            ax.scatter(lambdas, [0.0] * len(lambdas), color="#1f77b4", label="sampled lambda")
-        first_unresolved = True
-        for item in unresolved:
-            if isinstance(item, (list, tuple)) and len(item) == 2:
-                label = "unresolved interval" if first_unresolved else None
-                ax.axvspan(float(item[0]), float(item[1]), color="#d62728", alpha=0.2, label=label)
-                first_unresolved = False
+    status_colors = {
+        IntervalStatus.UNSAMPLED.value: "#d62728",
+        IntervalStatus.SAMPLED_LOCAL.value: "#1f77b4",
+        IntervalStatus.SAMPLED_COMPONENT.value: "#2ca02c",
+        IntervalStatus.SAMPLED_ADMISSIBLE.value: "#17becf",
+        IntervalStatus.CRITICAL_OR_BOUNDARY.value: "#ff7f0e",
+        IntervalStatus.UNRESOLVED.value: "#9467bd",
+        IntervalStatus.NOT_REQUIRED.value: "#7f7f7f",
+    }
+    plotted = False
+    seen_status: set[str] = set()
+    if isinstance(intervals, list):
+        for item in intervals:
+            if not isinstance(item, dict):
+                continue
+            raw_status = str(item.get("interval_status", IntervalStatus.UNRESOLVED.value))
+            if raw_status == "COMPLETE":
+                raw_status = IntervalStatus.SAMPLED_ADMISSIBLE.value
+            lo_hi = item.get("lambda_interval")
+            if not isinstance(lo_hi, (list, tuple)) or len(lo_hi) != 2:
+                continue
+            lo, hi = float(lo_hi[0]), float(lo_hi[1])
+            mid = 0.5 * (lo + hi)
+            color = status_colors.get(raw_status, "#8c564b")
+            label = raw_status if raw_status not in seen_status else None
+            ax.scatter([mid], [0.0], color=color, label=label, zorder=3)
+            ax.plot([lo, hi], [0.0, 0.0], color=color, alpha=0.35, linewidth=4)
+            seen_status.add(raw_status)
+            plotted = True
+    first_gap = True
+    for item in unresolved:
+        if isinstance(item, (list, tuple)) and len(item) == 2:
+            label = "required interval gap" if first_gap else None
+            ax.axvspan(float(item[0]), float(item[1]), color="#d62728", alpha=0.12, label=label)
+            first_gap = False
+            plotted = True
+    if plotted:
         ax.set_xlabel("lambda")
+        ax.set_yticks([])
         ax.set_title(f"family_parameter_coverage\n{caption}", fontsize=7)
+        ax.legend(fontsize=6, loc="upper right")
     else:
         _watermark_axes(ax, "family_parameter_coverage")
     names.append(_save(fig, fig_dir / "family_parameter_coverage.png"))

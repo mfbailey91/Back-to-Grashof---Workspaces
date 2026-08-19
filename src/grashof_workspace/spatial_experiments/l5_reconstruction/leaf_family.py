@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections import Counter
+from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
@@ -22,11 +24,13 @@ from .direct_truth import found_configurations
 from .models import (
     ACCEPTED_CHILD_STATUSES,
     CampaignConfig,
+    ChartAtlasPolicy,
     ChartOverlapAudit,
     DirectPointingTruth,
     FamilyAdmissibilityStatus,
     FamilyIntervalRecord,
     FixedPointProbe,
+    IntervalStatus,
     LeafFamilyResult,
     LeafPairStatus,
     NaturalLeafCertificate,
@@ -43,7 +47,7 @@ from .models import (
 from .positive_control import PositiveControlArm, build_positive_control_arm
 from .source_control import symmetric_q_distance
 from .sphere_grid import pointing_geodesic
-from .spherical_chart import SphericalClosureChart, charts_from_config
+from .spherical_chart import SphericalClosureChart, canonical_chart, charts_from_config
 from .uuru_leaf import (
     ClosedUURULeafProblem,
     child_tangent,
@@ -52,6 +56,15 @@ from .uuru_leaf import (
     leaf_spec_for,
     problem_from_source_seed,
     tangent_principal_angle,
+)
+
+
+BLOCKING_INTERVAL_STATUSES = frozenset(
+    {
+        IntervalStatus.UNSAMPLED,
+        IntervalStatus.UNRESOLVED,
+        IntervalStatus.CRITICAL_OR_BOUNDARY,
+    }
 )
 
 
@@ -1031,23 +1044,65 @@ def circular_lambda_bin_edges(n_bins: int) -> tuple[tuple[float, float], ...]:
     return tuple(edges)
 
 
+def _as_interval_status(value: IntervalStatus | str) -> IntervalStatus:
+    if isinstance(value, IntervalStatus):
+        return value
+    return IntervalStatus(str(value))
+
+
+def classify_interval_status(
+    *,
+    required: bool,
+    members: tuple[NaturalLeafCertificate, ...],
+    budget_exhausted: bool,
+    critical: tuple[float, ...],
+) -> IntervalStatus:
+    if members:
+        if any(leaf.accepted_for_reconstruction for leaf in members):
+            return IntervalStatus.SAMPLED_ADMISSIBLE
+        if critical:
+            return IntervalStatus.CRITICAL_OR_BOUNDARY
+        if any(leaf.leaf_component_status in ACCEPTED_CHILD_STATUSES for leaf in members):
+            return IntervalStatus.SAMPLED_COMPONENT
+        return IntervalStatus.SAMPLED_LOCAL
+    if not required:
+        return IntervalStatus.NOT_REQUIRED
+    if budget_exhausted:
+        return IntervalStatus.UNRESOLVED
+    return IntervalStatus.UNSAMPLED
+
+
 def audit_family_intervals(
     leaves: tuple[NaturalLeafCertificate, ...],
     *,
     n_bins: int,
     chart_ids: tuple[str, ...],
+    occupied: set[tuple[str, int]] | frozenset[tuple[str, int]] | None = None,
+    seed_counts: Mapping[tuple[str, int], int] | None = None,
+    exhausted: set[tuple[str, int]] | frozenset[tuple[str, int]] | None = None,
     duplicate_groups: tuple[tuple[str, ...], ...] = (),
 ) -> tuple[FamilyIntervalRecord, ...]:
+    """Initialize every configured chart×bin, then overlay sampled leaves.
+
+    Occupancy comes from canonical chart assignment, never from discovered
+    leaves alone. ``SAMPLED_ADMISSIBLE`` is not ``COMPLETE``.
+    """
+
     edges = circular_lambda_bin_edges(n_bins)
+    occupied_keys = frozenset(occupied or ())
+    exhausted_keys = frozenset(exhausted or ())
+    counts = dict(seed_counts or {})
     records: list[FamilyIntervalRecord] = []
     for chart_id in chart_ids:
         chart_leaves = tuple(leaf for leaf in leaves if leaf.spec.chart_id == chart_id)
         for i, (lo, hi) in enumerate(edges):
+            key = (chart_id, i)
             members = tuple(
                 leaf
                 for leaf in chart_leaves
                 if _lambda_bin_index(leaf.spec.lambda_fixed, n_bins) == i
             )
+            required = key in occupied_keys
             accepted = tuple(leaf.spec.leaf_id for leaf in members if leaf.accepted_for_reconstruction)
             rejected = tuple(leaf.spec.leaf_id for leaf in members if leaf.leaf_component_status == "REJECTED")
             unresolved = tuple(
@@ -1061,10 +1116,17 @@ def audit_family_intervals(
                 for leaf in members
                 if any(sample.chart_singularity for sample in leaf.samples)
             )
-            if accepted:
-                status = "COMPLETE"
-            else:
-                status = "UNRESOLVED"
+            budget_exhausted = key in exhausted_keys
+            status = classify_interval_status(
+                required=required,
+                members=members,
+                budget_exhausted=budget_exhausted,
+                critical=critical,
+            )
+            component_counts = dict(Counter(leaf.leaf_component_status for leaf in members))
+            admissibility_counts = dict(
+                Counter(leaf.family_admissibility_status.value for leaf in members)
+            )
             records.append(
                 FamilyIntervalRecord(
                     chart_id=chart_id,
@@ -1077,9 +1139,62 @@ def audit_family_intervals(
                     critical_values=critical,
                     birth_death_merge_events=(),
                     interval_status=status,
+                    required=required,
+                    seed_count=int(counts.get(key, 0)),
+                    leaf_count=len(members),
+                    component_status_counts=component_counts,
+                    admissibility_status_counts=admissibility_counts,
+                    budget_exhausted=budget_exhausted,
                 )
             )
     return tuple(records)
+
+
+def interval_coverage_ok(records: tuple[FamilyIntervalRecord, ...]) -> bool:
+    return not any(
+        item.required and _as_interval_status(item.interval_status) in BLOCKING_INTERVAL_STATUSES
+        for item in records
+    )
+
+
+def apply_interval_coverage_gate(
+    leaves: tuple[NaturalLeafCertificate, ...],
+    records: tuple[FamilyIntervalRecord, ...],
+) -> tuple[tuple[NaturalLeafCertificate, ...], tuple[tuple[float, float], ...]]:
+    """Block the natural union when a required interval is missing or unresolved.
+
+    Does not rewrite honest ``SAMPLED_*`` rows. ``NOT_REQUIRED`` never blocks.
+    """
+
+    gaps = tuple(
+        item.lambda_interval
+        for item in records
+        if item.required and _as_interval_status(item.interval_status) in BLOCKING_INTERVAL_STATUSES
+    )
+    if gaps:
+        leaves = tuple(replace(leaf, accepted_for_reconstruction=False) for leaf in leaves)
+    return leaves, gaps
+
+
+def _canonical_occupancy(
+    arm: PositiveControlArm,
+    charts: tuple[SphericalClosureChart, ...],
+    qs: tuple[tuple[float, ...], ...],
+    *,
+    n_bins: int,
+    policy: ChartAtlasPolicy,
+) -> dict[tuple[str, int], list[tuple[tuple[float, ...], float]]]:
+    occupied: dict[tuple[str, int], list[tuple[tuple[float, ...], float]]] = {}
+    by_id = {chart.chart_id: chart for chart in charts}
+    for q in qs:
+        rotation = arm.chain.evaluate(q).R
+        chart_id = canonical_chart(charts, rotation, policy=policy)
+        if chart_id is None:
+            continue
+        coords = by_id[chart_id].decompose(rotation)
+        key = (chart_id, _lambda_bin_index(coords.lam, n_bins))
+        occupied.setdefault(key, []).append((q, float(coords.lam)))
+    return occupied
 
 
 def discover_leaf_family(
@@ -1091,35 +1206,44 @@ def discover_leaf_family(
     *,
     max_steps: int = 12,
     max_leaves: int | None = None,
+    max_leaves_per_chart: int | None = None,
     lambda_bins: int | None = None,
     reseed_count: int | None = None,
 ) -> LeafFamilyResult:
     qs = found_configurations(discovery)
-    n_bins = lambda_bins if lambda_bins is not None else config.mode("smoke").natural_lambda_bin_count_per_chart
-    cap = max_leaves if max_leaves is not None else config.mode("smoke").max_natural_leaves_per_probe
-    n_reseed = reseed_count if reseed_count is not None else config.mode("smoke").reseed_samples_per_leaf
+    smoke = config.mode("smoke")
+    n_bins = lambda_bins if lambda_bins is not None else smoke.natural_lambda_bin_count_per_chart
+    per_chart_cap = (
+        max_leaves_per_chart if max_leaves_per_chart is not None else smoke.max_natural_leaves_per_chart
+    )
+    total_cap = max_leaves if max_leaves is not None else smoke.max_natural_leaves_per_probe
+    n_reseed = reseed_count if reseed_count is not None else smoke.reseed_samples_per_leaf
+    policy = config.chart_atlas_policy
+    occupancy = _canonical_occupancy(arm, charts, qs, n_bins=n_bins, policy=policy)
+    seed_counts = {key: len(seeds) for key, seeds in occupancy.items()}
+    exhausted: set[tuple[str, int]] = set()
     works: list[LeafWorkRecord] = []
     for chart in charts:
-        lams: list[float] = []
-        usable: list[tuple[float, ...]] = []
-        for q in qs:
-            coords = chart.decompose(arm.chain.evaluate(q).R)
-            if coords.singular:
+        chart_count = 0
+        for bin_index in range(n_bins):
+            key = (chart.chart_id, bin_index)
+            seeds = occupancy.get(key)
+            if not seeds:
                 continue
-            lams.append(coords.lam)
-            usable.append(q)
-        clusters = cluster_circular(tuple(lams), n_bins)
-        for mean_lam, members in clusters:
-            if len(works) >= cap:
-                break
-            seed_q = usable[members[0]]
-            built = problem_from_source_seed(
-                arm,
-                chart,
-                seed_q,
-                probe.p_star,
-                leaf_id=f"{probe.probe_id}_{chart.chart_id}_{len(works)}",
-            )
+            if chart_count >= per_chart_cap or len(works) >= total_cap:
+                exhausted.add(key)
+                continue
+            built = None
+            for candidate_q, _lam in seeds:
+                built = problem_from_source_seed(
+                    arm,
+                    chart,
+                    candidate_q,
+                    probe.p_star,
+                    leaf_id=f"{probe.probe_id}_{chart.chart_id}_{len(works)}",
+                )
+                if built is not None:
+                    break
             if built is None:
                 continue
             problem, x0 = built
@@ -1137,6 +1261,7 @@ def discover_leaf_family(
                 lambda_tol=config.tolerances.family_coordinate_error_rad,
                 closure_tol=config.tolerances.closed_loop_residual,
             )
+            cert = replace(cert, responsible_chart_id=chart.chart_id)
             if samples:
                 reseed = audit_reseeded_component(
                     arm,
@@ -1171,7 +1296,7 @@ def discover_leaf_family(
                     lambda_fixed=float(problem.lambda_fixed),
                 )
             )
-            _ = mean_lam
+            chart_count += 1
     unique_works, dup, labels = dedup_work_records(
         works,
         q_tol=config.tolerances.leaf_duplicate_distance_rad,
@@ -1195,17 +1320,16 @@ def discover_leaf_family(
         neighbor_audits,
         overlap_audits,
     )
-    chart_ids = tuple(dict.fromkeys(item.spec.chart_id for item in leaves))
+    chart_ids = tuple(item.chart_id for item in config.charts)
     lambda_intervals = audit_family_intervals(
         leaves,
         n_bins=n_bins,
         chart_ids=chart_ids,
+        occupied=set(occupancy),
+        seed_counts=seed_counts,
+        exhausted=exhausted,
     )
-    unresolved_lambda = tuple(
-        item.lambda_interval for item in lambda_intervals if item.interval_status == "UNRESOLVED"
-    )
-    if unresolved_lambda:
-        leaves = tuple(replace(leaf, accepted_for_reconstruction=False) for leaf in leaves)
+    leaves, unresolved_lambda = apply_interval_coverage_gate(leaves, lambda_intervals)
     accepted = sum(1 for leaf in leaves if leaf.accepted_for_reconstruction)
     return LeafFamilyResult(
         probe_id=probe.probe_id,
@@ -1215,9 +1339,9 @@ def discover_leaf_family(
         chart_overlap_status=overlap.status,
         unresolved_lambda_intervals=unresolved_lambda,
         notes=(
-            "Discovery-only lambda clustering; confirmation freeze is the caller's duty.",
+            "Canonical chart occupancy; confirmation freeze is the caller's duty.",
             "Neighbor transversality uses child Jacobians; chart overlap is source-Q correspondence.",
-            "Circular lambda bins; empty or open bins are unresolved; not a global foliation.",
+            "Circular lambda bins; SAMPLED_ADMISSIBLE is not COMPLETE; not a global foliation.",
             "birth/death/merge events are not classified.",
         ),
         neighbor_audits=neighbor_audits,
@@ -1294,6 +1418,7 @@ def write_leaves_stage(
             config,
             max_steps=budgets.continuation_steps,
             max_leaves=budgets.max_natural_leaves_per_probe,
+            max_leaves_per_chart=budgets.max_natural_leaves_per_chart,
             lambda_bins=budgets.natural_lambda_bin_count_per_chart,
             reseed_count=budgets.reseed_samples_per_leaf,
         )

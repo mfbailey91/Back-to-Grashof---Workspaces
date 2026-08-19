@@ -96,6 +96,13 @@
       "basis": [[0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0]]
     }
   ],
+  "chart_atlas_policy": {
+    "policy_id": "max_sin_beta_v1",
+    "canonical_assignment": "max_abs_sin_beta",
+    "singularity_margin": 0.05,
+    "overlap_margin": 0.10,
+    "claim_scope": "multi_chart_declared_domain"
+  },
   "source_control": {
     "field": "h(d)=n_dot_d",
     "n_policy": "radial_unit_p_star",
@@ -109,7 +116,8 @@
       "max_nfev_per_start": 40,
       "source_c_value_count": 3,
       "natural_lambda_bin_count_per_chart": 3,
-      "max_natural_leaves_per_probe": 4,
+      "max_natural_leaves_per_chart": 3,
+      "max_natural_leaves_per_probe": 9,
       "reseed_samples_per_leaf": 3,
       "continuation_steps": 6,
       "allows_full_campaign_disposition": false
@@ -121,7 +129,8 @@
       "max_nfev_per_start": 200,
       "source_c_value_count": 5,
       "natural_lambda_bin_count_per_chart": 5,
-      "max_natural_leaves_per_probe": 12,
+      "max_natural_leaves_per_chart": 5,
+      "max_natural_leaves_per_probe": 15,
       "reseed_samples_per_leaf": 3,
       "continuation_steps": 12,
       "allows_full_campaign_disposition": false
@@ -133,7 +142,8 @@
       "max_nfev_per_start": 500,
       "source_c_value_count": 17,
       "natural_lambda_bin_count_per_chart": 13,
-      "max_natural_leaves_per_probe": 36,
+      "max_natural_leaves_per_chart": 13,
+      "max_natural_leaves_per_probe": 39,
       "reseed_samples_per_leaf": 3,
       "continuation_steps": 48,
       "allows_full_campaign_disposition": true
