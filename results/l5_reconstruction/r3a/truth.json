@@ -1,0 +1,35 @@
+{
+  "config_hash": "9674211fb7cb9124da87dfdf630a0b8fff39648da21c63dd190907649fd42f51",
+  "mode": "full",
+  "probe_ids": [
+    "P1_DEEP_COMPLETE",
+    "P2_INNER_COMPLETE",
+    "P3_INNER_INCOMPLETE",
+    "P4_OUTER_COMPLETE",
+    "P5_OUTER_INCOMPLETE"
+  ],
+  "probes": [
+    {
+      "found_confirmation": 642,
+      "probe_id": "P1_DEEP_COMPLETE"
+    },
+    {
+      "found_confirmation": 642,
+      "probe_id": "P2_INNER_COMPLETE"
+    },
+    {
+      "found_confirmation": 601,
+      "probe_id": "P3_INNER_INCOMPLETE"
+    },
+    {
+      "found_confirmation": 642,
+      "probe_id": "P4_OUTER_COMPLETE"
+    },
+    {
+      "found_confirmation": 551,
+      "probe_id": "P5_OUTER_INCOMPLETE"
+    }
+  ],
+  "program_id": "R3A_L5_FIVE_POINT_NATURAL_LEAF_RECONSTRUCTION",
+  "stage": "truth"
+}

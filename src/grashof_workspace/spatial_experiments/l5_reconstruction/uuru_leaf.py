@@ -7,6 +7,8 @@ Certificates contain no ``h_c`` field.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass
 
 import numpy as np
@@ -16,6 +18,7 @@ from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 from grashof_workspace.spatial_experiments.branch_continuation import continue_implicit_branch
 from grashof_workspace.spatial_experiments.continuation import wrap_joint_delta
 from grashof_workspace.spatial_experiments.fixed_position import JACOBIAN_FD_STEP_RAD
+from grashof_workspace.spatial_experiments.implicit_manifold import orthonormal_tangent_basis
 from grashof_workspace.spatial_experiments.jacobians import matrix_rank_report
 from grashof_workspace.spatial_experiments.open_chain import OpenChainModel
 from grashof_workspace.spatial_experiments.orientation_image import (
@@ -27,7 +30,7 @@ from grashof_workspace.spatial_experiments.rotations import axis_angle_from_rota
 from grashof_workspace.spatial_experiments.serial_chain import SerialRevoluteChain
 
 from .models import (
-    ACCEPTED_CHILD_STATUSES,
+    FamilyAdmissibilityStatus,
     LeafConstructionKind,
     NaturalLeafCertificate,
     NaturalLeafSample,
@@ -54,8 +57,15 @@ def _rotation_error_vec(ra: Array, rb: Array) -> Array:
 
 
 def geometry_hash(chart: SphericalClosureChart, lambda_fixed: float) -> str:
-    blob = f"{chart.chart_id}:{lambda_fixed:.12f}:{chart.basis.tobytes().hex()}"
-    return str(abs(hash(blob)))
+    payload = {
+        "chart_id": chart.chart_id,
+        "sequence": chart.sequence,
+        "basis": np.asarray(chart.basis).round(15).tolist(),
+        "reference": np.asarray(chart.reference).round(15).tolist(),
+        "lambda_fixed": float(lambda_fixed),
+    }
+    blob = json.dumps(payload, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
 @dataclass(frozen=True, slots=True)
@@ -127,16 +137,18 @@ def problem_from_source_seed(
     p_star: tuple[float, float, float],
     *,
     leaf_id: str,
+    lambda_fixed: float | None = None,
 ) -> tuple[ClosedUURULeafProblem, Array] | None:
     state = arm.chain.evaluate(q_source)
     coords = chart.decompose(state.R)
     if coords.singular:
         return None
+    frozen = float(coords.lam if lambda_fixed is None else lambda_fixed)
     problem = ClosedUURULeafProblem(
         source=arm.model,
         independent_chain=_copy_chain(arm.chain),
         chart=chart,
-        lambda_fixed=coords.lam,
+        lambda_fixed=frozen,
         p_star=p_star,
         problem_id=leaf_id,
     )
@@ -145,6 +157,25 @@ def problem_from_source_seed(
     if not ok:
         return None
     return problem, x
+
+
+def child_tangent(problem: ClosedUURULeafProblem, x: Array) -> Array:
+    basis = orthonormal_tangent_basis(problem.jacobian(x), expected_nullity=1)
+    phys = np.asarray(basis[:, 0][2:7], dtype=float)
+    norm = float(np.linalg.norm(phys))
+    if norm <= 0.0:
+        raise ValueError("physical child tangent vanished")
+    return phys / norm
+
+
+def tangent_principal_angle(a: Array, b: Array) -> float:
+    ua = np.asarray(a, dtype=float).reshape(-1)
+    ub = np.asarray(b, dtype=float).reshape(-1)
+    na = float(np.linalg.norm(ua))
+    nb = float(np.linalg.norm(ub))
+    if na <= 0.0 or nb <= 0.0:
+        raise ValueError("tangent vanished")
+    return float(np.arccos(float(np.clip(abs(np.dot(ua / na, ub / nb)), 0.0, 1.0))))
 
 
 def _sample(problem: ClosedUURULeafProblem, x: Array, s: float) -> NaturalLeafSample:
@@ -225,7 +256,8 @@ def issue_leaf_certificate(
         return NaturalLeafCertificate(
             spec=spec,
             construction_status="UNRESOLVED",
-            closed_mechanism_status="UNRESOLVED",
+            leaf_component_status="UNRESOLVED",
+            family_admissibility_status=FamilyAdmissibilityStatus.UNRESOLVED,
             component_scope="none",
             branch_status=branch_status,
             returned=returned,
@@ -269,11 +301,11 @@ def issue_leaf_certificate(
         status = "REJECTED"
         scope = "none"
         reason = "embedding or lambda residual failed"
-    accepted = status in ACCEPTED_CHILD_STATUSES
     return NaturalLeafCertificate(
         spec=spec,
         construction_status="virtual_orientation_coordinate",
-        closed_mechanism_status=status,
+        leaf_component_status=status,
+        family_admissibility_status=FamilyAdmissibilityStatus.UNRESOLVED,
         component_scope=scope,
         branch_status=branch_status,
         returned=returned,
@@ -287,7 +319,7 @@ def issue_leaf_certificate(
         reseed=None,
         transversality=None,
         chart_overlap_status="UNRESOLVED",
-        accepted_for_reconstruction=accepted,
+        accepted_for_reconstruction=False,
         failure_or_scope_reason=reason,
     )
 

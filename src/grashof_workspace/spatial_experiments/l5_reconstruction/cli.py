@@ -1,7 +1,8 @@
 """R3A five-point reconstruction CLI.
 
 Stages: manifest, fixture, truth, source-control, leaves, compare, render, all.
-Later stages refuse missing prerequisites or config-hash drift.
+Later stages refuse missing prerequisites, config-hash/mode/probe-scope drift,
+or SHA-256 drift of hashed upstream artifacts.
 """
 
 from __future__ import annotations
@@ -12,19 +13,23 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
+from .artifacts import (
+    PREREQUISITES,
+    artifact_paths,
+    finalize_stage,
+    stage_summary_path,
+    validate_artifact_hashes,
+    validate_stage_output_refs,
+)
 from .models import (
     PROCESS_STAGE_NAMES,
     empty_campaign_result,
     json_dumps_strict,
     load_campaign_config,
+    stage_envelope,
 )
 
 STAGES = (*PROCESS_STAGE_NAMES, "all")
-
-
-def _write_json(path: Path, payload: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json_dumps_strict(payload), encoding="utf-8")
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -34,20 +39,67 @@ def _read_json(path: Path) -> dict[str, Any]:
     return payload
 
 
-def _require_hash(manifest: dict[str, Any], config_hash: str) -> None:
-    stored = str(manifest.get("config_hash", ""))
+def _require_hash(blob: dict[str, Any], config_hash: str) -> None:
+    stored = str(blob.get("config_hash", ""))
     if stored != config_hash:
         raise ValueError("config-hash drift: refusing to resume from mismatched manifest")
 
 
-def write_manifest(config_path: Path, outdir: Path) -> Path:
+def _stage_summary_path(outdir: Path, stage: str) -> Path:
+    return stage_summary_path(outdir, stage)
+
+
+def _artifact_paths(outdir: Path, stage: str, probe_ids: Sequence[str]) -> tuple[Path, ...]:
+    return artifact_paths(outdir, stage, probe_ids)
+
+
+def _require_prerequisites(
+    outdir: Path,
+    stage: str,
+    *,
+    config_hash: str,
+    mode: str,
+    probe_ids: Sequence[str],
+) -> None:
+    for prior in PREREQUISITES.get(stage, ()):
+        paths = artifact_paths(outdir, prior, probe_ids)
+        for path in paths:
+            if not path.is_file():
+                raise FileNotFoundError(f"missing prerequisite {path}")
+        summary = stage_summary_path(outdir, prior)
+        blob = _read_json(summary)
+        stored_hash = str(blob.get("config_hash", ""))
+        if stored_hash and stored_hash != config_hash:
+            raise ValueError("config-hash drift: refusing to resume from mismatched artifact")
+        stored_mode = blob.get("mode")
+        if stored_mode is not None and str(stored_mode) != mode:
+            raise ValueError(f"mode drift: {stored_mode} vs {mode}")
+        stored_probes = blob.get("probe_ids")
+        if stored_probes is not None:
+            allowed = {str(item) for item in stored_probes}
+            missing = [pid for pid in probe_ids if pid not in allowed]
+            if missing:
+                raise ValueError(f"probe-scope drift: {missing} not in upstream {sorted(allowed)}")
+        validate_stage_output_refs(outdir, blob)
+        validate_artifact_hashes(outdir, paths)
+
+
+def write_manifest(config_path: Path, outdir: Path, *, mode: str = "smoke") -> Path:
     config = load_campaign_config(config_path)
     campaign = empty_campaign_result(config)
     payload = campaign.to_json_dict()
-    payload["stage"] = "manifest"
-    path = outdir / "manifest.json"
-    _write_json(path, payload)
-    return path
+    probe_ids = tuple(p.probe_id for p in config.probes)
+    payload.update(stage_envelope(config, stage="manifest", mode=mode, probe_ids=probe_ids))
+    outdir.mkdir(parents=True, exist_ok=True)
+    finalize_stage(
+        outdir,
+        payload,
+        config=config,
+        stage="manifest",
+        mode=mode,
+        probe_ids=probe_ids,
+    )
+    return outdir / "manifest.json"
 
 
 def _load_manifest(outdir: Path, config_hash: str) -> dict[str, Any]:
@@ -67,24 +119,33 @@ def run_stage(
     mode: str,
     probe_id: str | None,
     resume_from: Path | None,
+    probe_ids: Sequence[str] | None = None,
 ) -> dict[str, Any]:
     config = load_campaign_config(config_path)
     outdir.mkdir(parents=True, exist_ok=True)
     if resume_from is not None:
         prior = _read_json(resume_from)
         _require_hash(prior, config.config_hash)
+        stored_mode = prior.get("mode")
+        if stored_mode is not None and str(stored_mode) != mode:
+            raise ValueError(f"mode drift: {stored_mode} vs {mode}")
 
     if stage == "manifest":
-        path = write_manifest(config_path, outdir)
+        path = write_manifest(config_path, outdir, mode=mode)
         return _read_json(path)
 
-    _load_manifest(outdir, config.config_hash)
-    probes = [config.probe(probe_id)] if probe_id else list(config.probes)
+    if stage != "all":
+        _load_manifest(outdir, config.config_hash)
+    selected = list(probe_ids) if probe_ids else ([probe_id] if probe_id else [])
+    probes = [config.probe(pid) for pid in selected] if selected else list(config.probes)
+    probe_ids = tuple(p.probe_id for p in probes)
+    if stage != "all":
+        _require_prerequisites(outdir, stage, config_hash=config.config_hash, mode=mode, probe_ids=probe_ids)
 
     if stage == "fixture":
         from .positive_control import write_fixture_stage
 
-        return write_fixture_stage(config, outdir, probes)
+        return write_fixture_stage(config, outdir, probes, mode=mode)
     if stage == "truth":
         from .direct_truth import write_truth_stage
 
@@ -104,9 +165,9 @@ def run_stage(
     if stage == "render":
         from .readout import write_render_stage
 
-        return write_render_stage(config, outdir, probes, mode=mode, generate_gif=mode == "full")
+        return write_render_stage(config, outdir, probes, mode=mode, generate_gif=False)
     if stage == "all":
-        write_manifest(config_path, outdir)
+        write_manifest(config_path, outdir, mode=mode)
         from .comparison import write_compare_stage
         from .direct_truth import write_truth_stage
         from .leaf_family import write_leaves_stage
@@ -114,11 +175,26 @@ def run_stage(
         from .readout import write_render_stage
         from .source_control import write_source_control_stage
 
-        write_fixture_stage(config, outdir, probes)
+        def _gate(next_stage: str) -> None:
+            _require_prerequisites(
+                outdir,
+                next_stage,
+                config_hash=config.config_hash,
+                mode=mode,
+                probe_ids=probe_ids,
+            )
+
+        _gate("fixture")
+        write_fixture_stage(config, outdir, probes, mode=mode)
+        _gate("truth")
         write_truth_stage(config, outdir, probes, mode=mode)
+        _gate("source-control")
         write_source_control_stage(config, outdir, probes, mode=mode)
+        _gate("leaves")
         write_leaves_stage(config, outdir, probes, mode=mode)
+        _gate("compare")
         result = write_compare_stage(config, outdir, probes, mode=mode)
+        _gate("render")
         write_render_stage(config, outdir, probes, mode=mode, generate_gif=False)
         return result
     raise ValueError(f"unknown stage {stage}")
@@ -129,8 +205,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--outdir", type=Path, required=True)
     parser.add_argument("--stage", choices=STAGES, default="manifest")
-    parser.add_argument("--mode", choices=("smoke", "full"), default="smoke")
-    parser.add_argument("--probe", dest="probe_id", default=None)
+    parser.add_argument("--mode", choices=("smoke", "full", "ci"), default="smoke")
+    parser.add_argument("--probe", dest="probe_ids", action="append", default=None)
     parser.add_argument("--resume-from", type=Path, default=None)
     return parser
 
@@ -142,8 +218,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         outdir=args.outdir,
         stage=args.stage,
         mode=args.mode,
-        probe_id=args.probe_id,
+        probe_id=None,
         resume_from=args.resume_from,
+        probe_ids=args.probe_ids,
     )
     print(json_dumps_strict({"stage": args.stage, "program_id": payload.get("program_id")}))
     return 0

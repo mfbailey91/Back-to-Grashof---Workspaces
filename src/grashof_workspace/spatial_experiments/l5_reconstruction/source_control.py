@@ -20,13 +20,18 @@ from grashof_workspace.spatial_experiments.parent_level_sets import (
     pointing_scalar,
 )
 
+from .artifacts import finalize_stage
 from .direct_truth import found_configurations
 from .models import (
     CampaignConfig,
     DirectPointingTruth,
     FixedPointProbe,
+    SourceControlCRecord,
+    SourceIntervalStatus,
     json_dumps_strict,
     json_object,
+    resolve_stage_budgets,
+    stage_envelope,
 )
 from .positive_control import PositiveControlArm, build_positive_control_arm
 from .sphere_grid import SphereGrid, build_sphere_grid, paint_pointings
@@ -34,6 +39,29 @@ from .sphere_grid import SphereGrid, build_sphere_grid, paint_pointings
 Array = NDArray[np.floating]
 Vec3 = tuple[float, float, float]
 DEDUP_Q_TOL = 0.35
+COVERED_SOURCE_INTERVAL_STATUSES = frozenset(
+    {
+        SourceIntervalStatus.RETURNED_COMPONENT_FOUND,
+        SourceIntervalStatus.COMPONENT_COMPLETE,
+    }
+)
+
+
+def classify_source_interval_status(
+    *,
+    returned_count: int,
+    open_count: int,
+    singular_count: int,
+) -> SourceIntervalStatus:
+    """Evidence at one ``c``. Never emits ``COMPONENT_COMPLETE``."""
+
+    if returned_count > 0:
+        return SourceIntervalStatus.RETURNED_COMPONENT_FOUND
+    if open_count > 0:
+        return SourceIntervalStatus.OPEN_ONLY
+    if singular_count > 0:
+        return SourceIntervalStatus.SINGULAR
+    return SourceIntervalStatus.UNRESOLVED
 
 
 def radial_normal(p_star: Vec3 | Array) -> Vec3:
@@ -107,6 +135,7 @@ class SourceControlResult:
     hit_cells: tuple[bool, ...]
     unresolved_c_intervals: tuple[tuple[float, float], ...]
     notes: tuple[str, ...]
+    c_records: tuple[SourceControlCRecord, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -118,10 +147,84 @@ class SourceControlResult:
                 "pointing_samples": [list(d) for d in self.pointing_samples],
                 "hit_cell_count": int(sum(self.hit_cells)),
                 "unresolved_c_intervals": [list(iv) for iv in self.unresolved_c_intervals],
+                "c_records": [item.to_json_dict() for item in self.c_records],
                 "notes": list(self.notes),
                 "certificate_status": None,
             }
         )
+
+
+def unresolved_c_intervals_from_records(
+    c_values: tuple[float, ...],
+    records: tuple[SourceControlCRecord, ...] | list[SourceControlCRecord],
+) -> tuple[tuple[float, float], ...]:
+    """Neighbor spans of c bins that are missing, open, singular, or unresolved."""
+    if not c_values:
+        return ()
+    covered = {status.value for status in COVERED_SOURCE_INTERVAL_STATUSES}
+    by_c = {float(item.c): item for item in records}
+    out: list[tuple[float, float]] = []
+    for i, c in enumerate(c_values):
+        rec = by_c.get(float(c))
+        status = None if rec is None else rec.parameter_interval_status
+        if isinstance(status, SourceIntervalStatus):
+            status = status.value
+        if rec is not None and status in covered:
+            continue
+        lo = c_values[i - 1] if i > 0 else c
+        hi = c_values[i + 1] if i + 1 < len(c_values) else c
+        out.append((float(lo), float(hi)))
+    return tuple(out)
+
+
+def _fiber_kind(fiber: SourceControlFiber) -> str:
+    if fiber.returned or fiber.branch_status == "returned":
+        return "returned"
+    if fiber.branch_status == "singular":
+        return "singular"
+    if fiber.branch_status == "unresolved" or not fiber.q_samples:
+        return "unresolved"
+    return "open"
+
+
+def summarize_c_records(
+    c_values: tuple[float, ...],
+    fibers_by_c: dict[float, tuple[SourceControlFiber, ...]],
+    *,
+    expected_seed_counts: dict[float, int],
+    projected_seed_counts: dict[float, int],
+    unique: tuple[SourceControlFiber, ...],
+) -> tuple[SourceControlCRecord, ...]:
+    records: list[SourceControlCRecord] = []
+    for c in c_values:
+        group = fibers_by_c.get(float(c), ())
+        kinds = [_fiber_kind(item) for item in group]
+        returned = sum(1 for kind in kinds if kind == "returned")
+        open_count = sum(1 for kind in kinds if kind == "open")
+        singular = sum(1 for kind in kinds if kind == "singular")
+        unresolved = sum(1 for kind in kinds if kind == "unresolved")
+        continued = sum(1 for item in group if item.q_samples)
+        unique_ids = tuple(item.fiber_id for item in unique if abs(item.c - c) <= 1e-12 and item.q_samples)
+        status = classify_source_interval_status(
+            returned_count=returned,
+            open_count=open_count,
+            singular_count=singular,
+        )
+        records.append(
+            SourceControlCRecord(
+                c=float(c),
+                expected_seed_count=int(expected_seed_counts.get(float(c), 0)),
+                projected_seed_count=int(projected_seed_counts.get(float(c), 0)),
+                continued_component_count=continued,
+                returned_count=returned,
+                open_count=open_count,
+                singular_count=singular,
+                unresolved_count=unresolved,
+                deduplicated_component_ids=unique_ids,
+                parameter_interval_status=status.value,
+            )
+        )
+    return tuple(records)
 
 
 def choose_c_values(h_samples: tuple[float, ...], count: int) -> tuple[float, ...]:
@@ -231,28 +334,47 @@ def build_source_control(
     h_samples = tuple(h_value(arm, q, n) for q in configs)
     c_values = choose_c_values(h_samples, c_count)
     fibers: list[SourceControlFiber] = []
+    fibers_by_c: dict[float, list[SourceControlFiber]] = {}
+    expected_seed_counts: dict[float, int] = {}
+    projected_seed_counts: dict[float, int] = {}
     for i, c in enumerate(c_values):
         seeds = [q for q in configs if abs(h_value(arm, q, n) - c) <= 0.35] or list(configs[:3])
         if not seeds and configs:
             seeds = [min(configs, key=lambda q: abs(h_value(arm, q, n) - c))]
-        for j, seed in enumerate(seeds[:3]):
-            fibers.append(
-                continue_source_fiber(
-                    arm,
-                    probe,
-                    n,
-                    c,
-                    seed,
-                    fiber_id=f"{probe.probe_id}_c{i}_s{j}",
-                    max_steps=max_steps,
-                    step_size=step_size,
-                )
+        chosen = seeds[:3]
+        expected_seed_counts[float(c)] = len(chosen)
+        projected = 0
+        group: list[SourceControlFiber] = []
+        for j, seed in enumerate(chosen):
+            _q_proj, ok, _ = correct_to_levelset(arm.model, seed, probe.p_star, n, c)
+            if ok:
+                projected += 1
+            fiber = continue_source_fiber(
+                arm,
+                probe,
+                n,
+                c,
+                seed,
+                fiber_id=f"{probe.probe_id}_c{i}_s{j}",
+                max_steps=max_steps,
+                step_size=step_size,
             )
+            group.append(fiber)
+            fibers.append(fiber)
+        projected_seed_counts[float(c)] = projected
+        fibers_by_c[float(c)] = group
     unique = deduplicate_fibers(tuple(fibers))
     pointings = tuple(d for fiber in unique for d in fiber.pointing_samples)
     grid = build_sphere_grid(confirmation_level)
     hits = paint_pointings(grid, pointings)
-    unresolved = tuple((c_values[i], c_values[i + 1]) for i in range(len(c_values) - 1) if not unique)
+    c_records = summarize_c_records(
+        c_values,
+        {key: tuple(val) for key, val in fibers_by_c.items()},
+        expected_seed_counts=expected_seed_counts,
+        projected_seed_counts=projected_seed_counts,
+        unique=unique,
+    )
+    unresolved = unresolved_c_intervals_from_records(c_values, c_records)
     return SourceControlResult(
         probe_id=probe.probe_id,
         n=n,
@@ -264,7 +386,9 @@ def build_source_control(
         notes=(
             "Source h=c control; not a natural UURU child.",
             "n = p_star / ||p_star||.",
+            "Unresolved c intervals come from failed or open bins, not from an empty fiber list.",
         ),
+        c_records=c_records,
     )
 
 
@@ -274,12 +398,11 @@ def write_source_control_stage(
     probes: list[FixedPointProbe],
     *,
     mode: str,
-    max_steps: int = 16,
 ) -> dict[str, Any]:
     import json
 
     arm = build_positive_control_arm(config.geometry)
-    budgets = config.mode(mode)
+    budgets = resolve_stage_budgets(config, mode)
     records: list[dict[str, Any]] = []
     for probe in probes:
         truth_path = outdir / probe.probe_id / "direct_truth.json"
@@ -335,7 +458,7 @@ def write_source_control_stage(
             discovery,
             c_count=budgets.source_c_value_count,
             confirmation_level=budgets.confirmation_icosphere_level,
-            max_steps=max_steps,
+            max_steps=budgets.continuation_steps,
         )
         path = outdir / probe.probe_id / "source_control.json"
         path.write_text(json_dumps_strict(result.to_json_dict()), encoding="utf-8")
@@ -344,11 +467,23 @@ def write_source_control_stage(
         _ = wrap_joint_delta
         _ = SphereGrid
     summary = {
-        "program_id": config.program_id,
-        "config_hash": config.config_hash,
-        "stage": "source-control",
-        "mode": mode,
+        **stage_envelope(
+            config,
+            stage="source-control",
+            mode=mode,
+            probe_ids=tuple(p.probe_id for p in probes),
+        ),
         "probes": records,
+        "allows_full_campaign_disposition": budgets.allows_full_campaign_disposition,
+        "limitations": []
+        if budgets.allows_full_campaign_disposition
+        else ["mode cannot issue full-campaign disposition"],
     }
-    (outdir / "source_control.json").write_text(json_dumps_strict(summary), encoding="utf-8")
-    return summary
+    return finalize_stage(
+        outdir,
+        summary,
+        config=config,
+        stage="source-control",
+        mode=mode,
+        probe_ids=tuple(p.probe_id for p in probes),
+    )

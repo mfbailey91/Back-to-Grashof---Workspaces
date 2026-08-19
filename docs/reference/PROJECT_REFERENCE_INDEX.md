@@ -74,6 +74,14 @@ Source-derived natural mechanism leaves versus task-sliced `h=c` controls (ADR-0
 
 Five-point L5 positive-control execution program. Hub: [`../../results/l5_reconstruction/r3a/index.html`](../../results/l5_reconstruction/r3a/index.html).
 
+### [`../methods/R3A_HARDENING_EXECUTION.md`](../methods/R3A_HARDENING_EXECUTION.md)
+
+R3A-H0–H6 evidence-hardening contract: evaluative family audits, independent direct reference, and stage artifact authority (ADR-050). Guide: [`CURSOR_GUIDE_R3A_HARDENING.md`](../methods/CURSOR_GUIDE_R3A_HARDENING.md).
+
+### [`../methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md`](../methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md)
+
+R3A-H7–H10 follow-up: metric applicability, two-resolution refinement, leaf-scoped admission, chart responsibility, and compact artifact closeout (ADR-051 draft). Guide: [`CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md`](../methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md).
+
 ### Archived V05–V09 planning lineage
 
 Historical sequential sprint labels (V05–V09) are preserved under [`../archive/programs/`](../archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md) and [`../archive/sprints/`](../archive/sprints/SPRINT_01.md). They are not the active roadmap.

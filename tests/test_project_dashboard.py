@@ -37,6 +37,10 @@ def test_render_project_index_covers_capabilities_and_l3_l7() -> None:
     assert "v05b_exact_u_pair_4r_fiber.gif" in html
     assert "v05d_exact_u_pair_4r_overlay.gif" in html
     assert "mechanism_explorer_only" in html
+    assert "reconstruction not accepted" in html.casefold()
+    assert "implemented kernels" in html.casefold()
+    assert "R3B" in html
+    assert "held" in html.casefold()
 
 
 def test_render_explorer_index_mentions_active_ladder() -> None:

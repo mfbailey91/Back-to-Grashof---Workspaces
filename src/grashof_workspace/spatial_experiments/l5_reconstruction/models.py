@@ -45,6 +45,62 @@ class ProcessStageStatus(str, Enum):
     COMPLETE = "COMPLETE"
 
 
+class ArtifactHashDrift(ValueError):
+    """Recorded SHA-256 does not match the file on disk."""
+
+
+@dataclass(frozen=True, slots=True)
+class StageArtifactRef:
+    stage: str
+    path: str
+    sha256: str
+    config_hash: str
+    mode: str
+    probe_ids: tuple[str, ...]
+    schema_version: str = ""
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "stage": self.stage,
+                "path": self.path,
+                "sha256": self.sha256,
+                "config_hash": self.config_hash,
+                "mode": self.mode,
+                "probe_ids": list(self.probe_ids),
+                "schema_version": self.schema_version,
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class StageResult:
+    stage: str
+    stage_status: ProcessStageStatus
+    scientific_disposition: str
+    config_hash: str
+    mode: str
+    probe_ids: tuple[str, ...]
+    inputs: tuple[StageArtifactRef, ...]
+    outputs: tuple[StageArtifactRef, ...]
+    limitations: tuple[str, ...] = ()
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "stage": self.stage,
+                "stage_status": self.stage_status.value,
+                "scientific_disposition": self.scientific_disposition,
+                "config_hash": self.config_hash,
+                "mode": self.mode,
+                "probe_ids": list(self.probe_ids),
+                "inputs": [item.to_json_dict() for item in self.inputs],
+                "outputs": [item.to_json_dict() for item in self.outputs],
+                "limitations": list(self.limitations),
+            }
+        )
+
+
 class PointingSolveStatus(str, Enum):
     FOUND = "FOUND"
     NOT_FOUND_AT_DECLARED_BUDGET = "NOT_FOUND_AT_DECLARED_BUDGET"
@@ -64,10 +120,92 @@ class ReconstructionDisposition(str, Enum):
     UNRESOLVED = "UNRESOLVED"
 
 
+class CampaignBlocker(str, Enum):
+    """First failing scientific column. Not a generic PARTIAL label."""
+
+    DIRECT_REFERENCE_BLOCKED = "DIRECT_REFERENCE_BLOCKED"
+    STITCHING_CONTROL_BLOCKED = "STITCHING_CONTROL_BLOCKED"
+    NATURAL_DECOMPOSITION_BLOCKED = "NATURAL_DECOMPOSITION_BLOCKED"
+    CONTROLLED_COVER_ACCEPTED = "CONTROLLED_COVER_ACCEPTED"
+
+
+class FamilyAdmissibilityStatus(str, Enum):
+    PASS = "PASS"
+    FAIL = "FAIL"
+    UNRESOLVED = "UNRESOLVED"
+
+
+class ReseedScope(str, Enum):
+    LOCAL = "LOCAL"
+    COMPONENT = "COMPONENT"
+
+
+class ReseedDisposition(str, Enum):
+    LOCAL_PASS = "LOCAL_PASS"
+    COMPONENT_PASS = "COMPONENT_PASS"
+    FAIL = "FAIL"
+    UNRESOLVED = "UNRESOLVED"
+
+
+class IntervalStatus(str, Enum):
+    """Finite-domain coverage of one declared chart-by-lambda bin.
+
+    ``SAMPLED_ADMISSIBLE`` is not a complete foliation, and is never ``COMPLETE``.
+    """
+
+    UNSAMPLED = "UNSAMPLED"
+    SAMPLED_LOCAL = "SAMPLED_LOCAL"
+    SAMPLED_COMPONENT = "SAMPLED_COMPONENT"
+    SAMPLED_ADMISSIBLE = "SAMPLED_ADMISSIBLE"
+    CRITICAL_OR_BOUNDARY = "CRITICAL_OR_BOUNDARY"
+    UNRESOLVED = "UNRESOLVED"
+    NOT_REQUIRED = "NOT_REQUIRED"
+
+
+class SourceIntervalStatus(str, Enum):
+    """Per-c source-control evidence. Not a component-completeness theorem."""
+
+    RETURNED_COMPONENT_FOUND = "RETURNED_COMPONENT_FOUND"
+    OPEN_ONLY = "OPEN_ONLY"
+    SINGULAR = "SINGULAR"
+    UNRESOLVED = "UNRESOLVED"
+    COMPONENT_COMPLETE = "COMPONENT_COMPLETE"
+
+
+class LeafPairStatus(str, Enum):
+    DUPLICATE_SAME_COMPONENT = "DUPLICATE_SAME_COMPONENT"
+    DISTINCT_COMPATIBLE = "DISTINCT_COMPATIBLE"
+    CROSSING_DIFFERENT_TANGENT = "CROSSING_DIFFERENT_TANGENT"
+    INCOMPATIBLE_COMPONENT = "INCOMPATIBLE_COMPONENT"
+    UNRESOLVED = "UNRESOLVED"
+
+
 class CompletenessLabel(str, Enum):
     COMPLETE = "COMPLETE"
     PARTIAL = "PARTIAL"
     BOUNDARY = "BOUNDARY"
+
+
+@dataclass(frozen=True, slots=True)
+class ChartAtlasPolicy:
+    policy_id: str
+    chart_ids: tuple[str, ...]
+    canonical_assignment: str
+    singularity_margin: float
+    overlap_margin: float
+    claim_scope: str
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "policy_id": self.policy_id,
+                "chart_ids": list(self.chart_ids),
+                "canonical_assignment": self.canonical_assignment,
+                "singularity_margin": self.singularity_margin,
+                "overlap_margin": self.overlap_margin,
+                "claim_scope": self.claim_scope,
+            }
+        )
 
 
 class OracleFeasibility(str, Enum):
@@ -80,6 +218,74 @@ class CellClass(str, Enum):
     STRICT_COVERED = "STRICT_COVERED"
     STRICT_UNCOVERED = "STRICT_UNCOVERED"
     AMBIGUOUS_BOUNDARY = "AMBIGUOUS_BOUNDARY"
+
+
+class MetricState(str, Enum):
+    """Applicability of one comparison scalar. ``None`` is not a pass/fail."""
+
+    VALUE = "VALUE"
+    NOT_APPLICABLE = "NOT_APPLICABLE"
+    UNEVALUABLE = "UNEVALUABLE"
+    FAILED_VALUE = "FAILED_VALUE"
+
+
+@dataclass(frozen=True, slots=True)
+class ScalarMetric:
+    state: MetricState
+    value: float | None
+    reason: str
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object({"state": self.state.value, "value": self.value, "reason": self.reason})
+
+    @classmethod
+    def computed(cls, value: float, reason: str = "computed") -> ScalarMetric:
+        return cls(MetricState.VALUE, float(value), reason)
+
+    @classmethod
+    def not_applicable(cls, reason: str) -> ScalarMetric:
+        return cls(MetricState.NOT_APPLICABLE, None, reason)
+
+    @classmethod
+    def unevaluable(cls, reason: str) -> ScalarMetric:
+        return cls(MetricState.UNEVALUABLE, None, reason)
+
+    @classmethod
+    def failed(cls, reason: str) -> ScalarMetric:
+        return cls(MetricState.FAILED_VALUE, None, reason)
+
+    @classmethod
+    def from_json_fields(
+        cls,
+        blob: Mapping[str, Any],
+        name: str,
+        *,
+        default_unevaluable_reason: str = "legacy null metric",
+    ) -> ScalarMetric:
+        """Load ``<name>`` plus optional ``<name>_state`` / ``<name>_reason``.
+
+        Pre-H7 JSON (numeric only) is ``VALUE`` when present and ``UNEVALUABLE``
+        when null. Missing refinement is never treated as a pass.
+        """
+
+        raw_state = blob.get(f"{name}_state")
+        raw_value = blob.get(name)
+        raw_reason = blob.get(f"{name}_reason")
+        reason = str(raw_reason) if raw_reason else ""
+        if raw_state is None:
+            if raw_value is None:
+                return cls.unevaluable(reason or default_unevaluable_reason)
+            return cls.computed(float(raw_value), reason or "legacy numeric")
+        state = MetricState(str(raw_state))
+        value = None if raw_value is None else float(raw_value)
+        if not reason:
+            reason = {
+                MetricState.VALUE: "loaded",
+                MetricState.NOT_APPLICABLE: "not applicable",
+                MetricState.UNEVALUABLE: "unevaluable",
+                MetricState.FAILED_VALUE: "failed",
+            }[state]
+        return cls(state, value, reason)
 
 
 def json_safe(obj: Any) -> Any:
@@ -115,6 +321,22 @@ def json_dumps_strict(payload: Mapping[str, Any] | dict[str, Any]) -> str:
     return json.dumps(json_object(dict(payload)), indent=2, allow_nan=False, sort_keys=True) + "\n"
 
 
+def stage_envelope(
+    config: CampaignConfig,
+    *,
+    stage: str,
+    mode: str,
+    probe_ids: tuple[str, ...] | list[str],
+) -> dict[str, Any]:
+    return {
+        "program_id": config.program_id,
+        "config_hash": config.config_hash,
+        "stage": stage,
+        "mode": mode,
+        "probe_ids": list(probe_ids),
+    }
+
+
 def _as_vec3(values: Any, *, name: str) -> Vec3:
     arr = list(values)
     if len(arr) != 3:
@@ -135,6 +357,43 @@ def _as_mat3(values: Any, *, name: str) -> Mat3:
 def config_sha256(raw: Mapping[str, Any]) -> str:
     blob = json.dumps(raw, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
     return hashlib.sha256(blob).hexdigest()
+
+
+def file_sha256(path: Path, *, chunk_size: int = 1024 * 1024) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        while True:
+            block = handle.read(chunk_size)
+            if not block:
+                break
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def git_provenance(repo: Path | None = None) -> dict[str, Any]:
+    """Best-effort source commit and dirty-tree flag. Missing git is not a crash."""
+
+    import subprocess
+
+    cwd = Path(repo) if repo is not None else Path.cwd()
+    try:
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=cwd,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+        dirty = bool(
+            subprocess.check_output(
+                ["git", "status", "--porcelain"],
+                cwd=cwd,
+                stderr=subprocess.DEVNULL,
+                text=True,
+            ).strip()
+        )
+        return {"git_commit": commit, "dirty_tree": dirty}
+    except (OSError, subprocess.CalledProcessError):
+        return {"git_commit": None, "dirty_tree": None}
 
 
 @dataclass(frozen=True, slots=True)
@@ -301,6 +560,55 @@ class PointingTargetSolve:
 
 
 @dataclass(frozen=True, slots=True)
+class DirectReferenceCell:
+    cell_id: str
+    vertex_or_barycenter_direction: Vec3
+    oracle_status: OracleFeasibility
+    direct_status: PointingSolveStatus
+    direct_cluster_count: int
+    best_position_residual_m: float | None
+    best_pointing_error_rad: float | None
+    strict_reference_eligible: bool
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "cell_id": self.cell_id,
+                "vertex_or_barycenter_direction": list(self.vertex_or_barycenter_direction),
+                "oracle_status": self.oracle_status.value,
+                "direct_status": self.direct_status.value,
+                "direct_cluster_count": self.direct_cluster_count,
+                "best_position_residual_m": self.best_position_residual_m,
+                "best_pointing_error_rad": self.best_pointing_error_rad,
+                "strict_reference_eligible": self.strict_reference_eligible,
+            }
+        )
+
+    @classmethod
+    def from_json_dict(cls, payload: Mapping[str, Any]) -> DirectReferenceCell:
+        return cls(
+            cell_id=str(payload["cell_id"]),
+            vertex_or_barycenter_direction=_as_vec3(
+                payload["vertex_or_barycenter_direction"], name="vertex_or_barycenter_direction"
+            ),
+            oracle_status=OracleFeasibility(str(payload["oracle_status"])),
+            direct_status=PointingSolveStatus(str(payload["direct_status"])),
+            direct_cluster_count=int(payload["direct_cluster_count"]),
+            best_position_residual_m=(
+                None
+                if payload.get("best_position_residual_m") is None
+                else float(payload["best_position_residual_m"])
+            ),
+            best_pointing_error_rad=(
+                None
+                if payload.get("best_pointing_error_rad") is None
+                else float(payload["best_pointing_error_rad"])
+            ),
+            strict_reference_eligible=bool(payload["strict_reference_eligible"]),
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class DirectPointingTruth:
     probe_id: str
     split: str
@@ -412,20 +720,118 @@ class NaturalLeafSample:
 
 
 @dataclass(frozen=True, slots=True)
-class ReseedAudit:
-    status: str
-    n_reseeds: int
-    max_symmetric_q_distance_rad: float | None
-    max_pointing_distance_rad: float | None
+class ReseedAttempt:
+    reseed_id: str
+    seed_s: float
+    local_seed_q_error: float | None
+    local_seed_pointing_error: float | None
+    local_lambda_error: float | None
+    local_tangent_error: float | None
+    symmetric_branch_q_distance: float | None
+    symmetric_branch_pointing_distance: float | None
+    return_status_match: bool | None
+    branch_status_match: bool | None
+    circuit_or_component_match: bool | None
+    scope: ReseedScope
+    disposition: ReseedDisposition
     notes: tuple[str, ...] = ()
+
+    @property
+    def lambda_error_rad(self) -> float | None:
+        return self.local_lambda_error
+
+    @property
+    def tangent_error(self) -> float | None:
+        return self.local_tangent_error
+
+    @property
+    def returned_match(self) -> bool | None:
+        return self.return_status_match
+
+    @property
+    def component_identity(self) -> bool | None:
+        return self.circuit_or_component_match
+
+    @property
+    def status(self) -> str:
+        return self.disposition.value
+
+    @property
+    def symmetric_wrapped_q_distance_rad(self) -> float | None:
+        return self.symmetric_branch_q_distance
+
+    @property
+    def symmetric_pointing_distance_rad(self) -> float | None:
+        return self.symmetric_branch_pointing_distance
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
             {
-                "status": self.status,
+                "reseed_id": self.reseed_id,
+                "seed_s": self.seed_s,
+                "local_seed_q_error": self.local_seed_q_error,
+                "local_seed_pointing_error": self.local_seed_pointing_error,
+                "local_lambda_error": self.local_lambda_error,
+                "lambda_error_rad": self.local_lambda_error,
+                "local_tangent_error": self.local_tangent_error,
+                "tangent_error": self.local_tangent_error,
+                "symmetric_branch_q_distance": self.symmetric_branch_q_distance,
+                "symmetric_wrapped_q_distance_rad": self.symmetric_branch_q_distance,
+                "symmetric_branch_pointing_distance": self.symmetric_branch_pointing_distance,
+                "symmetric_pointing_distance_rad": self.symmetric_branch_pointing_distance,
+                "return_status_match": self.return_status_match,
+                "returned_match": self.return_status_match,
+                "branch_status_match": self.branch_status_match,
+                "circuit_or_component_match": self.circuit_or_component_match,
+                "component_identity": self.circuit_or_component_match,
+                "scope": self.scope.value,
+                "disposition": self.disposition.value,
+                "status": self.disposition.value,
+                "notes": list(self.notes),
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ReseedAudit:
+    disposition: ReseedDisposition
+    n_reseeds: int
+    max_symmetric_q_distance_rad: float | None
+    max_pointing_distance_rad: float | None
+    notes: tuple[str, ...] = ()
+    attempts: tuple[ReseedAttempt, ...] = ()
+    max_tangent_error: float | None = None
+    all_component_ids_match: bool | None = None
+    max_local_seed_q_error: float | None = None
+    max_local_seed_pointing_error: float | None = None
+
+    @property
+    def status(self) -> str:
+        return self.disposition.value
+
+    @property
+    def reseed_status(self) -> str:
+        return self.disposition.value
+
+    @property
+    def max_symmetric_pointing_distance_rad(self) -> float | None:
+        return self.max_pointing_distance_rad
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "status": self.disposition.value,
+                "disposition": self.disposition.value,
+                "reseed_status": self.disposition.value,
                 "n_reseeds": self.n_reseeds,
                 "max_symmetric_q_distance_rad": self.max_symmetric_q_distance_rad,
                 "max_pointing_distance_rad": self.max_pointing_distance_rad,
+                "max_symmetric_pointing_distance_rad": self.max_pointing_distance_rad,
+                "max_local_seed_q_error": self.max_local_seed_q_error,
+                "max_local_seed_pointing_error": self.max_local_seed_pointing_error,
+                "max_tangent_error": self.max_tangent_error,
+                "all_component_ids_match": self.all_component_ids_match,
+                "attempts": [item.to_json_dict() for item in self.attempts],
                 "notes": list(self.notes),
             }
         )
@@ -437,6 +843,10 @@ class TransversalityAudit:
     sigma_min: float | None
     rank_span: int | None
     notes: tuple[str, ...] = ()
+    leaf_id_a: str | None = None
+    leaf_id_b: str | None = None
+    lambda_a: float | None = None
+    lambda_b: float | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -444,6 +854,44 @@ class TransversalityAudit:
                 "status": self.status,
                 "sigma_min": self.sigma_min,
                 "rank_span": self.rank_span,
+                "leaf_id_a": self.leaf_id_a,
+                "leaf_id_b": self.leaf_id_b,
+                "lambda_a": self.lambda_a,
+                "lambda_b": self.lambda_b,
+                "notes": list(self.notes),
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class ChartOverlapAudit:
+    status: str
+    source_q_correspondence: bool | None = None
+    recovered_rotation_correspondence: bool | None = None
+    chart_coordinate_transform: bool | None = None
+    family_parameter_correspondence: bool | None = None
+    component_identity: bool | None = None
+    pointing_set_correspondence: bool | None = None
+    notes: tuple[str, ...] = ()
+    required: bool = True
+    claim_scope: str = "multi_chart_declared_domain"
+    chart_id_a: str | None = None
+    chart_id_b: str | None = None
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "status": self.status,
+                "source_q_correspondence": self.source_q_correspondence,
+                "recovered_rotation_correspondence": self.recovered_rotation_correspondence,
+                "chart_coordinate_transform": self.chart_coordinate_transform,
+                "family_parameter_correspondence": self.family_parameter_correspondence,
+                "component_identity": self.component_identity,
+                "pointing_set_correspondence": self.pointing_set_correspondence,
+                "required": self.required,
+                "claim_scope": self.claim_scope,
+                "chart_id_a": self.chart_id_a,
+                "chart_id_b": self.chart_id_b,
                 "notes": list(self.notes),
             }
         )
@@ -453,7 +901,8 @@ class TransversalityAudit:
 class NaturalLeafCertificate:
     spec: NaturalLeafSpec
     construction_status: str
-    closed_mechanism_status: str
+    leaf_component_status: str
+    family_admissibility_status: FamilyAdmissibilityStatus
     component_scope: str
     branch_status: str
     returned: bool
@@ -469,6 +918,11 @@ class NaturalLeafCertificate:
     chart_overlap_status: str
     accepted_for_reconstruction: bool
     failure_or_scope_reason: str
+    responsible_chart_id: str | None = None
+
+    @property
+    def closed_mechanism_status(self) -> str:
+        return self.leaf_component_status
 
     def to_json_dict(self) -> dict[str, Any]:
         payload = {
@@ -482,7 +936,9 @@ class NaturalLeafCertificate:
             "joint_role_sequence": list(self.spec.joint_role_sequence),
             "geometry_hash": self.spec.geometry_hash,
             "construction_status": self.construction_status,
-            "closed_mechanism_status": self.closed_mechanism_status,
+            "leaf_component_status": self.leaf_component_status,
+            "closed_mechanism_status": self.leaf_component_status,
+            "family_admissibility_status": self.family_admissibility_status.value,
             "component_scope": self.component_scope,
             "branch_status": self.branch_status,
             "returned": self.returned,
@@ -499,8 +955,86 @@ class NaturalLeafCertificate:
             "chart_overlap_status": self.chart_overlap_status,
             "accepted_for_reconstruction": self.accepted_for_reconstruction,
             "failure_or_scope_reason": self.failure_or_scope_reason,
+            "responsible_chart_id": self.responsible_chart_id,
         }
         return json_object(payload)
+
+
+@dataclass(frozen=True, slots=True)
+class FamilyIntervalRecord:
+    chart_id: str
+    lambda_interval: tuple[float, float]
+    sampled_lambda_values: tuple[float, ...]
+    accepted_leaf_ids: tuple[str, ...]
+    rejected_leaf_ids: tuple[str, ...]
+    unresolved_leaf_ids: tuple[str, ...]
+    duplicate_groups: tuple[tuple[str, ...], ...] = ()
+    critical_values: tuple[float, ...] = ()
+    birth_death_merge_events: tuple[str, ...] = ()
+    interval_status: IntervalStatus = IntervalStatus.UNSAMPLED
+    required: bool = False
+    seed_count: int = 0
+    leaf_count: int = 0
+    component_status_counts: dict[str, int] | None = None
+    admissibility_status_counts: dict[str, int] | None = None
+    budget_exhausted: bool = False
+
+    def to_json_dict(self) -> dict[str, Any]:
+        status = (
+            self.interval_status.value
+            if isinstance(self.interval_status, IntervalStatus)
+            else str(self.interval_status)
+        )
+        return json_object(
+            {
+                "chart_id": self.chart_id,
+                "lambda_interval": list(self.lambda_interval),
+                "sampled_lambda_values": list(self.sampled_lambda_values),
+                "accepted_leaf_ids": list(self.accepted_leaf_ids),
+                "rejected_leaf_ids": list(self.rejected_leaf_ids),
+                "unresolved_leaf_ids": list(self.unresolved_leaf_ids),
+                "duplicate_groups": [list(group) for group in self.duplicate_groups],
+                "critical_values": list(self.critical_values),
+                "birth_death_merge_events": list(self.birth_death_merge_events),
+                "interval_status": status,
+                "required": self.required,
+                "seed_count": self.seed_count,
+                "leaf_count": self.leaf_count,
+                "component_status_counts": dict(self.component_status_counts or {}),
+                "admissibility_status_counts": dict(self.admissibility_status_counts or {}),
+                "budget_exhausted": self.budget_exhausted,
+            }
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class SourceControlCRecord:
+    c: float
+    expected_seed_count: int
+    projected_seed_count: int
+    continued_component_count: int
+    returned_count: int
+    open_count: int
+    singular_count: int
+    unresolved_count: int
+    deduplicated_component_ids: tuple[str, ...]
+    parameter_interval_status: str
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return json_object(
+            {
+                "c": self.c,
+                "expected_seed_count": self.expected_seed_count,
+                "projected_seed_count": self.projected_seed_count,
+                "continued_component_count": self.continued_component_count,
+                "returned_count": self.returned_count,
+                "open_count": self.open_count,
+                "singular_count": self.singular_count,
+                "unresolved_count": self.unresolved_count,
+                "deduplicated_component_ids": list(self.deduplicated_component_ids),
+                "parameter_interval_status": self.parameter_interval_status,
+            }
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -512,6 +1046,11 @@ class LeafFamilyResult:
     chart_overlap_status: str
     unresolved_lambda_intervals: tuple[tuple[float, float], ...]
     notes: tuple[str, ...] = ()
+    neighbor_audits: tuple[TransversalityAudit, ...] = ()
+    chart_overlap: ChartOverlapAudit | None = None
+    chart_overlap_audits: tuple[ChartOverlapAudit, ...] = ()
+    duplicate_classifications: tuple[str, ...] = ()
+    lambda_intervals: tuple[FamilyIntervalRecord, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -522,6 +1061,11 @@ class LeafFamilyResult:
                 "duplicate_count": self.duplicate_count,
                 "chart_overlap_status": self.chart_overlap_status,
                 "unresolved_lambda_intervals": [list(iv) for iv in self.unresolved_lambda_intervals],
+                "lambda_intervals": [item.to_json_dict() for item in self.lambda_intervals],
+                "neighbor_audits": [item.to_json_dict() for item in self.neighbor_audits],
+                "chart_overlap": None if self.chart_overlap is None else self.chart_overlap.to_json_dict(),
+                "chart_overlap_audits": [item.to_json_dict() for item in self.chart_overlap_audits],
+                "duplicate_classifications": list(self.duplicate_classifications),
                 "notes": list(self.notes),
                 "certificate_status": None,
             }
@@ -533,28 +1077,83 @@ class PointingSetMetrics:
     strict_covered_count: int
     strict_uncovered_count: int
     reconstructed_hit_count: int
-    missed_covered_fraction: float | None
-    false_positive_fraction: float | None
-    hausdorff_rad: float | None
+    missed_covered: ScalarMetric
+    false_positive: ScalarMetric
+    hausdorff: ScalarMetric
     boundary_disagreement_fraction: float | None
     unresolved_fraction: float
     max_cell_diameter_rad: float
-    refinement_delta: float | None
+    refinement: ScalarMetric
+    coarse_metrics: PointingSetMetrics | None = None
 
-    def to_json_dict(self) -> dict[str, Any]:
-        return json_object(
-            {
-                "strict_covered_count": self.strict_covered_count,
-                "strict_uncovered_count": self.strict_uncovered_count,
-                "reconstructed_hit_count": self.reconstructed_hit_count,
-                "missed_covered_fraction": self.missed_covered_fraction,
-                "false_positive_fraction": self.false_positive_fraction,
-                "hausdorff_rad": self.hausdorff_rad,
-                "boundary_disagreement_fraction": self.boundary_disagreement_fraction,
-                "unresolved_fraction": self.unresolved_fraction,
-                "max_cell_diameter_rad": self.max_cell_diameter_rad,
-                "refinement_delta": self.refinement_delta,
-            }
+    @property
+    def missed_covered_fraction(self) -> float | None:
+        return self.missed_covered.value if self.missed_covered.state is MetricState.VALUE else None
+
+    @property
+    def false_positive_fraction(self) -> float | None:
+        return self.false_positive.value if self.false_positive.state is MetricState.VALUE else None
+
+    @property
+    def hausdorff_rad(self) -> float | None:
+        return self.hausdorff.value if self.hausdorff.state is MetricState.VALUE else None
+
+    @property
+    def refinement_delta(self) -> float | None:
+        return self.refinement.value if self.refinement.state is MetricState.VALUE else None
+
+    def _scalar_json(self, name: str, metric: ScalarMetric) -> dict[str, Any]:
+        return {
+            name: metric.value if metric.state is MetricState.VALUE else None,
+            f"{name}_state": metric.state.value,
+            f"{name}_reason": metric.reason,
+        }
+
+    def to_json_dict(self, *, nested: bool = False) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "strict_covered_count": self.strict_covered_count,
+            "strict_uncovered_count": self.strict_uncovered_count,
+            "reconstructed_hit_count": self.reconstructed_hit_count,
+            **self._scalar_json("missed_covered_fraction", self.missed_covered),
+            **self._scalar_json("false_positive_fraction", self.false_positive),
+            **self._scalar_json("hausdorff_rad", self.hausdorff),
+            "boundary_disagreement_fraction": self.boundary_disagreement_fraction,
+            "unresolved_fraction": self.unresolved_fraction,
+            "max_cell_diameter_rad": self.max_cell_diameter_rad,
+            **self._scalar_json("refinement_delta", self.refinement),
+            "refinement": self.refinement.to_json_dict(),
+        }
+        if not nested:
+            payload["fine"] = self.to_json_dict(nested=True)
+            payload["coarse"] = None if self.coarse_metrics is None else self.coarse_metrics.to_json_dict(nested=True)
+        return json_object(payload)
+
+    @classmethod
+    def from_json_dict(cls, blob: Mapping[str, Any]) -> PointingSetMetrics:
+        coarse_raw = blob.get("coarse")
+        coarse = None
+        if isinstance(coarse_raw, dict):
+            coarse = cls.from_json_dict(coarse_raw)
+        return cls(
+            strict_covered_count=int(blob["strict_covered_count"]),
+            strict_uncovered_count=int(blob["strict_uncovered_count"]),
+            reconstructed_hit_count=int(blob["reconstructed_hit_count"]),
+            missed_covered=ScalarMetric.from_json_fields(blob, "missed_covered_fraction"),
+            false_positive=ScalarMetric.from_json_fields(blob, "false_positive_fraction"),
+            hausdorff=ScalarMetric.from_json_fields(blob, "hausdorff_rad"),
+            boundary_disagreement_fraction=(
+                None
+                if blob.get("boundary_disagreement_fraction") is None
+                else float(blob["boundary_disagreement_fraction"])
+            ),
+            unresolved_fraction=float(blob.get("unresolved_fraction", 0.0)),
+            max_cell_diameter_rad=float(blob["max_cell_diameter_rad"]),
+            refinement=ScalarMetric.from_json_fields(
+                blob,
+                "refinement_delta",
+                default_unevaluable_reason="legacy null refinement",
+            ),
+            coarse_metrics=coarse,
         )
 
 
@@ -569,23 +1168,42 @@ class ThreeWayReconstructionResult:
     disposition: ReconstructionDisposition
     failure_localization: str
     excluded_child_dispositions: tuple[str, ...] = ()
+    direct_vs_oracle: PointingSetMetrics | None = None
+    source_vs_direct: PointingSetMetrics | None = None
+    natural_vs_direct: PointingSetMetrics | None = None
+    campaign_blocker: CampaignBlocker | None = None
+
+    @property
+    def source_vs_oracle(self) -> PointingSetMetrics | None:
+        return self.source_control_metrics
+
+    @property
+    def natural_vs_oracle(self) -> PointingSetMetrics | None:
+        return self.natural_leaf_metrics
 
     def to_json_dict(self) -> dict[str, Any]:
+        def _metrics(item: PointingSetMetrics | None) -> dict[str, Any] | None:
+            return None if item is None else item.to_json_dict()
+
+        source_vs_oracle = _metrics(self.source_control_metrics)
+        natural_vs_oracle = _metrics(self.natural_leaf_metrics)
         return json_object(
             {
                 "probe_id": self.probe_id,
                 "oracle_complete": self.oracle_complete,
                 "direct_complete": self.direct_complete,
-                "source_control_metrics": None
-                if self.source_control_metrics is None
-                else self.source_control_metrics.to_json_dict(),
-                "natural_leaf_metrics": None
-                if self.natural_leaf_metrics is None
-                else self.natural_leaf_metrics.to_json_dict(),
+                "source_control_metrics": source_vs_oracle,
+                "natural_leaf_metrics": natural_vs_oracle,
+                "direct_vs_oracle": _metrics(self.direct_vs_oracle),
+                "source_vs_direct": _metrics(self.source_vs_direct),
+                "natural_vs_direct": _metrics(self.natural_vs_direct),
+                "source_vs_oracle": source_vs_oracle,
+                "natural_vs_oracle": natural_vs_oracle,
                 "point_classification": self.point_classification.value,
                 "disposition": self.disposition.value,
                 "failure_localization": self.failure_localization,
                 "excluded_child_dispositions": list(self.excluded_child_dispositions),
+                "campaign_blocker": None if self.campaign_blocker is None else self.campaign_blocker.value,
             }
         )
 
@@ -600,6 +1218,7 @@ class FivePointCampaignResult:
     disposition: ReconstructionDisposition
     accepted_reconstruction: bool
     notes: tuple[str, ...] = ()
+    campaign_blocker: CampaignBlocker | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -611,6 +1230,7 @@ class FivePointCampaignResult:
                 "comparisons": [c.to_json_dict() for c in self.comparisons],
                 "disposition": self.disposition.value,
                 "accepted_reconstruction": self.accepted_reconstruction,
+                "campaign_blocker": None if self.campaign_blocker is None else self.campaign_blocker.value,
                 "notes": list(self.notes),
             }
         )
@@ -625,8 +1245,11 @@ class CampaignMode:
     max_nfev_per_start: int
     source_c_value_count: int
     natural_lambda_bin_count_per_chart: int
+    max_natural_leaves_per_chart: int
     max_natural_leaves_per_probe: int
     reseed_samples_per_leaf: int
+    continuation_steps: int
+    allows_full_campaign_disposition: bool
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -638,10 +1261,18 @@ class CampaignMode:
                 "max_nfev_per_start": self.max_nfev_per_start,
                 "source_c_value_count": self.source_c_value_count,
                 "natural_lambda_bin_count_per_chart": self.natural_lambda_bin_count_per_chart,
+                "max_natural_leaves_per_chart": self.max_natural_leaves_per_chart,
                 "max_natural_leaves_per_probe": self.max_natural_leaves_per_probe,
                 "reseed_samples_per_leaf": self.reseed_samples_per_leaf,
+                "continuation_steps": self.continuation_steps,
+                "allows_full_campaign_disposition": self.allows_full_campaign_disposition,
             }
         )
+
+
+def resolve_stage_budgets(config: CampaignConfig, mode: str) -> CampaignMode:
+    """Return frozen mode budgets with no silent clipping."""
+    return config.mode(mode)
 
 
 @dataclass(frozen=True, slots=True)
@@ -690,6 +1321,7 @@ class CampaignConfig:
     geometry: L5PositiveControlGeometry
     probes: tuple[FixedPointProbe, ...]
     charts: tuple[SphericalClosureChartRecord, ...]
+    chart_atlas_policy: ChartAtlasPolicy
     modes: dict[str, CampaignMode]
     tolerances: CampaignTolerances
     accepted_child_statuses: tuple[str, ...]
@@ -711,6 +1343,7 @@ class CampaignConfig:
                 "geometry": self.geometry.to_json_dict(),
                 "probes": [p.to_json_dict() for p in self.probes],
                 "charts": [c.to_json_dict() for c in self.charts],
+                "chart_atlas_policy": self.chart_atlas_policy.to_json_dict(),
                 "modes": {k: v.to_json_dict() for k, v in self.modes.items()},
                 "tolerances": self.tolerances.to_json_dict(),
                 "accepted_child_statuses": list(self.accepted_child_statuses),
@@ -734,11 +1367,13 @@ def empty_stage_statuses() -> dict[str, str]:
 
 
 def empty_campaign_result(config: CampaignConfig) -> FivePointCampaignResult:
+    statuses = empty_stage_statuses()
+    statuses["manifest"] = ProcessStageStatus.COMPLETE.value
     return FivePointCampaignResult(
         program_id=config.program_id,
         config_hash=config.config_hash,
         probe_ids=tuple(p.probe_id for p in config.probes),
-        stage_statuses=empty_stage_statuses(),
+        stage_statuses=statuses,
         comparisons=(),
         disposition=ReconstructionDisposition.UNRESOLVED,
         accepted_reconstruction=False,
@@ -808,11 +1443,41 @@ def load_campaign_config(path: Path | str) -> CampaignConfig:
             max_nfev_per_start=int(spec["max_nfev_per_start"]),
             source_c_value_count=int(spec["source_c_value_count"]),
             natural_lambda_bin_count_per_chart=int(spec["natural_lambda_bin_count_per_chart"]),
+            max_natural_leaves_per_chart=int(spec["max_natural_leaves_per_chart"]),
             max_natural_leaves_per_probe=int(spec["max_natural_leaves_per_probe"]),
             reseed_samples_per_leaf=int(spec["reseed_samples_per_leaf"]),
+            continuation_steps=int(spec["continuation_steps"]),
+            allows_full_campaign_disposition=bool(spec["allows_full_campaign_disposition"]),
         )
         for name, spec in raw["campaign_modes"].items()
     }
+    n_charts = len(charts)
+    for mode in modes.values():
+        if mode.max_natural_leaves_per_chart < mode.natural_lambda_bin_count_per_chart:
+            raise ValueError(
+                f"{mode.name}: max_natural_leaves_per_chart must cover declared bins "
+                f"({mode.natural_lambda_bin_count_per_chart})"
+            )
+        expected_probe_cap = n_charts * mode.max_natural_leaves_per_chart
+        if mode.max_natural_leaves_per_probe != expected_probe_cap:
+            raise ValueError(
+                f"{mode.name}: max_natural_leaves_per_probe must equal n_charts * "
+                f"max_natural_leaves_per_chart ({expected_probe_cap}), "
+                f"got {mode.max_natural_leaves_per_probe}"
+            )
+    policy_raw = raw["chart_atlas_policy"]
+    declared_ids = tuple(item.chart_id for item in charts)
+    policy_ids = tuple(str(x) for x in policy_raw.get("chart_ids", declared_ids))
+    if policy_ids != declared_ids:
+        raise ValueError("chart_atlas_policy.chart_ids must match virtual_spherical_charts order")
+    chart_atlas_policy = ChartAtlasPolicy(
+        policy_id=str(policy_raw["policy_id"]),
+        chart_ids=policy_ids,
+        canonical_assignment=str(policy_raw["canonical_assignment"]),
+        singularity_margin=float(policy_raw["singularity_margin"]),
+        overlap_margin=float(policy_raw["overlap_margin"]),
+        claim_scope=str(policy_raw["claim_scope"]),
+    )
     tol = raw["tolerances"]
     tolerances = CampaignTolerances(
         axis_intersection_m=float(tol["axis_intersection_m"]),
@@ -839,6 +1504,7 @@ def load_campaign_config(path: Path | str) -> CampaignConfig:
         geometry=geometry,
         probes=probes,
         charts=charts,
+        chart_atlas_policy=chart_atlas_policy,
         modes=modes,
         tolerances=tolerances,
         accepted_child_statuses=tuple(str(x) for x in accept["accepted_child_statuses"]),

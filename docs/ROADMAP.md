@@ -76,6 +76,41 @@ The natural child fixes one coordinate of an exact virtual-spherical chart, then
 
 Detailed execution: [methods/R3A_L5_FIVE_POINT_EXECUTION.md](methods/R3A_L5_FIVE_POINT_EXECUTION.md).
 
+#### R3A-H — Evidence hardening gate
+
+The merged R3A software establishes the positive-control arm, oracle, direct IK kernel, source `h=c` control, spherical charts, and frozen-`lambda` `UURU` branch kernel. Before the five-point campaign may issue an accepted reconstruction, harden:
+
+```text
+stage dependency and artifact authority
+deterministic geometry/artifact identity
+direct numerical confirmation as an independent reference
+real branch re-seeding consistency
+actual child-tangent family transversality
+source-space duplicate and chart-overlap semantics
+c/lambda interval completeness
+negative-probe feasible-set recall
+real evidence visualizations and reduced end-to-end CI
+```
+
+**Pass/fail gate:** The current ceremonial family audits are replaced by evaluative gates; empty or missing reconstructions cannot pass; all five points receive an honest direct/source/natural set comparison.
+
+Hardening execution: [methods/R3A_HARDENING_EXECUTION.md](methods/R3A_HARDENING_EXECUTION.md).
+
+#### R3A-H7–H10 — Full-mode acceptance and family-scope follow-up
+
+H0–H6 landed an honest unaccepted full-mode hub. Before any controlled cover may be accepted, distinguish not-applicable from unevaluable metrics, compute two-resolution refinement, scope re-seeding and family admission per leaf, freeze chart responsibility and parameter-domain completeness, and compact campaign artifacts.
+
+```text
+H7  metric applicability + actual refinement
+H8  component-scoped re-seeding + leaf-scoped admission
+H9  chart responsibility + parameter-domain completeness
+H10 artifact authority + compact full-campaign closeout
+```
+
+**Pass/fail gate:** A complete-sphere reference can pass the false-positive sub-gate; missing refinement remains unevaluable; `ci`/`smoke` cannot accept; an honest first-failing-column closeout is valid. R3B and L6 remain held.
+
+Follow-up execution: [methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md](methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md).
+
 ### R3B — Transfer and falsification
 
 Apply the same direct/source/natural comparison to the existing `exact_two_u_5r`, `generic_5r`, and a near-architecture control. Determine which virtual-coordinate families remain exact, how chart choice changes individual leaf behavior, and whether the accepted family still reconstructs the parent pointing image.

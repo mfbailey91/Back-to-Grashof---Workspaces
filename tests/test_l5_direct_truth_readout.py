@@ -25,3 +25,6 @@ def test_truth_stage_writes_split_payloads(tmp_path: Path) -> None:
     assert data["discovery"]["icosphere_level"] != data["confirmation"]["icosphere_level"]
     json.dumps(data, allow_nan=False)
     assert "NaN" not in text
+    assert "confirmation_cells" in data
+    assert isinstance(data["confirmation_cells"], list)
+    assert "direct_unresolved_strict_count" in data

@@ -1,8 +1,9 @@
 {
   "accepted_reconstruction": false,
   "comparisons": [],
-  "config_hash": "31e0805653b81b14102b12824fc91a6fe7799a5fecfff3514f84d7859fa60e15",
+  "config_hash": "9674211fb7cb9124da87dfdf630a0b8fff39648da21c63dd190907649fd42f51",
   "disposition": "UNRESOLVED",
+  "mode": "full",
   "notes": [
     "Empty R3A scaffold; no accepted reconstruction."
   ],
@@ -19,7 +20,7 @@
     "compare": "PLANNED",
     "fixture": "PLANNED",
     "leaves": "PLANNED",
-    "manifest": "PLANNED",
+    "manifest": "COMPLETE",
     "render": "PLANNED",
     "source-control": "PLANNED",
     "truth": "PLANNED"

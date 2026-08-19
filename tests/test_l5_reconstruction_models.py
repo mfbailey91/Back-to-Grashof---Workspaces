@@ -81,14 +81,7 @@ def test_manifest_cli_writes_planned_scaffold(tmp_path: Path) -> None:
         "P5_OUTER_INCOMPLETE",
     ]
     assert payload["accepted_reconstruction"] is False
-    assert set(payload["stage_statuses"]) >= {
-        "manifest",
-        "fixture",
-        "truth",
-        "source-control",
-        "leaves",
-        "compare",
-        "render",
-    }
-    assert all(v == "PLANNED" for v in payload["stage_statuses"].values())
+    statuses = payload["stage_statuses"]
+    assert statuses["manifest"] == "COMPLETE"
+    assert all(statuses[name] == "PLANNED" for name in statuses if name != "manifest")
     json.dumps(payload, allow_nan=False)

@@ -590,3 +590,54 @@ cover. Terms such as `foliation`, `fiber bundle`, or `exact factorization` remai
 reserved until uniqueness, chart transitions, complete parameter intervals, and
 component correspondence are established. Individual chart-specific crank or winding
 behavior is not a workspace predicate until the family reconstruction is validated.
+
+## ADR-050 — R3A acceptance requires evaluative family gates and an independent direct reference
+
+<!-- R3A_HARDENING_EVIDENCE_GATES_2026_08_17 -->
+
+**Decision:** The merged R3A positive-control software is retained, but returned
+`UURU` components are not accepted for parent reconstruction until family-level
+re-seeding, child-tangent transversality, chart compatibility, parameter-interval
+accounting, and independent set comparison are evaluated rather than represented by
+placeholder or proxy fields. Leaf component status, family admissibility, and
+reconstruction disposition are separate decisions.
+
+The executable campaign must enforce:
+
+```text
+manifest -> fixture -> truth -> source-control -> leaves -> compare -> render
+```
+
+with matching config hash, mode, probe scope, and upstream artifact hashes. Missing
+inputs cannot produce a completed comparison. Python process-randomized `hash()` is
+not an acceptable geometry identifier; canonical SHA-256 is required.
+
+The analytical oracle and decomposition-free target-direction IK remain independent
+columns. Oracle labels do not overwrite numerical statuses. Strict feasible or
+infeasible numerical `UNRESOLVED` cells block a qualified point result. Both positive
+and negative probes must reconstruct their feasible pointing subsets; an empty set
+does not pass merely because it refuses full `S^2` coverage.
+
+**Reason:** PR #17 established the correct controlled architecture and branch kernel,
+but several family audits were non-evaluative, comparison authority centered the
+oracle rather than the direct source result, negative controls could pass with zero
+reconstructed directions, and stage/readout scaffolds could look complete without
+their prerequisites. Those are evidence-semantic defects, not a reason to abandon
+the natural-leaf hypothesis.
+
+**Consequence:** R3A-H proceeds before R3B or L6. Current status remains
+`parent_incomplete`; no accepted L5 reconstruction, foliation, exact factorization,
+or workspace rule is issued until the hardening closeout passes. The numerical
+virtual-crank atlas remains downstream of reconstruction provenance.
+
+## ADR-051 — R3A acceptance metrics distinguish not-applicable from unevaluable evidence
+
+<!-- R3A_H7_H10_FOLLOWUP_2026_08_18 DRAFT until H10 closeout -->
+
+**Status:** DRAFT (H7–H10 follow-up; not a reconstruction closeout)
+
+**Decision:** A missing numerical value is not sufficient to determine pass/fail. R3A comparison metrics carry explicit `VALUE`, `NOT_APPLICABLE`, or `UNEVALUABLE` state. Zero-denominator metrics such as false-positive fraction on an all-covered reference are `NOT_APPLICABLE`; missing refinement is `UNEVALUABLE`. Full-campaign acceptance requires a computed refinement comparison, leaf-scoped family admissibility, declared chart responsibility, resolved required parameter intervals, and content-addressed artifacts.
+
+**Reason:** Treating every `None` as failure makes valid complete coverage impossible, while treating every `None` as pass fabricates evidence. Explicit applicability preserves conservative gates without making the intended theorem untestable.
+
+**Consequence:** R3A-H0–H6 artifacts remain valid historical diagnostics but are re-evaluated under H7–H10 before any controlled cover is accepted. R3B and L6 remain held. Content-addressed stage hashes and `CampaignBlocker` localization are implemented. This ADR stays draft until a frozen-config full rerun records the first failing scientific column or a declared-resolution controlled cover.
