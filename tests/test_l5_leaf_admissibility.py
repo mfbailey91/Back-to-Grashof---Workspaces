@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from dataclasses import replace
 
+from test_l5_leaf_transversality import _two_neighbor_works
+
 from grashof_workspace.spatial_experiments.l5_reconstruction.leaf_family import (
     classify_reseed_attempt,
     recompute_family_acceptance,
@@ -16,7 +18,6 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     ReseedScope,
     TransversalityAudit,
 )
-from test_l5_leaf_transversality import _two_neighbor_works
 
 
 def test_component_pass_requires_symmetric_branch_distances() -> None:
