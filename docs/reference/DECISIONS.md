@@ -640,4 +640,4 @@ virtual-crank atlas remains downstream of reconstruction provenance.
 
 **Reason:** Treating every `None` as failure makes valid complete coverage impossible, while treating every `None` as pass fabricates evidence. Explicit applicability preserves conservative gates without making the intended theorem untestable.
 
-**Consequence:** R3A-H0–H6 artifacts remain valid historical diagnostics but are re-evaluated under H7–H10 before any controlled cover is accepted. R3B and L6 remain held. This ADR stays draft until the H10 closeout records the first failing scientific column or a declared-resolution controlled cover.
+**Consequence:** R3A-H0–H6 artifacts remain valid historical diagnostics but are re-evaluated under H7–H10 before any controlled cover is accepted. R3B and L6 remain held. Content-addressed stage hashes and `CampaignBlocker` localization are implemented. This ADR stays draft until a frozen-config full rerun records the first failing scientific column or a declared-resolution controlled cover.

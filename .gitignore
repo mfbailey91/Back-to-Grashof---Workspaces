@@ -9,5 +9,9 @@ build/
 *.egg-info/
 outputs/
 
+# H10 raw campaign traces and content-addressed bundles (covered by outputs/).
+outputs/r3a_full_raw/
+outputs/r3a_campaign_bundles/
+
 .DS_Store
 **/.DS_Store

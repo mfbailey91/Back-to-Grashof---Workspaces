@@ -1,7 +1,8 @@
 """R3A five-point reconstruction CLI.
 
 Stages: manifest, fixture, truth, source-control, leaves, compare, render, all.
-Later stages refuse missing prerequisites or config-hash, mode, or probe-scope drift.
+Later stages refuse missing prerequisites, config-hash/mode/probe-scope drift,
+or SHA-256 drift of hashed upstream artifacts.
 """
 
 from __future__ import annotations
@@ -12,6 +13,14 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
+from .artifacts import (
+    PREREQUISITES,
+    artifact_paths,
+    finalize_stage,
+    stage_summary_path,
+    validate_artifact_hashes,
+    validate_stage_output_refs,
+)
 from .models import (
     PROCESS_STAGE_NAMES,
     empty_campaign_result,
@@ -21,19 +30,6 @@ from .models import (
 )
 
 STAGES = (*PROCESS_STAGE_NAMES, "all")
-PREREQUISITES: dict[str, tuple[str, ...]] = {
-    "fixture": ("manifest",),
-    "truth": ("manifest", "fixture"),
-    "source-control": ("manifest", "fixture", "truth"),
-    "leaves": ("manifest", "fixture", "truth"),
-    "compare": ("manifest", "fixture", "truth", "source-control", "leaves"),
-    "render": ("manifest", "fixture", "truth", "source-control", "leaves", "compare"),
-}
-
-
-def _write_json(path: Path, payload: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json_dumps_strict(payload), encoding="utf-8")
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -50,34 +46,11 @@ def _require_hash(blob: dict[str, Any], config_hash: str) -> None:
 
 
 def _stage_summary_path(outdir: Path, stage: str) -> Path:
-    names = {
-        "manifest": "manifest.json",
-        "fixture": "fixture.json",
-        "truth": "truth.json",
-        "source-control": "source_control.json",
-        "leaves": "leaves.json",
-        "compare": "campaign.json",
-        "render": "render.json",
-    }
-    return outdir / names[stage]
+    return stage_summary_path(outdir, stage)
 
 
 def _artifact_paths(outdir: Path, stage: str, probe_ids: Sequence[str]) -> tuple[Path, ...]:
-    if stage == "manifest":
-        return (_stage_summary_path(outdir, stage),)
-    if stage == "fixture":
-        return (_stage_summary_path(outdir, stage), *(outdir / pid / "fixture.json" for pid in probe_ids))
-    if stage == "truth":
-        return (_stage_summary_path(outdir, stage), *(outdir / pid / "direct_truth.json" for pid in probe_ids))
-    if stage == "source-control":
-        return (_stage_summary_path(outdir, stage), *(outdir / pid / "source_control.json" for pid in probe_ids))
-    if stage == "leaves":
-        return (_stage_summary_path(outdir, stage), *(outdir / pid / "natural_family.json" for pid in probe_ids))
-    if stage == "compare":
-        return (_stage_summary_path(outdir, stage),)
-    if stage == "render":
-        return (_stage_summary_path(outdir, stage),)
-    return ()
+    return artifact_paths(outdir, stage, probe_ids)
 
 
 def _require_prerequisites(
@@ -89,10 +62,11 @@ def _require_prerequisites(
     probe_ids: Sequence[str],
 ) -> None:
     for prior in PREREQUISITES.get(stage, ()):
-        for path in _artifact_paths(outdir, prior, probe_ids):
+        paths = artifact_paths(outdir, prior, probe_ids)
+        for path in paths:
             if not path.is_file():
                 raise FileNotFoundError(f"missing prerequisite {path}")
-        summary = _stage_summary_path(outdir, prior)
+        summary = stage_summary_path(outdir, prior)
         blob = _read_json(summary)
         stored_hash = str(blob.get("config_hash", ""))
         if stored_hash and stored_hash != config_hash:
@@ -106,16 +80,26 @@ def _require_prerequisites(
             missing = [pid for pid in probe_ids if pid not in allowed]
             if missing:
                 raise ValueError(f"probe-scope drift: {missing} not in upstream {sorted(allowed)}")
+        validate_stage_output_refs(outdir, blob)
+        validate_artifact_hashes(outdir, paths)
 
 
 def write_manifest(config_path: Path, outdir: Path, *, mode: str = "smoke") -> Path:
     config = load_campaign_config(config_path)
     campaign = empty_campaign_result(config)
     payload = campaign.to_json_dict()
-    payload.update(stage_envelope(config, stage="manifest", mode=mode, probe_ids=tuple(p.probe_id for p in config.probes)))
-    path = outdir / "manifest.json"
-    _write_json(path, payload)
-    return path
+    probe_ids = tuple(p.probe_id for p in config.probes)
+    payload.update(stage_envelope(config, stage="manifest", mode=mode, probe_ids=probe_ids))
+    outdir.mkdir(parents=True, exist_ok=True)
+    finalize_stage(
+        outdir,
+        payload,
+        config=config,
+        stage="manifest",
+        mode=mode,
+        probe_ids=probe_ids,
+    )
+    return outdir / "manifest.json"
 
 
 def _load_manifest(outdir: Path, config_hash: str) -> dict[str, Any]:
@@ -191,11 +175,26 @@ def run_stage(
         from .readout import write_render_stage
         from .source_control import write_source_control_stage
 
+        def _gate(next_stage: str) -> None:
+            _require_prerequisites(
+                outdir,
+                next_stage,
+                config_hash=config.config_hash,
+                mode=mode,
+                probe_ids=probe_ids,
+            )
+
+        _gate("fixture")
         write_fixture_stage(config, outdir, probes, mode=mode)
+        _gate("truth")
         write_truth_stage(config, outdir, probes, mode=mode)
+        _gate("source-control")
         write_source_control_stage(config, outdir, probes, mode=mode)
+        _gate("leaves")
         write_leaves_stage(config, outdir, probes, mode=mode)
+        _gate("compare")
         result = write_compare_stage(config, outdir, probes, mode=mode)
+        _gate("render")
         write_render_stage(config, outdir, probes, mode=mode, generate_gif=False)
         return result
     raise ValueError(f"unknown stage {stage}")

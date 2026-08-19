@@ -45,6 +45,10 @@ class ProcessStageStatus(str, Enum):
     COMPLETE = "COMPLETE"
 
 
+class ArtifactHashDrift(ValueError):
+    """Recorded SHA-256 does not match the file on disk."""
+
+
 @dataclass(frozen=True, slots=True)
 class StageArtifactRef:
     stage: str
@@ -53,6 +57,7 @@ class StageArtifactRef:
     config_hash: str
     mode: str
     probe_ids: tuple[str, ...]
+    schema_version: str = ""
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -63,6 +68,7 @@ class StageArtifactRef:
                 "config_hash": self.config_hash,
                 "mode": self.mode,
                 "probe_ids": list(self.probe_ids),
+                "schema_version": self.schema_version,
             }
         )
 
@@ -112,6 +118,15 @@ class ReconstructionDisposition(str, Enum):
     PARTIAL = "PARTIAL"
     REJECTED = "REJECTED"
     UNRESOLVED = "UNRESOLVED"
+
+
+class CampaignBlocker(str, Enum):
+    """First failing scientific column. Not a generic PARTIAL label."""
+
+    DIRECT_REFERENCE_BLOCKED = "DIRECT_REFERENCE_BLOCKED"
+    STITCHING_CONTROL_BLOCKED = "STITCHING_CONTROL_BLOCKED"
+    NATURAL_DECOMPOSITION_BLOCKED = "NATURAL_DECOMPOSITION_BLOCKED"
+    CONTROLLED_COVER_ACCEPTED = "CONTROLLED_COVER_ACCEPTED"
 
 
 class FamilyAdmissibilityStatus(str, Enum):
@@ -342,6 +357,43 @@ def _as_mat3(values: Any, *, name: str) -> Mat3:
 def config_sha256(raw: Mapping[str, Any]) -> str:
     blob = json.dumps(raw, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
     return hashlib.sha256(blob).hexdigest()
+
+
+def file_sha256(path: Path, *, chunk_size: int = 1024 * 1024) -> str:
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        while True:
+            block = handle.read(chunk_size)
+            if not block:
+                break
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def git_provenance(repo: Path | None = None) -> dict[str, Any]:
+    """Best-effort source commit and dirty-tree flag. Missing git is not a crash."""
+
+    import subprocess
+
+    cwd = Path(repo) if repo is not None else Path.cwd()
+    try:
+        commit = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=cwd,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+        dirty = bool(
+            subprocess.check_output(
+                ["git", "status", "--porcelain"],
+                cwd=cwd,
+                stderr=subprocess.DEVNULL,
+                text=True,
+            ).strip()
+        )
+        return {"git_commit": commit, "dirty_tree": dirty}
+    except (OSError, subprocess.CalledProcessError):
+        return {"git_commit": None, "dirty_tree": None}
 
 
 @dataclass(frozen=True, slots=True)
@@ -1119,6 +1171,7 @@ class ThreeWayReconstructionResult:
     direct_vs_oracle: PointingSetMetrics | None = None
     source_vs_direct: PointingSetMetrics | None = None
     natural_vs_direct: PointingSetMetrics | None = None
+    campaign_blocker: CampaignBlocker | None = None
 
     @property
     def source_vs_oracle(self) -> PointingSetMetrics | None:
@@ -1150,6 +1203,7 @@ class ThreeWayReconstructionResult:
                 "disposition": self.disposition.value,
                 "failure_localization": self.failure_localization,
                 "excluded_child_dispositions": list(self.excluded_child_dispositions),
+                "campaign_blocker": None if self.campaign_blocker is None else self.campaign_blocker.value,
             }
         )
 
@@ -1164,6 +1218,7 @@ class FivePointCampaignResult:
     disposition: ReconstructionDisposition
     accepted_reconstruction: bool
     notes: tuple[str, ...] = ()
+    campaign_blocker: CampaignBlocker | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -1175,6 +1230,7 @@ class FivePointCampaignResult:
                 "comparisons": [c.to_json_dict() for c in self.comparisons],
                 "disposition": self.disposition.value,
                 "accepted_reconstruction": self.accepted_reconstruction,
+                "campaign_blocker": None if self.campaign_blocker is None else self.campaign_blocker.value,
                 "notes": list(self.notes),
             }
         )

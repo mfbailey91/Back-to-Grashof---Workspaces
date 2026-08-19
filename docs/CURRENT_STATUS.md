@@ -1,7 +1,7 @@
 # Current Scientific Status
 
 **Status:** ACTIVE ledger (snapshot, not a plan)
-**Last updated:** 2026-08-18 (R3A-H7–H10 follow-up active; reconstruction not accepted)
+**Last updated:** 2026-08-18 (R3A-H10 artifact authority landed; reconstruction not accepted)
 
 This is the only live status ledger. Future work belongs in [ROADMAP.md](ROADMAP.md).
 
@@ -23,7 +23,7 @@ mechanism_explorer_only
 |---|---|---|---|---|
 | L3 planar 3R | `trusted_exact_reference` | Exact fixed-position four-bar reduction; designated-link rotatability; independent validation | None for reference role | Exact fixed-position four-bar reduction and designated-link rotatability recover planar dexterity |
 | L4 spatial 4R | `local_only` | One-DOF source mechanism and local orientation-curve machinery; proximal exact-U traced-arc match | Global component-complete certificate | One-DOF source mechanism and local orientation-curve machinery exist; global certification remains incomplete |
-| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software; R3A-H0–H6 evidence gates; JSON-backed readout; reduced P1/P3 `ci` smoke; reconstruction-pass law; full-mode five-point hub regenerated at `results/l5_reconstruction/r3a/` with `accepted_reconstruction=false` and campaign `PARTIAL`; R3A-H7–H10 follow-up is the live gate (metric applicability, refinement, leaf-scoped admission, chart responsibility, compact artifacts) | Accepted reconstruction remains false; `PARTIAL` is not a scientific closeout | Positive-control geometry, oracle, direct IK, h=c control, frozen-lambda UURU branches, confirmation-cell column, re-seeding, child-Jacobian neighbor transversality, source-Q chart overlap, family/source-control interval gaps, reconstruction-pass law, and evidence readout exist; empty reconstruction cannot pass; a finite sample bank is not a complete global foliation; the regenerated full-mode hub is not an accepted reconstruction; H7–H10 must distinguish not-applicable from unevaluable evidence before any controlled cover is claimed |
+| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software; R3A-H0–H6 evidence gates; JSON-backed readout; reduced P1/P3 `ci` smoke; reconstruction-pass law; H7 metric applicability and two-resolution refinement; H8 leaf-scoped reseed/admission; H9 chart responsibility and interval ledger; H10 content-addressed stage hashes, `CampaignBlocker` first-failing-column labels, and compact/raw split; historical full-mode hub at `results/l5_reconstruction/r3a/` remains unaccepted `PARTIAL` | Accepted reconstruction remains false; compact full-mode closeout still requires a frozen-config full rerun and content-addressed raw bundle | Positive-control geometry, oracle, direct IK, h=c control, frozen-lambda UURU branches, confirmation-cell column, re-seeding, child-Jacobian neighbor transversality, source-Q chart overlap, family/source-control interval gaps, reconstruction-pass law, and evidence readout exist; empty reconstruction cannot pass; a finite sample bank is not a complete global foliation; `PARTIAL` is not a scientific closeout; campaign closeout is the first failing column (`DIRECT_REFERENCE_BLOCKED`, `STITCHING_CONTROL_BLOCKED`, `NATURAL_DECOMPOSITION_BLOCKED`) or a declared-resolution controlled cover |
 | L6 spatial 6R | `scaffold_only` | Dimensional/task contracts and L6 scaffold stubs | Independent full-`SO(3)` reference and proven nesting | Dimensional/task contracts exist; independent full-`SO(3)` reference and reconstruction are not implemented |
 | L7 spatial 7R | `deferred` | Dimensional/gauge framing only | L6 completion and redundancy contract | Redundancy/gauge formulation is architectural only |
 
@@ -43,12 +43,11 @@ mechanism_explorer_only
 ```text
 current fixed-axis UUUR construction rejected as h=c fiber equivalence;
 R3A SURU→UURU positive-control software implemented at five frozen points;
-R3A-H0/H1/H2/H3/H4/H5/H6 evidence semantics, confirmation-cell column, real re-seeding,
-child-tangent transversality, source-Q chart overlap, interval completeness records,
-reconstruction-pass law, JSON-backed readout, and P1/P3 ci smoke landed;
-full-mode five-point hub regenerated as PARTIAL; reconstruction not accepted;
-PARTIAL is not a scientific closeout;
-R3A-H7–H10 follow-up is the live gate (ADR-051 draft);
+R3A-H0–H9 evidence semantics, metric applicability, leaf-scoped admission,
+chart responsibility, and interval ledgers landed;
+H10 stage hashes, compact/raw split, and CampaignBlocker localization landed;
+historical full-mode hub remains PARTIAL and is not a scientific closeout;
+compact full-mode closeout still requires a frozen-config full rerun;
 general 5R factorization remains unresolved;
 R3B and L6 remain held;
 V07A held pending parent/continuation completion.

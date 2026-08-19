@@ -47,6 +47,10 @@ jobs:
             --outdir outputs/r3a_hardening_smoke \
             --stage all --mode ci \
             --probe P1_DEEP_COMPLETE --probe P3_INNER_INCOMPLETE
+          python scripts/package_r3a_campaign.py \
+            --raw-root outputs/r3a_hardening_smoke \
+            --results-root outputs/r3a_hardening_compact \
+            --bundle-dir outputs/r3a_campaign_bundles
       - name: Atlas generation
         run: grashof-workspace --atlas --output-dir outputs/atlas
       - name: Upload diagnostic artifacts

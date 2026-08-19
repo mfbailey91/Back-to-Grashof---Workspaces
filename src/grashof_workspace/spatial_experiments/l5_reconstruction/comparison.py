@@ -10,8 +10,10 @@ from typing import Any
 
 from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 
+from .artifacts import finalize_stage, update_artifact_index
 from .direct_truth import build_direct_reference_cells
 from .models import (
+    CampaignBlocker,
     CampaignConfig,
     CampaignMode,
     CellClass,
@@ -313,6 +315,93 @@ def campaign_reconstruction_accepted(
     return True
 
 
+def localize_probe_blocker(
+    result: ThreeWayReconstructionResult,
+    config: CampaignConfig,
+    *,
+    unresolved_c: bool = False,
+    unresolved_family: bool = False,
+    expected_complete: bool | None = None,
+    require_classification_match: bool = True,
+) -> CampaignBlocker:
+    """First failing column for one probe. Direct before source before natural."""
+
+    if result.direct_complete is None or not reconstruction_pass(result.direct_vs_oracle, config):
+        return CampaignBlocker.DIRECT_REFERENCE_BLOCKED
+    source_ok = reconstruction_pass(result.source_vs_direct, config) and reconstruction_pass(
+        result.source_vs_oracle, config
+    )
+    if unresolved_c or not source_ok:
+        return CampaignBlocker.STITCHING_CONTROL_BLOCKED
+    natural_ok = reconstruction_pass(result.natural_vs_direct, config) and reconstruction_pass(
+        result.natural_vs_oracle, config
+    )
+    if unresolved_family or not natural_ok:
+        return CampaignBlocker.NATURAL_DECOMPOSITION_BLOCKED
+    if (
+        require_classification_match
+        and expected_complete is not None
+        and not classification_matches_oracle(result.point_classification, expected_complete)
+    ):
+        return CampaignBlocker.NATURAL_DECOMPOSITION_BLOCKED
+    return CampaignBlocker.CONTROLLED_COVER_ACCEPTED
+
+
+def first_campaign_blocker(
+    blockers: Sequence[CampaignBlocker],
+    *,
+    campaign_accepted: bool,
+) -> CampaignBlocker | None:
+    """Global first failing scientific column.
+
+    Acceptance requires the campaign gate. If no column failed, return ``None``
+    rather than inventing ``NATURAL_DECOMPOSITION_BLOCKED`` for a ci/incomplete run.
+    """
+
+    if campaign_accepted:
+        return CampaignBlocker.CONTROLLED_COVER_ACCEPTED
+    for kind in (
+        CampaignBlocker.DIRECT_REFERENCE_BLOCKED,
+        CampaignBlocker.STITCHING_CONTROL_BLOCKED,
+        CampaignBlocker.NATURAL_DECOMPOSITION_BLOCKED,
+    ):
+        if kind in blockers:
+            return kind
+    return None
+
+
+def localize_campaign_blocker(
+    comparisons: Sequence[ThreeWayReconstructionResult],
+    probes: Sequence[FixedPointProbe],
+    budgets: CampaignMode,
+    config: CampaignConfig,
+    *,
+    require_classification_match: bool = True,
+) -> CampaignBlocker | None:
+    accepted = campaign_reconstruction_accepted(
+        comparisons,
+        probes,
+        budgets,
+        require_classification_match=require_classification_match,
+    )
+    by_id = {item.probe_id: item for item in comparisons}
+    blockers: list[CampaignBlocker] = []
+    for probe in probes:
+        result = by_id.get(probe.probe_id)
+        if result is None:
+            continue
+        blocker = result.campaign_blocker
+        if blocker is None:
+            blocker = localize_probe_blocker(
+                result,
+                config,
+                expected_complete=probe.expected_pointing_complete,
+                require_classification_match=require_classification_match,
+            )
+        blockers.append(blocker)
+    return first_campaign_blocker(blockers, campaign_accepted=accepted)
+
+
 def _load_hits_and_dirs(path: Path) -> tuple[tuple[bool, ...], tuple[tuple[float, float, float], ...]]:
     blob = json.loads(path.read_text(encoding="utf-8"))
     dirs_raw = blob.get("pointing_samples", [])
@@ -506,6 +595,9 @@ def write_compare_stage(
     coarse_grid = build_sphere_grid(budgets.confirmation_icosphere_level - 1)
     comparisons: list[ThreeWayReconstructionResult] = []
     probe_ids = tuple(p.probe_id for p in probes)
+    require_match = bool(
+        config.raw.get("set_acceptance", {}).get("require_all_five_point_classifications_match_oracle", True)
+    )
     for probe in probes:
         oracle = point_completeness_oracle(
             config.geometry, probe.p_star, margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m
@@ -607,7 +699,7 @@ def write_compare_stage(
             for leaf in fam.get("leaves", [])
             if not leaf.get("accepted_for_reconstruction")
         )
-        result = ThreeWayReconstructionResult(
+        probe_result = ThreeWayReconstructionResult(
             probe_id=probe.probe_id,
             oracle_complete=oracle.complete,
             direct_complete=direct_complete,
@@ -621,12 +713,18 @@ def write_compare_stage(
             source_vs_direct=src_vs_direct,
             natural_vs_direct=nat_vs_direct,
         )
+        blocker = localize_probe_blocker(
+            probe_result,
+            config,
+            unresolved_c=bool(unresolved_c),
+            unresolved_family=bool(unresolved_lambda),
+            expected_complete=probe.expected_pointing_complete,
+            require_classification_match=require_match,
+        )
+        result = replace(probe_result, campaign_blocker=blocker)
         path = outdir / probe.probe_id / "comparison.json"
         path.write_text(json_dumps_strict(result.to_json_dict()), encoding="utf-8")
         comparisons.append(result)
-    require_match = bool(
-        config.raw.get("set_acceptance", {}).get("require_all_five_point_classifications_match_oracle", True)
-    )
     accepted = campaign_reconstruction_accepted(
         comparisons,
         config.probes,
@@ -638,6 +736,19 @@ def write_compare_stage(
         notes.append("Mode does not allow full-campaign disposition.")
     if not accepted:
         notes.append("Reconstruction is not accepted at this declared resolution.")
+    campaign_blocker = localize_campaign_blocker(
+        comparisons,
+        config.probes,
+        budgets,
+        config,
+        require_classification_match=require_match,
+    )
+    if campaign_blocker is None:
+        notes.append(
+            "campaign_blocker=None (campaign incomplete or mode cannot dispose; not a scientific column)"
+        )
+    else:
+        notes.append(f"campaign_blocker={campaign_blocker.value}")
     campaign = FivePointCampaignResult(
         program_id=config.program_id,
         config_hash=config.config_hash,
@@ -651,9 +762,18 @@ def write_compare_stage(
         ),
         accepted_reconstruction=accepted,
         notes=tuple(notes),
+        campaign_blocker=campaign_blocker,
     )
     payload = campaign.to_json_dict()
     payload.update(stage_envelope(config, stage="compare", mode=mode, probe_ids=probe_ids))
-    (outdir / "campaign.json").write_text(json_dumps_strict(payload), encoding="utf-8")
-    (outdir / "compare.json").write_text(json_dumps_strict(payload), encoding="utf-8")
-    return payload
+    sealed = finalize_stage(
+        outdir,
+        payload,
+        config=config,
+        stage="compare",
+        mode=mode,
+        probe_ids=probe_ids,
+    )
+    (outdir / "compare.json").write_text(json_dumps_strict(sealed), encoding="utf-8")
+    update_artifact_index(outdir, (outdir / "compare.json",))
+    return sealed

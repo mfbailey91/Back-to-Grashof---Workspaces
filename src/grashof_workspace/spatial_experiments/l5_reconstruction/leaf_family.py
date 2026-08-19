@@ -20,6 +20,7 @@ from grashof_workspace.spatial_experiments.implicit_manifold import (
 from grashof_workspace.spatial_experiments.jacobians import position_jacobian
 from grashof_workspace.spatial_experiments.orientation_image import _rotation_geodesic
 
+from .artifacts import finalize_stage
 from .direct_truth import found_configurations
 from .models import (
     ACCEPTED_CHILD_STATUSES,
@@ -57,7 +58,6 @@ from .uuru_leaf import (
     problem_from_source_seed,
     tangent_principal_angle,
 )
-
 
 BLOCKING_INTERVAL_STATUSES = frozenset(
     {
@@ -1438,5 +1438,11 @@ def write_leaves_stage(
         if budgets.allows_full_campaign_disposition
         else ["mode cannot issue full-campaign disposition"],
     }
-    (outdir / "leaves.json").write_text(json_dumps_strict(summary), encoding="utf-8")
-    return summary
+    return finalize_stage(
+        outdir,
+        summary,
+        config=config,
+        stage="leaves",
+        mode=mode,
+        probe_ids=tuple(p.probe_id for p in probes),
+    )

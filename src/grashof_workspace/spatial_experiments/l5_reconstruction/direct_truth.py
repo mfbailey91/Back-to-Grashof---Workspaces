@@ -21,6 +21,7 @@ from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 from grashof_workspace.spatial_experiments.continuation import wrap_joint_delta
 from grashof_workspace.spatial_experiments.serial_chain import SerialRevoluteChain
 
+from .artifacts import finalize_stage
 from .models import (
     CampaignConfig,
     CellClass,
@@ -489,5 +490,11 @@ def write_truth_stage(
         ),
         "probes": records,
     }
-    (outdir / "truth.json").write_text(json_dumps_strict(summary), encoding="utf-8")
-    return summary
+    return finalize_stage(
+        outdir,
+        summary,
+        config=config,
+        stage="truth",
+        mode=mode,
+        probe_ids=tuple(p.probe_id for p in probes),
+    )

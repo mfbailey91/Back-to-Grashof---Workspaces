@@ -20,6 +20,7 @@ from grashof_workspace.spatial_experiments.parent_level_sets import (
     pointing_scalar,
 )
 
+from .artifacts import finalize_stage
 from .direct_truth import found_configurations
 from .models import (
     CampaignConfig,
@@ -478,5 +479,11 @@ def write_source_control_stage(
         if budgets.allows_full_campaign_disposition
         else ["mode cannot issue full-campaign disposition"],
     }
-    (outdir / "source_control.json").write_text(json_dumps_strict(summary), encoding="utf-8")
-    return summary
+    return finalize_stage(
+        outdir,
+        summary,
+        config=config,
+        stage="source-control",
+        mode=mode,
+        probe_ids=tuple(p.probe_id for p in probes),
+    )

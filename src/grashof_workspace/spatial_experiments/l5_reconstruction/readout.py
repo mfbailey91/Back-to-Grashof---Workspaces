@@ -15,13 +15,13 @@ import numpy as np
 
 from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 
+from .artifacts import finalize_stage
 from .models import (
     CampaignConfig,
     CellClass,
     FixedPointProbe,
     IntervalStatus,
     PointingSetMetrics,
-    json_dumps_strict,
     stage_envelope,
 )
 from .positive_control import (
@@ -510,12 +510,15 @@ def write_render_stage(
     plt.close(fig)
     links = "".join(f'<li><a href="{p.probe_id}/index.html">{p.probe_id}</a></li>' for p in probes)
     disposition = str(campaign.get("disposition", "UNRESOLVED")) if isinstance(campaign, dict) else "UNRESOLVED"
+    raw_blocker = campaign.get("campaign_blocker") if isinstance(campaign, dict) else None
+    blocker = "None" if raw_blocker is None else str(raw_blocker)
     index = f"""<!doctype html><html><head><meta charset="utf-8"><title>R3A five-point hub</title></head>
 <body>
 <h1>R3A L5 five-point natural-leaf reconstruction</h1>
 <p>Pointing coverage in S^2. Not dexterity. Fixed-axis UUUR remains rejected as an h=c equivalence.</p>
-<p>mode={mode} config_hash={config.config_hash} stage_status=COMPLETE scientific_disposition={disposition} accepted_reconstruction={accepted}</p>
+<p>mode={mode} config_hash={config.config_hash} stage_status=COMPLETE scientific_disposition={disposition} campaign_blocker={blocker} accepted_reconstruction={accepted}</p>
 <p>A ci/smoke campaign cannot issue full-campaign disposition. Reconstruction is not accepted unless campaign.json records accepted_reconstruction=true.</p>
+<p>Do not read generic PARTIAL as the scientific closeout. campaign_blocker is the first failing column, or None when the campaign is incomplete or the mode cannot dispose.</p>
 <ul>
 {links}
 </ul>
@@ -532,6 +535,14 @@ def write_render_stage(
         ),
         "figures": written,
         "accepted_reconstruction": accepted,
+        "campaign_blocker": blocker,
     }
-    (outdir / "render.json").write_text(json_dumps_strict(payload), encoding="utf-8")
-    return payload
+    return finalize_stage(
+        outdir,
+        payload,
+        config=config,
+        stage="render",
+        mode=mode,
+        probe_ids=tuple(p.probe_id for p in probes),
+        extra_outputs=(summary_path, outdir / "index.html"),
+    )
