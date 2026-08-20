@@ -404,6 +404,30 @@ def test_raw_bundle_hash_matches_manifest(tmp_path: Path) -> None:
     assert recorded[compact_path] == file_sha256(results / compact_path)
 
 
+def test_diagnostic_package_preserves_mode_and_probe_scope(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    results = tmp_path / "compact"
+    bundles = tmp_path / "bundles"
+    _hashed_raw_campaign(raw, probe_ids=P1_P3, mode="ci")
+    manifest = package_r3a_campaign(
+        raw_root=raw,
+        results_root=results,
+        bundle_dir=bundles,
+        config_path=CONFIG,
+    )
+    assert manifest["package_kind"] == "diagnostic"
+    assert manifest["campaign_mode"] == "ci"
+    assert manifest["probe_ids"] == list(P1_P3)
+    assert manifest["all_configured_probes_present"] is False
+    assert manifest["full_closeout_eligible"] is False
+    assert manifest["allows_full_campaign_disposition"] is False
+    assert not str(manifest["raw_bundle"]).startswith("r3a_full_")
+    assert str(manifest["raw_bundle"]).startswith("r3a_ci_2probes_")
+    assert "--mode ci" in manifest["reproduction"]
+    assert "--probe P1_DEEP_COMPLETE" in manifest["reproduction"]
+    assert "--probe P3_INNER_INCOMPLETE" in manifest["reproduction"]
+
+
 def test_packager_refuses_raw_hash_drift(tmp_path: Path) -> None:
     raw = tmp_path / "raw"
     _hashed_raw_campaign(raw)
