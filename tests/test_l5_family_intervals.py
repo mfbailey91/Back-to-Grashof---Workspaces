@@ -228,3 +228,55 @@ def test_required_budget_exhaustion_overrides_sampled_member() -> None:
         critical=(),
     )
     assert status is IntervalStatus.UNRESOLVED
+    records = audit_family_intervals(
+        (accepted,),
+        n_bins=2,
+        chart_ids=("ZYZ_WORLD",),
+        occupied={("ZYZ_WORLD", 0)},
+        exhausted={("ZYZ_WORLD", 0)},
+    )
+    world_bin0 = next(
+        item for item in records if item.chart_id == "ZYZ_WORLD" and item.lambda_interval[0] < -1.0
+    )
+    assert world_bin0.required is True
+    assert world_bin0.budget_exhausted is True
+    assert world_bin0.accepted_leaf_ids == ("ok",)
+    assert world_bin0.interval_status is IntervalStatus.UNRESOLVED
+    assert world_bin0.interval_status is not IntervalStatus.SAMPLED_ADMISSIBLE
+    assert interval_coverage_ok(records) is False
+    gated, gaps = apply_interval_coverage_gate((accepted,), records)
+    assert gaps
+    assert all(leaf.accepted_for_reconstruction is False for leaf in gated)
+    payload = world_bin0.to_json_dict()
+    assert payload["budget_exhausted"] is True
+    assert payload["interval_status"] == "UNRESOLVED"
+    assert payload["interval_status"] != "COMPLETE"
+
+
+def test_empty_topology_events_are_not_evaluated() -> None:
+    accepted = _leaf(
+        leaf_id="ok",
+        chart_id="ZYZ_WORLD",
+        lam=-1.0,
+        accepted=True,
+        component="EXACT_ON_COMPONENT",
+        family=FamilyAdmissibilityStatus.PASS,
+    )
+    records = audit_family_intervals(
+        (accepted,),
+        n_bins=2,
+        chart_ids=("ZYZ_WORLD",),
+        occupied={("ZYZ_WORLD", 0)},
+    )
+    payload = records[0].to_json_dict()
+    assert payload["birth_death_merge_events"] == []
+    assert (
+        payload["topology_event_status"]
+        == "NOT_EVALUATED_EXCLUDED_FROM_DECLARED_RESOLUTION_SET_COVER"
+    )
+    assert payload["interval_status"] != "COMPLETE"
+
+
+def test_interval_status_enum_has_no_complete() -> None:
+    assert "COMPLETE" not in {item.value for item in IntervalStatus}
+    assert IntervalStatus.SAMPLED_ADMISSIBLE.value == "SAMPLED_ADMISSIBLE"

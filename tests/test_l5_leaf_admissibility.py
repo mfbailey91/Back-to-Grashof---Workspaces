@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from dataclasses import replace
 
 from l5_test_support import two_neighbor_works as _two_neighbor_works
@@ -14,6 +15,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.leaf_family import 
 from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     ChartOverlapAudit,
     FamilyAdmissibilityStatus,
+    ReseedAttempt,
     ReseedAudit,
     ReseedDisposition,
     ReseedScope,
@@ -85,6 +87,63 @@ def test_returned_symmetric_match_is_component_pass() -> None:
     assert branch_match is True
     assert set_match is True
     assert all("circuit identity" not in note.lower() for note in notes)
+
+
+def test_returned_set_match_does_not_claim_circuit_identity() -> None:
+    *_rest, set_match, notes = classify_reseed_attempt(
+        lambda_ok=True,
+        seed_q_ok=True,
+        seed_pointing_ok=True,
+        tangent_ok=True,
+        original_returned=True,
+        reseeded_returned=True,
+        original_branch_status="returned",
+        reseeded_branch_status="returned",
+        symmetric_q=0.0,
+        symmetric_p=0.0,
+        q_tol=1e-3,
+        p_tol=1e-3,
+    )
+    joined = " ".join(notes).lower()
+    assert set_match is True
+    assert "returned symmetric branch-set match" in joined
+    assert "circuit identity" not in joined
+    assert "assembly-mode" not in joined
+    assert "topological component identity" not in joined
+    attempt = ReseedAttempt(
+        reseed_id="r0",
+        seed_s=0.0,
+        local_seed_q_error=0.0,
+        local_seed_pointing_error=0.0,
+        local_lambda_error=0.0,
+        local_tangent_error=0.0,
+        symmetric_branch_q_distance=0.0,
+        symmetric_branch_pointing_distance=0.0,
+        return_status_match=True,
+        branch_status_match=True,
+        returned_symmetric_set_match=True,
+        scope=ReseedScope.COMPONENT,
+        disposition=ReseedDisposition.COMPONENT_PASS,
+        notes=notes,
+    )
+    payload = attempt.to_json_dict()
+    assert payload["returned_symmetric_set_match"] is True
+    assert payload["circuit_or_component_match"] is None
+    assert payload["component_identity"] is None
+    assert "circuit identity" not in json.dumps(payload).lower()
+    audit = ReseedAudit(
+        disposition=ReseedDisposition.COMPONENT_PASS,
+        n_reseeds=1,
+        max_symmetric_q_distance_rad=0.0,
+        max_pointing_distance_rad=0.0,
+        notes=notes,
+        attempts=(attempt,),
+        all_returned_symmetric_set_matches=True,
+    )
+    audit_payload = audit.to_json_dict()
+    assert audit_payload["all_returned_symmetric_set_matches"] is True
+    assert audit_payload["all_component_ids_match"] is None
+    assert "circuit identity" not in json.dumps(audit_payload).lower()
 
 
 def _component_reseed() -> ReseedAudit:
