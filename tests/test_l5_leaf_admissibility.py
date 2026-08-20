@@ -207,3 +207,30 @@ def test_leaf_only_inherits_incident_chart_audits() -> None:
     assert mapped[work_a.certificate.spec.leaf_id] == [audit]
     assert mapped[work_b.certificate.spec.leaf_id] == [audit]
     assert mapped["leaf_c"] == []
+
+
+def test_chart_level_unresolved_attaches_only_to_affected_charts() -> None:
+    work_a, work_b = _two_neighbor_works()
+    world, rx90, ry90 = "ZYZ_WORLD", "ZYZ_RX90", "ZYZ_RY90"
+    cert_a = replace(work_a.certificate, spec=replace(work_a.certificate.spec, chart_id=world))
+    cert_b = replace(
+        work_b.certificate,
+        spec=replace(work_b.certificate.spec, chart_id=rx90),
+    )
+    cert_c = replace(
+        work_a.certificate,
+        spec=replace(work_a.certificate.spec, leaf_id="leaf_c", chart_id=ry90),
+    )
+    audit = ChartOverlapAudit(
+        status="UNRESOLVED",
+        required=True,
+        claim_scope="multi_chart_declared_domain",
+        chart_id_a=world,
+        chart_id_b=rx90,
+        responsibility_transition_id=f"{world}<->{rx90}",
+        transition_sample_count=1,
+    )
+    mapped = chart_audits_by_leaf((cert_a, cert_b, cert_c), (audit,))
+    assert mapped[cert_a.spec.leaf_id] == [audit]
+    assert mapped[cert_b.spec.leaf_id] == [audit]
+    assert mapped["leaf_c"] == []

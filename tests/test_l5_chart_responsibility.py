@@ -6,13 +6,19 @@ from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
+from l5_test_support import two_neighbor_works as _two_neighbor_works
+
 from grashof_workspace.spatial_experiments.l5_reconstruction.leaf_family import (
+    _family_chart_overlap,
     audit_family_intervals,
     required_chart_transition_pairs,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     IntervalStatus,
     load_campaign_config,
+)
+from grashof_workspace.spatial_experiments.l5_reconstruction.positive_control import (
+    build_positive_control_arm,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.spherical_chart import (
     canonical_chart,
@@ -21,6 +27,23 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.spherical_chart imp
 )
 
 CONFIG = Path("configs/l5_positive_control_v1.json")
+
+
+def _dummy_arm() -> SimpleNamespace:
+    class FixedRotationChain:
+        def evaluate(self, _q):
+            return SimpleNamespace(R=None)
+
+    return SimpleNamespace(chain=FixedRotationChain())
+
+
+def _overlap_kwargs(config):
+    return {
+        "q_tol": config.tolerances.leaf_duplicate_distance_rad,
+        "rotation_tol": config.tolerances.orientation_geodesic_rad,
+        "pointing_tol": config.tolerances.pointing_geodesic_rad,
+        "lambda_tol": config.tolerances.family_coordinate_error_rad,
+    }
 
 
 def test_all_configured_charts_appear_even_without_leaves() -> None:
@@ -122,3 +145,110 @@ def test_overlap_band_drives_required_transition_pairs() -> None:
         policy=narrow_policy,
     )
     assert not_required == {}
+
+
+def test_out_of_band_chart_pair_is_not_applicable() -> None:
+    config = load_campaign_config(CONFIG)
+    charts = charts_from_config(config.charts)
+    audits = _family_chart_overlap(
+        _dummy_arm(),
+        charts,
+        (),
+        required_transitions={},
+        policy=config.chart_atlas_policy,
+        **_overlap_kwargs(config),
+    )
+    assert len(audits) == 3
+    assert all(item.status == "NOT_APPLICABLE" for item in audits)
+    assert all(item.required is False for item in audits)
+    assert all(item.transition_sample_count == 0 for item in audits)
+    assert all(item.chart_id_a and item.chart_id_b for item in audits)
+    assert all(item.responsibility_transition_id == f"{item.chart_id_a}<->{item.chart_id_b}" for item in audits)
+    assert all("overlap band" in " ".join(item.notes).lower() for item in audits)
+
+
+def test_required_transition_without_matched_leaves_is_unresolved() -> None:
+    config = load_campaign_config(CONFIG)
+    charts = charts_from_config(config.charts)
+    policy = config.chart_atlas_policy
+    pair = (policy.chart_ids[0], policy.chart_ids[1])
+    source_q = (0.0, 0.0, 0.0, 0.0, 0.0)
+    audits = _family_chart_overlap(
+        _dummy_arm(),
+        charts,
+        (),
+        required_transitions={pair: (source_q,)},
+        policy=policy,
+        **_overlap_kwargs(config),
+    )
+    required = tuple(item for item in audits if item.required)
+    optional = tuple(item for item in audits if not item.required)
+    assert len(required) == 1
+    assert required[0].status == "UNRESOLVED"
+    assert required[0].chart_id_a == pair[0]
+    assert required[0].chart_id_b == pair[1]
+    assert required[0].leaf_id_a is None
+    assert required[0].leaf_id_b is None
+    assert required[0].transition_sample_count == 1
+    assert required[0].responsibility_transition_id == f"{pair[0]}<->{pair[1]}"
+    assert all(item.status == "NOT_APPLICABLE" for item in optional)
+
+
+def _copy_work_onto_chart(work, chart, leaf_id: str):
+    return replace(
+        work,
+        chart=chart,
+        certificate=replace(
+            work.certificate,
+            spec=replace(work.certificate.spec, leaf_id=leaf_id, chart_id=chart.chart_id),
+        ),
+    )
+
+
+def test_frozen_lambda_leaves_are_audited_as_separate_pairs() -> None:
+    config = load_campaign_config(CONFIG)
+    charts = charts_from_config(config.charts)
+    arm = build_positive_control_arm(config.geometry)
+    work_a, work_b = _two_neighbor_works()
+    copy_a = _copy_work_onto_chart(work_a, charts[1], "leaf_a_chart1")
+    copy_b = _copy_work_onto_chart(work_b, charts[1], "leaf_b_chart1")
+    pair = (charts[0].chart_id, charts[1].chart_id)
+    audits = _family_chart_overlap(
+        arm,
+        charts,
+        (work_a, work_b, copy_a, copy_b),
+        required_transitions={pair: (work_a.seed_q, work_b.seed_q)},
+        policy=config.chart_atlas_policy,
+        **_overlap_kwargs(config),
+    )
+    required = tuple(item for item in audits if item.required)
+    pairs = {(item.leaf_id_a, item.leaf_id_b) for item in required}
+    assert len(required) == 2
+    assert pairs == {
+        (work_a.certificate.spec.leaf_id, "leaf_a_chart1"),
+        (work_b.certificate.spec.leaf_id, "leaf_b_chart1"),
+    }
+    assert all(item.chart_id_a == pair[0] and item.chart_id_b == pair[1] for item in required)
+    assert all(item.transition_sample_count == 1 for item in required)
+
+
+def test_repeated_transition_samples_dedup_to_one_leaf_pair() -> None:
+    config = load_campaign_config(CONFIG)
+    charts = charts_from_config(config.charts)
+    arm = build_positive_control_arm(config.geometry)
+    work_a, _work_b = _two_neighbor_works()
+    copy_a = _copy_work_onto_chart(work_a, charts[1], "leaf_a_chart1")
+    pair = (charts[0].chart_id, charts[1].chart_id)
+    audits = _family_chart_overlap(
+        arm,
+        charts,
+        (work_a, copy_a),
+        required_transitions={pair: (work_a.seed_q, work_a.seed_q)},
+        policy=config.chart_atlas_policy,
+        **_overlap_kwargs(config),
+    )
+    required = tuple(item for item in audits if item.required)
+    assert len(required) == 1
+    assert required[0].leaf_id_a == work_a.certificate.spec.leaf_id
+    assert required[0].leaf_id_b == "leaf_a_chart1"
+    assert required[0].transition_sample_count == 2
