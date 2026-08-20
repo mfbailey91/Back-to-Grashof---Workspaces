@@ -114,6 +114,10 @@ def test_sampled_admissible_is_not_called_complete() -> None:
     payload = world_bin0.to_json_dict()
     assert payload["interval_status"] == "SAMPLED_ADMISSIBLE"
     assert payload["interval_status"] != "COMPLETE"
+    assert (
+        payload["topology_event_status"]
+        == "NOT_EVALUATED_EXCLUDED_FROM_DECLARED_RESOLUTION_SET_COVER"
+    )
 
 
 def test_missing_required_bin_blocks_natural_cover() -> None:
@@ -206,3 +210,21 @@ def test_classify_interval_status_vocabulary() -> None:
     )
     replaced = replace(dummy, interval_status=IntervalStatus.SAMPLED_ADMISSIBLE)
     assert replaced.interval_status != "COMPLETE"
+
+
+def test_required_budget_exhaustion_overrides_sampled_member() -> None:
+    accepted = _leaf(
+        leaf_id="ok",
+        chart_id="ZYZ_WORLD",
+        lam=-1.0,
+        accepted=True,
+        component="EXACT_ON_COMPONENT",
+        family=FamilyAdmissibilityStatus.PASS,
+    )
+    status = classify_interval_status(
+        required=True,
+        members=(accepted,),
+        budget_exhausted=True,
+        critical=(),
+    )
+    assert status is IntervalStatus.UNRESOLVED

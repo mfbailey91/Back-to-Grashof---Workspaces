@@ -5,6 +5,10 @@ from __future__ import annotations
 from dataclasses import replace
 
 import numpy as np
+from l5_test_support import p1_fixture as _p1_fixture
+from l5_test_support import two_neighbor_works as _two_neighbor_works
+from l5_test_support import work_from_q as _work_from_q
+from l5_test_support import wrap_q as _wrap
 
 from grashof_workspace.spatial_experiments.implicit_manifold import orthonormal_tangent_basis
 from grashof_workspace.spatial_experiments.jacobians import position_jacobian
@@ -20,84 +24,8 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     ChartOverlapAudit,
     FamilyAdmissibilityStatus,
     TransversalityAudit,
-    load_campaign_config,
 )
-from grashof_workspace.spatial_experiments.l5_reconstruction.positive_control import (
-    analytic_seed_configuration,
-    build_positive_control_arm,
-)
-from grashof_workspace.spatial_experiments.l5_reconstruction.spherical_chart import (
-    charts_from_config,
-)
-from grashof_workspace.spatial_experiments.l5_reconstruction.uuru_leaf import (
-    child_tangent,
-    continue_uuru_leaf,
-    issue_leaf_certificate,
-    leaf_spec_for,
-    problem_from_source_seed,
-)
-
-CONFIG = "configs/l5_positive_control_v1.json"
-
-
-def _wrap(q: tuple[float, ...], delta: np.ndarray) -> tuple[float, ...]:
-    arr = np.asarray(q, dtype=float) + np.asarray(delta, dtype=float)
-    return tuple(float(np.arctan2(np.sin(v), np.cos(v))) for v in arr)
-
-
-def _work_from_q(arm, chart, probe, q, leaf_id: str, *, max_steps: int = 6) -> LeafWorkRecord | None:
-    built = problem_from_source_seed(arm, chart, q, probe.p_star, leaf_id=leaf_id)
-    if built is None:
-        return None
-    problem, x0 = built
-    samples, status, returned = continue_uuru_leaf(problem, x0, max_steps=max_steps, step_size=0.08)
-    if len(samples) < 1:
-        return None
-    spec = leaf_spec_for(probe.probe_id, chart, problem.lambda_fixed, probe.p_star, problem.problem_id)
-    cert = issue_leaf_certificate(
-        spec,
-        samples,
-        branch_status=status,
-        returned=returned,
-        position_tol=1e-6,
-        orientation_tol=1e-5,
-        pointing_tol=1e-5,
-        lift_tol=1e-8,
-        lambda_tol=1e-5,
-        closure_tol=1e-6,
-    )
-    return LeafWorkRecord(
-        certificate=cert,
-        problem=problem,
-        seed_x=tuple(float(v) for v in x0),
-        seed_q=tuple(float(v) for v in problem.physical_q(x0)),
-        chart=chart,
-        lambda_fixed=float(problem.lambda_fixed),
-    )
-
-
-def _p1_fixture():
-    config = load_campaign_config(CONFIG)
-    arm = build_positive_control_arm(config.geometry)
-    probe = config.probe("P1_DEEP_COMPLETE")
-    chart = charts_from_config(config.charts)[0]
-    q0 = analytic_seed_configuration(config.geometry, probe)
-    return config, arm, chart, probe, q0
-
-
-def _two_neighbor_works() -> tuple[LeafWorkRecord, LeafWorkRecord]:
-    _config, arm, chart, probe, q0 = _p1_fixture()
-    w0 = _work_from_q(arm, chart, probe, q0, "leaf_a", max_steps=6)
-    assert w0 is not None
-    for delta in (0.12, 0.2, 0.28, 0.36, -0.18, 0.45):
-        q1 = _wrap(q0, np.array([delta, 0.0, 0.0, 0.0, 0.0]))
-        w1 = _work_from_q(arm, chart, probe, q1, "leaf_b", max_steps=6)
-        if w1 is None:
-            continue
-        gap = abs(float(np.arctan2(np.sin(w1.lambda_fixed - w0.lambda_fixed), np.cos(w1.lambda_fixed - w0.lambda_fixed))))
-        if gap >= 0.05:
-            return w0, w1
-    raise AssertionError("could not construct a second distinct-lambda neighbor")
+from grashof_workspace.spatial_experiments.l5_reconstruction.uuru_leaf import child_tangent
 
 
 def test_transversality_uses_child_tangent() -> None:

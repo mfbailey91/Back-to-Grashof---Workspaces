@@ -86,9 +86,10 @@ def test_same_source_curve_in_two_charts_is_compatible() -> None:
     assert audit.recovered_rotation_correspondence is True
     assert audit.chart_coordinate_transform is True
     assert audit.family_parameter_correspondence is True
-    assert audit.component_identity is True
+    assert audit.component_identity is None
     assert audit.pointing_set_correspondence is True
     notes = " ".join(audit.notes).lower()
+    assert "independent circuit/component signature" in notes
     assert "d_ab" not in notes
     assert "asymmetry" not in notes
 

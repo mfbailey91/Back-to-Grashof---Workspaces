@@ -151,21 +151,70 @@ def validate_artifact_hashes(
             raise ArtifactHashDrift(f"hash drift for {rel}: recorded {expected} actual {actual}")
 
 
-def validate_campaign_tree(outdir: Path, probe_ids: Sequence[str]) -> None:
-    """Refuse a campaign tree whose stage hashes are missing or drifted."""
+def validate_campaign_tree(
+    outdir: Path,
+    probe_ids: Sequence[str],
+    *,
+    expected_config_hash: str | None = None,
+    expected_mode: str | None = None,
+    require_all_stages: bool = False,
+) -> None:
+    """Refuse missing, drifted, or scope-inconsistent campaign artifacts.
+
+    Diagnostic packages may omit later stages. A full closeout must contain every
+    stage and every per-probe artifact. The manifest may advertise a superset of
+    probes, but every downstream stage must match the packaged probe scope exactly.
+    """
 
     if not (outdir / INDEX_NAME).is_file():
         raise ArtifactHashDrift(f"missing {INDEX_NAME}; refusing unhashed campaign {outdir}")
+    expected_probes = tuple(str(item) for item in probe_ids)
     for stage in STAGE_SUMMARY_NAMES:
         summary = stage_summary_path(outdir, stage)
         if not summary.is_file():
+            if require_all_stages:
+                raise FileNotFoundError(f"missing required stage summary {summary}")
             continue
         blob = json.loads(summary.read_text(encoding="utf-8"))
         if not isinstance(blob, dict):
             raise TypeError(f"{summary} is not a JSON object")
+
+        if expected_config_hash is not None:
+            actual_hash = str(blob.get("config_hash", ""))
+            if actual_hash != expected_config_hash:
+                raise ValueError(
+                    f"{stage} config-hash drift: expected {expected_config_hash}, got {actual_hash}"
+                )
+        if expected_mode is not None:
+            actual_mode = str(blob.get("mode", ""))
+            if actual_mode != expected_mode:
+                raise ValueError(f"{stage} mode drift: expected {expected_mode}, got {actual_mode}")
+
+        stored_raw = blob.get("probe_ids")
+        if stored_raw is None:
+            raise ValueError(f"{stage} summary is missing probe_ids")
+        if not isinstance(stored_raw, list):
+            raise TypeError(f"{stage} summary probe_ids is not a list")
+        stored_probes = tuple(str(item) for item in stored_raw)
+        if stage == "manifest":
+            missing = tuple(pid for pid in expected_probes if pid not in stored_probes)
+            if missing:
+                raise ValueError(
+                    "manifest probe scope does not contain packaged probes: "
+                    f"{missing}"
+                )
+        elif stored_probes != expected_probes:
+            raise ValueError(
+                f"{stage} probe-scope drift: expected {expected_probes}, got {stored_probes}"
+            )
+
         validate_stage_output_refs(outdir, blob)
-        present = tuple(path for path in artifact_paths(outdir, stage, probe_ids) if path.is_file())
-        validate_artifact_hashes(outdir, present)
+        paths = artifact_paths(outdir, stage, expected_probes)
+        if require_all_stages:
+            validate_artifact_hashes(outdir, paths)
+        else:
+            present = tuple(path for path in paths if path.is_file())
+            validate_artifact_hashes(outdir, present)
 
 
 def validate_stage_output_refs(outdir: Path, blob: Mapping[str, Any]) -> None:

@@ -615,6 +615,19 @@ Recommended raw bundle:
 r3a_full_<config-hash>_<git-sha>.tar.zst
 ```
 
+H11 packaging for a frozen full closeout:
+
+```bash
+python scripts/package_r3a_campaign.py \
+  --raw-root outputs/r3a_full_raw \
+  --results-root results/l5_reconstruction/r3a \
+  --bundle-dir outputs/r3a_campaign_bundles \
+  --replace-committed \
+  --full-closeout
+```
+
+A `ci`/`smoke` or incomplete probe run is a diagnostic package and must not use `--full-closeout`. See [R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md).
+
 Store its SHA-256 in the committed manifest. GitHub Actions artifacts, a release attachment, or an explicitly ignored local campaign directory are acceptable. Git LFS may be used only if the repository intentionally adopts it.
 
 ## 27. Branch hygiene

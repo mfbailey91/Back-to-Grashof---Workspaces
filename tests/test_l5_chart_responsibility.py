@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
+from types import SimpleNamespace
 
 from grashof_workspace.spatial_experiments.l5_reconstruction.leaf_family import (
     audit_family_intervals,
+    required_chart_transition_pairs,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     IntervalStatus,
@@ -70,3 +73,52 @@ def test_full_budget_covers_required_bins_by_policy() -> None:
     assert full.max_natural_leaves_per_probe != 36
     assert config.chart_atlas_policy.canonical_assignment == "max_abs_sin_beta"
     assert config.chart_atlas_policy.chart_ids == tuple(item.chart_id for item in config.charts)
+
+
+def test_overlap_band_drives_required_transition_pairs() -> None:
+    config = load_campaign_config(CONFIG)
+    charts = charts_from_config(config.charts)
+    rotation = None
+    for chart in charts:
+        for beta in (0.4, 0.8, 1.2):
+            candidate = chart.compose(0.37, beta, -0.29)
+            qualities = sorted((chart_quality(item, candidate) for item in charts), reverse=True)
+            if qualities[0] - qualities[1] > 1e-6 and qualities[1] > 1e-6:
+                rotation = candidate
+                break
+        if rotation is not None:
+            break
+    assert rotation is not None
+
+    class FixedRotationChain:
+        def evaluate(self, _q):
+            return SimpleNamespace(R=rotation)
+
+    arm = SimpleNamespace(chain=FixedRotationChain())
+    source_qs = ((0.0, 0.0, 0.0, 0.0, 0.0),)
+    wide_policy = replace(
+        config.chart_atlas_policy,
+        singularity_margin=0.0,
+        overlap_margin=1.0,
+    )
+    required = required_chart_transition_pairs(
+        arm,
+        charts,
+        source_qs,
+        policy=wide_policy,
+    )
+    assert required
+    assert all(samples == source_qs for samples in required.values())
+
+    narrow_policy = replace(
+        config.chart_atlas_policy,
+        singularity_margin=0.0,
+        overlap_margin=0.0,
+    )
+    not_required = required_chart_transition_pairs(
+        arm,
+        charts,
+        source_qs,
+        policy=narrow_policy,
+    )
+    assert not_required == {}

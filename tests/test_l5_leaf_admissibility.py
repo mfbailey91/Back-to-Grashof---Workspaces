@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from test_l5_leaf_transversality import _two_neighbor_works
+from l5_test_support import two_neighbor_works as _two_neighbor_works
 
 from grashof_workspace.spatial_experiments.l5_reconstruction.leaf_family import (
+    chart_audits_by_leaf,
     classify_reseed_attempt,
     recompute_family_acceptance,
 )
@@ -64,7 +65,7 @@ def test_return_mismatch_blocks_component_pass() -> None:
 
 
 def test_returned_symmetric_match_is_component_pass() -> None:
-    scope, disposition, returned_match, branch_match, identity, _notes = classify_reseed_attempt(
+    scope, disposition, returned_match, branch_match, set_match, notes = classify_reseed_attempt(
         lambda_ok=True,
         seed_q_ok=True,
         seed_pointing_ok=True,
@@ -82,7 +83,8 @@ def test_returned_symmetric_match_is_component_pass() -> None:
     assert disposition is ReseedDisposition.COMPONENT_PASS
     assert returned_match is True
     assert branch_match is True
-    assert identity is True
+    assert set_match is True
+    assert all("circuit identity" not in note.lower() for note in notes)
 
 
 def _component_reseed() -> ReseedAudit:
@@ -175,6 +177,33 @@ def test_optional_chart_overlap_is_not_required() -> None:
         chart_id_b=work_b.chart.chart_id,
     )
     updated = recompute_family_acceptance((cert_a, cert_b), (pass_ab,), overlap)
-    assert all(leaf.family_admissibility_status is not FamilyAdmissibilityStatus.FAIL for leaf in updated)
+    assert all(
+        leaf.family_admissibility_status is not FamilyAdmissibilityStatus.FAIL
+        for leaf in updated
+    )
     chart_ok_status = {leaf.chart_overlap_status for leaf in updated}
     assert "INCOMPATIBLE" not in chart_ok_status
+
+
+def test_leaf_only_inherits_incident_chart_audits() -> None:
+    work_a, work_b = _two_neighbor_works()
+    spec_c = replace(work_a.certificate.spec, leaf_id="leaf_c")
+    cert_c = replace(work_a.certificate, spec=spec_c)
+    audit = ChartOverlapAudit(
+        status="UNRESOLVED",
+        required=True,
+        claim_scope="multi_chart_declared_domain",
+        chart_id_a=work_a.chart.chart_id,
+        chart_id_b=work_b.chart.chart_id,
+        leaf_id_a=work_a.certificate.spec.leaf_id,
+        leaf_id_b=work_b.certificate.spec.leaf_id,
+        responsibility_transition_id="synthetic-transition",
+        transition_sample_count=2,
+    )
+    mapped = chart_audits_by_leaf(
+        (work_a.certificate, work_b.certificate, cert_c),
+        (audit,),
+    )
+    assert mapped[work_a.certificate.spec.leaf_id] == [audit]
+    assert mapped[work_b.certificate.spec.leaf_id] == [audit]
+    assert mapped["leaf_c"] == []

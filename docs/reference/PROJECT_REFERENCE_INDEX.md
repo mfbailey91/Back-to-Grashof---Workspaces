@@ -82,6 +82,10 @@ R3A-H0–H6 evidence-hardening contract: evaluative family audits, independent d
 
 R3A-H7–H10 follow-up: metric applicability, two-resolution refinement, leaf-scoped admission, chart responsibility, and compact artifact closeout (ADR-051 draft). Guide: [`CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md`](../methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md).
 
+### [`../methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md`](../methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md)
+
+R3A-H11 acceptance-authority hardening: diagnostic vs full-closeout packages, overlap-band chart transitions, returned-set claim narrowing, and the strict gate before a frozen full rerun.
+
 ### Archived V05–V09 planning lineage
 
 Historical sequential sprint labels (V05–V09) are preserved under [`../archive/programs/`](../archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md) and [`../archive/sprints/`](../archive/sprints/SPRINT_01.md). They are not the active roadmap.

@@ -11,6 +11,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.artifacts import (
     finalize_stage,
     update_artifact_index,
     validate_artifact_hashes,
+    validate_campaign_tree,
     validate_stage_output_refs,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.campaign_package import (
@@ -19,6 +20,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.campaign_package im
     compact_natural_family,
     compact_source_control,
     package_r3a_campaign,
+    validate_package_scope,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.cli import run_stage, write_manifest
 from grashof_workspace.spatial_experiments.l5_reconstruction.comparison import (
@@ -37,6 +39,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     ThreeWayReconstructionResult,
     file_sha256,
     load_campaign_config,
+    stage_envelope,
 )
 
 CONFIG = Path("configs/l5_positive_control_v1.json")
@@ -143,20 +146,35 @@ def _hashed_raw_campaign(raw: Path, *, probe_id: str = "P1_DEEP_COMPLETE") -> No
     (probe / "comparison.json").write_text(json.dumps({"probe_id": probe_id}), encoding="utf-8")
     probe_ids = (probe_id,)
     for stage, payload in (
-        ("fixture", {"probe_ids": list(probe_ids)}),
-        ("truth", {"probe_ids": list(probe_ids)}),
-        ("source-control", {"probe_ids": list(probe_ids)}),
-        ("leaves", {"probe_ids": list(probe_ids)}),
+        ("fixture", {}),
+        ("truth", {}),
+        ("source-control", {}),
+        ("leaves", {}),
         (
             "compare",
             {
-                "probe_ids": list(probe_ids),
                 "campaign_blocker": "STITCHING_CONTROL_BLOCKED",
                 "accepted_reconstruction": False,
             },
         ),
     ):
-        finalize_stage(raw, payload, config=config, stage=stage, mode="ci", probe_ids=probe_ids)
+        sealed_payload = {
+            **stage_envelope(
+                config,
+                stage=stage,
+                mode="ci",
+                probe_ids=probe_ids,
+            ),
+            **payload,
+        }
+        finalize_stage(
+            raw,
+            sealed_payload,
+            config=config,
+            stage=stage,
+            mode="ci",
+            probe_ids=probe_ids,
+        )
     campaign = raw / "campaign.json"
     if campaign.is_file():
         (raw / "compare.json").write_text(campaign.read_text(encoding="utf-8"), encoding="utf-8")
@@ -288,16 +306,38 @@ def test_raw_bundle_hash_matches_manifest(tmp_path: Path) -> None:
     results = tmp_path / "compact"
     bundles = tmp_path / "bundles"
     _hashed_raw_campaign(raw)
-    manifest = package_r3a_campaign(raw_root=raw, results_root=results, bundle_dir=bundles, config_path=CONFIG)
+    manifest = package_r3a_campaign(
+        raw_root=raw,
+        results_root=results,
+        bundle_dir=bundles,
+        config_path=CONFIG,
+    )
     bundle = bundles / str(manifest["raw_bundle"])
     assert bundle.is_file()
     assert file_sha256(bundle) == manifest["raw_bundle_sha256"]
-    compact_truth = json.loads((results / "P1_DEEP_COMPLETE" / "direct_truth.json").read_text(encoding="utf-8"))
+    assert manifest["package_kind"] == "diagnostic"
+    assert manifest["campaign_mode"] == "ci"
+    assert manifest["probe_ids"] == ["P1_DEEP_COMPLETE"]
+    assert manifest["all_configured_probes_present"] is False
+    assert manifest["full_closeout_eligible"] is False
+    assert str(manifest["raw_bundle"]).startswith("r3a_ci_1probes_")
+    assert manifest["raw_bundle_archive_root"] == "r3a_ci_raw"
+    assert "--mode ci" in manifest["reproduction"]
+    assert "--probe P1_DEEP_COMPLETE" in manifest["reproduction"]
+    assert manifest["git"] == manifest["producer_git"]
+    assert "packager_git" in manifest
+    compact_truth = json.loads(
+        (results / "P1_DEEP_COMPLETE" / "direct_truth.json").read_text(encoding="utf-8")
+    )
     assert "solves" not in compact_truth["discovery"]
     truth_summary = json.loads((results / "truth.json").read_text(encoding="utf-8"))
     validate_stage_output_refs(results, truth_summary)
     compact_path = "P1_DEEP_COMPLETE/direct_truth.json"
-    recorded = {item["path"]: item["sha256"] for item in truth_summary["outputs"] if isinstance(item, dict)}
+    recorded = {
+        item["path"]: item["sha256"]
+        for item in truth_summary["outputs"]
+        if isinstance(item, dict)
+    }
     assert recorded[compact_path] == file_sha256(results / compact_path)
 
 
@@ -314,6 +354,73 @@ def test_packager_refuses_raw_hash_drift(tmp_path: Path) -> None:
             results_root=tmp_path / "compact",
             bundle_dir=tmp_path / "bundles",
             config_path=CONFIG,
+        )
+
+
+def test_full_closeout_refuses_ci_subset(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    _hashed_raw_campaign(raw)
+    with pytest.raises(ValueError, match="mode='full'"):
+        package_r3a_campaign(
+            raw_root=raw,
+            results_root=tmp_path / "compact",
+            bundle_dir=tmp_path / "bundles",
+            config_path=CONFIG,
+            full_closeout=True,
+        )
+
+
+def test_campaign_config_hash_mismatch_is_refused_before_packaging(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    _hashed_raw_campaign(raw)
+    campaign_path = raw / "campaign.json"
+    campaign = json.loads(campaign_path.read_text(encoding="utf-8"))
+    campaign["config_hash"] = "mismatched-config"
+    campaign_path.write_text(json.dumps(campaign), encoding="utf-8")
+    with pytest.raises(ValueError, match="campaign config-hash drift"):
+        package_r3a_campaign(
+            raw_root=raw,
+            results_root=tmp_path / "compact",
+            bundle_dir=tmp_path / "bundles",
+            config_path=CONFIG,
+        )
+
+
+def test_full_scope_requires_all_five_probes_and_one_blocker() -> None:
+    config = load_campaign_config(CONFIG)
+    probe_ids = [probe.probe_id for probe in config.probes]
+    campaign = {
+        "config_hash": config.config_hash,
+        "mode": "full",
+        "probe_ids": probe_ids,
+        "campaign_blocker": CampaignBlocker.STITCHING_CONTROL_BLOCKED.value,
+        "accepted_reconstruction": False,
+    }
+    mode, declared, all_configured = validate_package_scope(
+        campaign,
+        config,
+        full_closeout=True,
+    )
+    assert mode == "full"
+    assert declared == tuple(probe_ids)
+    assert all_configured is True
+
+    campaign["probe_ids"] = probe_ids[:-1]
+    with pytest.raises(ValueError, match="all configured probes"):
+        validate_package_scope(campaign, config, full_closeout=True)
+
+
+def test_strict_campaign_tree_requires_every_stage(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    _hashed_raw_campaign(raw)
+    config = load_campaign_config(CONFIG)
+    with pytest.raises(FileNotFoundError, match="render.json"):
+        validate_campaign_tree(
+            raw,
+            ("P1_DEEP_COMPLETE",),
+            expected_config_hash=config.config_hash,
+            expected_mode="ci",
+            require_all_stages=True,
         )
 
 
