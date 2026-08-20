@@ -36,7 +36,7 @@ implementation authority.
 | [methods/CURSOR_GUIDE_R3A_HARDENING.md](methods/CURSOR_GUIDE_R3A_HARDENING.md) | H0–H6 GUIDE | File-by-file Cursor sequence for R3A-H0–H6 |
 | [methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md](methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md) | ACTIVE FOLLOW-UP | Full-mode acceptance semantics, family scope, and compact closeout |
 | [methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md](methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md) | IMPLEMENTATION GUIDE | File-by-file Cursor sequence for R3A-H7–H10 |
-| [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md) | ACTIVE HARDENING | Package scope, chart responsibility transitions, claim narrowing, and strict full-closeout gate |
+| [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md) | RECORDED HARDENING | Package scope, chart responsibility transitions, claim narrowing, and H11E frozen closeout `DIRECT_REFERENCE_BLOCKED` |
 | [methods/JACOBIAN_AND_DERIVATIVE_POLICY.md](methods/JACOBIAN_AND_DERIVATIVE_POLICY.md) | REFERENCE | Derivative / FD policy |
 | [methods/SPATIAL_POINTING_SLICE_CONTRACT.md](methods/SPATIAL_POINTING_SLICE_CONTRACT.md) | REFERENCE | Pointing level-set contract |
 | [methods/U_JOINT_DRIVE_CONTRACT.md](methods/U_JOINT_DRIVE_CONTRACT.md) | REFERENCE | Virtual-U drive coordinates |

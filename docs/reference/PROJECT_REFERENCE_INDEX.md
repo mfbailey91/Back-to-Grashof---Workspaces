@@ -80,11 +80,11 @@ R3A-H0–H6 evidence-hardening contract: evaluative family audits, independent d
 
 ### [`../methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md`](../methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md)
 
-R3A-H7–H10 follow-up: metric applicability, two-resolution refinement, leaf-scoped admission, chart responsibility, and compact artifact closeout (ADR-051 draft). Guide: [`CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md`](../methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md).
+R3A-H7–H10 follow-up: metric applicability, two-resolution refinement, leaf-scoped admission, chart responsibility, and compact artifact closeout (ADR-051 recorded at `DIRECT_REFERENCE_BLOCKED`). Guide: [`CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md`](../methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md).
 
 ### [`../methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md`](../methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md)
 
-R3A-H11 acceptance-authority hardening: diagnostic vs full-closeout packages, overlap-band chart transitions, returned-set claim narrowing, and the strict gate before a frozen full rerun.
+R3A-H11 acceptance-authority hardening: diagnostic vs full-closeout packages, overlap-band chart transitions, returned-set claim narrowing, and the recorded H11E frozen closeout `DIRECT_REFERENCE_BLOCKED`.
 
 ### Archived V05–V09 planning lineage
 

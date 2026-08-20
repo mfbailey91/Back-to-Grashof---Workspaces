@@ -1,6 +1,6 @@
 # R3A-H11 — Acceptance-Authority Hardening Before the Full-Mode Rerun
 
-**Status:** ACTIVE hardening follow-up
+**Status:** RECORDED — H11E frozen full-mode closeout is `DIRECT_REFERENCE_BLOCKED`
 **Project:** Back to Grashof — Mechanism-Based Workspace Characterization
 **Rung:** L5 spatial 5R
 **Starting branch:** `R3A_Stiching_Stitch_Tests`
@@ -425,6 +425,8 @@ natural decomposition third
 ```
 
 No generic `PARTIAL` is sufficient as the final scientific statement.
+
+**Recorded H11E outcome:** producer `d288d38`, `--mode full`, five probes, `package_kind=full_closeout`, `campaign_blocker=DIRECT_REFERENCE_BLOCKED`, `accepted_reconstruction=false`. Direct-vs-oracle two-resolution refinement exceeds the frozen 0.02 delta on all five probes; incomplete probes also exceed the frozen Hausdorff cell-diameter gate. Source and natural columns are not interpreted. L5 remains `parent_incomplete`.
 
 ---
 

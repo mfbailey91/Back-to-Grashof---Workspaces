@@ -127,6 +127,8 @@ strict full-closeout packaging
 
 **Pass/fail gate:** A diagnostic package cannot resemble a full package; only actual overlap-band handoffs create required chart audits; required truncated bins remain unresolved; CI is green; and `--full-closeout` accepts exactly one clean, five-probe, full-mode campaign with one explicit first-failing-column outcome.
 
+**Recorded H11E closeout:** Frozen `--mode full` at producer `d288d38` packaged as `full_closeout` records `DIRECT_REFERENCE_BLOCKED`. Direct-vs-oracle two-resolution refinement exceeds the frozen 0.02 delta on all five probes; incomplete probes also exceed the frozen Hausdorff cell-diameter gate. Do not interpret source or natural columns. L5 remains `parent_incomplete`. R3B remains held.
+
 Hardening execution: [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md).
 
 ### R3B — Transfer and falsification
