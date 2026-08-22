@@ -475,7 +475,9 @@ python -m grashof_workspace.spatial_experiments.l5_reconstruction.cli \
 python scripts/package_r3a_campaign.py \
   --raw-root outputs/r3a_full_raw \
   --results-root results/l5_reconstruction/r3a \
-  --bundle-dir outputs/r3a_campaign_bundles
+  --bundle-dir outputs/r3a_campaign_bundles \
+  --replace-committed \
+  --full-closeout
 ```
 
 Then regenerate dashboards:

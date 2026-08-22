@@ -111,6 +111,26 @@ H10 artifact authority + compact full-campaign closeout
 
 Follow-up execution: [methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md](methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md).
 
+#### R3A-H11 — Acceptance-authority hardening before the frozen full rerun
+
+H11 preserves the H7–H10 experiment while hardening the authority boundary around its final run:
+
+```text
+package mode/probe/config/provenance fidelity
+overlap-band responsibility-transition audits
+leaf-pair chart correspondence
+returned-set claim narrowing
+budget-exhaustion and topology-event honesty
+CI test-fixture isolation
+strict full-closeout packaging
+```
+
+**Pass/fail gate:** A diagnostic package cannot resemble a full package; only actual overlap-band handoffs create required chart audits; required truncated bins remain unresolved; CI is green; and `--full-closeout` accepts exactly one clean, five-probe, full-mode campaign with one explicit first-failing-column outcome.
+
+**Recorded H11E closeout:** Frozen `--mode full` at producer `d288d38` packaged as `full_closeout` records `DIRECT_REFERENCE_BLOCKED`. Direct-vs-oracle two-resolution refinement exceeds the frozen 0.02 delta on all five probes; incomplete probes also exceed the frozen Hausdorff cell-diameter gate. Do not interpret source or natural columns. L5 remains `parent_incomplete`. R3B remains held.
+
+Hardening execution: [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md).
+
 ### R3B — Transfer and falsification
 
 Apply the same direct/source/natural comparison to the existing `exact_two_u_5r`, `generic_5r`, and a near-architecture control. Determine which virtual-coordinate families remain exact, how chart choice changes individual leaf behavior, and whether the accepted family still reconstructs the parent pointing image.

@@ -1,0 +1,44 @@
+{
+  "accepted_reconstruction": false,
+  "all_configured_probes_present": true,
+  "allows_full_campaign_disposition": true,
+  "campaign_blocker": "DIRECT_REFERENCE_BLOCKED",
+  "campaign_mode": "full",
+  "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+  "full_closeout_eligible": true,
+  "git": {
+    "dirty_tree": false,
+    "git_commit": "d288d38b3c0e46465244b06706fbfffd782a689d"
+  },
+  "notes": [
+    "Compact evidence only. Raw solver banks live in the content-addressed bundle.",
+    "SAMPLED_ADMISSIBLE is not a global foliation. L5 remains pointing in S^2.",
+    "Full closeout package: mode, five-probe scope, hashes, and producer provenance verified.",
+    "campaign_blocker None means the campaign is incomplete or the mode cannot dispose; it is not NATURAL_DECOMPOSITION_BLOCKED."
+  ],
+  "package_kind": "full_closeout",
+  "packager_config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+  "packager_git": {
+    "dirty_tree": false,
+    "git_commit": "d288d38b3c0e46465244b06706fbfffd782a689d"
+  },
+  "probe_ids": [
+    "P1_DEEP_COMPLETE",
+    "P2_INNER_COMPLETE",
+    "P3_INNER_INCOMPLETE",
+    "P4_OUTER_COMPLETE",
+    "P5_OUTER_INCOMPLETE"
+  ],
+  "producer_config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+  "producer_git": {
+    "dirty_tree": false,
+    "git_commit": "d288d38b3c0e46465244b06706fbfffd782a689d"
+  },
+  "program_id": "R3A_L5_FIVE_POINT_NATURAL_LEAF_RECONSTRUCTION",
+  "raw_bundle": "r3a_full_all5_8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa_d288d38b3c0e46465244b06706fbfffd782a689d.tar.zst",
+  "raw_bundle_archive_root": "r3a_full_raw",
+  "raw_bundle_codec": "zstd",
+  "raw_bundle_sha256": "0c7d4ed27a071d7eaef85f80b44993e85a7b510a116744bb9c728dd21739b9f4",
+  "reproduction": "PYTHONPATH=src python -m grashof_workspace.spatial_experiments.l5_reconstruction.cli --config configs/l5_positive_control_v1.json --outdir outputs/r3a_full_raw --stage all --mode full",
+  "schema_version": "r3a_l5_positive_control_v1"
+}
