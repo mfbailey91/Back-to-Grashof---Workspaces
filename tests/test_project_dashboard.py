@@ -13,8 +13,9 @@ from grashof_workspace.project_dashboard import (
 
 def test_render_project_index_covers_capabilities_and_l3_l7() -> None:
     html = render_project_index_html()
-    assert STATUS_DATE == "2026-08-20"
-    assert "DIRECT_REFERENCE_BLOCKED" in html
+    assert STATUS_DATE == "2026-08-22"
+    assert "H12 direct-comparison metric repair" in html
+    assert "blocker is withdrawn" in html
     assert "capabilities and status" in html.casefold() or "L3–L7" in html
     assert "R3A" in html
     assert "l5_reconstruction/r3a/index.html" in html

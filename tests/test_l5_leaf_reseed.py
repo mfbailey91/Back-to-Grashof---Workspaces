@@ -184,6 +184,7 @@ def test_open_reseed_can_local_pass_but_not_component_pass() -> None:
         original_branch_status=status,
     )
     assert audit.disposition is ReseedDisposition.LOCAL_PASS
+    assert audit.disposition is not ReseedDisposition.RETURNED_SET_PASS
     assert audit.disposition is not ReseedDisposition.COMPONENT_PASS
     assert all(item.returned_symmetric_set_match is not True for item in audit.attempts)
     assert all(item.component_identity is None for item in audit.attempts)

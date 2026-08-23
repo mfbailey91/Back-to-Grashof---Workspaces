@@ -261,8 +261,8 @@ def classify_reseed_attempt(
         )
     notes.append("returned symmetric branch-set match at the declared continuation budget")
     return (
-        ReseedScope.COMPONENT,
-        ReseedDisposition.COMPONENT_PASS,
+        ReseedScope.RETURNED_SET,
+        ReseedDisposition.RETURNED_SET_PASS,
         returned_match,
         branch_match,
         True,
@@ -280,6 +280,11 @@ def aggregate_reseed_disposition(attempts: tuple[ReseedAttempt, ...] | list[Rese
         return ReseedDisposition.UNRESOLVED
     if statuses == {ReseedDisposition.COMPONENT_PASS}:
         return ReseedDisposition.COMPONENT_PASS
+    if statuses <= {
+        ReseedDisposition.RETURNED_SET_PASS,
+        ReseedDisposition.COMPONENT_PASS,
+    }:
+        return ReseedDisposition.RETURNED_SET_PASS
     return ReseedDisposition.LOCAL_PASS
 
 
@@ -1146,7 +1151,10 @@ def recompute_family_acceptance(
         incident_neighbors = neighbors.get(leaf_id, [])
         incident_charts = charts.get(leaf_id, [])
         reseed_disp = None if leaf.reseed is None else leaf.reseed.disposition
-        reseed_ok = reseed_disp is ReseedDisposition.COMPONENT_PASS
+        reseed_ok = reseed_disp in {
+            ReseedDisposition.RETURNED_SET_PASS,
+            ReseedDisposition.COMPONENT_PASS,
+        }
         neighbor_fail = any(item.status == "FAIL" for item in incident_neighbors)
         neighbor_ok = bool(incident_neighbors) and all(item.status == "PASS" for item in incident_neighbors)
         required_charts = [item for item in incident_charts if item.required]

@@ -127,9 +127,24 @@ strict full-closeout packaging
 
 **Pass/fail gate:** A diagnostic package cannot resemble a full package; only actual overlap-band handoffs create required chart audits; required truncated bins remain unresolved; CI is green; and `--full-closeout` accepts exactly one clean, five-probe, full-mode campaign with one explicit first-failing-column outcome.
 
-**Recorded H11E closeout:** Frozen `--mode full` at producer `d288d38` packaged as `full_closeout` records `DIRECT_REFERENCE_BLOCKED`. Direct-vs-oracle two-resolution refinement exceeds the frozen 0.02 delta on all five probes; incomplete probes also exceed the frozen Hausdorff cell-diameter gate. Do not interpret source or natural columns. L5 remains `parent_incomplete`. R3B remains held.
+**H11E disposition withdrawn:** The package itself is authoritative, but its `DIRECT_REFERENCE_BLOCKED` interpretation is not. The direct refinement path compared fine-grid samples with non-nested coarse-grid barycenters, and strict Hausdorff included ambiguous-boundary hits. Preserve the run as historical evidence; do not interpret source or natural columns.
 
 Hardening execution: [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md).
+
+#### R3A-H12 — Direct-comparison metric repair and closeout revalidation
+
+```text
+same-grid strict Hausdorff representatives
+ambiguous-boundary exclusion from strict set distances
+real non-nested-grid refinement regressions
+RETURNED_SET_PASS distinct from component identity
+package-side probe and global blocker recomputation
+clean frozen five-probe rerun
+```
+
+**Pass/fail gate:** A complete-sphere direct result has zero Hausdorff and zero refinement on both declared grids; found boundary cells cannot fail the strict gate; the full-closeout packager independently reproduces every per-probe classification, disposition, and blocker plus the global blocker.
+
+Execution: [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md).
 
 ### R3B — Transfer and falsification
 

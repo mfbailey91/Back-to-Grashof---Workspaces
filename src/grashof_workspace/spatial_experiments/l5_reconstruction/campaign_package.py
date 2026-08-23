@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import tarfile
 from collections.abc import Mapping, Sequence
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -18,9 +19,19 @@ from .artifacts import (
     validate_campaign_tree,
     validate_stage_output_refs,
 )
+from .comparison import (
+    campaign_reconstruction_accepted,
+    classify_probe_reconstruction,
+    localize_campaign_blocker,
+    localize_probe_blocker,
+)
 from .models import (
     CampaignBlocker,
     CampaignConfig,
+    CompletenessLabel,
+    PointingSetMetrics,
+    ReconstructionDisposition,
+    ThreeWayReconstructionResult,
     file_sha256,
     git_provenance,
     json_dumps_strict,
@@ -146,6 +157,187 @@ def _producer_git(campaign: Mapping[str, Any]) -> dict[str, Any]:
     if not isinstance(raw, Mapping):
         return {"git_commit": None, "dirty_tree": None}
     return {str(key): value for key, value in raw.items()}
+
+
+def _metrics_from_json(
+    blob: Mapping[str, Any],
+    *keys: str,
+) -> PointingSetMetrics | None:
+    for key in keys:
+        raw = blob.get(key)
+        if isinstance(raw, Mapping):
+            return PointingSetMetrics.from_json_dict(raw)
+    return None
+
+
+def _comparison_from_json(blob: Mapping[str, Any]) -> ThreeWayReconstructionResult:
+    direct_raw = blob.get("direct_complete")
+    if direct_raw is not None and not isinstance(direct_raw, bool):
+        raise TypeError("comparison direct_complete must be bool or null")
+    blocker_raw = blob.get("campaign_blocker")
+    blocker = None if blocker_raw is None else CampaignBlocker(str(blocker_raw))
+    excluded_raw = blob.get("excluded_child_dispositions", [])
+    if not isinstance(excluded_raw, list):
+        raise TypeError("comparison excluded_child_dispositions must be a list")
+    return ThreeWayReconstructionResult(
+        probe_id=str(blob["probe_id"]),
+        oracle_complete=bool(blob["oracle_complete"]),
+        direct_complete=direct_raw,
+        source_control_metrics=_metrics_from_json(
+            blob,
+            "source_control_metrics",
+            "source_vs_oracle",
+        ),
+        natural_leaf_metrics=_metrics_from_json(
+            blob,
+            "natural_leaf_metrics",
+            "natural_vs_oracle",
+        ),
+        point_classification=CompletenessLabel(str(blob["point_classification"])),
+        disposition=ReconstructionDisposition(str(blob["disposition"])),
+        failure_localization=str(blob["failure_localization"]),
+        excluded_child_dispositions=tuple(str(item) for item in excluded_raw),
+        direct_vs_oracle=_metrics_from_json(blob, "direct_vs_oracle"),
+        source_vs_direct=_metrics_from_json(blob, "source_vs_direct"),
+        natural_vs_direct=_metrics_from_json(blob, "natural_vs_direct"),
+        campaign_blocker=blocker,
+    )
+
+
+def _has_intervals(path: Path, key: str) -> bool:
+    raw = _read_json(path).get(key)
+    return isinstance(raw, list) and bool(raw)
+
+
+def validate_full_closeout_semantics(
+    raw_root: Path,
+    campaign: Mapping[str, Any],
+    config: CampaignConfig,
+    probe_ids: Sequence[str],
+    *,
+    mode: str,
+) -> CampaignBlocker:
+    """Recompute the complete closeout from per-probe evidence.
+
+    Stage hashes establish byte authority. This gate establishes semantic
+    authority by refusing a self-consistently rehashed but incorrectly labeled
+    campaign tree.
+    """
+
+    if mode != "full":
+        raise ValueError("semantic closeout validation requires mode='full'")
+    configured = tuple(probe.probe_id for probe in config.probes)
+    if tuple(probe_ids) != configured:
+        raise ValueError("semantic closeout validation requires all configured probes")
+
+    compare = _read_json(raw_root / "compare.json")
+    if compare != dict(campaign):
+        raise ValueError("compare.json does not match campaign.json")
+
+    embedded_raw = campaign.get("comparisons")
+    if not isinstance(embedded_raw, list) or len(embedded_raw) != len(configured):
+        raise ValueError("full closeout requires one embedded comparison per probe")
+    embedded: dict[str, dict[str, Any]] = {}
+    for item in embedded_raw:
+        if not isinstance(item, dict):
+            raise TypeError("embedded comparison is not a JSON object")
+        probe_id = str(item.get("probe_id", ""))
+        if not probe_id or probe_id in embedded:
+            raise ValueError("embedded comparison probe IDs are missing or duplicated")
+        embedded[probe_id] = item
+
+    require_match = bool(
+        config.raw.get("set_acceptance", {}).get(
+            "require_all_five_point_classifications_match_oracle",
+            True,
+        )
+    )
+    recomputed: list[ThreeWayReconstructionResult] = []
+    for probe in config.probes:
+        probe_id = probe.probe_id
+        per_probe = _read_json(raw_root / probe_id / "comparison.json")
+        if embedded.get(probe_id) != per_probe:
+            raise ValueError(
+                f"{probe_id} comparison.json does not match the embedded campaign record"
+            )
+        stored = _comparison_from_json(per_probe)
+        unresolved_c = _has_intervals(
+            raw_root / probe_id / "source_control.json",
+            "unresolved_c_intervals",
+        )
+        unresolved_family = _has_intervals(
+            raw_root / probe_id / "natural_family.json",
+            "unresolved_lambda_intervals",
+        )
+        label, disposition, reason = classify_probe_reconstruction(
+            oracle_complete=stored.oracle_complete,
+            expected_complete=probe.expected_pointing_complete,
+            direct_complete=stored.direct_complete,
+            direct_vs_oracle=stored.direct_vs_oracle,
+            source_vs_direct=stored.source_vs_direct,
+            natural_vs_direct=stored.natural_vs_direct,
+            source_vs_oracle=stored.source_vs_oracle,
+            natural_vs_oracle=stored.natural_vs_oracle,
+            unresolved_family_intervals=((0.0, 0.0),) if unresolved_family else (),
+            unresolved_c_intervals=((0.0, 0.0),) if unresolved_c else (),
+            config=config,
+        )
+        candidate = replace(
+            stored,
+            point_classification=label,
+            disposition=disposition,
+            failure_localization=reason,
+            campaign_blocker=None,
+        )
+        blocker = localize_probe_blocker(
+            candidate,
+            config,
+            unresolved_c=unresolved_c,
+            unresolved_family=unresolved_family,
+            expected_complete=probe.expected_pointing_complete,
+            require_classification_match=require_match,
+        )
+        candidate = replace(candidate, campaign_blocker=blocker)
+        if stored.point_classification is not label:
+            raise ValueError(f"{probe_id} point classification does not recompute")
+        if stored.disposition is not disposition:
+            raise ValueError(f"{probe_id} disposition does not recompute")
+        if stored.failure_localization != reason:
+            raise ValueError(f"{probe_id} failure localization does not recompute")
+        if stored.campaign_blocker is not blocker:
+            raise ValueError(f"{probe_id} campaign blocker does not recompute")
+        recomputed.append(candidate)
+
+    budgets = config.mode(mode)
+    accepted = campaign_reconstruction_accepted(
+        recomputed,
+        config.probes,
+        budgets,
+        require_classification_match=require_match,
+    )
+    campaign_blocker = localize_campaign_blocker(
+        recomputed,
+        config.probes,
+        budgets,
+        config,
+        require_classification_match=require_match,
+    )
+    if campaign_blocker is None:
+        raise ValueError("full closeout did not produce one scientific blocker")
+    stored_accepted = bool(campaign.get("accepted_reconstruction"))
+    if stored_accepted != accepted:
+        raise ValueError("campaign accepted_reconstruction does not recompute")
+    stored_blocker = campaign.get("campaign_blocker")
+    if stored_blocker != campaign_blocker.value:
+        raise ValueError("campaign_blocker does not recompute")
+    expected_disposition = (
+        ReconstructionDisposition.PASS_AT_DECLARED_RESOLUTION
+        if accepted
+        else ReconstructionDisposition.PARTIAL
+    )
+    if campaign.get("disposition") != expected_disposition.value:
+        raise ValueError("campaign disposition does not recompute")
+    return campaign_blocker
 
 
 def compact_truth_split(blob: Mapping[str, Any] | None) -> dict[str, Any] | None:
@@ -386,6 +578,15 @@ def package_r3a_campaign(
         expected_mode=mode,
         require_all_stages=full_closeout,
     )
+    recomputed_blocker = None
+    if full_closeout:
+        recomputed_blocker = validate_full_closeout_semantics(
+            raw_root,
+            campaign,
+            config,
+            probe_scope,
+            mode=mode,
+        )
     assert_can_replace_results(results_root, replace_committed=replace_committed)
 
     producer_git = _producer_git(campaign)
@@ -419,6 +620,10 @@ def package_r3a_campaign(
         "all_configured_probes_present": all_configured,
         "allows_full_campaign_disposition": config.mode(mode).allows_full_campaign_disposition,
         "full_closeout_eligible": full_closeout,
+        "semantic_revalidation": full_closeout,
+        "recomputed_campaign_blocker": (
+            None if recomputed_blocker is None else recomputed_blocker.value
+        ),
         "git": producer_git,
         "producer_git": producer_git,
         "packager_git": packager_git,

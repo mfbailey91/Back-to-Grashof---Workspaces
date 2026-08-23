@@ -137,11 +137,13 @@ class FamilyAdmissibilityStatus(str, Enum):
 
 class ReseedScope(str, Enum):
     LOCAL = "LOCAL"
+    RETURNED_SET = "RETURNED_SET"
     COMPONENT = "COMPONENT"
 
 
 class ReseedDisposition(str, Enum):
     LOCAL_PASS = "LOCAL_PASS"
+    RETURNED_SET_PASS = "RETURNED_SET_PASS"
     COMPONENT_PASS = "COMPONENT_PASS"
     FAIL = "FAIL"
     UNRESOLVED = "UNRESOLVED"

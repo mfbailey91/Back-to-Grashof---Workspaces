@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -21,11 +22,13 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.campaign_package im
     compact_natural_family,
     compact_source_control,
     package_r3a_campaign,
+    validate_full_closeout_semantics,
     validate_package_scope,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.cli import run_stage, write_manifest
 from grashof_workspace.spatial_experiments.l5_reconstruction.comparison import (
     campaign_reconstruction_accepted,
+    classify_probe_reconstruction,
     first_campaign_blocker,
     localize_campaign_blocker,
     localize_probe_blocker,
@@ -39,6 +42,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     ReconstructionDisposition,
     ThreeWayReconstructionResult,
     file_sha256,
+    json_dumps_strict,
     load_campaign_config,
     stage_envelope,
 )
@@ -123,6 +127,50 @@ def _metric_result(
     )
 
 
+def _source_blocked_result(
+    probe_id: str,
+    *,
+    expected_complete: bool,
+) -> ThreeWayReconstructionResult:
+    config = load_campaign_config(CONFIG)
+    direct = _passing_metrics()
+    source = _failing_metrics()
+    natural = _failing_metrics()
+    label, disposition, reason = classify_probe_reconstruction(
+        oracle_complete=expected_complete,
+        expected_complete=expected_complete,
+        direct_complete=True,
+        direct_vs_oracle=direct,
+        source_vs_direct=source,
+        natural_vs_direct=natural,
+        source_vs_oracle=source,
+        natural_vs_oracle=natural,
+        unresolved_family_intervals=(),
+        unresolved_c_intervals=(),
+        config=config,
+    )
+    result = ThreeWayReconstructionResult(
+        probe_id=probe_id,
+        oracle_complete=expected_complete,
+        direct_complete=True,
+        source_control_metrics=source,
+        natural_leaf_metrics=natural,
+        point_classification=label,
+        disposition=disposition,
+        failure_localization=reason,
+        direct_vs_oracle=direct,
+        source_vs_direct=source,
+        natural_vs_direct=natural,
+    )
+    blocker = localize_probe_blocker(
+        result,
+        config,
+        expected_complete=expected_complete,
+    )
+    assert blocker is CampaignBlocker.STITCHING_CONTROL_BLOCKED
+    return replace(result, campaign_blocker=blocker)
+
+
 def _write_probe_files(raw: Path, probe_id: str) -> None:
     probe = raw / probe_id
     probe.mkdir(parents=True, exist_ok=True)
@@ -175,8 +223,18 @@ def _hashed_raw_campaign(
 ) -> None:
     write_manifest(CONFIG, raw, mode=mode)
     config = load_campaign_config(CONFIG)
+    comparisons = tuple(
+        _source_blocked_result(
+            probe_id,
+            expected_complete=config.probe(probe_id).expected_pointing_complete,
+        )
+        for probe_id in probe_ids
+    )
     for probe_id in probe_ids:
         _write_probe_files(raw, probe_id)
+    for result in comparisons:
+        path = raw / result.probe_id / "comparison.json"
+        path.write_text(json_dumps_strict(result.to_json_dict()), encoding="utf-8")
     stages: tuple[tuple[str, dict[str, Any]], ...] = (
         ("fixture", {}),
         ("truth", {}),
@@ -185,7 +243,9 @@ def _hashed_raw_campaign(
         (
             "compare",
             {
-                "campaign_blocker": "STITCHING_CONTROL_BLOCKED",
+                "comparisons": [item.to_json_dict() for item in comparisons],
+                "disposition": ReconstructionDisposition.PARTIAL.value,
+                "campaign_blocker": CampaignBlocker.STITCHING_CONTROL_BLOCKED.value,
                 "accepted_reconstruction": False,
             },
         ),
@@ -618,6 +678,11 @@ def test_synthetic_full_closeout_package_names_all_five_probes(tmp_path: Path) -
     assert manifest["all_configured_probes_present"] is True
     assert manifest["full_closeout_eligible"] is True
     assert manifest["allows_full_campaign_disposition"] is True
+    assert manifest["semantic_revalidation"] is True
+    assert (
+        manifest["recomputed_campaign_blocker"]
+        == CampaignBlocker.STITCHING_CONTROL_BLOCKED.value
+    )
     assert str(manifest["raw_bundle"]).startswith("r3a_full_all5_")
     assert manifest["raw_bundle_archive_root"] == "r3a_full_raw"
     assert manifest["producer_git"]["git_commit"] == CLEAN_PRODUCER_GIT["git_commit"]
@@ -626,6 +691,59 @@ def test_synthetic_full_closeout_package_names_all_five_probes(tmp_path: Path) -
     assert "packager_git" in manifest
     assert "--mode full" in manifest["reproduction"]
     assert "--probe" not in manifest["reproduction"]
+
+
+def test_full_closeout_semantics_recomputes_probe_and_global_blockers(
+    tmp_path: Path,
+) -> None:
+    raw = tmp_path / "raw"
+    ids = _hashed_full_campaign(raw, producer_git=CLEAN_PRODUCER_GIT)
+    config = load_campaign_config(CONFIG)
+    campaign = json.loads((raw / "campaign.json").read_text(encoding="utf-8"))
+    blocker = validate_full_closeout_semantics(
+        raw,
+        campaign,
+        config,
+        ids,
+        mode="full",
+    )
+    assert blocker is CampaignBlocker.STITCHING_CONTROL_BLOCKED
+
+
+def test_full_closeout_semantics_refuses_wrong_global_blocker(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    ids = _hashed_full_campaign(raw, producer_git=CLEAN_PRODUCER_GIT)
+    config = load_campaign_config(CONFIG)
+    campaign = json.loads((raw / "campaign.json").read_text(encoding="utf-8"))
+    campaign["campaign_blocker"] = CampaignBlocker.NATURAL_DECOMPOSITION_BLOCKED.value
+    (raw / "compare.json").write_text(json_dumps_strict(campaign), encoding="utf-8")
+    with pytest.raises(ValueError, match="campaign_blocker does not recompute"):
+        validate_full_closeout_semantics(
+            raw,
+            campaign,
+            config,
+            ids,
+            mode="full",
+        )
+
+
+def test_full_closeout_semantics_refuses_per_probe_drift(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    ids = _hashed_full_campaign(raw, producer_git=CLEAN_PRODUCER_GIT)
+    config = load_campaign_config(CONFIG)
+    campaign = json.loads((raw / "campaign.json").read_text(encoding="utf-8"))
+    path = raw / ids[0] / "comparison.json"
+    per_probe = json.loads(path.read_text(encoding="utf-8"))
+    per_probe["campaign_blocker"] = CampaignBlocker.NATURAL_DECOMPOSITION_BLOCKED.value
+    path.write_text(json.dumps(per_probe), encoding="utf-8")
+    with pytest.raises(ValueError, match="does not match the embedded campaign record"):
+        validate_full_closeout_semantics(
+            raw,
+            campaign,
+            config,
+            ids,
+            mode="full",
+        )
 
 
 def test_packager_refuses_git_tracked_results_without_flag() -> None:

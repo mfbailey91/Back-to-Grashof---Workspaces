@@ -20,7 +20,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-STATUS_DATE = "2026-08-20"
+STATUS_DATE = "2026-08-22"
 
 # Proximal exact_u_pair_4r closed-mechanism is LOCAL_ONLY on a traced arc (ADR-034);
 # axis aggregation remains EXACT_GLOBAL; EXACT_ON_COMPONENT is reserved.
@@ -818,8 +818,8 @@ claim remains <code>LOCAL_ONLY</code>.
   <tr>
     <td><strong>L5</strong> spatial 5R</td>
     <td><code class="status hold">parent_incomplete</code></td>
-    <td>Hardened source-parent infrastructure; R3A five-point kernels and H0–H11 evidence law; frozen full-mode closeout <code>DIRECT_REFERENCE_BLOCKED</code>; reconstruction not accepted; fixed-axis UUUR still rejected as an h=c equivalence</td>
-    <td>Direct-vs-oracle declared-resolution set gate; accepted source-derived child reconstruction</td>
+    <td>Hardened source-parent infrastructure; R3A five-point kernels and H0–H11 authority; H12 direct-comparison metric repair active; reconstruction not accepted; fixed-axis UUUR still rejected as an h=c equivalence</td>
+    <td>Corrected direct-comparison gate and clean full rerun; accepted source-derived child reconstruction</td>
   </tr>
   <tr>
     <td><strong>L6</strong> spatial 6R</td>
@@ -854,7 +854,7 @@ claim remains <code>LOCAL_ONLY</code>.
     <p>Implicit-manifold engine validation (V06A0); local parent patch (V06A1); multi-chart atlas (V06A2).</p>
     <p>Orientation + pointing images (V06C); task-derived <code>h=c</code> fibers (V06D1); compound SUUR audit (V06B).</p>
     <p>Shared 1D pseudo-arclength continuation; atlas stitch / component provenance; reconstruction cell paint (V06E).</p>
-    <p>R3A five-point hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> — implemented kernels (oracle, direct IK, h=c control, UURU leaves). Frozen full-mode closeout is <code>DIRECT_REFERENCE_BLOCKED</code>. Reconstruction is not accepted.</p>
+    <p>R3A five-point hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> — implemented kernels (oracle, direct IK, h=c control, UURU leaves). The committed H11E blocker is withdrawn pending H12 metric repair and a clean rerun. Reconstruction is not accepted.</p>
     <p><strong>Not yet:</strong> general 5R factorization, complete parent, S² completeness theorem. Fixed-axis UUUR remains rejected as an h=c fiber equivalence.</p>
   </div>
   <div class="cap">
@@ -883,7 +883,7 @@ R3A-H0–H6 gates exist; <code>ci</code>/<code>smoke</code> cannot issue full-ca
 R3B and L6 remain held.
 </p>
 <ul>
-  <li>Hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> (full-mode <code>DIRECT_REFERENCE_BLOCKED</code>; reconstruction not accepted)</li>
+  <li>Hub: <a href="l5_reconstruction/r3a/index.html">l5_reconstruction/r3a/index.html</a> (historical H11E package; blocker withdrawn pending H12; reconstruction not accepted)</li>
   <li>Contract: <a href="../docs/methods/NATURAL_LEAF_FAMILY_CONTRACT.md">NATURAL_LEAF_FAMILY_CONTRACT.md</a></li>
   <li>Execution: <a href="../docs/methods/R3A_L5_FIVE_POINT_EXECUTION.md">R3A_L5_FIVE_POINT_EXECUTION.md</a></li>
 </ul>
@@ -926,7 +926,7 @@ V07A held pending parent/continuation completion.</pre>
   </tr>
   <tr>
     <td>R3A L5 five-point natural leaves</td>
-    <td>implemented kernels; full-mode closeout <code>DIRECT_REFERENCE_BLOCKED</code>; reconstruction not accepted</td>
+    <td>implemented kernels; H12 direct-comparison metric repair active; reconstruction not accepted</td>
     <td><a href="l5_reconstruction/r3a/index.html">r3a</a></td>
   </tr>
   <tr>

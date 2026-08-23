@@ -66,7 +66,7 @@ def test_return_mismatch_blocks_component_pass() -> None:
     assert identity is False
 
 
-def test_returned_symmetric_match_is_component_pass() -> None:
+def test_returned_symmetric_match_is_returned_set_pass() -> None:
     scope, disposition, returned_match, branch_match, set_match, notes = classify_reseed_attempt(
         lambda_ok=True,
         seed_q_ok=True,
@@ -81,8 +81,9 @@ def test_returned_symmetric_match_is_component_pass() -> None:
         q_tol=1e-3,
         p_tol=1e-3,
     )
-    assert scope is ReseedScope.COMPONENT
-    assert disposition is ReseedDisposition.COMPONENT_PASS
+    assert scope is ReseedScope.RETURNED_SET
+    assert disposition is ReseedDisposition.RETURNED_SET_PASS
+    assert disposition is not ReseedDisposition.COMPONENT_PASS
     assert returned_match is True
     assert branch_match is True
     assert set_match is True
@@ -122,8 +123,8 @@ def test_returned_set_match_does_not_claim_circuit_identity() -> None:
         return_status_match=True,
         branch_status_match=True,
         returned_symmetric_set_match=True,
-        scope=ReseedScope.COMPONENT,
-        disposition=ReseedDisposition.COMPONENT_PASS,
+        scope=ReseedScope.RETURNED_SET,
+        disposition=ReseedDisposition.RETURNED_SET_PASS,
         notes=notes,
     )
     payload = attempt.to_json_dict()
@@ -132,7 +133,7 @@ def test_returned_set_match_does_not_claim_circuit_identity() -> None:
     assert payload["component_identity"] is None
     assert "circuit identity" not in json.dumps(payload).lower()
     audit = ReseedAudit(
-        disposition=ReseedDisposition.COMPONENT_PASS,
+        disposition=ReseedDisposition.RETURNED_SET_PASS,
         n_reseeds=1,
         max_symmetric_q_distance_rad=0.0,
         max_pointing_distance_rad=0.0,
