@@ -1,6 +1,6 @@
 # R3A-H11 — Acceptance-Authority Hardening Before the Full-Mode Rerun
 
-**Status:** IMPLEMENTED — H11 package authority is retained; the H11E scientific disposition is withdrawn by H12 pending corrected direct-comparison metrics
+**Status:** IMPLEMENTED — H11 package authority is retained; H12 records `STITCHING_CONTROL_BLOCKED`
 **Project:** Back to Grashof — Mechanism-Based Workspace Characterization
 **Rung:** L5 spatial 5R
 **Starting branch:** `R3A_Stiching_Stitch_Tests`
@@ -426,7 +426,7 @@ natural decomposition third
 
 No generic `PARTIAL` is sufficient as the final scientific statement.
 
-**Historical H11E package:** producer `d288d38`, `--mode full`, five probes, and `package_kind=full_closeout` remain valid package/provenance facts. Its `DIRECT_REFERENCE_BLOCKED` scientific interpretation is withdrawn because the direct refinement and strict Hausdorff representations were not resolution-consistent. Source and natural columns remain uninterpreted. H12 repairs the metric law and requires a clean rerun; L5 remains `parent_incomplete`.
+**Historical H11E package:** producer `d288d38`, `--mode full`, five probes, and `package_kind=full_closeout` remain valid package/provenance facts. Its `DIRECT_REFERENCE_BLOCKED` scientific interpretation was withdrawn because the direct refinement and strict Hausdorff representations were not resolution-consistent. H12 replaced the compact hub. L5 remains `parent_incomplete`.
 
 ---
 

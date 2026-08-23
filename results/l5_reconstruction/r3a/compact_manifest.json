@@ -2,13 +2,13 @@
   "accepted_reconstruction": false,
   "all_configured_probes_present": true,
   "allows_full_campaign_disposition": true,
-  "campaign_blocker": "DIRECT_REFERENCE_BLOCKED",
+  "campaign_blocker": "STITCHING_CONTROL_BLOCKED",
   "campaign_mode": "full",
   "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
   "full_closeout_eligible": true,
   "git": {
     "dirty_tree": false,
-    "git_commit": "d288d38b3c0e46465244b06706fbfffd782a689d"
+    "git_commit": "9505a877a489469186afb5fb3a8dfc89bb6a75ad"
   },
   "notes": [
     "Compact evidence only. Raw solver banks live in the content-addressed bundle.",
@@ -20,7 +20,7 @@
   "packager_config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
   "packager_git": {
     "dirty_tree": false,
-    "git_commit": "d288d38b3c0e46465244b06706fbfffd782a689d"
+    "git_commit": "9505a877a489469186afb5fb3a8dfc89bb6a75ad"
   },
   "probe_ids": [
     "P1_DEEP_COMPLETE",
@@ -32,13 +32,15 @@
   "producer_config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
   "producer_git": {
     "dirty_tree": false,
-    "git_commit": "d288d38b3c0e46465244b06706fbfffd782a689d"
+    "git_commit": "9505a877a489469186afb5fb3a8dfc89bb6a75ad"
   },
   "program_id": "R3A_L5_FIVE_POINT_NATURAL_LEAF_RECONSTRUCTION",
-  "raw_bundle": "r3a_full_all5_8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa_d288d38b3c0e46465244b06706fbfffd782a689d.tar.zst",
+  "raw_bundle": "r3a_full_all5_8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa_9505a877a489469186afb5fb3a8dfc89bb6a75ad.tar.zst",
   "raw_bundle_archive_root": "r3a_full_raw",
   "raw_bundle_codec": "zstd",
-  "raw_bundle_sha256": "0c7d4ed27a071d7eaef85f80b44993e85a7b510a116744bb9c728dd21739b9f4",
-  "reproduction": "PYTHONPATH=src python -m grashof_workspace.spatial_experiments.l5_reconstruction.cli --config configs/l5_positive_control_v1.json --outdir outputs/r3a_full_raw --stage all --mode full",
-  "schema_version": "r3a_l5_positive_control_v1"
+  "raw_bundle_sha256": "d65e7a369e6c529a7e6cd2c30e38ff0ba0a6b3d10b6a92656bb02fb1b8cab3ec",
+  "recomputed_campaign_blocker": "STITCHING_CONTROL_BLOCKED",
+  "reproduction": "PYTHONPATH=src python -m grashof_workspace.spatial_experiments.l5_reconstruction.cli --config configs/l5_positive_control_v1.json --outdir outputs/r3a_full_raw_h12 --stage all --mode full",
+  "schema_version": "r3a_l5_positive_control_v1",
+  "semantic_revalidation": true
 }

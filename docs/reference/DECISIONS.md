@@ -632,12 +632,12 @@ virtual-crank atlas remains downstream of reconstruction provenance.
 
 ## ADR-051 — R3A acceptance metrics distinguish not-applicable from unevaluable evidence
 
-<!-- R3A_H12_2026_08_22 prior H11E blocker withdrawn pending comparison-metric repair -->
+<!-- R3A_H12_2026_08_23 recorded frozen full closeout; not a general 5R theorem -->
 
-**Status:** ACTIVE — the prior H11E `DIRECT_REFERENCE_BLOCKED` disposition is withdrawn; H11 package authority remains in force
+**Status:** RECORDED (H12 frozen full-mode closeout; not a reconstruction acceptance and not a general 5R theorem)
 
 **Decision:** A missing numerical value is not sufficient to determine pass/fail. R3A comparison metrics carry explicit `VALUE`, `NOT_APPLICABLE`, or `UNEVALUABLE` state. Zero-denominator metrics such as false-positive fraction on an all-covered reference are `NOT_APPLICABLE`; missing refinement is `UNEVALUABLE`. Full-campaign acceptance requires a computed refinement comparison, leaf-scoped family admissibility, declared chart responsibility, resolved required parameter intervals, and content-addressed artifacts.
 
 **Reason:** Treating every `None` as failure makes valid complete coverage impossible, while treating every `None` as pass fabricates evidence. Explicit applicability preserves conservative gates without making the intended theorem untestable.
 
-**Consequence:** H11 package scope, hashes, producer provenance, and chart/interval authority remain valid. The producer `d288d38` five-probe package is retained only as historical evidence because its direct refinement compared one fine-grid direction cloud against non-nested coarse-grid barycenters, while strict Hausdorff included found ambiguous-boundary cells that the strict recall and false-positive denominators excluded. No scientific `CampaignBlocker` is currently recorded. H12 must compute grid-local strict sets, exclude ambiguous boundary from strict Hausdorff, distinguish `RETURNED_SET_PASS` from component identity, and recompute probe/global dispositions inside the full-closeout packager before a clean full rerun. `accepted_reconstruction` remains false; L5 remains `parent_incomplete`; R3B and L6 remain held.
+**Consequence:** H11 package scope, hashes, producer provenance, and chart/interval authority remain valid. H12 grid-local strict Hausdorff and boundary exclusion withdrew the H11E `DIRECT_REFERENCE_BLOCKED` interpretation as comparison-metric dependent. The producer `9505a87` five-probe `--mode full` package is `package_kind=full_closeout` with `semantic_revalidation=true`, `campaign_blocker=STITCHING_CONTROL_BLOCKED`, and `accepted_reconstruction=false`. All five probes have `direct_complete=true` with zero fine/coarse Hausdorff and zero refinement. Source `h=c` reconstruction fails with unresolved `c` intervals; the natural column is not interpreted. L5 remains `parent_incomplete`. R3B and L6 remain held. This is not a complete parent, a foliation, or a general 5R factorization.

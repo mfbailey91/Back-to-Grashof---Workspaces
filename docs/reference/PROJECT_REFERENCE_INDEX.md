@@ -80,7 +80,7 @@ R3A-H0–H6 evidence-hardening contract: evaluative family audits, independent d
 
 ### [`../methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md`](../methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md)
 
-R3A-H7–H10 follow-up: metric applicability, two-resolution refinement, leaf-scoped admission, chart responsibility, and compact artifact closeout. The prior H11E `DIRECT_REFERENCE_BLOCKED` interpretation is withdrawn by H12. Guide: [`CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md`](../methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md).
+R3A-H7–H10 follow-up: metric applicability, two-resolution refinement, leaf-scoped admission, chart responsibility, and compact artifact closeout (ADR-051 recorded at `STITCHING_CONTROL_BLOCKED`). Guide: [`CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md`](../methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md).
 
 ### [`../methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md`](../methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md)
 
@@ -88,7 +88,7 @@ R3A-H11 acceptance-authority hardening: diagnostic vs full-closeout packages, ov
 
 ### [`../methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md`](../methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md)
 
-Active repair for same-grid strict Hausdorff, ambiguous-boundary exclusion, returned-set disposition vocabulary, package-side semantic recomputation, and a corrected frozen full rerun.
+Recorded H12 repair: same-grid strict Hausdorff, ambiguous-boundary exclusion, returned-set disposition vocabulary, package-side semantic recomputation, and frozen closeout `STITCHING_CONTROL_BLOCKED`.
 
 ### Archived V05–V09 planning lineage
 

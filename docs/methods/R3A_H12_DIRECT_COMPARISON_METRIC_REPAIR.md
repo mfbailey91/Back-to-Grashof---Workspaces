@@ -1,6 +1,6 @@
 # R3A-H12 — Direct-Comparison Metric Repair and Closeout Revalidation
 
-**Status:** ACTIVE
+**Status:** RECORDED — H12 frozen full-mode closeout is `STITCHING_CONTROL_BLOCKED`
 **Project:** Back to Grashof — Mechanism-Based Workspace Characterization
 **Rung:** L5 spatial 5R
 **Starting point:** PR #19 / head `5ffe8ef5c7c4e8bb42c67396d5c8cc1368910ebc`
@@ -286,6 +286,8 @@ CONTROLLED_COVER_ACCEPTED
 ```
 
 No expectation about which column will fail is part of H12.
+
+**Recorded H12 outcome:** producer `9505a87`, `--mode full`, five probes, `package_kind=full_closeout`, `semantic_revalidation=true`, `campaign_blocker=STITCHING_CONTROL_BLOCKED`, `accepted_reconstruction=false`. Direct-vs-oracle Hausdorff and refinement are zero on all five probes (`direct_complete=true`). Source `h=c` reconstruction fails with unresolved `c` intervals. The natural column is not interpreted. L5 remains `parent_incomplete`.
 
 ---
 

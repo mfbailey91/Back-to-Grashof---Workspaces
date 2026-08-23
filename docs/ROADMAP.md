@@ -127,7 +127,7 @@ strict full-closeout packaging
 
 **Pass/fail gate:** A diagnostic package cannot resemble a full package; only actual overlap-band handoffs create required chart audits; required truncated bins remain unresolved; CI is green; and `--full-closeout` accepts exactly one clean, five-probe, full-mode campaign with one explicit first-failing-column outcome.
 
-**H11E disposition withdrawn:** The package itself is authoritative, but its `DIRECT_REFERENCE_BLOCKED` interpretation is not. The direct refinement path compared fine-grid samples with non-nested coarse-grid barycenters, and strict Hausdorff included ambiguous-boundary hits. Preserve the run as historical evidence; do not interpret source or natural columns.
+**H11E disposition withdrawn:** The H11E package itself is authoritative, but its `DIRECT_REFERENCE_BLOCKED` interpretation is not. The H12 rerun replaced the compact hub.
 
 Hardening execution: [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md).
 
@@ -143,6 +143,8 @@ clean frozen five-probe rerun
 ```
 
 **Pass/fail gate:** A complete-sphere direct result has zero Hausdorff and zero refinement on both declared grids; found boundary cells cannot fail the strict gate; the full-closeout packager independently reproduces every per-probe classification, disposition, and blocker plus the global blocker.
+
+**Recorded H12 closeout:** Frozen `--mode full` at producer `9505a87` packaged as `full_closeout` with `semantic_revalidation=true` records `STITCHING_CONTROL_BLOCKED`. Direct-vs-oracle Hausdorff and refinement are zero on all five probes. Source `h=c` reconstruction fails with unresolved `c` intervals. Do not interpret the natural column. L5 remains `parent_incomplete`. R3B remains held.
 
 Execution: [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md).
 

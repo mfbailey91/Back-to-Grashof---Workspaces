@@ -1,5 +1,5 @@
 {
-  "campaign_blocker": "DIRECT_REFERENCE_BLOCKED",
+  "campaign_blocker": "STITCHING_CONTROL_BLOCKED",
   "direct_complete": true,
   "direct_vs_oracle": {
     "boundary_disagreement_fraction": 0.05078125,
@@ -8,14 +8,14 @@
       "false_positive_fraction": 0.0,
       "false_positive_fraction_reason": "computed",
       "false_positive_fraction_state": "VALUE",
-      "hausdorff_rad": 0.32996845404183184,
+      "hausdorff_rad": 0.0,
       "hausdorff_rad_reason": "computed",
       "hausdorff_rad_state": "VALUE",
       "max_cell_diameter_rad": 0.32636622180660874,
       "missed_covered_fraction": 0.0,
       "missed_covered_fraction_reason": "computed",
       "missed_covered_fraction_state": "VALUE",
-      "reconstructed_hit_count": 307,
+      "reconstructed_hit_count": 298,
       "refinement": {
         "reason": "refinement not computed",
         "state": "UNEVALUABLE",
@@ -36,7 +36,7 @@
       "false_positive_fraction": 0.0,
       "false_positive_fraction_reason": "computed",
       "false_positive_fraction_state": "VALUE",
-      "hausdorff_rad": 0.24137729544893832,
+      "hausdorff_rad": 0.0,
       "hausdorff_rad_reason": "computed",
       "hausdorff_rad_state": "VALUE",
       "max_cell_diameter_rad": 0.16483370321401697,
@@ -47,16 +47,16 @@
       "refinement": {
         "reason": "max absolute metric change",
         "state": "VALUE",
-        "value": 0.4533311842442682
+        "value": 0.0
       },
-      "refinement_delta": 0.4533311842442682,
+      "refinement_delta": 0.0,
       "refinement_delta_reason": "max absolute metric change",
       "refinement_delta_state": "VALUE",
       "strict_covered_count": 1168,
       "strict_uncovered_count": 47,
       "unresolved_fraction": 0.05078125
     },
-    "hausdorff_rad": 0.24137729544893832,
+    "hausdorff_rad": 0.0,
     "hausdorff_rad_reason": "computed",
     "hausdorff_rad_state": "VALUE",
     "max_cell_diameter_rad": 0.16483370321401697,
@@ -67,16 +67,16 @@
     "refinement": {
       "reason": "max absolute metric change",
       "state": "VALUE",
-      "value": 0.4533311842442682
+      "value": 0.0
     },
-    "refinement_delta": 0.4533311842442682,
+    "refinement_delta": 0.0,
     "refinement_delta_reason": "max absolute metric change",
     "refinement_delta_state": "VALUE",
     "strict_covered_count": 1168,
     "strict_uncovered_count": 47,
     "unresolved_fraction": 0.05078125
   },
-  "disposition": "PARTIAL",
+  "disposition": "UNRESOLVED",
   "excluded_child_dispositions": [
     "LOCAL_ONLY",
     "LOCAL_ONLY",
@@ -118,7 +118,7 @@
     "LOCAL_ONLY",
     "LOCAL_ONLY"
   ],
-  "failure_localization": "direct strict agreement failed; not attributed to the decomposition set reconstruction gate failed",
+  "failure_localization": "source-control reconstruction failed; unresolved c interval; not attributed to the decomposition",
   "natural_leaf_metrics": {
     "boundary_disagreement_fraction": 0.05078125,
     "coarse": {
@@ -354,7 +354,7 @@
       "false_positive_fraction": 0.0,
       "false_positive_fraction_reason": "computed",
       "false_positive_fraction_state": "VALUE",
-      "hausdorff_rad": 0.26487048111801154,
+      "hausdorff_rad": 0.18565275495018826,
       "hausdorff_rad_reason": "computed",
       "hausdorff_rad_state": "VALUE",
       "max_cell_diameter_rad": 0.32636622180660874,
@@ -382,7 +382,7 @@
       "false_positive_fraction": 0.0,
       "false_positive_fraction_reason": "computed",
       "false_positive_fraction_state": "VALUE",
-      "hausdorff_rad": 0.1762814881891368,
+      "hausdorff_rad": 0.16256005531799597,
       "hausdorff_rad_reason": "computed",
       "hausdorff_rad_state": "VALUE",
       "max_cell_diameter_rad": 0.16483370321401697,
@@ -393,16 +393,16 @@
       "refinement": {
         "reason": "max absolute metric change",
         "state": "VALUE",
-        "value": 0.29203646536754774
+        "value": 0.41735846769023544
       },
-      "refinement_delta": 0.29203646536754774,
+      "refinement_delta": 0.41735846769023544,
       "refinement_delta_reason": "max absolute metric change",
       "refinement_delta_state": "VALUE",
       "strict_covered_count": 1168,
       "strict_uncovered_count": 47,
       "unresolved_fraction": 0.05078125
     },
-    "hausdorff_rad": 0.1762814881891368,
+    "hausdorff_rad": 0.16256005531799597,
     "hausdorff_rad_reason": "computed",
     "hausdorff_rad_state": "VALUE",
     "max_cell_diameter_rad": 0.16483370321401697,
@@ -413,9 +413,9 @@
     "refinement": {
       "reason": "max absolute metric change",
       "state": "VALUE",
-      "value": 0.29203646536754774
+      "value": 0.41735846769023544
     },
-    "refinement_delta": 0.29203646536754774,
+    "refinement_delta": 0.41735846769023544,
     "refinement_delta_reason": "max absolute metric change",
     "refinement_delta_state": "VALUE",
     "strict_covered_count": 1168,
@@ -429,7 +429,7 @@
       "false_positive_fraction": 0.0,
       "false_positive_fraction_reason": "computed",
       "false_positive_fraction_state": "VALUE",
-      "hausdorff_rad": 0.18387024253640954,
+      "hausdorff_rad": 0.18565275495018826,
       "hausdorff_rad_reason": "computed",
       "hausdorff_rad_state": "VALUE",
       "max_cell_diameter_rad": 0.32636622180660874,
@@ -457,7 +457,7 @@
       "false_positive_fraction": 0.0,
       "false_positive_fraction_reason": "computed",
       "false_positive_fraction_state": "VALUE",
-      "hausdorff_rad": 0.18387024253640954,
+      "hausdorff_rad": 0.16256005531799597,
       "hausdorff_rad_reason": "computed",
       "hausdorff_rad_state": "VALUE",
       "max_cell_diameter_rad": 0.16483370321401697,
@@ -468,16 +468,16 @@
       "refinement": {
         "reason": "max absolute metric change",
         "state": "VALUE",
-        "value": 0.5521031104558936
+        "value": 0.41735846769023544
       },
-      "refinement_delta": 0.5521031104558936,
+      "refinement_delta": 0.41735846769023544,
       "refinement_delta_reason": "max absolute metric change",
       "refinement_delta_state": "VALUE",
       "strict_covered_count": 1168,
       "strict_uncovered_count": 47,
       "unresolved_fraction": 0.05078125
     },
-    "hausdorff_rad": 0.18387024253640954,
+    "hausdorff_rad": 0.16256005531799597,
     "hausdorff_rad_reason": "computed",
     "hausdorff_rad_state": "VALUE",
     "max_cell_diameter_rad": 0.16483370321401697,
@@ -488,9 +488,9 @@
     "refinement": {
       "reason": "max absolute metric change",
       "state": "VALUE",
-      "value": 0.5521031104558936
+      "value": 0.41735846769023544
     },
-    "refinement_delta": 0.5521031104558936,
+    "refinement_delta": 0.41735846769023544,
     "refinement_delta_reason": "max absolute metric change",
     "refinement_delta_state": "VALUE",
     "strict_covered_count": 1168,
@@ -504,7 +504,7 @@
       "false_positive_fraction": 0.0,
       "false_positive_fraction_reason": "computed",
       "false_positive_fraction_state": "VALUE",
-      "hausdorff_rad": 0.26487048111801154,
+      "hausdorff_rad": 0.18565275495018826,
       "hausdorff_rad_reason": "computed",
       "hausdorff_rad_state": "VALUE",
       "max_cell_diameter_rad": 0.32636622180660874,
@@ -532,7 +532,7 @@
       "false_positive_fraction": 0.0,
       "false_positive_fraction_reason": "computed",
       "false_positive_fraction_state": "VALUE",
-      "hausdorff_rad": 0.1762814881891368,
+      "hausdorff_rad": 0.16256005531799597,
       "hausdorff_rad_reason": "computed",
       "hausdorff_rad_state": "VALUE",
       "max_cell_diameter_rad": 0.16483370321401697,
@@ -543,16 +543,16 @@
       "refinement": {
         "reason": "max absolute metric change",
         "state": "VALUE",
-        "value": 0.29203646536754774
+        "value": 0.41735846769023544
       },
-      "refinement_delta": 0.29203646536754774,
+      "refinement_delta": 0.41735846769023544,
       "refinement_delta_reason": "max absolute metric change",
       "refinement_delta_state": "VALUE",
       "strict_covered_count": 1168,
       "strict_uncovered_count": 47,
       "unresolved_fraction": 0.05078125
     },
-    "hausdorff_rad": 0.1762814881891368,
+    "hausdorff_rad": 0.16256005531799597,
     "hausdorff_rad_reason": "computed",
     "hausdorff_rad_state": "VALUE",
     "max_cell_diameter_rad": 0.16483370321401697,
@@ -563,9 +563,9 @@
     "refinement": {
       "reason": "max absolute metric change",
       "state": "VALUE",
-      "value": 0.29203646536754774
+      "value": 0.41735846769023544
     },
-    "refinement_delta": 0.29203646536754774,
+    "refinement_delta": 0.41735846769023544,
     "refinement_delta_reason": "max absolute metric change",
     "refinement_delta_state": "VALUE",
     "strict_covered_count": 1168,
