@@ -92,6 +92,7 @@ class H13ASourcePolicy:
     endpoint_state_tol_rad: float
     endpoint_tangent_abs_dot_min: float
     curve_segment_fraction: float
+    continuation_step_size: float
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -111,6 +112,7 @@ class H13ASourcePolicy:
                 "endpoint_state_tol_rad": self.endpoint_state_tol_rad,
                 "endpoint_tangent_abs_dot_min": self.endpoint_tangent_abs_dot_min,
                 "curve_segment_fraction": self.curve_segment_fraction,
+                "continuation_step_size": self.continuation_step_size,
             }
         )
 
@@ -225,6 +227,9 @@ def load_h13_source_policy(config: CampaignConfig, mode: str | None = None) -> H
         curve_segment_fraction=float(
             _mode_value(raw, "curve_segment_fraction", resolved_mode, 0.50)
         ),
+        continuation_step_size=float(
+            _mode_value(raw, "continuation_step_size", resolved_mode, 0.08)
+        ),
     )
     positive = (
         policy.c_slice_max_angular_spacing_cell_fraction,
@@ -236,6 +241,7 @@ def load_h13_source_policy(config: CampaignConfig, mode: str | None = None) -> H
         policy.endpoint_state_tol_rad,
         policy.endpoint_tangent_abs_dot_min,
         policy.curve_segment_fraction,
+        policy.continuation_step_size,
     )
     if any(value <= 0.0 for value in positive):
         raise ValueError("H13 source policy tolerances and spacing fractions must be positive")
@@ -883,9 +889,12 @@ def build_source_control_h13(
     config: CampaignConfig,
     mode: str,
     max_steps: int | None = None,
-    step_size: float = 0.08,
+    step_size: float | None = None,
 ) -> H13ASourceControlResult:
     policy = load_h13_source_policy(config, mode)
+    resolved_step_size = (
+        policy.continuation_step_size if step_size is None else step_size
+    )
     budgets = resolve_stage_budgets(config, mode)
     interval = analytical_c_interval(arm, probe)
     spacing = confirmation_c_slice_spacing_rad(
@@ -925,7 +934,7 @@ def build_source_control_h13(
                     seed,
                     fiber_id=f"{probe.probe_id}_c{c_index}_s{seed_index}",
                     max_steps=steps,
-                    step_size=step_size,
+                    step_size=resolved_step_size,
                     policy=policy,
                 )
             )

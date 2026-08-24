@@ -756,7 +756,7 @@ unchanged.
 
 <!-- R3A_H13_LOCKED_INVARIANTS_2026_08_23 -->
 
-**Status:** RECORDED LOCK (§1; H13A–H13D implemented; H13E–H13F unimplemented; not a new scientific closeout)
+**Status:** RECORDED LOCK (§1; H13A–H13E implemented; H13F unimplemented; not a new scientific closeout)
 
 **Decision:** Until a later strict full-closeout package replaces them, the compact
 hub at `results/l5_reconstruction/r3a/` and its raw-bundle digest remain the recorded
@@ -807,8 +807,8 @@ retuning the recorded H12 closeout.
 **Consequence:** H13A does not replace the compact hub, interpret the natural UURU
 column, or claim component completeness. Seed discovery on the H13 path is H13B
 (ADR-057). H13C honest termination is ADR-058. H13D curve rasterization is ADR-059.
-H13E–H13F remain unimplemented. L5 remains `parent_incomplete` and the campaign
-blocker remains `STITCHING_CONTROL_BLOCKED`.
+H13E diagnostic pilot config is ADR-060. H13F remains unimplemented. L5 remains
+`parent_incomplete` and the campaign blocker remains `STITCHING_CONTROL_BLOCKED`.
 
 ## ADR-057 — H13B discovers projected source-Q clusters with explicit caps
 
@@ -834,9 +834,9 @@ component census. Caps, seed-count semantics, and symmetric subset-preserving de
 make truncation and duplicate authority inspectable without claiming an analytical
 component count or inventing H13C termination vocabulary.
 
-**Consequence:** H13B does not replace the compact hub or add an H13E pilot JSON.
-Trace termination honesty is H13C (ADR-058). Curve rasterization is H13D (ADR-059).
-L5 remains `parent_incomplete` and the campaign blocker remains
+**Consequence:** H13B does not replace the compact hub. Trace termination honesty is
+H13C (ADR-058). Curve rasterization is H13D (ADR-059). The named diagnostic pilot
+JSON is H13E (ADR-060). L5 remains `parent_incomplete` and the campaign blocker remains
 `STITCHING_CONTROL_BLOCKED`.
 
 ## ADR-058 — H13C classifies traces by termination cause and mixed-interval law
@@ -864,9 +864,9 @@ budget-exhausted or its endpoints meet away from the seed. Explicit termination
 vocabulary makes those authority failures inspectable without claiming component
 completeness or densifying curves.
 
-**Consequence:** H13C does not replace the compact hub or add an H13E pilot JSON.
-Curve rasterization is H13D (ADR-059). L5 remains `parent_incomplete` and the
-campaign blocker remains `STITCHING_CONTROL_BLOCKED`.
+**Consequence:** H13C does not replace the compact hub. Curve rasterization is H13D
+(ADR-059). The named diagnostic pilot JSON is H13E (ADR-060). L5 remains
+`parent_incomplete` and the campaign blocker remains `STITCHING_CONTROL_BLOCKED`.
 
 ## ADR-059 — H13D paints source occupancy from resolution-aware pointing curves
 
@@ -881,14 +881,40 @@ sphere. Closed traces include their closing arc; nonclosed traces are not
 artificially closed. Raw continuation samples remain on each fiber. Occupancy uses
 the rasterized mask. Within-curve raster spacing and between-slice `c` spacing are
 recorded independently. H12 `build_source_control` still paints the sparse sample
-cloud. There is no H13E pilot JSON.
+cloud.
 
 **Reason:** Defect E of H13 is that a continuous source curve was painted as a sparse
 point cloud, so source-vs-direct occupancy could fail from undersampling along an
 otherwise continued fiber. Rasterization repairs that authority without claiming a
 new closeout or retuning H12.
 
-**Consequence:** H13D does not replace the compact hub or create
-`l5_positive_control_h13_source_pilot_v1.json`. L5 remains `parent_incomplete` and
-the campaign blocker remains `STITCHING_CONTROL_BLOCKED`.
+**Consequence:** H13D does not replace the compact hub. The named diagnostic pilot
+JSON is H13E (ADR-060). L5 remains `parent_incomplete` and the campaign blocker
+remains `STITCHING_CONTROL_BLOCKED`.
+
+## ADR-060 — H13E diagnostic source-control pilot cannot close the campaign
+
+<!-- R3A_H13E_DIAGNOSTIC_PILOT_2026_08_24 -->
+
+**Status:** IMPLEMENTED (H13E diagnostic config; not a scientific closeout)
+
+**Decision:** Freeze the H13A–D source-control policy, including continuation step
+size `0.08`, in `configs/l5_positive_control_h13_source_pilot_v1.json` with
+`schema_version=r3a_l5_positive_control_h13_source_pilot_v1`. Every campaign mode,
+including `full`, keeps `allows_full_campaign_disposition=false`, so accidental
+`--full-closeout` is refused. The H13A development config remains. Frozen H12
+`configs/l5_positive_control_v1.json` still has no `policy_version`. Focused
+diagnostic campaigns write gitignored `outputs/` and do not replace
+`results/l5_reconstruction/r3a/`. The §23 freeze rule is not claimed. H13F remains
+unimplemented.
+
+**Reason:** Defects A–E now have named H13 machinery, but a campaign that can issue
+scientific disposition would mix an unfrozen diagnostic policy into the recorded
+closeout. A separate pilot JSON with disposition locked false makes the focused
+P1/P4/P5 run inspectable without retuning H12 or claiming a new closeout.
+
+**Consequence:** H13E does not replace the compact hub, freeze an H13 source policy,
+or authorize natural-leaf tuning. A failed or incomplete focused campaign remains
+`STITCHING_CONTROL_BLOCKED`. L5 remains `parent_incomplete`. The H13F five-probe
+rerun config is not created.
 

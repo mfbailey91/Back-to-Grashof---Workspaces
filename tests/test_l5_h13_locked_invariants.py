@@ -1,4 +1,4 @@
-"""R3A-H13 locked invariants. H13A may exist; H12 hub and config stay frozen."""
+"""R3A-H13 locked invariants. H13A and H13E may exist; H12 hub and config stay frozen."""
 
 from __future__ import annotations
 
@@ -11,6 +11,9 @@ from grashof_workspace.spatial_experiments.l5_reconstruction import (
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction import (
     source_control as h12_source_control,
+)
+from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
+    load_campaign_config,
 )
 
 REPO = Path(__file__).resolve().parents[1]
@@ -72,7 +75,12 @@ def test_current_status_keeps_parent_incomplete_without_new_closeout() -> None:
 def test_h12_path_does_not_import_source_control_h13_at_module_level() -> None:
     assert H13_MODULE.is_file()
     assert H13A_CONFIG.is_file()
-    assert not H13_PILOT_CONFIG.exists()
+    assert H13_PILOT_CONFIG.is_file()
+    pilot = load_campaign_config(H13_PILOT_CONFIG)
+    assert pilot.schema_version == "r3a_l5_positive_control_h13_source_pilot_v1"
+    assert pilot.mode("ci").allows_full_campaign_disposition is False
+    assert pilot.mode("smoke").allows_full_campaign_disposition is False
+    assert pilot.mode("full").allows_full_campaign_disposition is False
     assert h12_source_control.__file__ is not None
     assert l5_cli.__file__ is not None
     cli_top = _top_level_imported_modules(Path(l5_cli.__file__))

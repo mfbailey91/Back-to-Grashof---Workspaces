@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import inspect
+import json
 from itertools import pairwise
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -13,14 +15,25 @@ from grashof_workspace.spatial_experiments.branch_continuation import (
     BranchTrace,
     UnitCircleProblem,
 )
+from grashof_workspace.spatial_experiments.l5_reconstruction.artifacts import (
+    finalize_stage,
+    update_artifact_index,
+)
+from grashof_workspace.spatial_experiments.l5_reconstruction.campaign_package import (
+    package_r3a_campaign,
+    validate_package_scope,
+)
+from grashof_workspace.spatial_experiments.l5_reconstruction.cli import write_manifest
 from grashof_workspace.spatial_experiments.l5_reconstruction.direct_truth import (
     build_direct_pointing_truth,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
+    CampaignBlocker,
     SourceControlCRecord,
     SourceIntervalStatus,
     SourceTraceTermination,
     load_campaign_config,
+    stage_envelope,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.positive_control import (
     build_positive_control_arm,
@@ -55,6 +68,8 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.sphere_grid import 
 
 H12_CONFIG = "configs/l5_positive_control_v1.json"
 H13A_CONFIG = "configs/l5_positive_control_h13a_c_domain_v1.json"
+H13_PILOT_CONFIG = "configs/l5_positive_control_h13_source_pilot_v1.json"
+P1_P3 = ("P1_DEEP_COMPLETE", "P3_INNER_INCOMPLETE")
 
 
 def _policy(**overrides: float) -> H13ASourcePolicy:
@@ -70,6 +85,7 @@ def _policy(**overrides: float) -> H13ASourcePolicy:
         "endpoint_state_tol_rad": 0.05,
         "endpoint_tangent_abs_dot_min": 0.99,
         "curve_segment_fraction": 0.50,
+        "continuation_step_size": 0.08,
     }
     values.update(overrides)
     return H13ASourcePolicy(
@@ -86,6 +102,7 @@ def _policy(**overrides: float) -> H13ASourcePolicy:
         endpoint_state_tol_rad=float(values["endpoint_state_tol_rad"]),
         endpoint_tangent_abs_dot_min=float(values["endpoint_tangent_abs_dot_min"]),
         curve_segment_fraction=float(values["curve_segment_fraction"]),
+        continuation_step_size=float(values["continuation_step_size"]),
     )
 
 
@@ -212,6 +229,7 @@ def test_h13a_full_cannot_issue_campaign_disposition() -> None:
     assert policy.endpoint_state_tol_rad == pytest.approx(0.10)
     assert policy.endpoint_tangent_abs_dot_min == pytest.approx(0.85)
     assert policy.curve_segment_fraction == pytest.approx(0.50)
+    assert policy.continuation_step_size == pytest.approx(0.08)
     ci = load_h13_source_policy(config, "ci")
     smoke = load_h13_source_policy(config, "smoke")
     assert ci.max_seed_candidates_per_c == 24
@@ -581,3 +599,154 @@ def test_closed_curve_paints_closing_arc_and_open_curve_does_not() -> None:
     closing_gap = pointing_geodesic(closed[-1], closed[0])
     assert max(closed_gaps) <= 0.2 + 1e-12
     assert closing_gap <= 0.2 + 1e-12
+
+
+def _write_pilot_probe_files(raw: Path, probe_id: str) -> None:
+    probe = raw / probe_id
+    probe.mkdir(parents=True, exist_ok=True)
+    (probe / "fixture.json").write_text(
+        json.dumps({"probe_id": probe_id, "rank_jp": 5}),
+        encoding="utf-8",
+    )
+    (probe / "direct_truth.json").write_text(
+        json.dumps({"discovery": {"solves": [{"clusters": [1]}]}, "confirmation": {"solves": []}}),
+        encoding="utf-8",
+    )
+    (probe / "source_control.json").write_text(
+        json.dumps(
+            {
+                "fibers": [{"q_samples": [[0.0]], "fiber_id": "f", "component_id": "c0"}],
+                "pointing_samples": [[1.0, 0.0, 0.0]],
+                "c_records": [{"parameter_interval_status": "RETURNED_SET_FOUND"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (probe / "natural_family.json").write_text(
+        json.dumps(
+            {
+                "leaves": [
+                    {"accepted_for_reconstruction": False, "samples": [{"q_source": [0.0]}]}
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    (probe / "comparison.json").write_text(
+        json.dumps({"probe_id": probe_id}),
+        encoding="utf-8",
+    )
+
+
+def _hashed_h13_pilot_campaign(
+    raw: Path,
+    *,
+    probe_ids: tuple[str, ...] = P1_P3,
+    mode: str = "ci",
+    include_render: bool = False,
+) -> None:
+    config_path = Path(H13_PILOT_CONFIG)
+    write_manifest(config_path, raw, mode=mode)
+    config = load_campaign_config(config_path)
+    for probe_id in probe_ids:
+        _write_pilot_probe_files(raw, probe_id)
+    stages: tuple[tuple[str, dict[str, object]], ...] = (
+        ("fixture", {}),
+        ("truth", {}),
+        ("source-control", {}),
+        ("leaves", {}),
+        (
+            "compare",
+            {
+                "disposition": "PARTIAL",
+                "campaign_blocker": CampaignBlocker.STITCHING_CONTROL_BLOCKED.value,
+                "accepted_reconstruction": False,
+            },
+        ),
+    )
+    for stage, payload in stages:
+        finalize_stage(
+            raw,
+            {
+                **stage_envelope(config, stage=stage, mode=mode, probe_ids=probe_ids),
+                **payload,
+            },
+            config=config,
+            stage=stage,
+            mode=mode,
+            probe_ids=probe_ids,
+        )
+    campaign = raw / "campaign.json"
+    if campaign.is_file():
+        (raw / "compare.json").write_text(campaign.read_text(encoding="utf-8"), encoding="utf-8")
+        update_artifact_index(raw, (raw / "compare.json",))
+    if include_render:
+        (raw / "index.html").write_text("<html></html>", encoding="utf-8")
+        finalize_stage(
+            raw,
+            stage_envelope(config, stage="render", mode=mode, probe_ids=probe_ids),
+            config=config,
+            stage="render",
+            mode=mode,
+            probe_ids=probe_ids,
+        )
+
+
+def test_h13_pilot_freezes_diagnostic_policy_and_cannot_close() -> None:
+    config = load_campaign_config(H13_PILOT_CONFIG)
+    policy = load_h13_source_policy(config, "full")
+    assert config.schema_version == "r3a_l5_positive_control_h13_source_pilot_v1"
+    assert h13_source_policy_requested(config) is True
+    assert config.mode("ci").allows_full_campaign_disposition is False
+    assert config.mode("smoke").allows_full_campaign_disposition is False
+    assert config.mode("full").allows_full_campaign_disposition is False
+    assert policy.continuation_step_size == pytest.approx(0.08)
+    assert policy.curve_segment_fraction == pytest.approx(0.50)
+    assert policy.c_slice_max_angular_spacing_cell_fraction == pytest.approx(0.75)
+    probe_ids = [probe.probe_id for probe in config.probes]
+    with pytest.raises(ValueError, match="cannot issue a full-campaign disposition"):
+        validate_package_scope(
+            {
+                "config_hash": config.config_hash,
+                "mode": "full",
+                "probe_ids": probe_ids,
+                "campaign_blocker": CampaignBlocker.STITCHING_CONTROL_BLOCKED.value,
+                "accepted_reconstruction": False,
+            },
+            config,
+            full_closeout=True,
+        )
+
+
+def test_h13_pilot_full_closeout_is_refused(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    config = load_campaign_config(H13_PILOT_CONFIG)
+    probe_ids = tuple(probe.probe_id for probe in config.probes)
+    _hashed_h13_pilot_campaign(raw, probe_ids=probe_ids, mode="full", include_render=True)
+    with pytest.raises(ValueError, match="cannot issue a full-campaign disposition"):
+        package_r3a_campaign(
+            raw_root=raw,
+            results_root=tmp_path / "compact",
+            bundle_dir=tmp_path / "bundles",
+            config_path=Path(H13_PILOT_CONFIG),
+            full_closeout=True,
+        )
+
+
+def test_h13_pilot_p1_p3_ci_package_is_diagnostic(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    results = tmp_path / "compact"
+    bundles = tmp_path / "bundles"
+    _hashed_h13_pilot_campaign(raw, probe_ids=P1_P3, mode="ci")
+    manifest = package_r3a_campaign(
+        raw_root=raw,
+        results_root=results,
+        bundle_dir=bundles,
+        config_path=Path(H13_PILOT_CONFIG),
+    )
+    assert manifest["package_kind"] == "diagnostic"
+    assert manifest["campaign_mode"] == "ci"
+    assert manifest["probe_ids"] == list(P1_P3)
+    assert manifest["full_closeout_eligible"] is False
+    assert manifest["allows_full_campaign_disposition"] is False
+    assert manifest["all_configured_probes_present"] is False
