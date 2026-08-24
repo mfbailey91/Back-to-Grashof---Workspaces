@@ -154,11 +154,33 @@ Apply the same direct/source/natural comparison to the existing `exact_two_u_5r`
 
 **Pass/fail gate:** At least one non-positive-control architecture reproduces independent parent evidence, or the failure is localized to a documented construction/component/coverage gate.
 
-### R3C — Mechanism behavior compression
+### R3C — L5 behavior-atlas round trip and falsification
 
-Only after R3A or R3B succeeds, test whether winding, crank/rocker, circuit, branch, or a numerical atlas can compress the accepted family result without losing reconstruction provenance.
+After a controlled natural-leaf reconstruction exists, build the first numerical mechanism atlas as a round trip:
 
-**R3 completion gate:** One controlled reconstruction must pass before L6 positive-control work begins. General 5R claims and broad rule discovery remain blocked until transfer evidence exists.
+```text
+5R parent
+  -> source-derived child corpus
+  -> exact family identity + frozen geometry
+  -> family support / canonical descriptors
+  -> exact child behavior reference
+  -> directed numerical atlas + OOD fallback
+  -> held-out 5R reconstruction
+```
+
+The order is deliberate: **manipulator → mechanism first** discovers which families and which parameter-space regions matter; **mechanism → atlas second** fills and refines those regions; **atlas → manipulator last** tests whether the compressed predicate preserves the parent pointing result.
+
+Family identity is structural and role-aware. A child is never assigned to the “closest” family. Out-of-distribution atlas queries remain unresolved and route to the exact child solver.
+
+**Pass/fail gate:** On a held-out 5R parent, atlas-backed child evaluation preserves an exact-child reconstruction that already agrees with decomposition-free \(S^2\) truth, or the failure is localized to the atlas while the exact-child decomposition remains valid.
+
+**Eject gate:** If exact child behavior is trustworthy but exact-child stitching fails to reconstruct held-out parent truth, the decomposition/stitching hypothesis is incomplete; do not blame or scale the atlas.
+
+Detailed program: [methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md](methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md). A0 contract: [methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md](methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md). A1 exporter: [methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md](methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md).
+
+**A1 authority:** Exporting the frozen H12 natural leaves proves mechanism-definition portability only. H12 source-parent component IDs remain unresolved, so current E0 specimens are not workspace evidence and the H12 `STITCHING_CONTROL_BLOCKED` closeout is unchanged.
+
+**R3 completion gate:** R3A must pass, transfer evidence must exist, and R3C must reach a parent-level falsification result before the aligned-roll L6 program becomes the primary workstream. A0 infrastructure may land earlier because it makes no scientific promotion.
 
 ---
 
@@ -172,7 +194,7 @@ Only after R3A or R3B succeeds, test whether winding, crank/rocker, circuit, bra
 
 **Pass/fail gate:** Component-aware orientation truth for a controlled 6R architecture.
 
-**Blockers:** R3A controlled reconstruction gate; L6 remains `scaffold_only`. R3B transfer may continue in parallel after the positive-control stitching operation is stable.
+**Blockers:** R3C parent-level falsification gate; L6 remains `scaffold_only`. Thin L6 contract/scaffold maintenance may continue, but the aligned-roll numerical program stays downstream of the L5 round trip.
 
 ---
 
@@ -204,14 +226,14 @@ Only after R3A or R3B succeeds, test whether winding, crank/rocker, circuit, bra
 
 ---
 
-## R7 — Rule discovery, atlases, and certificates
+## R7 — Broad rule discovery and atlas generalization
 
-**Question:** After source-to-child-to-parent reconstruction is demonstrated, which family atlases and Grashof-like rules are evidence-supported?
+**Question:** After the L5 round-trip atlas and higher-rung reconstruction are demonstrated, which broader family atlases and Grashof-like rules are evidence-supported beyond the source-derived L5 support?
 
-**Required inputs:** Successful reconstruction examples; conservative numerical atlas + exact fallback policy.
+**Required inputs:** R3C family atlases and exact fallback policy; successful higher-rung reconstruction examples.
 
-**Deliverable:** Scaled family atlases; compact rules where supported; workspace certificates with uncertainty.
+**Deliverable:** Expanded family domains, cross-architecture atlas support, compact rules where supported, and workspace certificates with uncertainty.
 
-**Pass/fail gate:** No atlas or rule is promoted as workspace method without reconstruction provenance.
+**Pass/fail gate:** No rule is promoted beyond the mechanism and architecture domain on which parent reconstruction has been validated.
 
-**Blockers:** Reconstruction gate (R3+). The old broad spatial-four-bar atlas program belongs here, not at the front of the program.
+**Blockers:** R3C round-trip evidence and subsequent reconstruction gates. Broad mathematical coverage of arbitrary spatial four-bars remains downstream of source-derived support.

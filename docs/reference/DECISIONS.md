@@ -641,3 +641,78 @@ virtual-crank atlas remains downstream of reconstruction provenance.
 **Reason:** Treating every `None` as failure makes valid complete coverage impossible, while treating every `None` as pass fabricates evidence. Explicit applicability preserves conservative gates without making the intended theorem untestable.
 
 **Consequence:** H11 package scope, hashes, producer provenance, and chart/interval authority remain valid. H12 grid-local strict Hausdorff and boundary exclusion withdrew the H11E `DIRECT_REFERENCE_BLOCKED` interpretation as comparison-metric dependent. The producer `9505a87` five-probe `--mode full` package is `package_kind=full_closeout` with `semantic_revalidation=true`, `campaign_blocker=STITCHING_CONTROL_BLOCKED`, and `accepted_reconstruction=false`. All five probes have `direct_complete=true` with zero fine/coarse Hausdorff and zero refinement. Source `h=c` reconstruction fails with unresolved `c` intervals; the natural column is not interpreted. L5 remains `parent_incomplete`. R3B and L6 remain held. This is not a complete parent, a foliation, or a general 5R factorization.
+
+## ADR-052 — Build the first L5 mechanism atlas as a source-derived round trip
+
+<!-- R3C_L5_BEHAVIOR_ATLAS_ROUND_TRIP_2026_08_23 -->
+
+**Status:** ACTIVE (A0 infrastructure only; not a reconstruction or workspace claim)
+
+**Decision:** The first spatial mechanism atlas is built in three directions, in
+order: (1) manipulator → mechanism to discover exact child families and the
+source-derived support of each family; (2) direct mechanism parameterization to
+fill, refine, and stress-test those supported regions; and (3) atlas → manipulator
+to test whether atlas-backed child behavior preserves a parent reconstruction that
+already agrees with independent source-chain pointing truth. Family identity is
+structural and role-aware, never nearest-family matching. Out-of-distribution atlas
+queries remain unresolved and route to the exact child evaluator.
+
+R3C begins with an E0 extraction record containing source provenance and full frozen
+mechanism geometry before any canonical descriptor vector is chosen. The R3A
+`SURU -> UURU` positive control seeds this infrastructure but is not promoted to a
+general 5R factorization or universal child family.
+
+**Reason:** A bottom-up atlas built over arbitrary U/R four-bars can spend most of its
+compute on mechanism regions that no legitimate 5R reduction produces, while a
+manipulator-only corpus may undersample behavior boundaries and cannot establish a
+reliable surrogate. The round trip uses the parent to define relevance and the
+direct mechanism space to provide coverage.
+
+**Falsification rule:** If exact child behavior is trustworthy but exact-child
+stitching fails against held-out direct 5R pointing truth, the decomposition /
+family-completeness / stitching hypothesis is incomplete and scaling the atlas is
+blocked. If exact-child stitching passes but atlas-backed stitching fails, the
+decomposition survives and the atlas/descriptor/sampling layer is rejected or
+reworked.
+
+**Consequence:** The aligned-roll L6 numerical program remains downstream of the R3C
+parent-level falsification gate. Thin L6 interface scaffolding may remain in the
+repository. Broad arbitrary spatial-four-bar rule discovery remains later work.
+A0 records provenance and frozen geometry only; it does not issue descriptors,
+behavior labels, or workspace certificates.
+
+## ADR-053 — E0 UURU geometry is payload-reconstructible and H12 component identity remains unresolved
+
+<!-- R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER_2026_08_23 -->
+
+**Status:** ACTIVE IMPLEMENTATION CONTRACT; no new L5 reconstruction claim
+
+**Decision:** R3C-A1 exports the existing frozen R3A `SURU -> UURU` natural leaves
+downstream of the numerical campaign. The complete E0 UURU geometry consists of the
+source serial chain, an independently allocated child serial chain, spherical closure
+chart, fixed `lambda`, fixed task point, and child coordinate contract. Campaign,
+probe, leaf, and artifact identifiers remain provenance and are excluded from the
+geometry hash. A payload-only reconstructor must reproduce the canonical geometry hash
+and the defining closure residuals, Jacobian, and FK at stored leaf samples before an
+E0 record is emitted.
+
+The existing R3A leaf `geometry_hash` is retained as a legacy chart/`lambda`
+construction check and is not redefined. E0 `geometry_sha256` is the full frozen
+mechanism-geometry authority.
+
+The H12 natural artifacts do not contain an independently established source-parent
+component identifier. A1 therefore records `UNRESOLVED_SOURCE_COMPONENT`. Such records
+may preserve leaf-local `accepted_for_reconstruction` / `EXACT_*` fields as provenance
+but are not `workspace_evidence_eligible`.
+
+**Reason:** A1 needs reconstructible mechanism specimens for the future atlas without
+mutating the frozen R3A experiment or fabricating component correspondence. Separating
+geometry identity from source provenance also prevents the same mechanism geometry
+from receiving different hashes merely because it arose from a different probe or
+artifact path.
+
+**Consequence:** A1 may succeed while the H12 campaign remains
+`STITCHING_CONTROL_BLOCKED` and L5 remains `parent_incomplete`. A1 proves data
+portability of the child mechanism definition only; it does not classify behavior,
+validate stitching, choose canonical atlas descriptors, or authorize L6.
+

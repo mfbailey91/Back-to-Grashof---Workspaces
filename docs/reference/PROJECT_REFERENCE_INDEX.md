@@ -90,6 +90,18 @@ R3A-H11 acceptance-authority hardening: diagnostic vs full-closeout packages, ov
 
 Recorded H12 repair: same-grid strict Hausdorff, ambiguous-boundary exclusion, returned-set disposition vocabulary, package-side semantic recomputation, and frozen closeout `STITCHING_CONTROL_BLOCKED`.
 
+### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
+
+R3C source-derived 5R → mechanism → atlas → 5R falsification program (ADR-052). A0 is infrastructure only.
+
+### [`../methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md`](../methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md)
+
+R3C-A0 E0 extraction contract: role-aware family identity, source provenance, frozen geometry payload, and workspace-eligibility gates. No descriptors, labels, or atlas lookup.
+
+### [`../methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md`](../methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md)
+
+R3C-A1 downstream exporter: frozen R3A natural leaves → reconstructible E0 UURU specimens with G1/G2 round-trip proof (ADR-053). H12 source-parent component IDs remain unresolved; exported records are not workspace evidence.
+
 ### Archived V05–V09 planning lineage
 
 Historical sequential sprint labels (V05–V09) are preserved under [`../archive/programs/`](../archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md) and [`../archive/sprints/`](../archive/sprints/SPRINT_01.md). They are not the active roadmap.
