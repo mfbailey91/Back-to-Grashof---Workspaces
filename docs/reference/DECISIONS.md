@@ -756,7 +756,7 @@ unchanged.
 
 <!-- R3A_H13_LOCKED_INVARIANTS_2026_08_23 -->
 
-**Status:** RECORDED LOCK (§1 only; H13A–H13F unimplemented; not a new scientific closeout)
+**Status:** RECORDED LOCK (§1; H13A and H13B implemented; H13C–H13F unimplemented; not a new scientific closeout)
 
 **Decision:** Until a later strict full-closeout package replaces them, the compact
 hub at `results/l5_reconstruction/r3a/` and its raw-bundle digest remain the recorded
@@ -777,7 +777,8 @@ domain-complete, component-aware, and resolution-stable.
 
 **Consequence:** This ADR records invariants only. It does not replace the compact hub,
 interpret the natural UURU column, or authorize R3B/L6. H13A implements opt-in
-dispatch and the analytical `c` domain under ADR-056 without retuning H12.
+dispatch and the analytical `c` domain under ADR-056. H13B implements projected-seed
+discovery under ADR-057. Neither retunes H12.
 
 ## ADR-056 — H13A source path is opt-in and the c domain is the analytical rho_m interval
 
@@ -794,7 +795,7 @@ count is `max(configured source_c_value_count, resolution-derived count)` so adj
 `arccos(c)` spacing stays within a declared fraction of the confirmation-cell
 diameter. Analytical endpoints are `CRITICAL_OR_BOUNDARY` and are not required to
 return a regular one-dimensional curve. Seed discovery remains the H12 first-three
-law until H13B.
+law until H13B (ADR-057).
 
 **Reason:** H12 blocked the source column in part because the required `c` domain was
 inferred from a finite discovery bank and because the slice count was not tied to
@@ -802,6 +803,36 @@ the declared sphere resolution. Those two authority defects can be repaired with
 retuning the recorded H12 closeout.
 
 **Consequence:** H13A does not replace the compact hub, interpret the natural UURU
-column, or claim component completeness. H13B–H13F remain unimplemented. L5 remains
-`parent_incomplete` and the campaign blocker remains `STITCHING_CONTROL_BLOCKED`.
+column, or claim component completeness. Seed discovery on the H13 path is H13B
+(ADR-057). H13C–H13F remain unimplemented. L5 remains `parent_incomplete` and the
+campaign blocker remains `STITCHING_CONTROL_BLOCKED`.
+
+## ADR-057 — H13B discovers projected source-Q clusters with explicit caps
+
+<!-- R3A_H13B_PROJECTED_SEEDS_2026_08_23 -->
+
+**Status:** IMPLEMENTED (H13B only; not a scientific closeout)
+
+**Decision:** On the H13 source path, replace the H12 silent first-three seed rule with
+wrapped-Q clustering, explicit candidate and projected-cluster caps, seed-count
+vocabulary, and quality-ordered symmetric dedup. Pre-cluster the discovery bank, order
+candidates by in-window then `|h(q)-c|`, project onto `p=p*` and `h=c`, cluster
+successful projections, and continue one H12 `continue_source_fiber` per selected
+cluster. If either cap truncates, the required bin is `BUDGET_EXHAUSTED` even when
+attempted traces return. Historical `expected_seed_count` on that path is the attempted
+projected-cluster count and is labeled
+`attempted_projected_seed_clusters_not_expected_components`. Dedup is a duplicate only
+when `max(d_ab, d_ba) <= tol` and `abs(d_ab - d_ba) <= tol`; returned traces win over
+non-returned duplicates; asymmetric Q subsets stay distinct. H12 `build_source_control`
+keeps `seeds[:3]`.
+
+**Reason:** Defect B of H13 is that a finite first-three nearby sample is not a
+component census. Caps, seed-count semantics, and symmetric subset-preserving dedup
+make truncation and duplicate authority inspectable without claiming an analytical
+component count or inventing H13C termination vocabulary.
+
+**Consequence:** H13B does not replace the compact hub, add H13C termination honesty,
+H13D curve rasterization, or an H13E pilot JSON. Painting remains sparse H12
+pointings. L5 remains `parent_incomplete` and the campaign blocker remains
+`STITCHING_CONTROL_BLOCKED`.
 

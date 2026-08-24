@@ -1,7 +1,7 @@
 # Current Scientific Status
 
 **Status:** ACTIVE ledger (snapshot, not a plan)
-**Last updated:** 2026-08-23 (H13A analytical c-domain dispatch exists; H12 compact hub remains the current closeout at `STITCHING_CONTROL_BLOCKED`; L5 remains `parent_incomplete`)
+**Last updated:** 2026-08-23 (H13B projected-seed discovery exists; H12 compact hub remains the current closeout at `STITCHING_CONTROL_BLOCKED`; L5 remains `parent_incomplete`)
 
 This is the only live status ledger. Future work belongs in [ROADMAP.md](ROADMAP.md).
 
@@ -23,7 +23,7 @@ mechanism_explorer_only
 |---|---|---|---|---|
 | L3 planar 3R | `trusted_exact_reference` | Exact fixed-position four-bar reduction; designated-link rotatability; independent validation | None for reference role | Exact fixed-position four-bar reduction and designated-link rotatability recover planar dexterity |
 | L4 spatial 4R | `local_only` | One-DOF source mechanism and local orientation-curve machinery; proximal exact-U traced-arc match | Global component-complete certificate | One-DOF source mechanism and local orientation-curve machinery exist; global certification remains incomplete |
-| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software; R3A-H0–H12 evidence law, package authority, grid-local strict Hausdorff, and semantic closeout recomputation; frozen `--mode full` five-probe hub at `results/l5_reconstruction/r3a/` with `package_kind=full_closeout` and `semantic_revalidation=true` records `campaign_blocker=STITCHING_CONTROL_BLOCKED` and `accepted_reconstruction=false`; all five probes have `direct_complete=true` with zero fine/coarse Hausdorff and zero refinement; R3A-H13 §1 locked invariants recorded; H13A analytical c-domain dispatch exists without replacing the H12 hub | Source `h=c` stitching control (unresolved `c` intervals and failed source-vs-direct reconstruction); natural column is not interpreted; no accepted child reconstruction | Positive-control geometry, oracle, direct IK, h=c control, frozen-lambda UURU branches, confirmation-cell column, re-seeding, child-Jacobian neighbor transversality, source-Q chart overlap, family/source-control interval gaps, reconstruction-pass law, and evidence readout exist; empty reconstruction cannot pass; a finite sample bank is not a complete global foliation; campaign closeout is `STITCHING_CONTROL_BLOCKED`; five-point accepted cover is not a complete parent or a foliation |
+| L5 spatial 5R | `parent_incomplete` | Source-parent atlas, images, fibers, hardening infrastructure (V06A–E / H0–H6); R3A five-point SURU positive-control software; R3A-H0–H12 evidence law, package authority, grid-local strict Hausdorff, and semantic closeout recomputation; frozen `--mode full` five-probe hub at `results/l5_reconstruction/r3a/` with `package_kind=full_closeout` and `semantic_revalidation=true` records `campaign_blocker=STITCHING_CONTROL_BLOCKED` and `accepted_reconstruction=false`; all five probes have `direct_complete=true` with zero fine/coarse Hausdorff and zero refinement; R3A-H13 §1 locked invariants recorded; H13A analytical c-domain dispatch and H13B projected-seed discovery exist without replacing the H12 hub | Source `h=c` stitching control (unresolved `c` intervals and failed source-vs-direct reconstruction); natural column is not interpreted; no accepted child reconstruction | Positive-control geometry, oracle, direct IK, h=c control, frozen-lambda UURU branches, confirmation-cell column, re-seeding, child-Jacobian neighbor transversality, source-Q chart overlap, family/source-control interval gaps, reconstruction-pass law, and evidence readout exist; empty reconstruction cannot pass; a finite sample bank is not a complete global foliation; campaign closeout is `STITCHING_CONTROL_BLOCKED`; five-point accepted cover is not a complete parent or a foliation |
 | L6 spatial 6R | `scaffold_only` | Dimensional/task contracts and L6 scaffold stubs | Independent full-`SO(3)` reference and proven nesting | Dimensional/task contracts exist; independent full-`SO(3)` reference and reconstruction are not implemented |
 | L7 spatial 7R | `deferred` | Dimensional/gauge framing only | L6 completion and redundancy contract | Redundancy/gauge formulation is architectural only |
 
@@ -49,12 +49,13 @@ accepted_reconstruction remains false;
 L5 remains parent_incomplete;
 R3A-H13 locked invariants recorded; H12 hub remains current;
 H13A analytical c-domain dispatch exists;
+H13B projected-seed discovery exists;
 general 5R factorization remains unresolved;
 R3B and L6 remain held;
 V07A held pending parent/continuation completion.
 ```
 
-See ADR-047, ADR-051, ADR-055, and ADR-056 in [reference/DECISIONS.md](reference/DECISIONS.md). Package authority: [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md). Metric repair: [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md). H13 locked invariants and H13A analytical c domain: [methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md](methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md). Hub: [results/l5_reconstruction/r3a/index.html](../results/l5_reconstruction/r3a/index.html).
+See ADR-047, ADR-051, ADR-055, ADR-056, and ADR-057 in [reference/DECISIONS.md](reference/DECISIONS.md). Package authority: [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md). Metric repair: [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md). H13 locked invariants, H13A analytical c domain, and H13B projected-seed discovery: [methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md](methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md). Hub: [results/l5_reconstruction/r3a/index.html](../results/l5_reconstruction/r3a/index.html).
 
 ## What is not claimed
 

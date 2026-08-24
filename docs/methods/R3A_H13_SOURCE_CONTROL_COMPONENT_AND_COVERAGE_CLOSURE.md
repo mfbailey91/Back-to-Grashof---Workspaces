@@ -1,13 +1,13 @@
 # R3A-H13 — Source-Control Component and Coverage Closure
 
-**Status:** §1 and H13A implemented; H13B–H13F remain unimplemented
+**Status:** §1, H13A, and H13B implemented; H13C–H13F remain unimplemented
 **Project:** Back to Grashof — Mechanism-Based Workspace Characterization
 **Rung:** L5 spatial 5R
 **Starting point:** current `origin/main` after PR #21 (`3750a55`); not the stale handoff `17d87ad`
 **Parent result:** frozen H12 five-probe closeout `STITCHING_CONTROL_BLOCKED`
 **Primary goal:** Make the decomposition-free source `h=c` control domain-complete, component-aware, termination-honest, and resolution-stable before the natural UURU column is interpreted.
 **Non-goal:** Do not tune natural leaves, begin R3B/L6, or activate the numerical virtual-crank atlas in H13.
-**Implementation:** §1 locked invariants and H13A opt-in analytical `c` domain are implemented. Frozen H12 config and compact hub are unchanged. H13B–H13F remain the contract for later sprints. Do not apply `r3a_h13_source_control_component_and_coverage_closure.patch`.
+**Implementation:** §1 locked invariants, H13A analytical `c` domain, and H13B projected-seed discovery are implemented. Frozen H12 config and compact hub are unchanged. H13C–H13F remain the contract for later sprints. Do not apply `r3a_h13_source_control_component_and_coverage_closure.patch`.
 
 ---
 
@@ -63,7 +63,7 @@ H13 preserves all of the following:
 - A finite family of sampled `h=c` curves is not called a global foliation.
 - R3B, L6, and the virtual-crank atlas remain held.
 
-H13A implements the opt-in dispatch and analytical `c` domain. Frozen H12 config still has no `policy_version`. There is no H13E pilot JSON (`l5_positive_control_h13_source_pilot_v1.json`). Seed discovery, termination honesty, and curve rasterization remain H12 until H13B–H13D.
+H13A implements the opt-in dispatch and analytical `c` domain. H13B replaces the silent first-three seed rule on that path with wrapped-Q clustering, explicit caps, seed-count vocabulary, and quality-ordered symmetric dedup. Frozen H12 config still has no `policy_version` and still uses `seeds[:3]`. There is no H13E pilot JSON (`l5_positive_control_h13_source_pilot_v1.json`). Termination honesty and curve rasterization remain H12 until H13C–H13D.
 
 ---
 
@@ -206,7 +206,8 @@ then lower residual
 ```
 
 A closed trace may replace a budget-exhausted duplicate. A distinct nonclosed trace
-may not be hidden by one returned trace.
+may not be hidden by one returned trace. H13B uses `fiber.returned` as the closed-quality
+bit; H13C trace-termination vocabulary is not yet implemented.
 
 ## 9. H13B acceptance
 
@@ -216,6 +217,10 @@ may not be hidden by one returned trace.
 - asymmetric source-Q subsets remain distinct;
 - mixed distinct traces remain visible in the per-c record;
 - JSON never describes attempted seeds as expected components.
+
+H13B is implemented on the H13 path: each selected projected cluster continues through
+H12 `continue_source_fiber`, and painting remains the sparse H12 pointing sample set.
+H13C termination honesty and H13D curve rasterization remain unimplemented.
 
 ---
 

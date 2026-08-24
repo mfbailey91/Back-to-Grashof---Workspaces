@@ -109,7 +109,22 @@
     "discovery_only_refinement": true,
     "policy_version": "h13_component_closure_v1",
     "c_domain_policy": "analytical_regional_shell",
-    "c_slice_max_angular_spacing_cell_fraction": 0.75
+    "c_slice_max_angular_spacing_cell_fraction": 0.75,
+    "discovery_q_precluster_tol_rad": 0.15,
+    "seed_h_window": 0.35,
+    "seed_precluster_q_tol_rad": 0.35,
+    "seed_projected_q_tol_rad": 0.20,
+    "dedup_q_tol_rad": 0.35,
+    "max_seed_candidates_per_c": {
+      "ci": 24,
+      "smoke": 256,
+      "full": 1024
+    },
+    "max_seed_clusters_per_c": {
+      "ci": 3,
+      "smoke": 8,
+      "full": 16
+    }
   },
   "campaign_modes": {
     "ci": {

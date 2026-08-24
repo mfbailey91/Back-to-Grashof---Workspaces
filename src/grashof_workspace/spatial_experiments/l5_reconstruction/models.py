@@ -169,6 +169,7 @@ class SourceIntervalStatus(str, Enum):
 
     RETURNED_COMPONENT_FOUND = "RETURNED_COMPONENT_FOUND"
     CRITICAL_OR_BOUNDARY = "CRITICAL_OR_BOUNDARY"
+    BUDGET_EXHAUSTED = "BUDGET_EXHAUSTED"
     OPEN_ONLY = "OPEN_ONLY"
     SINGULAR = "SINGULAR"
     UNRESOLVED = "UNRESOLVED"
@@ -1046,22 +1047,41 @@ class SourceControlCRecord:
     unresolved_count: int
     deduplicated_component_ids: tuple[str, ...]
     parameter_interval_status: str
+    candidate_seed_count: int = 0
+    projection_attempt_count: int = 0
+    attempted_seed_count: int | None = None
+    projected_seed_cluster_count: int = 0
+    projection_failure_count: int = 0
+    seed_budget_exhausted: bool = False
 
     def to_json_dict(self) -> dict[str, Any]:
-        return json_object(
-            {
-                "c": self.c,
-                "expected_seed_count": self.expected_seed_count,
-                "projected_seed_count": self.projected_seed_count,
-                "continued_component_count": self.continued_component_count,
-                "returned_count": self.returned_count,
-                "open_count": self.open_count,
-                "singular_count": self.singular_count,
-                "unresolved_count": self.unresolved_count,
-                "deduplicated_component_ids": list(self.deduplicated_component_ids),
-                "parameter_interval_status": self.parameter_interval_status,
-            }
-        )
+        payload: dict[str, Any] = {
+            "c": self.c,
+            "expected_seed_count": self.expected_seed_count,
+            "projected_seed_count": self.projected_seed_count,
+            "continued_component_count": self.continued_component_count,
+            "returned_count": self.returned_count,
+            "open_count": self.open_count,
+            "singular_count": self.singular_count,
+            "unresolved_count": self.unresolved_count,
+            "deduplicated_component_ids": list(self.deduplicated_component_ids),
+            "parameter_interval_status": self.parameter_interval_status,
+        }
+        if self.attempted_seed_count is not None:
+            payload.update(
+                {
+                    "candidate_seed_count": self.candidate_seed_count,
+                    "projection_attempt_count": self.projection_attempt_count,
+                    "attempted_seed_count": self.attempted_seed_count,
+                    "projected_seed_cluster_count": self.projected_seed_cluster_count,
+                    "projection_failure_count": self.projection_failure_count,
+                    "seed_budget_exhausted": self.seed_budget_exhausted,
+                    "seed_count_semantics": (
+                        "attempted_projected_seed_clusters_not_expected_components"
+                    ),
+                }
+            )
+        return json_object(payload)
 
 
 @dataclass(frozen=True, slots=True)
