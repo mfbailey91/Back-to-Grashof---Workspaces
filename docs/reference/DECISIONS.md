@@ -716,3 +716,39 @@ artifact path.
 portability of the child mechanism definition only; it does not classify behavior,
 validate stitching, choose canonical atlas descriptors, or authorize L6.
 
+## ADR-054 — A2 separates exact parent patterns from actually instantiated child families
+
+<!-- R3C_A2_5R_PARENT_CAMPAIGN_2026_08_23 -->
+
+**Status:** ACTIVE DIAGNOSTIC CAMPAIGN; no workspace promotion
+
+**Decision:** The first 5R parent campaign inventories exact source structure before
+mechanism parameterization. A2 uses exact consecutive `RR -> U_phys` detection and
+non-overlapping pair combinations to identify U-based four-compound-joint parent
+patterns. A registered mapping such as `SUUR -> UUUR` is recorded as
+`REGISTERED_PARENT_PATTERN_ONLY` unless a reconstructible source-derived E0 child of
+that family exists. `EXACT_CHILD_EXPORTED` is reserved for actual E0 mechanism
+specimens that passed the A1 geometry round trip. Near architectures are retained as
+exact-aggregation negative controls and are never nearest-matched into a family.
+
+The frozen bank is the R3A SURU positive control, `exact_two_u_5r`, `generic_5r`,
+`near_two_u_5r`, and two A2-local near-SURU controls that break the proximal or
+distal physical U pair separately. A2 does not modify the historical V06 corpus.
+
+A2's initial detector is explicitly limited to `RR -> U_phys`. Registered families
+whose parent patterns require `S_phys` or another unimplemented aggregation
+(`USRR`, `URSR`, `URRS`) are reported `OUT_OF_DETECTOR_SCOPE`, not absent.
+
+**Reason:** Counting a parent letter pattern as an observed child would recreate the
+same evidence error that earlier audits rejected: matching mobility and letters do
+not prove a source-derived closed mechanism. Conversely, forcing every registered
+family to appear would turn the parent campaign into synthetic label balancing rather
+than an empirical support study.
+
+**Consequence:** A3 receives only families with actual reconstructible E0 specimens.
+Exact registered parent patterns without children enter a construction backlog. It is
+acceptable for the current campaign to close with only UURU in the A3 queue. Such a
+result is an architecture/support statement, not a claim that UURU is universal.
+The H12 `STITCHING_CONTROL_BLOCKED` closeout and L5 `parent_incomplete` status are
+unchanged.
+

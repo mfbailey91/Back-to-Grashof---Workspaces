@@ -1,0 +1,30 @@
+{
+  "schema_version": "r3c_a2_parent_campaign_v1",
+  "program_id": "R3C_A2_5R_PARENT_CAMPAIGN",
+  "r3a_config_path": "configs/l5_positive_control_v1.json",
+  "required_cases": [
+    "r3a_positive_control",
+    "exact_two_u_5r",
+    "generic_5r",
+    "near_two_u_5r",
+    "near_suru_shoulder",
+    "near_suru_wrist"
+  ],
+  "q_offset_bank_rad": [
+    [0.0, 0.0, 0.0, 0.0, 0.0],
+    [0.12, -0.08, 0.06, -0.04, 0.10],
+    [-0.10, 0.11, -0.07, 0.09, -0.05],
+    [0.05, 0.07, -0.11, 0.06, -0.08],
+    [-0.06, -0.09, 0.10, -0.05, 0.07]
+  ],
+  "near_controls": {
+    "axis_offset_m": 0.0001,
+    "near_pair_distance_max_m": 0.0005,
+    "near_pair_orthogonality_abs_dot_max": 0.005
+  },
+  "acceptance": {
+    "required_positive_parent_family": "SURU",
+    "require_a1_zero_roundtrip_failures": true,
+    "require_all_cases_present": true
+  }
+}
