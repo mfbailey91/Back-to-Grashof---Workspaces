@@ -38,6 +38,8 @@ implementation authority.
 | [methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md](methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md) | IMPLEMENTATION GUIDE | File-by-file Cursor sequence for R3A-H7–H10 |
 | [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md) | IMPLEMENTED HARDENING | Package scope, chart responsibility transitions, claim narrowing, and strict closeout authority |
 | [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md) | RECORDED REPAIR | Grid-local strict Hausdorff, boundary exclusion, reseed vocabulary, semantic closeout recomputation, and H12 frozen closeout `STITCHING_CONTROL_BLOCKED` |
+| [methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md](methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md) | ACTIVE PROGRAM | Source-derived 5R → mechanism → atlas → 5R falsification loop |
+| [methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md](methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md) | ACTIVE EXECUTION | Atlas provenance and extraction-contract sprint |
 | [methods/JACOBIAN_AND_DERIVATIVE_POLICY.md](methods/JACOBIAN_AND_DERIVATIVE_POLICY.md) | REFERENCE | Derivative / FD policy |
 | [methods/SPATIAL_POINTING_SLICE_CONTRACT.md](methods/SPATIAL_POINTING_SLICE_CONTRACT.md) | REFERENCE | Pointing level-set contract |
 | [methods/U_JOINT_DRIVE_CONTRACT.md](methods/U_JOINT_DRIVE_CONTRACT.md) | REFERENCE | Virtual-U drive coordinates |
