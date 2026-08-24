@@ -3,6 +3,7 @@ import json
 import pytest
 
 from grashof_workspace.spatial_experiments.l5_behavior_atlas import (
+    UNRESOLVED_SOURCE_COMPONENT_ID,
     ExtractedMechanismRecord,
     ExtractionManifest,
     MechanismFamilyIdentity,
@@ -26,11 +27,12 @@ def _source(
     provenance: MechanismProvenance = MechanismProvenance.SOURCE_DERIVED_NATURAL_LEAF,
     accepted: bool = True,
     status: str = "EXACT_ON_COMPONENT",
+    source_component_id: str = "component_0",
 ):
     return SourceProvenanceRecord(
         source_chain_id="positive_control_suru_5r",
         fixed_position_problem_id="P1_DEEP_COMPLETE",
-        source_component_id="component_0",
+        source_component_id=source_component_id,
         probe_id="P1_DEEP_COMPLETE",
         task_point=(0.94, 0.18, 0.28),
         source_artifact="results/l5_reconstruction/r3a/P1/leaves.json",
@@ -151,3 +153,14 @@ def test_manifest_json_is_strict_and_deterministic():
     assert parsed["workspace_evidence_eligible_count"] == 1
     assert "NaN" not in text
     assert text == manifest.to_json_text()
+
+
+def test_unresolved_source_component_blocks_workspace_evidence():
+    record = _record(
+        source=_source(
+            accepted=True,
+            status="EXACT_ON_COMPONENT",
+            source_component_id=UNRESOLVED_SOURCE_COMPONENT_ID,
+        )
+    )
+    assert record.workspace_evidence_eligible is False

@@ -176,7 +176,9 @@ Family identity is structural and role-aware. A child is never assigned to the â
 
 **Eject gate:** If exact child behavior is trustworthy but exact-child stitching fails to reconstruct held-out parent truth, the decomposition/stitching hypothesis is incomplete; do not blame or scale the atlas.
 
-Detailed program: [methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md](methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md). A0 contract: [methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md](methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md).
+Detailed program: [methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md](methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md). A0 contract: [methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md](methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md). A1 exporter: [methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md](methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md).
+
+**A1 authority:** Exporting the frozen H12 natural leaves proves mechanism-definition portability only. H12 source-parent component IDs remain unresolved, so current E0 specimens are not workspace evidence and the H12 `STITCHING_CONTROL_BLOCKED` closeout is unchanged.
 
 **R3 completion gate:** R3A must pass, transfer evidence must exist, and R3C must reach a parent-level falsification result before the aligned-roll L6 program becomes the primary workstream. A0 infrastructure may land earlier because it makes no scientific promotion.
 

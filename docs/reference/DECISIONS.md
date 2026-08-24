@@ -681,3 +681,38 @@ repository. Broad arbitrary spatial-four-bar rule discovery remains later work.
 A0 records provenance and frozen geometry only; it does not issue descriptors,
 behavior labels, or workspace certificates.
 
+## ADR-053 — E0 UURU geometry is payload-reconstructible and H12 component identity remains unresolved
+
+<!-- R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER_2026_08_23 -->
+
+**Status:** ACTIVE IMPLEMENTATION CONTRACT; no new L5 reconstruction claim
+
+**Decision:** R3C-A1 exports the existing frozen R3A `SURU -> UURU` natural leaves
+downstream of the numerical campaign. The complete E0 UURU geometry consists of the
+source serial chain, an independently allocated child serial chain, spherical closure
+chart, fixed `lambda`, fixed task point, and child coordinate contract. Campaign,
+probe, leaf, and artifact identifiers remain provenance and are excluded from the
+geometry hash. A payload-only reconstructor must reproduce the canonical geometry hash
+and the defining closure residuals, Jacobian, and FK at stored leaf samples before an
+E0 record is emitted.
+
+The existing R3A leaf `geometry_hash` is retained as a legacy chart/`lambda`
+construction check and is not redefined. E0 `geometry_sha256` is the full frozen
+mechanism-geometry authority.
+
+The H12 natural artifacts do not contain an independently established source-parent
+component identifier. A1 therefore records `UNRESOLVED_SOURCE_COMPONENT`. Such records
+may preserve leaf-local `accepted_for_reconstruction` / `EXACT_*` fields as provenance
+but are not `workspace_evidence_eligible`.
+
+**Reason:** A1 needs reconstructible mechanism specimens for the future atlas without
+mutating the frozen R3A experiment or fabricating component correspondence. Separating
+geometry identity from source provenance also prevents the same mechanism geometry
+from receiving different hashes merely because it arose from a different probe or
+artifact path.
+
+**Consequence:** A1 may succeed while the H12 campaign remains
+`STITCHING_CONTROL_BLOCKED` and L5 remains `parent_incomplete`. A1 proves data
+portability of the child mechanism definition only; it does not classify behavior,
+validate stitching, choose canonical atlas descriptors, or authorize L6.
+

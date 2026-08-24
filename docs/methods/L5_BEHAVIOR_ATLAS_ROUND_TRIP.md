@@ -329,11 +329,15 @@ Detailed execution: `R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md`.
 
 ### R3C-A1 — Manipulator → mechanism exporter
 
-**Goal:** Export R3A/R3B natural leaves into E0 records.
+**Goal:** Export frozen R3A/R3B natural leaves into E0 records without changing the source numerical campaign.
 
-Required change: natural-leaf artifacts must include the full frozen mechanism geometry, not only a geometry hash.
+The first implementation targets the current exact `SURU -> UURU` R3A positive-control child. The exporter combines the frozen campaign config with each `natural_family.json` leaf, emits a complete `uuru_frozen_geometry_v1` payload, reconstructs the child from that payload alone, and verifies geometry hash, closure residual, Jacobian, and FK identity at stored leaf samples.
 
-**Pass:** Every exported mechanism can be reconstructed byte-for-byte / numerically from its stored geometry payload, with source provenance and family identity intact.
+The current H12 natural artifacts do not provide independent source-parent component IDs. A1 therefore records `UNRESOLVED_SOURCE_COMPONENT` and does not promote exported specimens to workspace evidence even if leaf-local certificate fields are preserved.
+
+**Pass:** Every emitted UURU specimen has a successful canonical-geometry round trip; every specimen with stored samples passes defining-equation numerical identity; source package/config authority is verified; round-trip failures are zero.
+
+Detailed execution: `R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md`.
 
 ### R3C-A2 — Parent campaign and raw child corpus
 

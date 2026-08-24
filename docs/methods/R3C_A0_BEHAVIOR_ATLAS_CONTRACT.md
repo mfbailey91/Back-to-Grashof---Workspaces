@@ -160,6 +160,7 @@ Derived `workspace_evidence_eligible` is true only when:
 ```text
 provenance == source_derived_natural_leaf
 accepted_for_reconstruction == true
+source_component_id != UNRESOLVED_SOURCE_COMPONENT
 child_certificate_status in {EXACT_GLOBAL, EXACT_ON_COMPONENT}
 ```
 
@@ -229,6 +230,8 @@ A source-derived natural leaf is eligible only with:
 
 ```text
 accepted_for_reconstruction=true
+AND
+source_component_id != UNRESOLVED_SOURCE_COMPONENT
 AND
 EXACT_GLOBAL or EXACT_ON_COMPONENT
 ```

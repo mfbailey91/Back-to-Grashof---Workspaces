@@ -16,6 +16,7 @@ from typing import Any
 
 SCHEMA_VERSION = "l5_behavior_atlas_extraction_v1"
 WORKSPACE_ACCEPTED_CHILD_STATUSES = frozenset({"EXACT_GLOBAL", "EXACT_ON_COMPONENT"})
+UNRESOLVED_SOURCE_COMPONENT_ID = "UNRESOLVED_SOURCE_COMPONENT"
 
 
 class MechanismProvenance(str, Enum):
@@ -245,6 +246,7 @@ class ExtractedMechanismRecord:
         return (
             self.source.provenance is MechanismProvenance.SOURCE_DERIVED_NATURAL_LEAF
             and self.source.accepted_for_reconstruction
+            and self.source.source_component_id != UNRESOLVED_SOURCE_COMPONENT_ID
             and self.source.child_certificate_status in WORKSPACE_ACCEPTED_CHILD_STATUSES
         )
 
