@@ -752,3 +752,30 @@ result is an architecture/support statement, not a claim that UURU is universal.
 The H12 `STITCHING_CONTROL_BLOCKED` closeout and L5 `parent_incomplete` status are
 unchanged.
 
+## ADR-055 — H13 locked invariants preserve the H12 recorded closeout
+
+<!-- R3A_H13_LOCKED_INVARIANTS_2026_08_23 -->
+
+**Status:** RECORDED LOCK (§1 only; H13A–H13F unimplemented; not a new scientific closeout)
+
+**Decision:** Until a later strict full-closeout package replaces them, the compact
+hub at `results/l5_reconstruction/r3a/` and its raw-bundle digest remain the recorded
+R3A closeout. The frozen `configs/l5_positive_control_v1.json` keeps the historical
+H12 source path (`source_control` has no `policy_version`). H13, when implemented, is
+opt-in via a separate pilot config and `policy_version=h13_component_closure_v1`; that
+pilot cannot issue a full-campaign disposition. `accepted_reconstruction` stays false;
+L5 stays `parent_incomplete`. Direct-column metrics and natural-leaf
+parameters/tolerances are not retuned while source control is blocked.
+`RETURNED_SET_FOUND` is declared-budget evidence; `COMPONENT_COMPLETE` stays reserved;
+a finite `h=c` family is not a foliation. R3B, L6, and the virtual-crank atlas remain
+held.
+
+**Reason:** H12 localized the first trustworthy column boundary to source `h=c`
+stitching. Mixing a new H13 evidence contract into the frozen H12 config, hub, or
+historical source path would retune the recorded closeout before the source column is
+domain-complete, component-aware, and resolution-stable.
+
+**Consequence:** This ADR records invariants only. It does not activate H13
+source-control code, replace the compact hub, interpret the natural UURU column, or
+authorize R3B/L6. Later H13 sprints remain queued behind these invariants.
+

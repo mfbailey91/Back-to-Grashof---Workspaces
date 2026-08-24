@@ -38,6 +38,7 @@ implementation authority.
 | [methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md](methods/CURSOR_GUIDE_R3A_H7_H10_FOLLOWUP.md) | IMPLEMENTATION GUIDE | File-by-file Cursor sequence for R3A-H7–H10 |
 | [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md) | IMPLEMENTED HARDENING | Package scope, chart responsibility transitions, claim narrowing, and strict closeout authority |
 | [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md) | RECORDED REPAIR | Grid-local strict Hausdorff, boundary exclusion, reseed vocabulary, semantic closeout recomputation, and H12 frozen closeout `STITCHING_CONTROL_BLOCKED` |
+| [methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md](methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md) | §1 LOCKED INVARIANTS | H12 hub and frozen config stay authoritative; H13 remains unimplemented and opt-in; L5 remains `parent_incomplete` |
 | [methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md](methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md) | ACTIVE PROGRAM | Source-derived 5R → mechanism → atlas → 5R falsification loop |
 | [methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md](methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md) | ACTIVE EXECUTION | Atlas provenance and extraction-contract sprint |
 | [methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md](methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md) | ACTIVE EXECUTION | Frozen natural leaves → reconstructible E0 UURU mechanism specimens |

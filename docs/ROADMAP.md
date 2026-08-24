@@ -148,6 +148,12 @@ clean frozen five-probe rerun
 
 Execution: [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md).
 
+#### R3A-H13 — Source-control component and coverage closure (queued)
+
+H13 is queued behind locked invariants: the H12 compact hub and frozen config remain authoritative; H13 remains unimplemented and opt-in; L5 stays `parent_incomplete`. Direct-column metrics and natural-leaf parameters are not retuned while source control is blocked. `RETURNED_SET_FOUND` is declared-budget evidence; `COMPONENT_COMPLETE` stays reserved.
+
+Execution: [methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md](methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md).
+
 ### R3B — Transfer and falsification
 
 Apply the same direct/source/natural comparison to the existing `exact_two_u_5r`, `generic_5r`, and a near-architecture control. Determine which virtual-coordinate families remain exact, how chart choice changes individual leaf behavior, and whether the accepted family still reconstructs the parent pointing image.
