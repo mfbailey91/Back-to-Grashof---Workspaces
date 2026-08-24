@@ -137,11 +137,13 @@ class FamilyAdmissibilityStatus(str, Enum):
 
 class ReseedScope(str, Enum):
     LOCAL = "LOCAL"
+    RETURNED_SET = "RETURNED_SET"
     COMPONENT = "COMPONENT"
 
 
 class ReseedDisposition(str, Enum):
     LOCAL_PASS = "LOCAL_PASS"
+    RETURNED_SET_PASS = "RETURNED_SET_PASS"
     COMPONENT_PASS = "COMPONENT_PASS"
     FAIL = "FAIL"
     UNRESOLVED = "UNRESOLVED"
@@ -731,7 +733,7 @@ class ReseedAttempt:
     symmetric_branch_pointing_distance: float | None
     return_status_match: bool | None
     branch_status_match: bool | None
-    circuit_or_component_match: bool | None
+    returned_symmetric_set_match: bool | None
     scope: ReseedScope
     disposition: ReseedDisposition
     notes: tuple[str, ...] = ()
@@ -749,8 +751,14 @@ class ReseedAttempt:
         return self.return_status_match
 
     @property
-    def component_identity(self) -> bool | None:
-        return self.circuit_or_component_match
+    def circuit_or_component_match(self) -> None:
+        """Legacy compatibility: no independent circuit/component signature exists."""
+        return None
+
+    @property
+    def component_identity(self) -> None:
+        """Reserved for a future independent circuit/component signature."""
+        return None
 
     @property
     def status(self) -> str:
@@ -782,8 +790,10 @@ class ReseedAttempt:
                 "return_status_match": self.return_status_match,
                 "returned_match": self.return_status_match,
                 "branch_status_match": self.branch_status_match,
-                "circuit_or_component_match": self.circuit_or_component_match,
-                "component_identity": self.circuit_or_component_match,
+                "returned_symmetric_set_match": self.returned_symmetric_set_match,
+                "legacy_returned_set_match_signal": self.returned_symmetric_set_match,
+                "circuit_or_component_match": None,
+                "component_identity": None,
                 "scope": self.scope.value,
                 "disposition": self.disposition.value,
                 "status": self.disposition.value,
@@ -801,9 +811,14 @@ class ReseedAudit:
     notes: tuple[str, ...] = ()
     attempts: tuple[ReseedAttempt, ...] = ()
     max_tangent_error: float | None = None
-    all_component_ids_match: bool | None = None
+    all_returned_symmetric_set_matches: bool | None = None
     max_local_seed_q_error: float | None = None
     max_local_seed_pointing_error: float | None = None
+
+    @property
+    def all_component_ids_match(self) -> None:
+        """Legacy compatibility: component IDs are not independently computed."""
+        return None
 
     @property
     def status(self) -> str:
@@ -830,7 +845,8 @@ class ReseedAudit:
                 "max_local_seed_q_error": self.max_local_seed_q_error,
                 "max_local_seed_pointing_error": self.max_local_seed_pointing_error,
                 "max_tangent_error": self.max_tangent_error,
-                "all_component_ids_match": self.all_component_ids_match,
+                "all_returned_symmetric_set_matches": self.all_returned_symmetric_set_matches,
+                "all_component_ids_match": None,
                 "attempts": [item.to_json_dict() for item in self.attempts],
                 "notes": list(self.notes),
             }
@@ -877,6 +893,10 @@ class ChartOverlapAudit:
     claim_scope: str = "multi_chart_declared_domain"
     chart_id_a: str | None = None
     chart_id_b: str | None = None
+    leaf_id_a: str | None = None
+    leaf_id_b: str | None = None
+    responsibility_transition_id: str | None = None
+    transition_sample_count: int = 0
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -892,6 +912,10 @@ class ChartOverlapAudit:
                 "claim_scope": self.claim_scope,
                 "chart_id_a": self.chart_id_a,
                 "chart_id_b": self.chart_id_b,
+                "leaf_id_a": self.leaf_id_a,
+                "leaf_id_b": self.leaf_id_b,
+                "responsibility_transition_id": self.responsibility_transition_id,
+                "transition_sample_count": self.transition_sample_count,
                 "notes": list(self.notes),
             }
         )
@@ -971,6 +995,7 @@ class FamilyIntervalRecord:
     duplicate_groups: tuple[tuple[str, ...], ...] = ()
     critical_values: tuple[float, ...] = ()
     birth_death_merge_events: tuple[str, ...] = ()
+    topology_event_status: str = "NOT_EVALUATED_EXCLUDED_FROM_DECLARED_RESOLUTION_SET_COVER"
     interval_status: IntervalStatus = IntervalStatus.UNSAMPLED
     required: bool = False
     seed_count: int = 0
@@ -996,6 +1021,7 @@ class FamilyIntervalRecord:
                 "duplicate_groups": [list(group) for group in self.duplicate_groups],
                 "critical_values": list(self.critical_values),
                 "birth_death_merge_events": list(self.birth_death_merge_events),
+                "topology_event_status": self.topology_event_status,
                 "interval_status": status,
                 "required": self.required,
                 "seed_count": self.seed_count,

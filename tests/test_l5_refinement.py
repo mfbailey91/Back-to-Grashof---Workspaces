@@ -144,6 +144,53 @@ def test_evaluate_set_on_grid_paints_same_samples() -> None:
     assert metrics.hausdorff.state is MetricState.VALUE
 
 
+def test_complete_sphere_refinement_is_zero_on_non_nested_grids() -> None:
+    fine_grid = build_sphere_grid(1)
+    coarse_grid = build_sphere_grid(0)
+    fine_labels = tuple(CellClass.STRICT_COVERED for _ in fine_grid.faces)
+    coarse_labels = tuple(CellClass.STRICT_COVERED for _ in coarse_grid.faces)
+    fine_dirs = tuple(tuple(float(value) for value in row) for row in fine_grid.barycenters)
+    fine = evaluate_set_on_grid(
+        grid=fine_grid,
+        reference_labels=fine_labels,
+        reconstructed_dirs=fine_dirs,
+        reconstructed_hits=tuple(True for _ in fine_grid.faces),
+    )
+    coarse = evaluate_set_on_grid(
+        grid=coarse_grid,
+        reference_labels=coarse_labels,
+        reconstructed_dirs=fine_dirs,
+    )
+    attached = attach_two_resolution_metrics(fine, coarse)
+    assert fine.hausdorff_rad == 0.0
+    assert coarse.hausdorff_rad == 0.0
+    assert attached.refinement.state is MetricState.VALUE
+    assert attached.refinement_delta == 0.0
+
+
+def test_ambiguous_boundary_hits_do_not_enter_strict_hausdorff() -> None:
+    grid = build_sphere_grid(0)
+    labels = [CellClass.STRICT_UNCOVERED for _ in grid.faces]
+    labels[0] = CellClass.STRICT_COVERED
+    labels[1] = CellClass.AMBIGUOUS_BOUNDARY
+    hits = [False for _ in grid.faces]
+    hits[0] = True
+    hits[1] = True
+    dirs = (
+        tuple(float(value) for value in grid.barycenters[0]),
+        tuple(float(value) for value in grid.barycenters[1]),
+    )
+    metrics = evaluate_set_on_grid(
+        grid=grid,
+        reference_labels=tuple(labels),
+        reconstructed_dirs=dirs,
+        reconstructed_hits=tuple(hits),
+    )
+    assert metrics.missed_covered_fraction == 0.0
+    assert metrics.false_positive_fraction == 0.0
+    assert metrics.hausdorff_rad == 0.0
+
+
 def test_legacy_null_json_is_unevaluable() -> None:
     blob = {
         "strict_covered_count": 1,

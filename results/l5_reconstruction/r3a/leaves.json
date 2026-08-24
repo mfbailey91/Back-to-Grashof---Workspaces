@@ -1,8 +1,286 @@
 {
   "allows_full_campaign_disposition": true,
-  "config_hash": "9674211fb7cb9124da87dfdf630a0b8fff39648da21c63dd190907649fd42f51",
+  "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+  "git": {
+    "dirty_tree": false,
+    "git_commit": "9505a877a489469186afb5fb3a8dfc89bb6a75ad"
+  },
+  "inputs": [
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "manifest.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "52944c587e4136c9492ac081ee5e498df58e674db043d1857eaf1a6d19e848cc",
+      "stage": "manifest"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "d9df19fbeb00a23df9e0b82bac8257df6b9ae2b53381b43a8703597462e87e4b",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "48209a0a9fbeea88dc2b99526ca9d062502c950d22d3646d5dbf42102d60e742",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "db8cf80d2817b8600cafe3e7a4773920ebd4a94ac1e158a7fa2ce9b6647c121a",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "a25516f9524c6c85c090aefeba12e9d00bb4b4f1b879e4e1c1043e5f5c58cad2",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "c92f52d73e9ebbe1a32309ea12b4287f0833bc7ab98d38d9ddcc8a419ce08f00",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "386ba37969b0aff46b45c04118e4bee463584d409e4eeb55c26e8ccd5cea346e",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "effeb501cd3670806b64ab6669c528d0717c6746aadddc3c5759ace1b388a546",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "381d8370f9e518492241b528e94094c782adb31eeb0297e8e536938ecaf04d40",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "9befb09fdb6af0d00756cb6e7d01fc0468112ab36a2a85cf5880488a4f62d2ff",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "3387974131bfd75b4e9d97dc29b13050de81bf6aead386c49d3600702803caf4",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "eb3981ae1ba8ecc9f6db0a09e7846c5ba1ebf687e22bb7500df8d4eafec6a096",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "2d8212c22832a9107fd79609ea0f9c82c7a96007aa3a2e6c8d9d033ac6580d35",
+      "stage": "truth"
+    }
+  ],
   "limitations": [],
   "mode": "full",
+  "outputs": [
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "7b80afa1d8e5891298e0392c553585cd579e6477fe76cbabf7520be43de8c385",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "df3c59252fb04f38c84c9db688df84061ea7c6972108ced268b2dd67bbb60d26",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "1eea8aad354b4039a13c44f2150f68a9aeae3179bb17577564ff63350a05212a",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "fa8abdb8329aff5c331a0ddf84643fb76e3d464d8964107233df118378968edd",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "7e80c17c6ea2184cb1339aedc1b8c3f99cbd470a6d0893f1736db5db60dbd699",
+      "stage": "leaves"
+    }
+  ],
   "probe_ids": [
     "P1_DEEP_COMPLETE",
     "P2_INNER_COMPLETE",
@@ -33,5 +311,6 @@
     }
   ],
   "program_id": "R3A_L5_FIVE_POINT_NATURAL_LEAF_RECONSTRUCTION",
+  "schema_version": "r3a_l5_positive_control_v1",
   "stage": "leaves"
 }

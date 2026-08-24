@@ -184,7 +184,13 @@ def test_open_reseed_can_local_pass_but_not_component_pass() -> None:
         original_branch_status=status,
     )
     assert audit.disposition is ReseedDisposition.LOCAL_PASS
+    assert audit.disposition is not ReseedDisposition.RETURNED_SET_PASS
     assert audit.disposition is not ReseedDisposition.COMPONENT_PASS
-    assert all(item.circuit_or_component_match is not True for item in audit.attempts)
+    assert all(item.returned_symmetric_set_match is not True for item in audit.attempts)
+    assert all(item.component_identity is None for item in audit.attempts)
     assert all(item.local_seed_q_error is not None for item in audit.attempts)
     assert any(item.symmetric_branch_q_distance is not None for item in audit.attempts)
+    payload = audit.attempts[0].to_json_dict()
+    assert "returned_symmetric_set_match" in payload
+    assert payload["circuit_or_component_match"] is None
+    assert payload["component_identity"] is None

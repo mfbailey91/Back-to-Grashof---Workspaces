@@ -632,12 +632,12 @@ virtual-crank atlas remains downstream of reconstruction provenance.
 
 ## ADR-051 — R3A acceptance metrics distinguish not-applicable from unevaluable evidence
 
-<!-- R3A_H7_H10_FOLLOWUP_2026_08_18 DRAFT until H10 closeout -->
+<!-- R3A_H12_2026_08_23 recorded frozen full closeout; not a general 5R theorem -->
 
-**Status:** DRAFT (H7–H10 follow-up; not a reconstruction closeout)
+**Status:** RECORDED (H12 frozen full-mode closeout; not a reconstruction acceptance and not a general 5R theorem)
 
 **Decision:** A missing numerical value is not sufficient to determine pass/fail. R3A comparison metrics carry explicit `VALUE`, `NOT_APPLICABLE`, or `UNEVALUABLE` state. Zero-denominator metrics such as false-positive fraction on an all-covered reference are `NOT_APPLICABLE`; missing refinement is `UNEVALUABLE`. Full-campaign acceptance requires a computed refinement comparison, leaf-scoped family admissibility, declared chart responsibility, resolved required parameter intervals, and content-addressed artifacts.
 
 **Reason:** Treating every `None` as failure makes valid complete coverage impossible, while treating every `None` as pass fabricates evidence. Explicit applicability preserves conservative gates without making the intended theorem untestable.
 
-**Consequence:** R3A-H0–H6 artifacts remain valid historical diagnostics but are re-evaluated under H7–H10 before any controlled cover is accepted. R3B and L6 remain held. Content-addressed stage hashes and `CampaignBlocker` localization are implemented. This ADR stays draft until a frozen-config full rerun records the first failing scientific column or a declared-resolution controlled cover.
+**Consequence:** H11 package scope, hashes, producer provenance, and chart/interval authority remain valid. H12 grid-local strict Hausdorff and boundary exclusion withdrew the H11E `DIRECT_REFERENCE_BLOCKED` interpretation as comparison-metric dependent. The producer `9505a87` five-probe `--mode full` package is `package_kind=full_closeout` with `semantic_revalidation=true`, `campaign_blocker=STITCHING_CONTROL_BLOCKED`, and `accepted_reconstruction=false`. All five probes have `direct_complete=true` with zero fine/coarse Hausdorff and zero refinement. Source `h=c` reconstruction fails with unresolved `c` intervals; the natural column is not interpreted. L5 remains `parent_incomplete`. R3B and L6 remain held. This is not a complete parent, a foliation, or a general 5R factorization.

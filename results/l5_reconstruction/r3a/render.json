@@ -1,54 +1,588 @@
 {
   "accepted_reconstruction": false,
-  "config_hash": "9674211fb7cb9124da87dfdf630a0b8fff39648da21c63dd190907649fd42f51",
+  "campaign_blocker": "STITCHING_CONTROL_BLOCKED",
+  "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
   "figures": [
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/arm_geometry.png",
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/direct_oracle_vs_ik.png",
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/source_control_curves.png",
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/natural_leaf_components.png",
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/accepted_vs_excluded_leaves.png",
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/three_way_cell_comparison.png",
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/selected_leaf_overlay.png",
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/selected_leaf_residuals.png",
-    "results/l5_reconstruction/r3a/P1_DEEP_COMPLETE/figures/family_parameter_coverage.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/arm_geometry.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/direct_oracle_vs_ik.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/source_control_curves.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/natural_leaf_components.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/accepted_vs_excluded_leaves.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/three_way_cell_comparison.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/selected_leaf_overlay.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/selected_leaf_residuals.png",
-    "results/l5_reconstruction/r3a/P2_INNER_COMPLETE/figures/family_parameter_coverage.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/arm_geometry.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/direct_oracle_vs_ik.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/source_control_curves.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/natural_leaf_components.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/accepted_vs_excluded_leaves.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/three_way_cell_comparison.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/selected_leaf_overlay.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/selected_leaf_residuals.png",
-    "results/l5_reconstruction/r3a/P3_INNER_INCOMPLETE/figures/family_parameter_coverage.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/arm_geometry.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/direct_oracle_vs_ik.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/source_control_curves.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/natural_leaf_components.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/accepted_vs_excluded_leaves.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/three_way_cell_comparison.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/selected_leaf_overlay.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/selected_leaf_residuals.png",
-    "results/l5_reconstruction/r3a/P4_OUTER_COMPLETE/figures/family_parameter_coverage.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/arm_geometry.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/direct_oracle_vs_ik.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/source_control_curves.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/natural_leaf_components.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/accepted_vs_excluded_leaves.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/three_way_cell_comparison.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/selected_leaf_overlay.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/selected_leaf_residuals.png",
-    "results/l5_reconstruction/r3a/P5_OUTER_INCOMPLETE/figures/family_parameter_coverage.png"
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/arm_geometry.png",
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/direct_oracle_vs_ik.png",
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/source_control_curves.png",
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/natural_leaf_components.png",
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/accepted_vs_excluded_leaves.png",
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/three_way_cell_comparison.png",
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/selected_leaf_overlay.png",
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/selected_leaf_residuals.png",
+    "outputs/r3a_full_raw_h12/P1_DEEP_COMPLETE/figures/family_parameter_coverage.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/arm_geometry.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/direct_oracle_vs_ik.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/source_control_curves.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/natural_leaf_components.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/accepted_vs_excluded_leaves.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/three_way_cell_comparison.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/selected_leaf_overlay.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/selected_leaf_residuals.png",
+    "outputs/r3a_full_raw_h12/P2_INNER_COMPLETE/figures/family_parameter_coverage.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/arm_geometry.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/direct_oracle_vs_ik.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/source_control_curves.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/natural_leaf_components.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/accepted_vs_excluded_leaves.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/three_way_cell_comparison.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/selected_leaf_overlay.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/selected_leaf_residuals.png",
+    "outputs/r3a_full_raw_h12/P3_INNER_INCOMPLETE/figures/family_parameter_coverage.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/arm_geometry.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/direct_oracle_vs_ik.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/source_control_curves.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/natural_leaf_components.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/accepted_vs_excluded_leaves.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/three_way_cell_comparison.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/selected_leaf_overlay.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/selected_leaf_residuals.png",
+    "outputs/r3a_full_raw_h12/P4_OUTER_COMPLETE/figures/family_parameter_coverage.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/arm_geometry.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/direct_oracle_vs_ik.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/source_control_curves.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/natural_leaf_components.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/accepted_vs_excluded_leaves.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/three_way_cell_comparison.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/selected_leaf_overlay.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/selected_leaf_residuals.png",
+    "outputs/r3a_full_raw_h12/P5_OUTER_INCOMPLETE/figures/family_parameter_coverage.png"
+  ],
+  "git": {
+    "dirty_tree": false,
+    "git_commit": "9505a877a489469186afb5fb3a8dfc89bb6a75ad"
+  },
+  "inputs": [
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "manifest.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "52944c587e4136c9492ac081ee5e498df58e674db043d1857eaf1a6d19e848cc",
+      "stage": "manifest"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "d9df19fbeb00a23df9e0b82bac8257df6b9ae2b53381b43a8703597462e87e4b",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "48209a0a9fbeea88dc2b99526ca9d062502c950d22d3646d5dbf42102d60e742",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "db8cf80d2817b8600cafe3e7a4773920ebd4a94ac1e158a7fa2ce9b6647c121a",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "a25516f9524c6c85c090aefeba12e9d00bb4b4f1b879e4e1c1043e5f5c58cad2",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "c92f52d73e9ebbe1a32309ea12b4287f0833bc7ab98d38d9ddcc8a419ce08f00",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "386ba37969b0aff46b45c04118e4bee463584d409e4eeb55c26e8ccd5cea346e",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "effeb501cd3670806b64ab6669c528d0717c6746aadddc3c5759ace1b388a546",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "381d8370f9e518492241b528e94094c782adb31eeb0297e8e536938ecaf04d40",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "9befb09fdb6af0d00756cb6e7d01fc0468112ab36a2a85cf5880488a4f62d2ff",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "3387974131bfd75b4e9d97dc29b13050de81bf6aead386c49d3600702803caf4",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "eb3981ae1ba8ecc9f6db0a09e7846c5ba1ebf687e22bb7500df8d4eafec6a096",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/direct_truth.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "2d8212c22832a9107fd79609ea0f9c82c7a96007aa3a2e6c8d9d033ac6580d35",
+      "stage": "truth"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "source_control.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "6e77651bff7972e1dff88f950661a073eb4c8d1fc827c7d32f036dc07c05c136",
+      "stage": "source-control"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/source_control.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "47480923329b6ded294836111c69d585ac9092d58f02a98f24903bc79ee43ee0",
+      "stage": "source-control"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/source_control.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "dfa765df4e7da39da9349739b2fb0a9f8db8e1f5b860f164b0aca9d151854147",
+      "stage": "source-control"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/source_control.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "4cb9edbe0b56f439e275975ee19fa73056cb888c52bcf5b6e239030c21407a87",
+      "stage": "source-control"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/source_control.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "f63c55712eab1b66d122514701130ec7e02868f1c78cc7d818f535f54f5ece09",
+      "stage": "source-control"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/source_control.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "5bcc0ab8aecc6aeb384733c0eb93385754fdb0ac28277bfb3d7a1f41e691d0b8",
+      "stage": "source-control"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "leaves.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "fe49790f14dae3ad4a27f791af0b4c2279c027f2a6c31f64ccbb48874f27da2d",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "7b80afa1d8e5891298e0392c553585cd579e6477fe76cbabf7520be43de8c385",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "df3c59252fb04f38c84c9db688df84061ea7c6972108ced268b2dd67bbb60d26",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "1eea8aad354b4039a13c44f2150f68a9aeae3179bb17577564ff63350a05212a",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "fa8abdb8329aff5c331a0ddf84643fb76e3d464d8964107233df118378968edd",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/natural_family.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "7e80c17c6ea2184cb1339aedc1b8c3f99cbd470a6d0893f1736db5db60dbd699",
+      "stage": "leaves"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "campaign.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "0092dae6f3bc7cfa09e572a1a01f935a46cd0af18657ee9f07ed9eaf5baab0de",
+      "stage": "compare"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "compare.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "0092dae6f3bc7cfa09e572a1a01f935a46cd0af18657ee9f07ed9eaf5baab0de",
+      "stage": "compare"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/comparison.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "41fe250ccc9ab123e5dfbdcfb6b5cf250541122eb1fc2e7e49480a49776a51a6",
+      "stage": "compare"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/comparison.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "d01103f4c5bbcf8505522f1b61d7637ad558374652afe9f965178084528ac02e",
+      "stage": "compare"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/comparison.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "a66cf2ab162af2efc08e29998297e0fdd96a27120ca6ecbaef59af3aea12cba5",
+      "stage": "compare"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/comparison.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "a4714cb2e04398cd93dca7532aa6b758e8fb2df21b3769e80027e189381c53b2",
+      "stage": "compare"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/comparison.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "a172f271b31b3da919fb9a84ff79da9c011273ea7156d2bf61d017f1ddd3e8d1",
+      "stage": "compare"
+    }
   ],
   "mode": "full",
+  "outputs": [
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "index.html",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "5d7da6c1bcfb93f62fabc600b84511a685ba4102dceddea983c29434685dd38e",
+      "stage": "render"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "five_point_summary.png",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "38e2bf6721ce54f4f18c6c89a01b85160b736c3068fff2c2a8ed9c8d4621751e",
+      "stage": "render"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "index.html",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "5d7da6c1bcfb93f62fabc600b84511a685ba4102dceddea983c29434685dd38e",
+      "stage": "render"
+    }
+  ],
   "probe_ids": [
     "P1_DEEP_COMPLETE",
     "P2_INNER_COMPLETE",
@@ -57,5 +591,6 @@
     "P5_OUTER_INCOMPLETE"
   ],
   "program_id": "R3A_L5_FIVE_POINT_NATURAL_LEAF_RECONSTRUCTION",
+  "schema_version": "r3a_l5_positive_control_v1",
   "stage": "render"
 }

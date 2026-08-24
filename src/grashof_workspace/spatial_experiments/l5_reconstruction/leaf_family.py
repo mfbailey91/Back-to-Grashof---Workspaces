@@ -48,7 +48,12 @@ from .models import (
 from .positive_control import PositiveControlArm, build_positive_control_arm
 from .source_control import symmetric_q_distance
 from .sphere_grid import pointing_geodesic
-from .spherical_chart import SphericalClosureChart, canonical_chart, charts_from_config
+from .spherical_chart import (
+    SphericalClosureChart,
+    canonical_chart,
+    charts_from_config,
+    charts_in_overlap_band,
+)
 from .uuru_leaf import (
     ClosedUURULeafProblem,
     child_tangent,
@@ -150,7 +155,10 @@ def classify_reseed_attempt(
     q_tol: float,
     p_tol: float,
 ) -> tuple[ReseedScope, ReseedDisposition, bool | None, bool | None, bool | None, tuple[str, ...]]:
-    """Local seed consistency vs complete-component identity."""
+    """Local consistency versus a returned symmetric sampled-component match.
+
+    The final boolean is not an independent circuit or assembly-mode identifier.
+    """
 
     notes: list[str] = []
     returned_match = None if original_returned is None else reseeded_returned == original_returned
@@ -223,7 +231,7 @@ def classify_reseed_attempt(
     open_or_unknown = original_returned is not True or not reseeded_returned
     symmetric_q_ok = symmetric_q is not None and symmetric_q <= q_tol
     symmetric_p_ok = symmetric_p is not None and symmetric_p <= p_tol
-    identity = bool(
+    returned_set_match = bool(
         returned_match is True
         and branch_match is True
         and original_returned is True
@@ -232,7 +240,7 @@ def classify_reseed_attempt(
         and symmetric_p_ok
     )
     if open_or_unknown:
-        notes.append("open or unknown return; component identity forbidden")
+        notes.append("open or unknown return; returned set match cannot support component scope")
         return (
             ReseedScope.LOCAL,
             ReseedDisposition.LOCAL_PASS,
@@ -241,8 +249,8 @@ def classify_reseed_attempt(
             False,
             tuple(notes),
         )
-    if not (symmetric_q_ok and symmetric_p_ok and returned_match is True and branch_match is True and identity):
-        notes.append("local pass without symmetric branch-set identity")
+    if not returned_set_match:
+        notes.append("local pass without a returned symmetric branch-set match")
         return (
             ReseedScope.LOCAL,
             ReseedDisposition.LOCAL_PASS,
@@ -251,10 +259,10 @@ def classify_reseed_attempt(
             False,
             tuple(notes),
         )
-    notes.append("symmetric branch-set and circuit identity")
+    notes.append("returned symmetric branch-set match at the declared continuation budget")
     return (
-        ReseedScope.COMPONENT,
-        ReseedDisposition.COMPONENT_PASS,
+        ReseedScope.RETURNED_SET,
+        ReseedDisposition.RETURNED_SET_PASS,
         returned_match,
         branch_match,
         True,
@@ -272,6 +280,11 @@ def aggregate_reseed_disposition(attempts: tuple[ReseedAttempt, ...] | list[Rese
         return ReseedDisposition.UNRESOLVED
     if statuses == {ReseedDisposition.COMPONENT_PASS}:
         return ReseedDisposition.COMPONENT_PASS
+    if statuses <= {
+        ReseedDisposition.RETURNED_SET_PASS,
+        ReseedDisposition.COMPONENT_PASS,
+    }:
+        return ReseedDisposition.RETURNED_SET_PASS
     return ReseedDisposition.LOCAL_PASS
 
 
@@ -306,7 +319,7 @@ def audit_reseeded_component(
             notes=("fewer than three samples; reseed cannot pass",),
             attempts=(),
             max_tangent_error=None,
-            all_component_ids_match=None,
+            all_returned_symmetric_set_matches=None,
         )
     chosen = choose_arclength_samples(original_samples, reseed_count)
     labels = ("start", "mid", "end")
@@ -341,7 +354,7 @@ def audit_reseeded_component(
                     symmetric_branch_pointing_distance=None,
                     return_status_match=returned_match,
                     branch_status_match=branch_match,
-                    circuit_or_component_match=identity,
+                    returned_symmetric_set_match=identity,
                     scope=scope,
                     disposition=disposition,
                     notes=extra,
@@ -384,7 +397,7 @@ def audit_reseeded_component(
                     symmetric_branch_pointing_distance=None,
                     return_status_match=returned_match,
                     branch_status_match=branch_match,
-                    circuit_or_component_match=identity,
+                    returned_symmetric_set_match=identity,
                     scope=scope,
                     disposition=disposition,
                     notes=(*notes, *extra),
@@ -446,7 +459,7 @@ def audit_reseeded_component(
                 symmetric_branch_pointing_distance=p_sym,
                 return_status_match=returned_match,
                 branch_status_match=branch_match,
-                circuit_or_component_match=identity,
+                returned_symmetric_set_match=identity,
                 scope=scope,
                 disposition=disposition,
                 notes=(*notes, *extra),
@@ -462,7 +475,7 @@ def audit_reseeded_component(
     t_vals = [item.local_tangent_error for item in attempts if item.local_tangent_error is not None]
     seed_q_vals = [item.local_seed_q_error for item in attempts if item.local_seed_q_error is not None]
     seed_p_vals = [item.local_seed_pointing_error for item in attempts if item.local_seed_pointing_error is not None]
-    identities = [item.circuit_or_component_match for item in attempts]
+    set_matches = [item.returned_symmetric_set_match for item in attempts]
     return ReseedAudit(
         disposition=agg,
         n_reseeds=len(attempts),
@@ -473,7 +486,7 @@ def audit_reseeded_component(
         ),
         attempts=tuple(attempts),
         max_tangent_error=None if not t_vals else max(t_vals),
-        all_component_ids_match=all(identities) if identities else None,
+        all_returned_symmetric_set_matches=all(set_matches) if set_matches else None,
         max_local_seed_q_error=None if not seed_q_vals else max(seed_q_vals),
         max_local_seed_pointing_error=None if not seed_p_vals else max(seed_p_vals),
     )
@@ -750,6 +763,9 @@ def audit_all_neighbors(
     return tuple(audits)
 
 
+ChartPair = tuple[str, str]
+
+
 def audit_chart_overlap(
     arm: PositiveControlArm,
     chart_a: SphericalClosureChart,
@@ -766,15 +782,22 @@ def audit_chart_overlap(
     pointing_tol: float,
     lambda_tol: float,
 ) -> ChartOverlapAudit:
-    notes = ["source-Q correspondence first; task-space overlap is not compatibility"]
+    notes = [
+        "source-Q correspondence first; task-space overlap is not compatibility",
+        "no independent circuit/component signature is claimed",
+    ]
     if not qs_a or not qs_b:
         return ChartOverlapAudit(status="UNRESOLVED", notes=("empty source-Q set",))
     q_dist = symmetric_q_distance(qs_a, qs_b)
     source_q = bool(q_dist <= q_tol)
-    p_dist = max(
-        directed_pointing_distance(pointings_a, pointings_b),
-        directed_pointing_distance(pointings_b, pointings_a),
-    ) if pointings_a and pointings_b else float("inf")
+    p_dist = (
+        max(
+            directed_pointing_distance(pointings_a, pointings_b),
+            directed_pointing_distance(pointings_b, pointings_a),
+        )
+        if pointings_a and pointings_b
+        else float("inf")
+    )
     pointing_ok = bool(p_dist <= pointing_tol) if pointings_a and pointings_b else None
     if not source_q:
         notes.append("disjoint source-Q; pointing overlap does not certify chart copies")
@@ -784,38 +807,42 @@ def audit_chart_overlap(
             recovered_rotation_correspondence=None,
             chart_coordinate_transform=None,
             family_parameter_correspondence=None,
-            component_identity=False,
+            component_identity=None,
             pointing_set_correspondence=pointing_ok,
             notes=tuple(notes),
         )
+
     rotation_errors: list[float] = []
     transform_errors: list[float] = []
     lambda_ok = True
     singular = False
-    first = True
-    for q in qs_a:
-        state = arm.chain.evaluate(q)
-        r_src = np.asarray(state.R, dtype=float)
-        ca = chart_a.decompose(r_src)
-        cb = chart_b.decompose(r_src)
-        if ca.singular or cb.singular:
-            singular = True
-            continue
-        ra = chart_a.compose(ca.alpha, ca.beta, ca.lam)
-        rb = chart_b.compose(cb.alpha, cb.beta, cb.lam)
-        rotation_errors.append(max(_rotation_geodesic(r_src, ra), _rotation_geodesic(r_src, rb)))
-        transform_errors.append(_rotation_geodesic(ra, rb))
-        if _lambda_gap(ca.lam, ca.alternatives, lambda_a) > lambda_tol:
-            lambda_ok = False
-        if first:
-            if _lambda_gap(cb.lam, cb.alternatives, lambda_b) > lambda_tol:
+    for source_qs, owner_chart, owner_lambda in (
+        (qs_a, chart_a, lambda_a),
+        (qs_b, chart_b, lambda_b),
+    ):
+        for q in source_qs:
+            state = arm.chain.evaluate(q)
+            r_src = np.asarray(state.R, dtype=float)
+            ca = chart_a.decompose(r_src)
+            cb = chart_b.decompose(r_src)
+            if ca.singular or cb.singular:
+                singular = True
+                continue
+            ra = chart_a.compose(ca.alpha, ca.beta, ca.lam)
+            rb = chart_b.compose(cb.alpha, cb.beta, cb.lam)
+            rotation_errors.append(
+                max(_rotation_geodesic(r_src, ra), _rotation_geodesic(r_src, rb))
+            )
+            transform_errors.append(_rotation_geodesic(ra, rb))
+            owner_coords = ca if owner_chart is chart_a else cb
+            if _lambda_gap(owner_coords.lam, owner_coords.alternatives, owner_lambda) > lambda_tol:
                 lambda_ok = False
-            first = False
+
     if not rotation_errors:
         return ChartOverlapAudit(
             status="UNRESOLVED",
             source_q_correspondence=True,
-            component_identity=True,
+            component_identity=None,
             pointing_set_correspondence=pointing_ok,
             notes=(*notes, "chart-singular overlap samples"),
         )
@@ -835,10 +862,47 @@ def audit_chart_overlap(
         recovered_rotation_correspondence=rotation_ok,
         chart_coordinate_transform=transform_ok,
         family_parameter_correspondence=lambda_ok,
-        component_identity=True,
+        component_identity=None,
         pointing_set_correspondence=pointing_ok,
         notes=tuple(notes),
     )
+
+
+def _ordered_chart_pair(chart_id_a: str, chart_id_b: str, policy: ChartAtlasPolicy) -> ChartPair:
+    rank = {chart_id: i for i, chart_id in enumerate(policy.chart_ids)}
+    if rank[chart_id_a] <= rank[chart_id_b]:
+        return chart_id_a, chart_id_b
+    return chart_id_b, chart_id_a
+
+
+def required_chart_transition_pairs(
+    arm: PositiveControlArm,
+    charts: tuple[SphericalClosureChart, ...],
+    qs: tuple[tuple[float, ...], ...],
+    *,
+    policy: ChartAtlasPolicy,
+) -> dict[ChartPair, tuple[tuple[float, ...], ...]]:
+    """Responsibility transitions declared by the configured overlap band."""
+
+    if policy.claim_scope != "multi_chart_declared_domain":
+        return {}
+    transitions: dict[ChartPair, list[tuple[float, ...]]] = {}
+    for q in qs:
+        rotation = arm.chain.evaluate(q).R
+        canonical_id = canonical_chart(charts, rotation, policy=policy)
+        if canonical_id is None:
+            continue
+        for other_id in charts_in_overlap_band(
+            charts,
+            rotation,
+            policy=policy,
+            canonical_id=canonical_id,
+        ):
+            if other_id == canonical_id:
+                continue
+            pair = _ordered_chart_pair(canonical_id, other_id, policy)
+            transitions.setdefault(pair, []).append(tuple(float(value) for value in q))
+    return {pair: tuple(samples) for pair, samples in transitions.items()}
 
 
 def _stamp_chart_overlap(
@@ -848,27 +912,37 @@ def _stamp_chart_overlap(
     chart_id_b: str | None,
     required: bool,
     claim_scope: str,
+    leaf_id_a: str | None = None,
+    leaf_id_b: str | None = None,
+    responsibility_transition_id: str | None = None,
+    transition_sample_count: int = 0,
 ) -> ChartOverlapAudit:
     return replace(
         audit,
         chart_id_a=chart_id_a,
         chart_id_b=chart_id_b,
+        leaf_id_a=leaf_id_a,
+        leaf_id_b=leaf_id_b,
         required=required,
         claim_scope=claim_scope,
+        responsibility_transition_id=responsibility_transition_id,
+        transition_sample_count=transition_sample_count,
     )
 
 
-def summarize_chart_overlap(audits: tuple[ChartOverlapAudit, ...] | list[ChartOverlapAudit]) -> ChartOverlapAudit:
+def summarize_chart_overlap(
+    audits: tuple[ChartOverlapAudit, ...] | list[ChartOverlapAudit],
+) -> ChartOverlapAudit:
     items = tuple(audits)
     required = tuple(item for item in items if item.required)
     if not required:
         if items:
             return items[0]
         return ChartOverlapAudit(
-            status="UNRESOLVED",
+            status="NOT_APPLICABLE",
             required=False,
             claim_scope="declared_chart_domain_only",
-            notes=("no required chart pairs",),
+            notes=("no required chart transitions",),
         )
     incompatible = tuple(item for item in required if item.status == "INCOMPATIBLE")
     if incompatible:
@@ -882,10 +956,54 @@ def summarize_chart_overlap(audits: tuple[ChartOverlapAudit, ...] | list[ChartOv
     return required[0]
 
 
+def _nearest_work_to_source_q(
+    works: tuple[LeafWorkRecord, ...] | list[LeafWorkRecord],
+    q: tuple[float, ...],
+) -> LeafWorkRecord | None:
+    q_array = np.asarray(q, dtype=float)
+    periodic = (True,) * q_array.size
+    best: LeafWorkRecord | None = None
+    best_distance = float("inf")
+    for work in works:
+        for sample in work.certificate.samples:
+            distance = float(
+                ambient_distance(
+                    np.asarray(sample.q_source, dtype=float),
+                    q_array,
+                    periodic,
+                )
+            )
+            if distance < best_distance:
+                best_distance = distance
+                best = work
+    return best
+
+
+def _transition_work_pairs(
+    group_a: tuple[LeafWorkRecord, ...] | list[LeafWorkRecord],
+    group_b: tuple[LeafWorkRecord, ...] | list[LeafWorkRecord],
+    transition_qs: tuple[tuple[float, ...], ...],
+) -> tuple[tuple[LeafWorkRecord, LeafWorkRecord, int], ...]:
+    matched: dict[tuple[str, str], tuple[LeafWorkRecord, LeafWorkRecord, int]] = {}
+    for q in transition_qs:
+        work_a = _nearest_work_to_source_q(group_a, q)
+        work_b = _nearest_work_to_source_q(group_b, q)
+        if work_a is None or work_b is None:
+            continue
+        key = (work_a.certificate.spec.leaf_id, work_b.certificate.spec.leaf_id)
+        prior = matched.get(key)
+        count = 1 if prior is None else prior[2] + 1
+        matched[key] = (work_a, work_b, count)
+    return tuple(matched[key] for key in sorted(matched))
+
+
 def _family_chart_overlap(
     arm: PositiveControlArm,
+    charts: tuple[SphericalClosureChart, ...],
     works: tuple[LeafWorkRecord, ...],
     *,
+    required_transitions: Mapping[ChartPair, tuple[tuple[float, ...], ...]],
+    policy: ChartAtlasPolicy,
     q_tol: float,
     rotation_tol: float,
     pointing_tol: float,
@@ -894,56 +1012,87 @@ def _family_chart_overlap(
     by_chart: dict[str, list[LeafWorkRecord]] = {}
     for work in works:
         by_chart.setdefault(work.chart.chart_id, []).append(work)
-    chart_ids = list(by_chart)
-    if len(chart_ids) < 2:
-        return (
-            ChartOverlapAudit(
-                status="UNRESOLVED",
-                required=False,
-                claim_scope="declared_chart_domain_only",
-                notes=("fewer than two charts",),
-            ),
-        )
+    chart_by_id = {chart.chart_id: chart for chart in charts}
     audits: list[ChartOverlapAudit] = []
+    chart_ids = policy.chart_ids
     for i, id_a in enumerate(chart_ids):
         for id_b in chart_ids[i + 1 :]:
-            group_a = by_chart[id_a]
-            group_b = by_chart[id_b]
-            qs_a = tuple(sample.q_source for work in group_a for sample in work.certificate.samples)
-            qs_b = tuple(sample.q_source for work in group_b for sample in work.certificate.samples)
-            p_a = tuple(sample.pointing for work in group_a for sample in work.certificate.samples)
-            p_b = tuple(sample.pointing for work in group_b for sample in work.certificate.samples)
-            raw = audit_chart_overlap(
-                arm,
-                group_a[0].chart,
-                group_b[0].chart,
-                qs_a,
-                qs_b,
-                p_a,
-                p_b,
-                lambda_a=group_a[0].lambda_fixed,
-                lambda_b=group_b[0].lambda_fixed,
-                q_tol=q_tol,
-                rotation_tol=rotation_tol,
-                pointing_tol=pointing_tol,
-                lambda_tol=lambda_tol,
-            )
-            audits.append(
-                _stamp_chart_overlap(
-                    raw,
-                    chart_id_a=id_a,
-                    chart_id_b=id_b,
-                    required=True,
-                    claim_scope="multi_chart_declared_domain",
+            pair = _ordered_chart_pair(id_a, id_b, policy)
+            transition_qs = required_transitions.get(pair, ())
+            transition_id = f"{pair[0]}<->{pair[1]}"
+            if not transition_qs:
+                audits.append(
+                    ChartOverlapAudit(
+                        status="NOT_APPLICABLE",
+                        required=False,
+                        claim_scope=policy.claim_scope,
+                        chart_id_a=pair[0],
+                        chart_id_b=pair[1],
+                        responsibility_transition_id=transition_id,
+                        transition_sample_count=0,
+                        notes=("chart pair is outside the declared responsibility overlap band",),
+                    )
                 )
-            )
+                continue
+
+            group_a = by_chart.get(pair[0], [])
+            group_b = by_chart.get(pair[1], [])
+            matched = _transition_work_pairs(group_a, group_b, transition_qs)
+            if not matched:
+                audits.append(
+                    ChartOverlapAudit(
+                        status="UNRESOLVED",
+                        required=True,
+                        claim_scope=policy.claim_scope,
+                        chart_id_a=pair[0],
+                        chart_id_b=pair[1],
+                        responsibility_transition_id=transition_id,
+                        transition_sample_count=len(transition_qs),
+                        notes=("required chart transition has no matched leaf/component pair",),
+                    )
+                )
+                continue
+
+            for work_a, work_b, transition_count in matched:
+                qs_a = tuple(sample.q_source for sample in work_a.certificate.samples)
+                qs_b = tuple(sample.q_source for sample in work_b.certificate.samples)
+                p_a = tuple(sample.pointing for sample in work_a.certificate.samples)
+                p_b = tuple(sample.pointing for sample in work_b.certificate.samples)
+                raw = audit_chart_overlap(
+                    arm,
+                    chart_by_id[pair[0]],
+                    chart_by_id[pair[1]],
+                    qs_a,
+                    qs_b,
+                    p_a,
+                    p_b,
+                    lambda_a=work_a.lambda_fixed,
+                    lambda_b=work_b.lambda_fixed,
+                    q_tol=q_tol,
+                    rotation_tol=rotation_tol,
+                    pointing_tol=pointing_tol,
+                    lambda_tol=lambda_tol,
+                )
+                audits.append(
+                    _stamp_chart_overlap(
+                        raw,
+                        chart_id_a=pair[0],
+                        chart_id_b=pair[1],
+                        leaf_id_a=work_a.certificate.spec.leaf_id,
+                        leaf_id_b=work_b.certificate.spec.leaf_id,
+                        required=True,
+                        claim_scope=policy.claim_scope,
+                        responsibility_transition_id=transition_id,
+                        transition_sample_count=transition_count,
+                    )
+                )
     if not audits:
         return (
             ChartOverlapAudit(
-                status="UNRESOLVED",
+                status="NOT_APPLICABLE",
                 required=False,
-                claim_scope="declared_chart_domain_only",
-                notes=("no cross-chart pairs",),
+                claim_scope=policy.claim_scope,
+                notes=("fewer than two configured charts",),
             ),
         )
     return tuple(audits)
@@ -966,11 +1115,17 @@ def chart_audits_by_leaf(
 ) -> dict[str, list[ChartOverlapAudit]]:
     out: dict[str, list[ChartOverlapAudit]] = {leaf.spec.leaf_id: [] for leaf in leaves}
     for leaf in leaves:
+        leaf_id = leaf.spec.leaf_id
         chart_id = leaf.spec.chart_id
         for audit in audits:
-            ids = {audit.chart_id_a, audit.chart_id_b} - {None}
-            if not ids or chart_id in ids:
-                out[leaf.spec.leaf_id].append(audit)
+            specific_leaf_ids = {audit.leaf_id_a, audit.leaf_id_b} - {None}
+            if specific_leaf_ids:
+                if leaf_id in specific_leaf_ids:
+                    out[leaf_id].append(audit)
+                continue
+            chart_ids = {audit.chart_id_a, audit.chart_id_b} - {None}
+            if not chart_ids or chart_id in chart_ids:
+                out[leaf_id].append(audit)
     return out
 
 
@@ -996,7 +1151,10 @@ def recompute_family_acceptance(
         incident_neighbors = neighbors.get(leaf_id, [])
         incident_charts = charts.get(leaf_id, [])
         reseed_disp = None if leaf.reseed is None else leaf.reseed.disposition
-        reseed_ok = reseed_disp is ReseedDisposition.COMPONENT_PASS
+        reseed_ok = reseed_disp in {
+            ReseedDisposition.RETURNED_SET_PASS,
+            ReseedDisposition.COMPONENT_PASS,
+        }
         neighbor_fail = any(item.status == "FAIL" for item in incident_neighbors)
         neighbor_ok = bool(incident_neighbors) and all(item.status == "PASS" for item in incident_neighbors)
         required_charts = [item for item in incident_charts if item.required]
@@ -1014,7 +1172,7 @@ def recompute_family_acceptance(
             (item for item in incident_neighbors if item.status == "FAIL"),
             next(iter(incident_neighbors), None),
         )
-        summary = summarize_chart_overlap(incident_charts if incident_charts else overlap_audits)
+        summary = summarize_chart_overlap(incident_charts)
         updated.append(
             replace(
                 leaf,
@@ -1057,6 +1215,8 @@ def classify_interval_status(
     budget_exhausted: bool,
     critical: tuple[float, ...],
 ) -> IntervalStatus:
+    if required and budget_exhausted:
+        return IntervalStatus.UNRESOLVED
     if members:
         if any(leaf.accepted_for_reconstruction for leaf in members):
             return IntervalStatus.SAMPLED_ADMISSIBLE
@@ -1067,8 +1227,6 @@ def classify_interval_status(
         return IntervalStatus.SAMPLED_LOCAL
     if not required:
         return IntervalStatus.NOT_REQUIRED
-    if budget_exhausted:
-        return IntervalStatus.UNRESOLVED
     return IntervalStatus.UNSAMPLED
 
 
@@ -1138,6 +1296,9 @@ def audit_family_intervals(
                     duplicate_groups=duplicate_groups,
                     critical_values=critical,
                     birth_death_merge_events=(),
+                    topology_event_status=(
+                        "NOT_EVALUATED_EXCLUDED_FROM_DECLARED_RESOLUTION_SET_COVER"
+                    ),
                     interval_status=status,
                     required=required,
                     seed_count=int(counts.get(key, 0)),
@@ -1220,6 +1381,12 @@ def discover_leaf_family(
     n_reseed = reseed_count if reseed_count is not None else smoke.reseed_samples_per_leaf
     policy = config.chart_atlas_policy
     occupancy = _canonical_occupancy(arm, charts, qs, n_bins=n_bins, policy=policy)
+    required_transitions = required_chart_transition_pairs(
+        arm,
+        charts,
+        qs,
+        policy=policy,
+    )
     seed_counts = {key: len(seeds) for key, seeds in occupancy.items()}
     exhausted: set[tuple[str, int]] = set()
     works: list[LeafWorkRecord] = []
@@ -1308,7 +1475,10 @@ def discover_leaf_family(
     )
     overlap_audits = _family_chart_overlap(
         arm,
+        charts,
         unique_works,
+        required_transitions=required_transitions,
+        policy=policy,
         q_tol=config.tolerances.leaf_duplicate_distance_rad,
         rotation_tol=config.tolerances.orientation_geodesic_rad,
         pointing_tol=config.tolerances.pointing_geodesic_rad,
@@ -1340,9 +1510,19 @@ def discover_leaf_family(
         unresolved_lambda_intervals=unresolved_lambda,
         notes=(
             "Canonical chart occupancy; confirmation freeze is the caller's duty.",
-            "Neighbor transversality uses child Jacobians; chart overlap is source-Q correspondence.",
+            (
+                "Required chart audits come only from configured overlap-band responsibility "
+                "transitions and are matched to incident leaf pairs."
+            ),
+            (
+                "Neighbor transversality uses child Jacobians; chart overlap is "
+                "source-Q correspondence."
+            ),
             "Circular lambda bins; SAMPLED_ADMISSIBLE is not COMPLETE; not a global foliation.",
-            "birth/death/merge events are not classified.",
+            (
+                "birth/death/merge events are excluded from the declared-resolution set-cover "
+                "claim and remain unevaluated."
+            ),
         ),
         neighbor_audits=neighbor_audits,
         chart_overlap=overlap,

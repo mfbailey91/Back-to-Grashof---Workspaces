@@ -1,6 +1,104 @@
 {
-  "config_hash": "9674211fb7cb9124da87dfdf630a0b8fff39648da21c63dd190907649fd42f51",
+  "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+  "git": {
+    "dirty_tree": false,
+    "git_commit": "9505a877a489469186afb5fb3a8dfc89bb6a75ad"
+  },
+  "inputs": [
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "manifest.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "52944c587e4136c9492ac081ee5e498df58e674db043d1857eaf1a6d19e848cc",
+      "stage": "manifest"
+    }
+  ],
   "mode": "full",
+  "outputs": [
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P1_DEEP_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "48209a0a9fbeea88dc2b99526ca9d062502c950d22d3646d5dbf42102d60e742",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P2_INNER_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "db8cf80d2817b8600cafe3e7a4773920ebd4a94ac1e158a7fa2ce9b6647c121a",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P3_INNER_INCOMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "a25516f9524c6c85c090aefeba12e9d00bb4b4f1b879e4e1c1043e5f5c58cad2",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P4_OUTER_COMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "c92f52d73e9ebbe1a32309ea12b4287f0833bc7ab98d38d9ddcc8a419ce08f00",
+      "stage": "fixture"
+    },
+    {
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "mode": "full",
+      "path": "P5_OUTER_INCOMPLETE/fixture.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "schema_version": "r3a_l5_positive_control_v1",
+      "sha256": "386ba37969b0aff46b45c04118e4bee463584d409e4eeb55c26e8ccd5cea346e",
+      "stage": "fixture"
+    }
+  ],
   "probe_ids": [
     "P1_DEEP_COMPLETE",
     "P2_INNER_COMPLETE",
@@ -706,5 +804,6 @@
     }
   ],
   "program_id": "R3A_L5_FIVE_POINT_NATURAL_LEAF_RECONSTRUCTION",
+  "schema_version": "r3a_l5_positive_control_v1",
   "stage": "fixture"
 }

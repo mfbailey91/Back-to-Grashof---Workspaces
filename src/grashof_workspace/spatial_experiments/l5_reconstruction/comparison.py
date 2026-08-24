@@ -122,22 +122,75 @@ def pointing_set_metrics(
     )
 
 
+def strict_grid_direction_sets(
+    grid: SphereGrid,
+    reference_labels: tuple[CellClass, ...],
+    reconstructed_hits: tuple[bool, ...],
+) -> tuple[
+    tuple[tuple[float, float, float], ...],
+    tuple[tuple[float, float, float], ...],
+]:
+    """Represent both strict sets with barycenters from the same grid.
+
+    Raw direction samples determine occupancy only. Ambiguous-boundary cells are
+    excluded from both Hausdorff sets so the strict set gate uses the same domain
+    as recall and false-positive fractions.
+    """
+
+    if len(reference_labels) != len(grid.faces):
+        raise ValueError("reference labels must match grid faces")
+    if len(reconstructed_hits) != len(grid.faces):
+        raise ValueError("reconstructed hit mask must match grid faces")
+    reconstructed = tuple(
+        as_vec3(grid.barycenters[i])
+        for i, (label, hit) in enumerate(
+            zip(reference_labels, reconstructed_hits, strict=True)
+        )
+        if hit and label is not CellClass.AMBIGUOUS_BOUNDARY
+    )
+    covered = tuple(
+        as_vec3(grid.barycenters[i])
+        for i, label in enumerate(reference_labels)
+        if label is CellClass.STRICT_COVERED
+    )
+    return reconstructed, covered
+
+
 def evaluate_set_on_grid(
     *,
     grid: SphereGrid,
     reference_labels: tuple[CellClass, ...],
     reconstructed_dirs: tuple[tuple[float, float, float], ...],
-    reference_dirs: tuple[tuple[float, float, float], ...],
+    reference_dirs: tuple[tuple[float, float, float], ...] | None = None,
+    reconstructed_hits: tuple[bool, ...] | None = None,
 ) -> PointingSetMetrics:
+    """Evaluate occupancy and Hausdorff on one declared sphere grid.
+
+    ``reference_dirs`` is retained for call compatibility; the strict reference
+    representation is derived from ``reference_labels`` on ``grid``.
+    """
+
     if len(reference_labels) != len(grid.faces):
         raise ValueError("reference labels must match grid faces")
-    hits = paint_pointings(grid, reconstructed_dirs) if reconstructed_dirs else tuple(False for _ in grid.faces)
+    hits = reconstructed_hits
+    if hits is None:
+        hits = (
+            paint_pointings(grid, reconstructed_dirs)
+            if reconstructed_dirs
+            else tuple(False for _ in grid.faces)
+        )
+    reconstructed_on_grid, covered_on_grid = strict_grid_direction_sets(
+        grid,
+        reference_labels,
+        hits,
+    )
+    _ = reference_dirs
     return pointing_set_metrics(
         reference_labels,
         hits,
         max_cell_diameter_rad=grid.max_cell_diameter_rad,
-        reconstructed_dirs=reconstructed_dirs,
-        covered_dirs=reference_dirs,
+        reconstructed_dirs=reconstructed_on_grid,
+        covered_dirs=covered_on_grid,
     )
 
 
@@ -638,47 +691,58 @@ def write_compare_stage(
         cells = _load_confirmation_cells(truth, grid, labels)
         direct_hits = resolved_direct_mask(cells)
         direct_labels = direct_reference_labels(cells)
-        oracle_covered = covered_dirs_from_labels(grid, labels)
-        coarse_oracle_covered = covered_dirs_from_labels(coarse_grid, coarse_oracle_labels)
-        direct_covered = tuple(
-            cell.vertex_or_barycenter_direction for cell in cells if cell.direct_status is PointingSolveStatus.FOUND
+        direct_strict_dirs = tuple(
+            cell.vertex_or_barycenter_direction
+            for cell in cells
+            if (
+                cell.direct_status is PointingSolveStatus.FOUND
+                and cell.strict_reference_eligible
+            )
         )
-        direct_dirs = direct_covered
-        coarse_direct_labels = direct_labels_from_found_dirs(coarse_grid, coarse_oracle_labels, direct_dirs)
+        coarse_direct_labels = direct_labels_from_found_dirs(
+            coarse_grid,
+            coarse_oracle_labels,
+            direct_strict_dirs,
+        )
 
         def _column(
             fine_labels: tuple[CellClass, ...],
             fine_hits: tuple[bool, ...],
             reconstructed_dirs: tuple[tuple[float, float, float], ...],
-            fine_covered: tuple[tuple[float, float, float], ...],
             coarse_labels: tuple[CellClass, ...],
-            coarse_covered: tuple[tuple[float, float, float], ...],
         ) -> PointingSetMetrics:
-            fine = pointing_set_metrics(
-                fine_labels,
-                fine_hits,
-                max_cell_diameter_rad=grid.max_cell_diameter_rad,
+            fine = evaluate_set_on_grid(
+                grid=grid,
+                reference_labels=fine_labels,
                 reconstructed_dirs=reconstructed_dirs,
-                covered_dirs=fine_covered,
+                reconstructed_hits=fine_hits,
             )
             coarse = evaluate_set_on_grid(
                 grid=coarse_grid,
                 reference_labels=coarse_labels,
                 reconstructed_dirs=reconstructed_dirs,
-                reference_dirs=coarse_covered,
             )
             return attach_two_resolution_metrics(fine, coarse)
 
-        src_vs_oracle = _column(labels, src_hits, src_dirs, oracle_covered, coarse_oracle_labels, coarse_oracle_covered)
-        nat_vs_oracle = _column(labels, nat_hits, nat_dirs, oracle_covered, coarse_oracle_labels, coarse_oracle_covered)
+        src_vs_oracle = _column(labels, src_hits, src_dirs, coarse_oracle_labels)
+        nat_vs_oracle = _column(labels, nat_hits, nat_dirs, coarse_oracle_labels)
         direct_vs_oracle = _column(
-            labels, direct_hits, direct_dirs, oracle_covered, coarse_oracle_labels, coarse_oracle_covered
+            labels,
+            direct_hits,
+            direct_strict_dirs,
+            coarse_oracle_labels,
         )
         src_vs_direct = _column(
-            direct_labels, src_hits, src_dirs, direct_covered, coarse_direct_labels, direct_covered
+            direct_labels,
+            src_hits,
+            src_dirs,
+            coarse_direct_labels,
         )
         nat_vs_direct = _column(
-            direct_labels, nat_hits, nat_dirs, direct_covered, coarse_direct_labels, direct_covered
+            direct_labels,
+            nat_hits,
+            nat_dirs,
+            coarse_direct_labels,
         )
         direct_complete = direct_complete_from_cells(cells)
         label, disp, reason = classify_probe_reconstruction(

@@ -111,6 +111,43 @@ H10 artifact authority + compact full-campaign closeout
 
 Follow-up execution: [methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md](methods/R3A_H7_H10_FOLLOWUP_EXECUTION.md).
 
+#### R3A-H11 — Acceptance-authority hardening before the frozen full rerun
+
+H11 preserves the H7–H10 experiment while hardening the authority boundary around its final run:
+
+```text
+package mode/probe/config/provenance fidelity
+overlap-band responsibility-transition audits
+leaf-pair chart correspondence
+returned-set claim narrowing
+budget-exhaustion and topology-event honesty
+CI test-fixture isolation
+strict full-closeout packaging
+```
+
+**Pass/fail gate:** A diagnostic package cannot resemble a full package; only actual overlap-band handoffs create required chart audits; required truncated bins remain unresolved; CI is green; and `--full-closeout` accepts exactly one clean, five-probe, full-mode campaign with one explicit first-failing-column outcome.
+
+**H11E disposition withdrawn:** The H11E package itself is authoritative, but its `DIRECT_REFERENCE_BLOCKED` interpretation is not. The H12 rerun replaced the compact hub.
+
+Hardening execution: [methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md](methods/R3A_H11_ACCEPTANCE_AUTHORITY_HARDENING.md).
+
+#### R3A-H12 — Direct-comparison metric repair and closeout revalidation
+
+```text
+same-grid strict Hausdorff representatives
+ambiguous-boundary exclusion from strict set distances
+real non-nested-grid refinement regressions
+RETURNED_SET_PASS distinct from component identity
+package-side probe and global blocker recomputation
+clean frozen five-probe rerun
+```
+
+**Pass/fail gate:** A complete-sphere direct result has zero Hausdorff and zero refinement on both declared grids; found boundary cells cannot fail the strict gate; the full-closeout packager independently reproduces every per-probe classification, disposition, and blocker plus the global blocker.
+
+**Recorded H12 closeout:** Frozen `--mode full` at producer `9505a87` packaged as `full_closeout` with `semantic_revalidation=true` records `STITCHING_CONTROL_BLOCKED`. Direct-vs-oracle Hausdorff and refinement are zero on all five probes. Source `h=c` reconstruction fails with unresolved `c` intervals. Do not interpret the natural column. L5 remains `parent_incomplete`. R3B remains held.
+
+Execution: [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md).
+
 ### R3B — Transfer and falsification
 
 Apply the same direct/source/natural comparison to the existing `exact_two_u_5r`, `generic_5r`, and a near-architecture control. Determine which virtual-coordinate families remain exact, how chart choice changes individual leaf behavior, and whether the accepted family still reconstructs the parent pointing image.

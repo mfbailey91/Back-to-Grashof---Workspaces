@@ -1,12 +1,19 @@
 {
   "accepted_reconstruction": false,
+  "campaign_blocker": null,
   "comparisons": [],
-  "config_hash": "9674211fb7cb9124da87dfdf630a0b8fff39648da21c63dd190907649fd42f51",
+  "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
   "disposition": "UNRESOLVED",
+  "git": {
+    "dirty_tree": false,
+    "git_commit": "9505a877a489469186afb5fb3a8dfc89bb6a75ad"
+  },
+  "inputs": [],
   "mode": "full",
   "notes": [
     "Empty R3A scaffold; no accepted reconstruction."
   ],
+  "outputs": [],
   "probe_ids": [
     "P1_DEEP_COMPLETE",
     "P2_INNER_COMPLETE",
@@ -15,6 +22,7 @@
     "P5_OUTER_INCOMPLETE"
   ],
   "program_id": "R3A_L5_FIVE_POINT_NATURAL_LEAF_RECONSTRUCTION",
+  "schema_version": "r3a_l5_positive_control_v1",
   "stage": "manifest",
   "stage_statuses": {
     "compare": "PLANNED",
