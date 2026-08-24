@@ -1,9 +1,8 @@
-"""H13 opt-in source ``h=c`` policy: analytical c, projected seeds, honest traces.
+"""H13 opt-in source ``h=c`` policy: analytical c, projected seeds, honest traces, rasterized curves.
 
 This module is selected only when ``source_control.policy_version`` equals
 ``h13_component_closure_v1``. The frozen H12 config keeps the historical
 ``source_control.py`` path, including the silent first-three seed rule.
-Curve rasterization remains H13D.
 """
 
 from __future__ import annotations
@@ -12,13 +11,14 @@ import json
 from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass, replace
+from itertools import pairwise
 from math import acos, ceil, cos
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
-from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
+from grashof_workspace.spatial_experiments.axis_geometry import as_vec3, unit_vector
 from grashof_workspace.spatial_experiments.branch_continuation import (
     RETURN_MIN_ARC,
     BranchTrace,
@@ -60,7 +60,7 @@ from .source_control import (
     h_value,
     radial_normal,
 )
-from .sphere_grid import build_sphere_grid, paint_pointings
+from .sphere_grid import build_sphere_grid, paint_pointings, pointing_geodesic
 
 POLICY_VERSION = H13_POLICY_VERSION
 C_DOMAIN_POLICY = "analytical_regional_shell"
@@ -91,6 +91,7 @@ class H13ASourcePolicy:
     max_seed_clusters_per_c: int
     endpoint_state_tol_rad: float
     endpoint_tangent_abs_dot_min: float
+    curve_segment_fraction: float
 
     def to_json_dict(self) -> dict[str, Any]:
         return json_object(
@@ -109,6 +110,7 @@ class H13ASourcePolicy:
                 "max_seed_clusters_per_c": self.max_seed_clusters_per_c,
                 "endpoint_state_tol_rad": self.endpoint_state_tol_rad,
                 "endpoint_tangent_abs_dot_min": self.endpoint_tangent_abs_dot_min,
+                "curve_segment_fraction": self.curve_segment_fraction,
             }
         )
 
@@ -142,6 +144,8 @@ class H13ASourceControlResult:
     analytical_c_interval: tuple[float, float]
     requested_c_value_count: int
     c_slice_max_angular_spacing_rad: float
+    raw_pointing_sample_count: int
+    rasterization_max_segment_rad: float
     policy: H13ASourcePolicy
 
     def to_json_dict(self) -> dict[str, Any]:
@@ -154,6 +158,9 @@ class H13ASourceControlResult:
                 "requested_c_value_count": self.requested_c_value_count,
                 "effective_c_value_count": len(self.inner.c_values),
                 "c_slice_max_angular_spacing_rad": self.c_slice_max_angular_spacing_rad,
+                "raw_pointing_sample_count": self.raw_pointing_sample_count,
+                "rasterized_pointing_sample_count": len(self.inner.pointing_samples),
+                "rasterization_max_segment_rad": self.rasterization_max_segment_rad,
                 "policy": self.policy.to_json_dict(),
             }
         )
@@ -215,6 +222,9 @@ def load_h13_source_policy(config: CampaignConfig, mode: str | None = None) -> H
         endpoint_tangent_abs_dot_min=float(
             _mode_value(raw, "endpoint_tangent_abs_dot_min", resolved_mode, 0.85)
         ),
+        curve_segment_fraction=float(
+            _mode_value(raw, "curve_segment_fraction", resolved_mode, 0.50)
+        ),
     )
     positive = (
         policy.c_slice_max_angular_spacing_cell_fraction,
@@ -225,6 +235,7 @@ def load_h13_source_policy(config: CampaignConfig, mode: str | None = None) -> H
         policy.dedup_q_tol_rad,
         policy.endpoint_state_tol_rad,
         policy.endpoint_tangent_abs_dot_min,
+        policy.curve_segment_fraction,
     )
     if any(value <= 0.0 for value in positive):
         raise ValueError("H13 source policy tolerances and spacing fractions must be positive")
@@ -510,6 +521,79 @@ def continue_source_fiber_h13(
         endpoint_tangent_abs_dot=diagnostic.endpoint_tangent_abs_dot,
         rejection_reason_counts=diagnostic.rejection_reason_counts,
     )
+
+
+def _slerp_direction(a: Vec3, b: Vec3, fraction: float) -> Vec3:
+    va = np.asarray(unit_vector(a, name="slerp a"), dtype=float)
+    vb = np.asarray(unit_vector(b, name="slerp b"), dtype=float)
+    dot = float(np.clip(np.dot(va, vb), -1.0, 1.0))
+    theta = float(np.arccos(dot))
+    if theta <= 1e-12:
+        return as_vec3(va)
+    sin_theta = float(np.sin(theta))
+    if abs(sin_theta) <= 1e-12:
+        blended = (1.0 - fraction) * va + fraction * vb
+        if float(np.linalg.norm(blended)) <= 1e-12:
+            blended = va if fraction < 0.5 else vb
+    else:
+        blended = (
+            np.sin((1.0 - fraction) * theta) / sin_theta * va
+            + np.sin(fraction * theta) / sin_theta * vb
+        )
+    return as_vec3(unit_vector(blended, name="slerp result"))
+
+
+def densify_pointing_curve(
+    pointings: tuple[Vec3, ...],
+    *,
+    max_segment_rad: float,
+    closed: bool,
+) -> tuple[Vec3, ...]:
+    if max_segment_rad <= 0.0:
+        raise ValueError("maximum pointing segment must be positive")
+    if len(pointings) <= 1:
+        return pointings
+    pairs = list(pairwise(pointings))
+    if closed:
+        pairs.append((pointings[-1], pointings[0]))
+    out: list[Vec3] = [pointings[0]]
+    for pair_index, (a, b) in enumerate(pairs):
+        angle = pointing_geodesic(a, b)
+        subdivisions = max(1, ceil(angle / max_segment_rad))
+        for subdivision in range(1, subdivisions + 1):
+            final_closure = (
+                closed and pair_index == len(pairs) - 1 and subdivision == subdivisions
+            )
+            if final_closure:
+                continue
+            out.append(_slerp_direction(a, b, subdivision / subdivisions))
+    return tuple(out)
+
+
+def rasterize_source_fibers(
+    fibers: tuple[SourceControlFiber, ...],
+    *,
+    max_segment_rad: float,
+) -> tuple[Vec3, ...]:
+    out: list[Vec3] = []
+    seen: set[tuple[float, float, float]] = set()
+    for fiber in fibers:
+        dense = densify_pointing_curve(
+            fiber.pointing_samples,
+            max_segment_rad=max_segment_rad,
+            closed=fiber.closed or fiber.returned,
+        )
+        for direction in dense:
+            key = (
+                round(float(direction[0]), 12),
+                round(float(direction[1]), 12),
+                round(float(direction[2]), 12),
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(direction)
+    return tuple(out)
 
 
 def _fiber_quality(fiber: SourceControlFiber) -> tuple[int, int, int, float, float, str]:
@@ -846,8 +930,10 @@ def build_source_control_h13(
                 )
             )
     unique = deduplicate_fibers_h13(tuple(fibers), tol=policy.dedup_q_tol_rad)
-    pointings = tuple(direction for fiber in unique for direction in fiber.pointing_samples)
     grid = build_sphere_grid(budgets.confirmation_icosphere_level)
+    raw_pointing_count = sum(len(fiber.pointing_samples) for fiber in unique)
+    max_segment = policy.curve_segment_fraction * grid.max_cell_diameter_rad
+    pointings = rasterize_source_fibers(unique, max_segment_rad=max_segment)
     hits = paint_pointings(grid, pointings)
     records = summarize_c_records_h13(
         c_values,
@@ -873,6 +959,7 @@ def build_source_control_h13(
             "Plus/minus endpoint meeting is distinct from seed return.",
             "A budget-exhausted trace is not a genuinely noncompact branch.",
             "RETURNED_SET_FOUND is declared-budget evidence, not component completeness.",
+            "Source occupancy uses rasterized pointing curves; raw samples stay on fibers.",
             f"seed_count_semantics={SEED_COUNT_SEMANTICS}.",
         ),
         c_records=records,
@@ -882,6 +969,8 @@ def build_source_control_h13(
         analytical_c_interval=interval,
         requested_c_value_count=budgets.source_c_value_count,
         c_slice_max_angular_spacing_rad=spacing,
+        raw_pointing_sample_count=raw_pointing_count,
+        rasterization_max_segment_rad=max_segment,
         policy=policy,
     )
 

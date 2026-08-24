@@ -43,10 +43,14 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.source_control_h13 
     classify_source_interval_status_h13,
     cluster_wrapped_q,
     deduplicate_fibers_h13,
+    densify_pointing_curve,
     load_h13_source_policy,
     project_source_seed_clusters,
     source_trace_diagnostic,
     unresolved_c_intervals_from_records_h13,
+)
+from grashof_workspace.spatial_experiments.l5_reconstruction.sphere_grid import (
+    pointing_geodesic,
 )
 
 H12_CONFIG = "configs/l5_positive_control_v1.json"
@@ -65,6 +69,7 @@ def _policy(**overrides: float) -> H13ASourcePolicy:
         "max_seed_clusters_per_c": 3,
         "endpoint_state_tol_rad": 0.05,
         "endpoint_tangent_abs_dot_min": 0.99,
+        "curve_segment_fraction": 0.50,
     }
     values.update(overrides)
     return H13ASourcePolicy(
@@ -80,6 +85,7 @@ def _policy(**overrides: float) -> H13ASourcePolicy:
         max_seed_clusters_per_c=int(values["max_seed_clusters_per_c"]),
         endpoint_state_tol_rad=float(values["endpoint_state_tol_rad"]),
         endpoint_tangent_abs_dot_min=float(values["endpoint_tangent_abs_dot_min"]),
+        curve_segment_fraction=float(values["curve_segment_fraction"]),
     )
 
 
@@ -205,6 +211,7 @@ def test_h13a_full_cannot_issue_campaign_disposition() -> None:
     assert policy.max_seed_clusters_per_c == 16
     assert policy.endpoint_state_tol_rad == pytest.approx(0.10)
     assert policy.endpoint_tangent_abs_dot_min == pytest.approx(0.85)
+    assert policy.curve_segment_fraction == pytest.approx(0.50)
     ci = load_h13_source_policy(config, "ci")
     smoke = load_h13_source_policy(config, "smoke")
     assert ci.max_seed_candidates_per_c == 24
@@ -290,6 +297,8 @@ def test_h13a_json_records_analytical_domain_h12_does_not() -> None:
     )
     h13_payload = h13_result.to_json_dict()
     assert "analytical_c_interval" not in h12_payload
+    assert "raw_pointing_sample_count" not in h12_payload
+    assert "rasterization_max_segment_rad" not in h12_payload
     assert h13_payload["analytical_c_interval"] == pytest.approx([-1.0, 1.0], abs=1e-12)
     assert h13_payload["c_values"][0] == pytest.approx(-1.0)
     assert h13_payload["c_values"][-1] == pytest.approx(1.0)
@@ -321,6 +330,13 @@ def test_h13a_json_records_analytical_domain_h12_does_not() -> None:
     if h13_payload["fibers"]:
         assert "termination_status" in h13_payload["fibers"][0]
         assert "closed" in h13_payload["fibers"][0]
+    raw_from_fibers = sum(int(fiber["sample_count"]) for fiber in h13_payload["fibers"])
+    assert h13_payload["raw_pointing_sample_count"] == raw_from_fibers
+    assert "rasterized_pointing_sample_count" in h13_payload
+    assert h13_payload["rasterization_max_segment_rad"] > 0.0
+    assert h13_payload["rasterization_max_segment_rad"] != pytest.approx(
+        h13_payload["c_slice_max_angular_spacing_rad"]
+    )
 
 
 def test_h12_build_source_control_still_uses_first_three() -> None:
@@ -543,3 +559,25 @@ def test_h12_fiber_json_omits_h13_termination_keys() -> None:
     payload = fiber.to_json_dict()
     assert "termination_status" not in payload
     assert "closed" not in payload
+
+
+def test_densified_curve_obeys_maximum_pointing_segment() -> None:
+    dense = densify_pointing_curve(
+        ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0)),
+        max_segment_rad=0.2,
+        closed=False,
+    )
+    gaps = [pointing_geodesic(a, b) for a, b in pairwise(dense)]
+    assert len(dense) > 2
+    assert max(gaps) <= 0.2 + 1e-12
+
+
+def test_closed_curve_paints_closing_arc_and_open_curve_does_not() -> None:
+    endpoints = ((1.0, 0.0, 0.0), (0.0, 1.0, 0.0))
+    opened = densify_pointing_curve(endpoints, max_segment_rad=0.2, closed=False)
+    closed = densify_pointing_curve(endpoints, max_segment_rad=0.2, closed=True)
+    assert len(closed) > len(opened)
+    closed_gaps = [pointing_geodesic(a, b) for a, b in pairwise(closed)]
+    closing_gap = pointing_geodesic(closed[-1], closed[0])
+    assert max(closed_gaps) <= 0.2 + 1e-12
+    assert closing_gap <= 0.2 + 1e-12

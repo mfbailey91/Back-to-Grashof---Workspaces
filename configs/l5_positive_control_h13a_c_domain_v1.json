@@ -126,7 +126,8 @@
       "full": 16
     },
     "endpoint_state_tol_rad": 0.10,
-    "endpoint_tangent_abs_dot_min": 0.85
+    "endpoint_tangent_abs_dot_min": 0.85,
+    "curve_segment_fraction": 0.50
   },
   "campaign_modes": {
     "ci": {
