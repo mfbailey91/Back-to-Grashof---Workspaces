@@ -167,13 +167,32 @@ class IntervalStatus(str, Enum):
 class SourceIntervalStatus(str, Enum):
     """Per-c source-control evidence. Not a component-completeness theorem."""
 
+    RETURNED_SET_FOUND = "RETURNED_SET_FOUND"
+    # Historical H12 JSON only. H13 production does not emit this as a covered status.
     RETURNED_COMPONENT_FOUND = "RETURNED_COMPONENT_FOUND"
+    MIXED_UNRESOLVED = "MIXED_UNRESOLVED"
     CRITICAL_OR_BOUNDARY = "CRITICAL_OR_BOUNDARY"
     BUDGET_EXHAUSTED = "BUDGET_EXHAUSTED"
     OPEN_ONLY = "OPEN_ONLY"
     SINGULAR = "SINGULAR"
     UNRESOLVED = "UNRESOLVED"
     COMPONENT_COMPLETE = "COMPONENT_COMPLETE"
+
+
+class SourceTraceTermination(str, Enum):
+    """Termination of one declared-budget source ``h=c`` trace.
+
+    Closure at the seed and closure by meeting of the two arclength rays remain
+    distinct evidence. Neither status is an independent component-identity proof.
+    """
+
+    PROJECTION_FAILED = "PROJECTION_FAILED"
+    RETURNED_TO_SEED = "RETURNED_TO_SEED"
+    PLUS_MINUS_ENDPOINTS_CLOSED = "PLUS_MINUS_ENDPOINTS_CLOSED"
+    BUDGET_EXHAUSTED = "BUDGET_EXHAUSTED"
+    SINGULAR_OR_CRITICAL_ENDPOINT = "SINGULAR_OR_CRITICAL_ENDPOINT"
+    CORRECTOR_FAILURE = "CORRECTOR_FAILURE"
+    OPEN_UNCLASSIFIED = "OPEN_UNCLASSIFIED"
 
 
 class LeafPairStatus(str, Enum):
@@ -1053,6 +1072,13 @@ class SourceControlCRecord:
     projected_seed_cluster_count: int = 0
     projection_failure_count: int = 0
     seed_budget_exhausted: bool = False
+    required: bool = True
+    domain_boundary: bool = False
+    closed_count: int = 0
+    endpoint_closed_count: int = 0
+    budget_exhausted_count: int = 0
+    corrector_failure_count: int = 0
+    closure_kind_counts: dict[str, int] | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -1079,6 +1105,13 @@ class SourceControlCRecord:
                     "seed_count_semantics": (
                         "attempted_projected_seed_clusters_not_expected_components"
                     ),
+                    "required": self.required,
+                    "domain_boundary": self.domain_boundary,
+                    "closed_count": self.closed_count,
+                    "endpoint_closed_count": self.endpoint_closed_count,
+                    "budget_exhausted_count": self.budget_exhausted_count,
+                    "corrector_failure_count": self.corrector_failure_count,
+                    "closure_kind_counts": dict(self.closure_kind_counts or {}),
                 }
             )
         return json_object(payload)

@@ -118,22 +118,44 @@ class SourceControlFiber:
     returned: bool
     max_position_residual_m: float
     max_h_residual: float
+    closed: bool = False
+    termination_status: str | None = None
+    budget_exhausted: bool = False
+    positive_accepted_steps: int = 0
+    negative_accepted_steps: int = 0
+    accepted_arclength: float = 0.0
+    endpoint_state_distance: float | None = None
+    endpoint_tangent_abs_dot: float | None = None
+    rejection_reason_counts: dict[str, int] | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
-        return json_object(
-            {
-                "fiber_id": self.fiber_id,
-                "c": self.c,
-                "sample_count": len(self.q_samples),
-                "q_samples": [list(q) for q in self.q_samples],
-                "pointing_samples": [list(d) for d in self.pointing_samples],
-                "branch_status": self.branch_status,
-                "returned": self.returned,
-                "max_position_residual_m": self.max_position_residual_m,
-                "max_h_residual": self.max_h_residual,
-                "construction_kind": "task_level_set_control",
-            }
-        )
+        payload: dict[str, Any] = {
+            "fiber_id": self.fiber_id,
+            "c": self.c,
+            "sample_count": len(self.q_samples),
+            "q_samples": [list(q) for q in self.q_samples],
+            "pointing_samples": [list(d) for d in self.pointing_samples],
+            "branch_status": self.branch_status,
+            "returned": self.returned,
+            "max_position_residual_m": self.max_position_residual_m,
+            "max_h_residual": self.max_h_residual,
+            "construction_kind": "task_level_set_control",
+        }
+        if self.termination_status is not None:
+            payload.update(
+                {
+                    "closed": self.closed,
+                    "termination_status": self.termination_status,
+                    "budget_exhausted": self.budget_exhausted,
+                    "positive_accepted_steps": self.positive_accepted_steps,
+                    "negative_accepted_steps": self.negative_accepted_steps,
+                    "accepted_arclength": self.accepted_arclength,
+                    "endpoint_state_distance": self.endpoint_state_distance,
+                    "endpoint_tangent_abs_dot": self.endpoint_tangent_abs_dot,
+                    "rejection_reason_counts": dict(self.rejection_reason_counts or {}),
+                }
+            )
+        return json_object(payload)
 
 
 @dataclass(frozen=True, slots=True)

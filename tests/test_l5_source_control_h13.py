@@ -8,12 +8,18 @@ from itertools import pairwise
 import numpy as np
 import pytest
 
+from grashof_workspace.spatial_experiments.branch_continuation import (
+    BranchStep,
+    BranchTrace,
+    UnitCircleProblem,
+)
 from grashof_workspace.spatial_experiments.l5_reconstruction.direct_truth import (
     build_direct_pointing_truth,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     SourceControlCRecord,
     SourceIntervalStatus,
+    SourceTraceTermination,
     load_campaign_config,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.positive_control import (
@@ -34,10 +40,12 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.source_control_h13 
     build_source_control_h13,
     choose_analytical_c_values,
     classify_h13b_interval_status,
+    classify_source_interval_status_h13,
     cluster_wrapped_q,
     deduplicate_fibers_h13,
     load_h13_source_policy,
     project_source_seed_clusters,
+    source_trace_diagnostic,
     unresolved_c_intervals_from_records_h13,
 )
 
@@ -55,6 +63,8 @@ def _policy(**overrides: float) -> H13ASourcePolicy:
         "dedup_q_tol_rad": 0.35,
         "max_seed_candidates_per_c": 24,
         "max_seed_clusters_per_c": 3,
+        "endpoint_state_tol_rad": 0.05,
+        "endpoint_tangent_abs_dot_min": 0.99,
     }
     values.update(overrides)
     return H13ASourcePolicy(
@@ -68,6 +78,8 @@ def _policy(**overrides: float) -> H13ASourcePolicy:
         dedup_q_tol_rad=float(values["dedup_q_tol_rad"]),
         max_seed_candidates_per_c=int(values["max_seed_candidates_per_c"]),
         max_seed_clusters_per_c=int(values["max_seed_clusters_per_c"]),
+        endpoint_state_tol_rad=float(values["endpoint_state_tol_rad"]),
+        endpoint_tangent_abs_dot_min=float(values["endpoint_tangent_abs_dot_min"]),
     )
 
 
@@ -75,18 +87,62 @@ def _fiber(
     fiber_id: str,
     qs: tuple[tuple[float, ...], ...],
     *,
-    returned: bool,
+    returned: bool = False,
+    closed: bool | None = None,
+    termination: SourceTraceTermination | None = None,
     residual: float = 0.0,
 ) -> SourceControlFiber:
+    is_closed = returned if closed is None else closed
+    status = termination
+    if status is None:
+        status = (
+            SourceTraceTermination.RETURNED_TO_SEED
+            if is_closed
+            else SourceTraceTermination.OPEN_UNCLASSIFIED
+        )
     return SourceControlFiber(
         fiber_id=fiber_id,
         c=0.1,
         q_samples=qs,
         pointing_samples=tuple((1.0, 0.0, 0.0) for _ in qs),
-        branch_status="returned" if returned else "open",
+        branch_status="returned" if is_closed else "open",
         returned=returned,
         max_position_residual_m=residual,
         max_h_residual=residual,
+        closed=is_closed,
+        termination_status=status.value,
+        budget_exhausted=status is SourceTraceTermination.BUDGET_EXHAUSTED,
+    )
+
+
+def _step(s: float, x: tuple[float, float]) -> BranchStep:
+    return BranchStep(
+        s=s,
+        x_pred=x,
+        x=x,
+        constraint_residual=0.0,
+        gauge_residual=0.0,
+        correction_norm=0.0,
+        step_size=abs(s),
+        newton_iterations=1,
+        condition_number=1.0,
+        rank=1,
+        nullity=1,
+        tangent_alignment=1.0,
+        accepted=True,
+        rejection_reason=None,
+    )
+
+
+def _trace(*steps: BranchStep, branch_status: str = "open") -> BranchTrace:
+    return BranchTrace(
+        problem_id="analytical_unit_circle",
+        branch_id="trace",
+        x_seed=(1.0, 0.0),
+        steps=steps,
+        branch_status=branch_status,
+        returned=False,
+        notes=(),
     )
 
 
@@ -147,6 +203,8 @@ def test_h13a_full_cannot_issue_campaign_disposition() -> None:
     assert policy.c_slice_max_angular_spacing_cell_fraction == pytest.approx(0.75)
     assert policy.max_seed_candidates_per_c == 1024
     assert policy.max_seed_clusters_per_c == 16
+    assert policy.endpoint_state_tol_rad == pytest.approx(0.10)
+    assert policy.endpoint_tangent_abs_dot_min == pytest.approx(0.85)
     ci = load_h13_source_policy(config, "ci")
     smoke = load_h13_source_policy(config, "smoke")
     assert ci.max_seed_candidates_per_c == 24
@@ -179,7 +237,7 @@ def test_analytical_endpoints_serialize_as_critical_or_boundary() -> None:
             singular_count=0,
             unresolved_count=0,
             deduplicated_component_ids=("ok",),
-            parameter_interval_status=SourceIntervalStatus.RETURNED_COMPONENT_FOUND.value,
+            parameter_interval_status=SourceIntervalStatus.RETURNED_SET_FOUND.value,
         ),
         SourceControlCRecord(
             c=1.0,
@@ -197,7 +255,7 @@ def test_analytical_endpoints_serialize_as_critical_or_boundary() -> None:
     c_values = (-1.0, 0.0, 1.0)
     annotated = annotate_analytical_endpoints(c_values, records)
     assert annotated[0].parameter_interval_status == SourceIntervalStatus.CRITICAL_OR_BOUNDARY.value
-    assert annotated[1].parameter_interval_status == SourceIntervalStatus.RETURNED_COMPONENT_FOUND.value
+    assert annotated[1].parameter_interval_status == SourceIntervalStatus.RETURNED_SET_FOUND.value
     assert annotated[2].parameter_interval_status == SourceIntervalStatus.CRITICAL_OR_BOUNDARY.value
     unresolved = unresolved_c_intervals_from_records_h13(c_values, annotated)
     assert unresolved == ()
@@ -256,7 +314,13 @@ def test_h13a_json_records_analytical_domain_h12_does_not() -> None:
     for record in h13_payload["c_records"]:
         assert record["seed_count_semantics"] == SEED_COUNT_SEMANTICS
         assert record["attempted_seed_count"] == record["expected_seed_count"]
+        assert record["parameter_interval_status"] != (
+            SourceIntervalStatus.RETURNED_COMPONENT_FOUND.value
+        )
     assert any(SEED_COUNT_SEMANTICS in note for note in h13_payload["notes"])
+    if h13_payload["fibers"]:
+        assert "termination_status" in h13_payload["fibers"][0]
+        assert "closed" in h13_payload["fibers"][0]
 
 
 def test_h12_build_source_control_still_uses_first_three() -> None:
@@ -364,3 +428,118 @@ def test_asymmetric_source_q_subsets_remain_distinct() -> None:
         tol=0.2,
     )
     assert {fiber.fiber_id for fiber in out} == {"short", "long"}
+
+
+def test_mixed_returned_and_open_traces_are_unresolved() -> None:
+    status = classify_source_interval_status_h13(
+        closed_count=1,
+        open_count=1,
+        singular_count=0,
+        unresolved_count=0,
+        budget_exhausted_count=0,
+        seed_budget_exhausted=False,
+        required=True,
+    )
+    assert status is SourceIntervalStatus.MIXED_UNRESOLVED
+
+
+def test_seed_or_trace_budget_exhaustion_blocks_required_interval() -> None:
+    for seed_budget, trace_budget in ((True, 0), (False, 1)):
+        status = classify_source_interval_status_h13(
+            closed_count=1,
+            open_count=0,
+            singular_count=0,
+            unresolved_count=0,
+            budget_exhausted_count=trace_budget,
+            seed_budget_exhausted=seed_budget,
+            required=True,
+        )
+        assert status is SourceIntervalStatus.BUDGET_EXHAUSTED
+
+
+def test_legacy_returned_component_label_is_not_a_h13_covered_interval() -> None:
+    record = SourceControlCRecord(
+        c=0.0,
+        expected_seed_count=1,
+        projected_seed_count=1,
+        continued_component_count=1,
+        returned_count=1,
+        open_count=0,
+        singular_count=0,
+        unresolved_count=0,
+        deduplicated_component_ids=("legacy",),
+        parameter_interval_status=SourceIntervalStatus.RETURNED_COMPONENT_FOUND.value,
+    )
+    assert unresolved_c_intervals_from_records_h13((0.0,), (record,)) == ((0.0, 0.0),)
+
+
+def test_plus_minus_endpoints_can_close_away_from_seed() -> None:
+    diagnostic = source_trace_diagnostic(
+        UnitCircleProblem(),
+        _trace(
+            _step(-1.0, (-1.0, -0.02)),
+            _step(0.0, (1.0, 0.0)),
+            _step(1.0, (-1.0, 0.02)),
+        ),
+        max_steps=4,
+        policy=_policy(),
+    )
+    assert diagnostic.closed is True
+    assert diagnostic.accepted_arclength == pytest.approx(2.0)
+    assert diagnostic.termination is SourceTraceTermination.PLUS_MINUS_ENDPOINTS_CLOSED
+
+
+def test_exhausted_two_ray_trace_is_not_called_topologically_open() -> None:
+    diagnostic = source_trace_diagnostic(
+        UnitCircleProblem(),
+        _trace(
+            _step(-0.5, (0.0, -1.0)),
+            _step(0.0, (1.0, 0.0)),
+            _step(0.5, (0.0, 1.0)),
+        ),
+        max_steps=1,
+        policy=_policy(),
+    )
+    assert diagnostic.closed is False
+    assert diagnostic.budget_exhausted is True
+    assert diagnostic.termination is SourceTraceTermination.BUDGET_EXHAUSTED
+
+
+def test_closed_duplicate_is_retained_over_budget_duplicate() -> None:
+    q = (
+        (0.1, 0.2, 0.3, 0.4, 0.5),
+        (0.15, 0.2, 0.3, 0.4, 0.5),
+        (-0.1, 0.0, 0.1, 0.0, 0.0),
+    )
+    open_trace = _fiber(
+        "open",
+        q,
+        closed=False,
+        termination=SourceTraceTermination.BUDGET_EXHAUSTED,
+    )
+    closed_trace = _fiber(
+        "closed",
+        q,
+        returned=True,
+        closed=True,
+        termination=SourceTraceTermination.RETURNED_TO_SEED,
+    )
+    out = deduplicate_fibers_h13((open_trace, closed_trace), tol=0.2)
+    assert len(out) == 1
+    assert out[0].fiber_id == "closed"
+
+
+def test_h12_fiber_json_omits_h13_termination_keys() -> None:
+    fiber = SourceControlFiber(
+        fiber_id="h12",
+        c=0.0,
+        q_samples=((0.0, 0.0, 0.0, 0.0, 0.0),),
+        pointing_samples=((1.0, 0.0, 0.0),),
+        branch_status="returned",
+        returned=True,
+        max_position_residual_m=0.0,
+        max_h_residual=0.0,
+    )
+    payload = fiber.to_json_dict()
+    assert "termination_status" not in payload
+    assert "closed" not in payload
