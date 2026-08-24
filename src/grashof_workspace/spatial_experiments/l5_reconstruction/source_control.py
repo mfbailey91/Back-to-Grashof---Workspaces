@@ -39,6 +39,7 @@ from .sphere_grid import SphereGrid, build_sphere_grid, paint_pointings
 Array = NDArray[np.floating]
 Vec3 = tuple[float, float, float]
 DEDUP_Q_TOL = 0.35
+H13_POLICY_VERSION = "h13_component_closure_v1"
 COVERED_SOURCE_INTERVAL_STATUSES = frozenset(
     {
         SourceIntervalStatus.RETURNED_COMPONENT_FOUND,
@@ -62,6 +63,16 @@ def classify_source_interval_status(
     if singular_count > 0:
         return SourceIntervalStatus.SINGULAR
     return SourceIntervalStatus.UNRESOLVED
+
+
+def h13_source_policy_requested(config: CampaignConfig) -> bool:
+    """True only for the exact H13 opt-in policy version."""
+
+    policy_raw = config.raw.get("source_control", {})
+    return (
+        isinstance(policy_raw, dict)
+        and policy_raw.get("policy_version") == H13_POLICY_VERSION
+    )
 
 
 def radial_normal(p_star: Vec3 | Array) -> Vec3:
@@ -328,16 +339,22 @@ def build_source_control(
     confirmation_level: int,
     max_steps: int = 24,
     step_size: float = 0.08,
+    c_values: tuple[float, ...] | None = None,
 ) -> SourceControlResult:
     n = radial_normal(probe.p_star)
     configs = found_configurations(discovery)
     h_samples = tuple(h_value(arm, q, n) for q in configs)
-    c_values = choose_c_values(h_samples, c_count)
+    if c_values is None:
+        sampled = choose_c_values(h_samples, c_count)
+    else:
+        sampled = tuple(float(value) for value in c_values)
+        if not sampled:
+            raise ValueError("injected source c_values must be non-empty")
     fibers: list[SourceControlFiber] = []
     fibers_by_c: dict[float, list[SourceControlFiber]] = {}
     expected_seed_counts: dict[float, int] = {}
     projected_seed_counts: dict[float, int] = {}
-    for i, c in enumerate(c_values):
+    for i, c in enumerate(sampled):
         seeds = [q for q in configs if abs(h_value(arm, q, n) - c) <= 0.35] or list(configs[:3])
         if not seeds and configs:
             seeds = [min(configs, key=lambda q: abs(h_value(arm, q, n) - c))]
@@ -368,17 +385,17 @@ def build_source_control(
     grid = build_sphere_grid(confirmation_level)
     hits = paint_pointings(grid, pointings)
     c_records = summarize_c_records(
-        c_values,
+        sampled,
         {key: tuple(val) for key, val in fibers_by_c.items()},
         expected_seed_counts=expected_seed_counts,
         projected_seed_counts=projected_seed_counts,
         unique=unique,
     )
-    unresolved = unresolved_c_intervals_from_records(c_values, c_records)
+    unresolved = unresolved_c_intervals_from_records(sampled, c_records)
     return SourceControlResult(
         probe_id=probe.probe_id,
         n=n,
-        c_values=c_values,
+        c_values=sampled,
         fibers=unique,
         pointing_samples=pointings,
         hit_cells=hits,
@@ -400,6 +417,11 @@ def write_source_control_stage(
     mode: str,
 ) -> dict[str, Any]:
     import json
+
+    if h13_source_policy_requested(config):
+        from .source_control_h13 import write_source_control_stage_h13
+
+        return write_source_control_stage_h13(config, outdir, probes, mode=mode)
 
     arm = build_positive_control_arm(config.geometry)
     budgets = resolve_stage_budgets(config, mode)

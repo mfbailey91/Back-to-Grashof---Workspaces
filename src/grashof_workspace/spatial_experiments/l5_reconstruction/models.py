@@ -168,6 +168,7 @@ class SourceIntervalStatus(str, Enum):
     """Per-c source-control evidence. Not a component-completeness theorem."""
 
     RETURNED_COMPONENT_FOUND = "RETURNED_COMPONENT_FOUND"
+    CRITICAL_OR_BOUNDARY = "CRITICAL_OR_BOUNDARY"
     OPEN_ONLY = "OPEN_ONLY"
     SINGULAR = "SINGULAR"
     UNRESOLVED = "UNRESOLVED"

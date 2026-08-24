@@ -1,13 +1,13 @@
 # R3A-H13 — Source-Control Component and Coverage Closure
 
-**Status:** §1 implemented only; H13A–H13F remain unimplemented
+**Status:** §1 and H13A implemented; H13B–H13F remain unimplemented
 **Project:** Back to Grashof — Mechanism-Based Workspace Characterization
 **Rung:** L5 spatial 5R
 **Starting point:** current `origin/main` after PR #21 (`3750a55`); not the stale handoff `17d87ad`
 **Parent result:** frozen H12 five-probe closeout `STITCHING_CONTROL_BLOCKED`
 **Primary goal:** Make the decomposition-free source `h=c` control domain-complete, component-aware, termination-honest, and resolution-stable before the natural UURU column is interpreted.
 **Non-goal:** Do not tune natural leaves, begin R3B/L6, or activate the numerical virtual-crank atlas in H13.
-**Implementation:** This commit records §1 locked invariants in writing and tests. Later sections are the contract for future sprints. Do not apply `r3a_h13_source_control_component_and_coverage_closure.patch` here; that patch is H13A–H13E code, a pilot config, and “H13 is active” status language.
+**Implementation:** §1 locked invariants and H13A opt-in analytical `c` domain are implemented. Frozen H12 config and compact hub are unchanged. H13B–H13F remain the contract for later sprints. Do not apply `r3a_h13_source_control_component_and_coverage_closure.patch`.
 
 ---
 
@@ -63,7 +63,7 @@ H13 preserves all of the following:
 - A finite family of sampled `h=c` curves is not called a global foliation.
 - R3B, L6, and the virtual-crank atlas remain held.
 
-This sprint records those invariants only. H13A (§2 “Preserve the H12 execution path”) is not started: there is no `source_control_h13.py`, no H13 pilot JSON, and no `policy_version` on the frozen H12 config.
+H13A implements the opt-in dispatch and analytical `c` domain. Frozen H12 config still has no `policy_version`. There is no H13E pilot JSON (`l5_positive_control_h13_source_pilot_v1.json`). Seed discovery, termination honesty, and curve rasterization remain H12 until H13B–H13D.
 
 ---
 

@@ -1,0 +1,185 @@
+{
+  "schema_version": "r3a_l5_positive_control_h13a_c_domain_v1",
+  "program_id": "R3A_L5_FIVE_POINT_NATURAL_LEAF_RECONSTRUCTION",
+  "source_architecture": {
+    "architecture_id": "positive_control_suru_5r",
+    "description": "Unrestricted idealized U_shoulder-R_elbow-U_wrist spatial 5R",
+    "link_lengths_m": {
+      "L1": 1.0,
+      "L2": 0.8,
+      "tool_offset": 0.2
+    },
+    "home_axes": [
+      {"joint": "R1", "point": [0.0, 0.0, 0.0], "direction": [0.0, 0.0, 1.0], "role": "U_shoulder_a"},
+      {"joint": "R2", "point": [0.0, 0.0, 0.0], "direction": [0.0, 1.0, 0.0], "role": "U_shoulder_b"},
+      {"joint": "R3", "point": [1.0, 0.0, 0.0], "direction": [0.0, 1.0, 0.0], "role": "R_elbow"},
+      {"joint": "R4", "point": [1.8, 0.0, 0.0], "direction": [0.0, 0.0, 1.0], "role": "U_wrist_a"},
+      {"joint": "R5", "point": [1.8, 0.0, 0.0], "direction": [0.0, 1.0, 0.0], "role": "U_wrist_b"}
+    ],
+    "home_pointing": [1.0, 0.0, 0.0],
+    "home_wrist_center": [1.8, 0.0, 0.0],
+    "home_tool_point": [2.0, 0.0, 0.0],
+    "joint_limits": "not_modeled_unrestricted_periodic",
+    "parent_family": "SURU",
+    "parent_joint_roles": ["S_v", "U_phys", "R_phys", "U_phys"],
+    "natural_child_family": "UURU",
+    "natural_child_joint_roles": ["U_v", "U_phys", "R_phys", "U_phys"]
+  },
+  "analytical_oracle": {
+    "r_min_m": 0.2,
+    "r_max_m": 1.8,
+    "robust_pointing_complete_rho_interval_m": [0.4, 1.6],
+    "direction_feasibility_formula": "r_min <= norm(p_star - tool_offset * d_target) <= r_max",
+    "point_completeness_formula": "abs(rho-tool_offset) >= r_min and rho+tool_offset <= r_max"
+  },
+  "probes": [
+    {
+      "probe_id": "P1_DEEP_COMPLETE",
+      "rho_m": 1.0,
+      "p_star_m": [0.94072087, 0.18814417, 0.28221626],
+      "expected_pointing_complete": true,
+      "limiting_boundary": "none_balanced",
+      "analytical_margin_m": 0.6,
+      "seed_pointing_policy": "radial_outward"
+    },
+    {
+      "probe_id": "P2_INNER_COMPLETE",
+      "rho_m": 0.45,
+      "p_star_m": [0.15158735, 0.37896836, 0.18948418],
+      "expected_pointing_complete": true,
+      "limiting_boundary": "inner",
+      "analytical_margin_m": 0.05,
+      "seed_pointing_policy": "radial_outward"
+    },
+    {
+      "probe_id": "P3_INNER_INCOMPLETE",
+      "rho_m": 0.35,
+      "p_star_m": [-0.21659846, 0.10829923, 0.25269821],
+      "expected_pointing_complete": false,
+      "limiting_boundary": "inner",
+      "analytical_margin_m": -0.05,
+      "seed_pointing_policy": "radial_inward"
+    },
+    {
+      "probe_id": "P4_OUTER_COMPLETE",
+      "rho_m": 1.55,
+      "p_star_m": [-0.53760818, -1.20961841, 0.80641227],
+      "expected_pointing_complete": true,
+      "limiting_boundary": "outer",
+      "analytical_margin_m": 0.05,
+      "seed_pointing_policy": "radial_outward"
+    },
+    {
+      "probe_id": "P5_OUTER_INCOMPLETE",
+      "rho_m": 1.65,
+      "p_star_m": [1.2881881, -0.80511756, 0.64409405],
+      "expected_pointing_complete": false,
+      "limiting_boundary": "outer",
+      "analytical_margin_m": -0.05,
+      "seed_pointing_policy": "radial_outward"
+    }
+  ],
+  "virtual_spherical_charts": [
+    {
+      "chart_id": "ZYZ_WORLD",
+      "sequence": "ZYZ",
+      "basis": [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
+    },
+    {
+      "chart_id": "ZYZ_RX90",
+      "sequence": "ZYZ",
+      "basis": [[1.0, 0.0, 0.0], [0.0, 0.0, -1.0], [0.0, 1.0, 0.0]]
+    },
+    {
+      "chart_id": "ZYZ_RY90",
+      "sequence": "ZYZ",
+      "basis": [[0.0, 0.0, 1.0], [0.0, 1.0, 0.0], [-1.0, 0.0, 0.0]]
+    }
+  ],
+  "chart_atlas_policy": {
+    "policy_id": "max_sin_beta_v1",
+    "canonical_assignment": "max_abs_sin_beta",
+    "singularity_margin": 0.05,
+    "overlap_margin": 0.10,
+    "claim_scope": "multi_chart_declared_domain"
+  },
+  "source_control": {
+    "field": "h(d)=n_dot_d",
+    "n_policy": "radial_unit_p_star",
+    "discovery_only_refinement": true,
+    "policy_version": "h13_component_closure_v1",
+    "c_domain_policy": "analytical_regional_shell",
+    "c_slice_max_angular_spacing_cell_fraction": 0.75
+  },
+  "campaign_modes": {
+    "ci": {
+      "discovery_icosphere_level": 0,
+      "confirmation_icosphere_level": 1,
+      "sobol_seed_count_per_target": 8,
+      "max_nfev_per_start": 40,
+      "source_c_value_count": 3,
+      "natural_lambda_bin_count_per_chart": 3,
+      "max_natural_leaves_per_chart": 3,
+      "max_natural_leaves_per_probe": 9,
+      "reseed_samples_per_leaf": 3,
+      "continuation_steps": 6,
+      "allows_full_campaign_disposition": false
+    },
+    "smoke": {
+      "discovery_icosphere_level": 1,
+      "confirmation_icosphere_level": 2,
+      "sobol_seed_count_per_target": 64,
+      "max_nfev_per_start": 200,
+      "source_c_value_count": 5,
+      "natural_lambda_bin_count_per_chart": 5,
+      "max_natural_leaves_per_chart": 5,
+      "max_natural_leaves_per_probe": 15,
+      "reseed_samples_per_leaf": 3,
+      "continuation_steps": 12,
+      "allows_full_campaign_disposition": false
+    },
+    "full": {
+      "discovery_icosphere_level": 2,
+      "confirmation_icosphere_level": 3,
+      "sobol_seed_count_per_target": 256,
+      "max_nfev_per_start": 500,
+      "source_c_value_count": 17,
+      "natural_lambda_bin_count_per_chart": 13,
+      "max_natural_leaves_per_chart": 13,
+      "max_natural_leaves_per_probe": 39,
+      "reseed_samples_per_leaf": 3,
+      "continuation_steps": 48,
+      "allows_full_campaign_disposition": false
+    }
+  },
+  "tolerances": {
+    "axis_intersection_m": 1e-12,
+    "axis_orthogonality_abs_dot": 1e-12,
+    "position_residual_m": 1e-8,
+    "pointing_geodesic_rad": 1e-6,
+    "orientation_geodesic_rad": 1e-6,
+    "closed_loop_residual": 1e-8,
+    "joint_lift_error_rad": 1e-8,
+    "family_coordinate_error_rad": 1e-6,
+    "chart_singularity_sin_beta": 1e-6,
+    "reseed_symmetric_q_distance_rad": 0.005,
+    "reseed_pointing_distance_rad": 0.005,
+    "minimum_transversality_sigma": 0.001,
+    "leaf_duplicate_distance_rad": 0.02,
+    "strict_analytical_boundary_margin_m": 0.005
+  },
+  "set_acceptance": {
+    "max_hausdorff_in_confirmation_cell_diameters": 1.0,
+    "max_missed_strict_covered_fraction": 0.05,
+    "max_strict_false_positive_fraction": 0.0,
+    "max_refinement_metric_delta": 0.02,
+    "require_all_five_point_classifications_match_oracle": true,
+    "accepted_child_statuses": ["EXACT_GLOBAL", "EXACT_ON_COMPONENT"]
+  },
+  "reproducibility": {
+    "sobol_scramble": true,
+    "sobol_seed_discovery": 310031,
+    "sobol_seed_confirmation": 310032,
+    "allow_nan_json": false
+  }
+}

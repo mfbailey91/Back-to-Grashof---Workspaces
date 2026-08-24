@@ -1,4 +1,4 @@
-"""R3A-H13 §1 locked invariants. Not an H13A source-control implementation."""
+"""R3A-H13 locked invariants. H13A may exist; H12 hub and config stay frozen."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction import (
 
 REPO = Path(__file__).resolve().parents[1]
 H12_CONFIG = REPO / "configs" / "l5_positive_control_v1.json"
+H13A_CONFIG = REPO / "configs" / "l5_positive_control_h13a_c_domain_v1.json"
 COMPACT_MANIFEST = REPO / "results" / "l5_reconstruction" / "r3a" / "compact_manifest.json"
 CURRENT_STATUS = REPO / "docs" / "CURRENT_STATUS.md"
 H13_MODULE = (
@@ -31,16 +32,14 @@ LOCKED_RAW_BUNDLE_SHA256 = (
 )
 
 
-def _module_imports(path: Path) -> set[str]:
+def _top_level_imported_modules(path: Path) -> set[str]:
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     names: set[str] = set()
-    for node in ast.walk(tree):
+    for node in tree.body:
         if isinstance(node, ast.Import):
             names.update(alias.name for alias in node.names)
-        elif isinstance(node, ast.ImportFrom):
-            module = node.module or ""
-            names.add(module)
-            names.update(f"{module}.{alias.name}" if module else alias.name for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            names.add(node.module)
     return names
 
 
@@ -70,16 +69,16 @@ def test_current_status_keeps_parent_incomplete_without_new_closeout() -> None:
     assert "new scientific closeout" not in text.lower()
 
 
-def test_h12_path_does_not_import_source_control_h13() -> None:
-    assert not H13_MODULE.exists()
+def test_h12_path_does_not_import_source_control_h13_at_module_level() -> None:
+    assert H13_MODULE.is_file()
+    assert H13A_CONFIG.is_file()
     assert not H13_PILOT_CONFIG.exists()
     assert h12_source_control.__file__ is not None
     assert l5_cli.__file__ is not None
-    cli_imports = _module_imports(Path(l5_cli.__file__))
-    source_imports = _module_imports(Path(h12_source_control.__file__))
-    assert "source_control_h13" not in cli_imports
-    assert ".source_control_h13" not in cli_imports
-    assert "source_control_h13" not in source_imports
-    assert ".source_control_h13" not in source_imports
+    cli_top = _top_level_imported_modules(Path(l5_cli.__file__))
+    source_top = _top_level_imported_modules(Path(h12_source_control.__file__))
+    assert "source_control_h13" not in cli_top
+    assert ".source_control_h13" not in cli_top
+    assert "source_control_h13" not in source_top
+    assert ".source_control_h13" not in source_top
     assert "source_control_h13" not in Path(l5_cli.__file__).read_text(encoding="utf-8")
-    assert "source_control_h13" not in Path(h12_source_control.__file__).read_text(encoding="utf-8")

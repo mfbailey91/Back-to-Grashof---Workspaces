@@ -775,7 +775,33 @@ stitching. Mixing a new H13 evidence contract into the frozen H12 config, hub, o
 historical source path would retune the recorded closeout before the source column is
 domain-complete, component-aware, and resolution-stable.
 
-**Consequence:** This ADR records invariants only. It does not activate H13
-source-control code, replace the compact hub, interpret the natural UURU column, or
-authorize R3B/L6. Later H13 sprints remain queued behind these invariants.
+**Consequence:** This ADR records invariants only. It does not replace the compact hub,
+interpret the natural UURU column, or authorize R3B/L6. H13A implements opt-in
+dispatch and the analytical `c` domain under ADR-056 without retuning H12.
+
+## ADR-056 — H13A source path is opt-in and the c domain is the analytical rho_m interval
+
+<!-- R3A_H13A_ANALYTICAL_C_DOMAIN_2026_08_23 -->
+
+**Status:** IMPLEMENTED (H13A only; not a scientific closeout)
+
+**Decision:** Preserve the frozen H12 source-control implementation for configs without
+`source_control.policy_version`. Enable H13A only through
+`policy_version=h13_component_closure_v1` on a separate config that cannot issue a
+full-campaign disposition. The required `c` interval is the regional-shell oracle
+evaluated at declared probe `rho_m`, not discovery extrema and not `||p*||`. Slice
+count is `max(configured source_c_value_count, resolution-derived count)` so adjacent
+`arccos(c)` spacing stays within a declared fraction of the confirmation-cell
+diameter. Analytical endpoints are `CRITICAL_OR_BOUNDARY` and are not required to
+return a regular one-dimensional curve. Seed discovery remains the H12 first-three
+law until H13B.
+
+**Reason:** H12 blocked the source column in part because the required `c` domain was
+inferred from a finite discovery bank and because the slice count was not tied to
+the declared sphere resolution. Those two authority defects can be repaired without
+retuning the recorded H12 closeout.
+
+**Consequence:** H13A does not replace the compact hub, interpret the natural UURU
+column, or claim component completeness. H13B–H13F remain unimplemented. L5 remains
+`parent_incomplete` and the campaign blocker remains `STITCHING_CONTROL_BLOCKED`.
 
