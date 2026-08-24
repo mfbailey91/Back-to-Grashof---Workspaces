@@ -339,22 +339,30 @@ The current H12 natural artifacts do not provide independent source-parent compo
 
 Detailed execution: `R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md`.
 
-### R3C-A2 — Parent campaign and raw child corpus
+### R3C-A2 — 5R parent campaign and family census
 
-**Goal:** Generate a controlled bank of 5R geometries and Cartesian points and collect source-derived children.
+**Goal:** Build a controlled source-parent bank and separate actual E0 child families from exact registered parent patterns that do not yet have a source-derived child construction.
 
-Start with:
+Required bank:
 
 ```text
-R3A positive control
+R3A SURU positive control
 exact_two_u_5r
 generic_5r
-near-architecture controls
+near_two_u_5r
+near-SURU shoulder control
+near-SURU wrist control
 ```
 
-Do not silently assume every source produces UURU.
+A2 first audits exact consecutive `RR -> U_phys` structure. Two non-overlapping exact pairs may produce registered U-based parent patterns such as `SUUR`, `SURU`, or `SRUU`. A registered parent pattern does **not** mean its child (`UUUR`, `UURU`, `URUU`) has arisen.
 
-**Pass:** Family counts, source-component counts, acceptance status, and raw geometry distributions are reproducible from frozen configs.
+A child family is counted as `EXACT_CHILD_EXPORTED` only when reconstructible E0 specimens exist from A1-style source-derived export. Exact parent patterns with no E0 child are `REGISTERED_PARENT_PATTERN_ONLY`. Generic and near controls are never nearest-matched into a family.
+
+The `S_phys` registry families (`USRR`, `URSR`, `URRS`) remain explicitly outside A2's exact-U detector scope.
+
+**Pass:** All required cases are reproducible; A1 authority has zero round-trip failures; source structure and actual-child counts are distinct; near controls remain exact-aggregation negatives; and `a3_family_queue.json` contains only families with actual reconstructible E0 specimens.
+
+Detailed execution: `R3C_A2_5R_PARENT_CAMPAIGN.md`.
 
 ### R3C-A3 — Family canonicalization and support geometry
 

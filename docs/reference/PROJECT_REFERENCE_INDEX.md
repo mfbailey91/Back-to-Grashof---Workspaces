@@ -102,6 +102,10 @@ R3C-A0 E0 extraction contract: role-aware family identity, source provenance, fr
 
 R3C-A1 downstream exporter: frozen R3A natural leaves → reconstructible E0 UURU specimens with G1/G2 round-trip proof (ADR-053). H12 source-parent component IDs remain unresolved; exported records are not workspace evidence.
 
+### [`../methods/R3C_A2_5R_PARENT_CAMPAIGN.md`](../methods/R3C_A2_5R_PARENT_CAMPAIGN.md)
+
+R3C-A2 diagnostic census: exact-U parent patterns vs actual A1 E0 children (ADR-054). A3 queue contains only reconstructible families; pattern-only children enter a construction backlog. No workspace promotion.
+
 ### Archived V05–V09 planning lineage
 
 Historical sequential sprint labels (V05–V09) are preserved under [`../archive/programs/`](../archive/programs/KINEMATIC_DECOMPOSITION_V05_V09_PROGRAM.md) and [`../archive/sprints/`](../archive/sprints/SPRINT_01.md). They are not the active roadmap.

@@ -41,6 +41,7 @@ implementation authority.
 | [methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md](methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md) | ACTIVE PROGRAM | Source-derived 5R → mechanism → atlas → 5R falsification loop |
 | [methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md](methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md) | ACTIVE EXECUTION | Atlas provenance and extraction-contract sprint |
 | [methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md](methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md) | ACTIVE EXECUTION | Frozen natural leaves → reconstructible E0 UURU mechanism specimens |
+| [methods/R3C_A2_5R_PARENT_CAMPAIGN.md](methods/R3C_A2_5R_PARENT_CAMPAIGN.md) | ACTIVE EXECUTION | Controlled 5R source bank, exact parent-pattern census, and actual-child family queue |
 | [methods/JACOBIAN_AND_DERIVATIVE_POLICY.md](methods/JACOBIAN_AND_DERIVATIVE_POLICY.md) | REFERENCE | Derivative / FD policy |
 | [methods/SPATIAL_POINTING_SLICE_CONTRACT.md](methods/SPATIAL_POINTING_SLICE_CONTRACT.md) | REFERENCE | Pointing level-set contract |
 | [methods/U_JOINT_DRIVE_CONTRACT.md](methods/U_JOINT_DRIVE_CONTRACT.md) | REFERENCE | Virtual-U drive coordinates |

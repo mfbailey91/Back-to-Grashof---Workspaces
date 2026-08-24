@@ -180,6 +180,8 @@ Detailed program: [methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md](methods/L5_BEHAVIOR_
 
 **A1 authority:** Exporting the frozen H12 natural leaves proves mechanism-definition portability only. H12 source-parent component IDs remain unresolved, so current E0 specimens are not workspace evidence and the H12 `STITCHING_CONTROL_BLOCKED` closeout is unchanged.
 
+**A2 diagnostic campaign:** [methods/R3C_A2_5R_PARENT_CAMPAIGN.md](methods/R3C_A2_5R_PARENT_CAMPAIGN.md) may inventory exact source structure and reconstructible child-family support without promoting R3A. Exact parent patterns are separated from actual E0 children; near/generic controls are never nearest-matched; S-physical candidate families remain outside the first detector scope.
+
 **R3 completion gate:** R3A must pass, transfer evidence must exist, and R3C must reach a parent-level falsification result before the aligned-roll L6 program becomes the primary workstream. A0 infrastructure may land earlier because it makes no scientific promotion.
 
 ---
