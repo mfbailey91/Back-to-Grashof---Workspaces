@@ -92,7 +92,7 @@ Recorded H12 repair: same-grid strict Hausdorff, ambiguous-boundary exclusion, r
 
 ### [`../methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md`](../methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md)
 
-R3A-H13 §1 locked invariants (ADR-055) and H13A–H13E (ADR-056–ADR-060): H12 compact hub and frozen config remain the recorded closeout; H13F unimplemented; L5 remains `parent_incomplete`. Not a new scientific closeout.
+R3A-H13 §1 locked invariants (ADR-055) and H13A–H13F (ADR-056–ADR-061): H12 compact hub and frozen config remain the recorded closeout; freeze not claimed; L5 remains `parent_incomplete`. Not a new scientific closeout.
 
 ### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
 

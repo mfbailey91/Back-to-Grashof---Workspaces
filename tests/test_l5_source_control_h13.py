@@ -69,6 +69,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.sphere_grid import 
 H12_CONFIG = "configs/l5_positive_control_v1.json"
 H13A_CONFIG = "configs/l5_positive_control_h13a_c_domain_v1.json"
 H13_PILOT_CONFIG = "configs/l5_positive_control_h13_source_pilot_v1.json"
+H13F_CONFIG = "configs/l5_positive_control_h13_source_v1.json"
 P1_P3 = ("P1_DEEP_COMPLETE", "P3_INNER_INCOMPLETE")
 
 
@@ -644,10 +645,11 @@ def _hashed_h13_pilot_campaign(
     probe_ids: tuple[str, ...] = P1_P3,
     mode: str = "ci",
     include_render: bool = False,
+    config_path: Path | str = H13_PILOT_CONFIG,
 ) -> None:
-    config_path = Path(H13_PILOT_CONFIG)
-    write_manifest(config_path, raw, mode=mode)
-    config = load_campaign_config(config_path)
+    resolved = Path(config_path)
+    write_manifest(resolved, raw, mode=mode)
+    config = load_campaign_config(resolved)
     for probe_id in probe_ids:
         _write_pilot_probe_files(raw, probe_id)
     stages: tuple[tuple[str, dict[str, object]], ...] = (
@@ -750,3 +752,49 @@ def test_h13_pilot_p1_p3_ci_package_is_diagnostic(tmp_path: Path) -> None:
     assert manifest["full_closeout_eligible"] is False
     assert manifest["allows_full_campaign_disposition"] is False
     assert manifest["all_configured_probes_present"] is False
+
+
+def test_h13f_full_config_may_close_but_packages_diagnostic(tmp_path: Path) -> None:
+    config = load_campaign_config(H13F_CONFIG)
+    policy = load_h13_source_policy(config, "full")
+    assert config.schema_version == "r3a_l5_positive_control_h13_source_v1"
+    assert h13_source_policy_requested(config) is True
+    assert config.mode("ci").allows_full_campaign_disposition is False
+    assert config.mode("smoke").allows_full_campaign_disposition is False
+    assert config.mode("full").allows_full_campaign_disposition is True
+    assert policy.continuation_step_size == pytest.approx(0.08)
+    probe_ids = [probe.probe_id for probe in config.probes]
+    mode, declared, all_configured = validate_package_scope(
+        {
+            "config_hash": config.config_hash,
+            "mode": "full",
+            "probe_ids": probe_ids,
+            "campaign_blocker": CampaignBlocker.STITCHING_CONTROL_BLOCKED.value,
+            "accepted_reconstruction": False,
+        },
+        config,
+        full_closeout=True,
+    )
+    assert mode == "full"
+    assert declared == tuple(probe_ids)
+    assert all_configured is True
+    raw = tmp_path / "raw"
+    _hashed_h13_pilot_campaign(
+        raw,
+        probe_ids=tuple(probe_ids),
+        mode="full",
+        include_render=True,
+        config_path=H13F_CONFIG,
+    )
+    manifest = package_r3a_campaign(
+        raw_root=raw,
+        results_root=tmp_path / "compact",
+        bundle_dir=tmp_path / "bundles",
+        config_path=Path(H13F_CONFIG),
+    )
+    assert manifest["package_kind"] == "diagnostic"
+    assert manifest["campaign_mode"] == "full"
+    assert manifest["probe_ids"] == probe_ids
+    assert manifest["full_closeout_eligible"] is False
+    assert manifest["allows_full_campaign_disposition"] is True
+    assert manifest["all_configured_probes_present"] is True

@@ -1,13 +1,13 @@
 # R3A-H13 — Source-Control Component and Coverage Closure
 
-**Status:** §1 and H13A–H13E implemented; H13F remains unimplemented
+**Status:** §1 and H13A–H13F implemented
 **Project:** Back to Grashof — Mechanism-Based Workspace Characterization
 **Rung:** L5 spatial 5R
 **Starting point:** current `origin/main` after PR #21 (`3750a55`); not the stale handoff `17d87ad`
 **Parent result:** frozen H12 five-probe closeout `STITCHING_CONTROL_BLOCKED`
 **Primary goal:** Make the decomposition-free source `h=c` control domain-complete, component-aware, termination-honest, and resolution-stable before the natural UURU column is interpreted.
 **Non-goal:** Do not tune natural leaves, begin R3B/L6, or activate the numerical virtual-crank atlas in H13.
-**Implementation:** §1 locked invariants and H13A–H13E are implemented. Frozen H12 config and compact hub are unchanged. H13F remains the contract for a later sprint. Do not apply `r3a_h13_source_control_component_and_coverage_closure.patch`.
+**Implementation:** §1 locked invariants and H13A–H13F are implemented. Frozen H12 config and compact hub remain the recorded closeout. The H13F five-probe tree is diagnostic under `outputs/`. The freeze rule is not claimed. Do not apply `r3a_h13_source_control_component_and_coverage_closure.patch`.
 
 ---
 
@@ -63,7 +63,7 @@ H13 preserves all of the following:
 - A finite family of sampled `h=c` curves is not called a global foliation.
 - R3B, L6, and the virtual-crank atlas remain held.
 
-H13A implements the opt-in dispatch and analytical `c` domain. H13B replaces the silent first-three seed rule on that path with wrapped-Q clustering, explicit caps, seed-count vocabulary, and quality-ordered symmetric dedup. H13C classifies each continued trace as seed return, plus/minus endpoint meeting, budget exhaustion, singularity, corrector failure, or open-unclassified, and applies the mixed-trace interval law. H13D geodesically densifies each pointing polyline before painting so occupancy uses a resolution-aware curve, not a sparse sample cloud. H13E freezes that policy in `configs/l5_positive_control_h13_source_pilot_v1.json`; every mode including `full` has `allows_full_campaign_disposition=false`. Frozen H12 config still has no `policy_version` and still uses `seeds[:3]`. H13F remains unimplemented.
+H13A implements the opt-in dispatch and analytical `c` domain. H13B replaces the silent first-three seed rule on that path with wrapped-Q clustering, explicit caps, seed-count vocabulary, and quality-ordered symmetric dedup. H13C classifies each continued trace as seed return, plus/minus endpoint meeting, budget exhaustion, singularity, corrector failure, or open-unclassified, and applies the mixed-trace interval law. H13D geodesically densifies each pointing polyline before painting so occupancy uses a resolution-aware curve, not a sparse sample cloud. H13E freezes that policy in `configs/l5_positive_control_h13_source_pilot_v1.json`; every mode including `full` has `allows_full_campaign_disposition=false`. Frozen H12 config still has no `policy_version` and still uses `seeds[:3]`. H13F adds `configs/l5_positive_control_h13_source_v1.json` as an immutable copy whose `full` mode may close; this sprint does not `--full-closeout` or replace the H12 hub. The freeze rule is not claimed.
 
 ---
 
@@ -499,7 +499,7 @@ tuning.
 H13E is implemented as the named diagnostic pilot JSON. All modes including `full`
 cannot issue a full-campaign disposition. A focused diagnostic campaign writes
 gitignored `outputs/` and does not replace the H12 hub. The freeze rule is not
-claimed. H13F remains unimplemented.
+claimed.
 
 ---
 
@@ -553,6 +553,11 @@ natural decomposition
 ```
 
 H13 makes no prediction that the campaign advances beyond the source column.
+
+H13F is implemented as the named immutable five-probe config. `full` may issue a
+full-campaign disposition. This sprint's five-probe run writes gitignored `outputs/`
+and packages as `diagnostic` without `--full-closeout` or `--replace-committed`. The
+H12 hub remains the recorded closeout. The freeze rule is not claimed.
 
 ---
 

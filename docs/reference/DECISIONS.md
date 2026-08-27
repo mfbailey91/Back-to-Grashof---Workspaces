@@ -756,7 +756,7 @@ unchanged.
 
 <!-- R3A_H13_LOCKED_INVARIANTS_2026_08_23 -->
 
-**Status:** RECORDED LOCK (§1; H13A–H13E implemented; H13F unimplemented; not a new scientific closeout)
+**Status:** RECORDED LOCK (§1; H13A–H13F implemented; not a new scientific closeout)
 
 **Decision:** Until a later strict full-closeout package replaces them, the compact
 hub at `results/l5_reconstruction/r3a/` and its raw-bundle digest remain the recorded
@@ -780,7 +780,7 @@ interpret the natural UURU column, or authorize R3B/L6. H13A implements opt-in
 dispatch and the analytical `c` domain under ADR-056. H13B implements projected-seed
 discovery under ADR-057. H13C implements honest trace termination under ADR-058.
 H13D implements resolution-aware curve rasterization under ADR-059.
-None of those retunes H12.
+H13E is ADR-060. H13F is ADR-061. None of those retunes H12.
 
 ## ADR-056 — H13A source path is opt-in and the c domain is the analytical rho_m interval
 
@@ -807,7 +807,7 @@ retuning the recorded H12 closeout.
 **Consequence:** H13A does not replace the compact hub, interpret the natural UURU
 column, or claim component completeness. Seed discovery on the H13 path is H13B
 (ADR-057). H13C honest termination is ADR-058. H13D curve rasterization is ADR-059.
-H13E diagnostic pilot config is ADR-060. H13F remains unimplemented. L5 remains
+H13E diagnostic pilot config is ADR-060. H13F five-probe config is ADR-061. L5 remains
 `parent_incomplete` and the campaign blocker remains `STITCHING_CONTROL_BLOCKED`.
 
 ## ADR-057 — H13B discovers projected source-Q clusters with explicit caps
@@ -905,8 +905,8 @@ including `full`, keeps `allows_full_campaign_disposition=false`, so accidental
 `--full-closeout` is refused. The H13A development config remains. Frozen H12
 `configs/l5_positive_control_v1.json` still has no `policy_version`. Focused
 diagnostic campaigns write gitignored `outputs/` and do not replace
-`results/l5_reconstruction/r3a/`. The §23 freeze rule is not claimed. H13F remains
-unimplemented.
+`results/l5_reconstruction/r3a/`. The §23 freeze rule is not claimed. The H13F
+five-probe config is ADR-061.
 
 **Reason:** Defects A–E now have named H13 machinery, but a campaign that can issue
 scientific disposition would mix an unfrozen diagnostic policy into the recorded
@@ -916,5 +916,34 @@ P1/P4/P5 run inspectable without retuning H12 or claiming a new closeout.
 **Consequence:** H13E does not replace the compact hub, freeze an H13 source policy,
 or authorize natural-leaf tuning. A failed or incomplete focused campaign remains
 `STITCHING_CONTROL_BLOCKED`. L5 remains `parent_incomplete`. The H13F five-probe
-rerun config is not created.
+config is ADR-061.
+
+## ADR-061 — H13F five-probe config may close; this sprint does not replace the hub
+
+<!-- R3A_H13F_FIVE_PROBE_CONFIG_2026_08_25 -->
+
+**Status:** IMPLEMENTED (H13F named config and diagnostic five-probe tree; not a
+scientific closeout)
+
+**Decision:** Create `configs/l5_positive_control_h13_source_v1.json` as an immutable
+copy of the H13E pilot policy, including continuation step size `0.08`, with
+`schema_version=r3a_l5_positive_control_h13_source_v1`. Do not rename or mutate the
+pilot JSON. `ci` and `smoke` keep `allows_full_campaign_disposition=false`. `full`
+sets `allows_full_campaign_disposition=true` so a later strict package *may* close.
+This sprint runs `--mode full` P1–P5 into gitignored `outputs/r3a_full_raw_h13` and
+packages as `diagnostic` without `--full-closeout` or `--replace-committed`. Frozen
+H12 `configs/l5_positive_control_v1.json` still has no `policy_version`. The compact
+hub digest `d65e7a36…` remains the recorded closeout. The §23 freeze rule is not
+claimed. Seed caps, continuation steps, c-spacing, and natural-leaf parameters are
+not retuned.
+
+**Reason:** Method H13F is a five-probe rerun on a named immutable config. The H13E
+pilot did not pass freeze (projected-cluster cap truncation, mixed required bins,
+refinement above tolerance). Replacing the H12 hub would record an H13 closeout
+before that freeze. A separate H13F config plus a diagnostic five-probe tree gives
+P2/P3 evidence without retuning H12 or claiming a new recorded package.
+
+**Consequence:** H13F does not replace the compact hub, freeze an H13 source policy,
+or authorize natural-leaf tuning. A failed five-probe diagnostic remains
+`STITCHING_CONTROL_BLOCKED`. L5 remains `parent_incomplete`.
 

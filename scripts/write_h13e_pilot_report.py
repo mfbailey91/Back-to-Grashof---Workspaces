@@ -153,7 +153,31 @@ def render_report(
     campaign: Mapping[str, Any],
     manifest: Mapping[str, Any] | None,
     rows: list[dict[str, Any]],
+    title: str = "H13E diagnostic source-control pilot",
+    lede: str = (
+        "Sprint-and-campaign printout. Not a scientific closeout. "
+        "The H12 hub remains authoritative."
+    ),
+    sprint_html: str | None = None,
+    summary_html: str | None = None,
+    package_config: str = "configs/l5_positive_control_h13_source_pilot_v1.json",
+    rebuild_cmd: str = "python scripts/write_h13e_pilot_report.py",
 ) -> str:
+    if sprint_html is None:
+        sprint_html = (
+            "H13E froze the H13A–D source policy, including continuation step size 0.08, in "
+            "<code>configs/l5_positive_control_h13_source_pilot_v1.json</code>. "
+            "Every mode including <code>full</code> has "
+            "<code>allows_full_campaign_disposition=false</code>. "
+            "The freeze rule is not claimed."
+        )
+    if summary_html is None:
+        summary_html = (
+            "Stage-1 diagnosis: the full-mode projected-cluster cap of 16 is exhausted on "
+            "required bins. Traces that did run are mostly returned or plus/minus-closed. "
+            "Occupancy is no longer a sparse-sample failure, but required <code>c</code> "
+            "intervals remain unresolved and refinement exceeds 0.02."
+        )
     schema = campaign.get("schema_version") or (manifest or {}).get("schema_version")
     mode = campaign.get("mode") or (manifest or {}).get("campaign_mode")
     config_hash = campaign.get("config_hash") or (manifest or {}).get("config_hash")
@@ -167,7 +191,7 @@ def render_report(
     freeze_rows = [
         ("Required bins all covered (not mixed, budget-exhausted, singular, or unresolved)", not mixed),
         ("No candidate or projected-cluster cap exhausted", not seed_fail),
-        ("P1/P4/P5 source-vs-direct dispositions accepted", False),
+        ("Source-vs-direct dispositions accepted", False),
         ("Refinement delta within 0.02", False),
         ("Copied-config continuation/c-spacing/raster stages run", False),
     ]
@@ -230,7 +254,7 @@ def render_report(
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>H13E diagnostic pilot report</title>
+  <title>{_esc(title)}</title>
   <style>
     :root {{ color-scheme: light dark; }}
     body {{ font: 15px/1.45 ui-sans-serif, system-ui, sans-serif; margin: 1.5rem auto; max-width: 960px; padding: 0 1rem 3rem; }}
@@ -265,8 +289,8 @@ def render_report(
   </style>
 </head>
 <body>
-  <h1>H13E diagnostic source-control pilot</h1>
-  <p class="lede">Sprint-and-campaign printout. Not a scientific closeout. The H12 hub remains authoritative.</p>
+  <h1>{_esc(title)}</h1>
+  <p class="lede">{_esc(lede)}</p>
   <p class="actions"><button type="button" onclick="window.print()">Print</button>
   <a href="index.html">Campaign hub</a></p>
 
@@ -278,10 +302,7 @@ def render_report(
   </div>
 
   <h2>Sprint</h2>
-  <p>H13E froze the H13A–D source policy, including continuation step size 0.08, in
-  <code>configs/l5_positive_control_h13_source_pilot_v1.json</code>.
-  Every mode including <code>full</code> has <code>allows_full_campaign_disposition=false</code>.
-  H13F was not created. The freeze rule is not claimed.</p>
+  <p>{sprint_html}</p>
   <table>
     <tbody>
       <tr><th>Schema</th><td>{_esc(schema)}</td></tr>
@@ -294,9 +315,7 @@ def render_report(
   </table>
 
   <h2>Campaign summary</h2>
-  <p>Stage-1 diagnosis: the full-mode projected-cluster cap of 16 is exhausted on required bins.
-  Traces that did run are mostly returned or plus/minus-closed. Occupancy is no longer a sparse-sample
-  failure, but required <code>c</code> intervals remain unresolved and refinement exceeds 0.02.</p>
+  <p>{summary_html}</p>
   <table>
     <thead>
       <tr>
@@ -320,9 +339,9 @@ def render_report(
   <h2>Reproduction</h2>
   <pre>{_esc(reproduction)}</pre>
   <p class="note">Package with
-  <code>scripts/package_r3a_campaign.py --config configs/l5_positive_control_h13_source_pilot_v1.json</code>
+  <code>scripts/package_r3a_campaign.py --config {_esc(package_config)}</code>
   and no <code>--full-closeout</code>. Rebuild this page with
-  <code>python scripts/write_h13e_pilot_report.py</code>.</p>
+  <code>{_esc(rebuild_cmd)}</code>.</p>
 </body>
 </html>
 """
@@ -333,6 +352,24 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--raw-root", type=Path, default=DEFAULT_RAW)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--output", type=Path, default=None)
+    parser.add_argument("--title", default="H13E diagnostic source-control pilot")
+    parser.add_argument(
+        "--lede",
+        default=(
+            "Sprint-and-campaign printout. Not a scientific closeout. "
+            "The H12 hub remains authoritative."
+        ),
+    )
+    parser.add_argument("--sprint-html", default=None)
+    parser.add_argument("--summary-html", default=None)
+    parser.add_argument(
+        "--package-config",
+        default="configs/l5_positive_control_h13_source_pilot_v1.json",
+    )
+    parser.add_argument(
+        "--rebuild-cmd",
+        default="python scripts/write_h13e_pilot_report.py",
+    )
     args = parser.parse_args(argv)
     raw_root = args.raw_root.resolve()
     campaign_path = raw_root / "campaign.json"
@@ -351,12 +388,18 @@ def main(argv: list[str] | None = None) -> int:
         campaign=campaign,
         manifest=manifest,
         rows=rows,
+        title=args.title,
+        lede=args.lede,
+        sprint_html=args.sprint_html,
+        summary_html=args.summary_html,
+        package_config=args.package_config,
+        rebuild_cmd=args.rebuild_cmd,
     )
     output = args.output.resolve() if args.output else raw_root / "h13e_sprint_report.html"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(html_text, encoding="utf-8")
     extras: list[Path] = []
-    compact = args.manifest.parent / "h13e_sprint_report.html"
+    compact = args.manifest.parent / output.name
     if args.manifest.is_file() and compact.resolve() != output:
         compact.write_text(html_text, encoding="utf-8")
         extras.append(compact)
