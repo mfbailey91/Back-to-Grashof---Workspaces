@@ -90,6 +90,10 @@ R3A-H11 acceptance-authority hardening: diagnostic vs full-closeout packages, ov
 
 Recorded H12 repair: same-grid strict Hausdorff, ambiguous-boundary exclusion, returned-set disposition vocabulary, package-side semantic recomputation, and frozen closeout `STITCHING_CONTROL_BLOCKED`.
 
+### [`../methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md`](../methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md)
+
+R3A-H13 §1 locked invariants (ADR-055) and H13A–H13F (ADR-056–ADR-061): H12 compact hub and frozen config remain the recorded closeout; freeze not claimed; L5 remains `parent_incomplete`. Not a new scientific closeout.
+
 ### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
 
 R3C source-derived 5R → mechanism → atlas → 5R falsification program (ADR-052). A0 is infrastructure only.
