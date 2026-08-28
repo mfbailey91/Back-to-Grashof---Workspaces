@@ -150,9 +150,9 @@ Execution: [methods/R3A_H12_DIRECT_COMPARISON_METRIC_REPAIR.md](methods/R3A_H12_
 
 #### R3A-H13 — Source-control component and coverage closure (queued)
 
-H13A–H13F source-control work exists on separate diagnostic configs; the H12 compact hub and frozen config remain authoritative. The §23 freeze rule is not claimed. L5 stays `parent_incomplete`. Direct-column metrics and natural-leaf parameters are not retuned while source control is blocked. `RETURNED_SET_FOUND` is declared-budget evidence; `COMPONENT_COMPLETE` stays reserved.
+H13A–H13F source-control work exists on separate diagnostic configs. H13G evidence-safe corrective software exists as a diagnostic opt-in (`h13g_evidence_safe_v1`); its P1/P4/P5 tree remains `STITCHING_CONTROL_BLOCKED`. The H12 compact hub and frozen config remain authoritative. The §23 freeze rule is not claimed. L5 stays `parent_incomplete`. Direct-column metrics and natural-leaf parameters are not retuned while source control is blocked. `RETURNED_SET_FOUND` is declared-budget evidence; `COMPONENT_COMPLETE` stays reserved.
 
-Execution: [methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md](methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md).
+Execution: [methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md](methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md), [methods/R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP.md](methods/R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP.md).
 
 ### R3B — Transfer and falsification
 

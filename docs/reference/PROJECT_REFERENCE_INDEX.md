@@ -94,6 +94,10 @@ Recorded H12 repair: same-grid strict Hausdorff, ambiguous-boundary exclusion, r
 
 R3A-H13 §1 locked invariants (ADR-055) and H13A–H13F (ADR-056–ADR-061): H12 compact hub and frozen config remain the recorded closeout; freeze not claimed; L5 remains `parent_incomplete`. Not a new scientific closeout.
 
+### [`../methods/R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP.md`](../methods/R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP.md)
+
+H13G evidence-safe source-control corrections exist as a diagnostic opt-in (`h13g_evidence_safe_v1`). Diagnostic P1/P4/P5 remains `STITCHING_CONTROL_BLOCKED` under `outputs/`. Not a freeze, not a hub replacement, not a new scientific closeout.
+
 ### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
 
 R3C source-derived 5R → mechanism → atlas → 5R falsification program (ADR-052). A0 is infrastructure only.

@@ -40,6 +40,7 @@ Array = NDArray[np.floating]
 Vec3 = tuple[float, float, float]
 DEDUP_Q_TOL = 0.35
 H13_POLICY_VERSION = "h13_component_closure_v1"
+H13G_POLICY_VERSION = "h13g_evidence_safe_v1"
 COVERED_SOURCE_INTERVAL_STATUSES = frozenset(
     {
         SourceIntervalStatus.RETURNED_COMPONENT_FOUND,
@@ -72,6 +73,16 @@ def h13_source_policy_requested(config: CampaignConfig) -> bool:
     return (
         isinstance(policy_raw, dict)
         and policy_raw.get("policy_version") == H13_POLICY_VERSION
+    )
+
+
+def h13g_source_policy_requested(config: CampaignConfig) -> bool:
+    """True only for the evidence-safe H13G corrective policy."""
+
+    policy_raw = config.raw.get("source_control", {})
+    return (
+        isinstance(policy_raw, dict)
+        and policy_raw.get("policy_version") == H13G_POLICY_VERSION
     )
 
 
@@ -127,6 +138,14 @@ class SourceControlFiber:
     endpoint_state_distance: float | None = None
     endpoint_tangent_abs_dot: float | None = None
     rejection_reason_counts: dict[str, int] | None = None
+    positive_ray_termination: str | None = None
+    negative_ray_termination: str | None = None
+    rasterized_pointing_samples: tuple[Vec3, ...] | None = None
+    rasterization_complete: bool | None = None
+    rasterization_failure_count: int = 0
+    rasterization_budget_exhausted: bool = False
+    max_rasterized_position_residual_m: float | None = None
+    max_rasterized_h_residual: float | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -153,6 +172,29 @@ class SourceControlFiber:
                     "endpoint_state_distance": self.endpoint_state_distance,
                     "endpoint_tangent_abs_dot": self.endpoint_tangent_abs_dot,
                     "rejection_reason_counts": dict(self.rejection_reason_counts or {}),
+                }
+            )
+        if self.positive_ray_termination is not None or self.negative_ray_termination is not None:
+            payload.update(
+                {
+                    "positive_ray_termination": self.positive_ray_termination,
+                    "negative_ray_termination": self.negative_ray_termination,
+                }
+            )
+        if self.rasterization_complete is not None:
+            payload.update(
+                {
+                    "rasterized_pointing_samples": [
+                        list(direction)
+                        for direction in (self.rasterized_pointing_samples or ())
+                    ],
+                    "rasterization_complete": self.rasterization_complete,
+                    "rasterization_failure_count": self.rasterization_failure_count,
+                    "rasterization_budget_exhausted": self.rasterization_budget_exhausted,
+                    "max_rasterized_position_residual_m": (
+                        self.max_rasterized_position_residual_m
+                    ),
+                    "max_rasterized_h_residual": self.max_rasterized_h_residual,
                 }
             )
         return json_object(payload)
@@ -440,6 +482,10 @@ def write_source_control_stage(
 ) -> dict[str, Any]:
     import json
 
+    if h13g_source_policy_requested(config):
+        from .source_control_h13g import write_source_control_stage_h13g
+
+        return write_source_control_stage_h13g(config, outdir, probes, mode=mode)
     if h13_source_policy_requested(config):
         from .source_control_h13 import write_source_control_stage_h13
 

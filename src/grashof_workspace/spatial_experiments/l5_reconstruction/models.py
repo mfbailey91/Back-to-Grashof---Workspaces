@@ -1079,6 +1079,18 @@ class SourceControlCRecord:
     budget_exhausted_count: int = 0
     corrector_failure_count: int = 0
     closure_kind_counts: dict[str, int] | None = None
+    seed_count_semantics: str | None = None
+    required_candidate_count: int = 0
+    exploratory_candidate_count: int = 0
+    candidate_budget_exhausted: bool = False
+    blocking_projection_failure_count: int = 0
+    diagnostic_projection_failure_count: int = 0
+    trace_attempt_count: int = 0
+    explained_projected_seed_count: int = 0
+    failed_trace_seed_count: int = 0
+    unexplained_projected_seed_count: int = 0
+    trace_budget_exhausted: bool = False
+    rasterization_incomplete_count: int = 0
 
     def to_json_dict(self) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -1102,9 +1114,8 @@ class SourceControlCRecord:
                     "projected_seed_cluster_count": self.projected_seed_cluster_count,
                     "projection_failure_count": self.projection_failure_count,
                     "seed_budget_exhausted": self.seed_budget_exhausted,
-                    "seed_count_semantics": (
-                        "attempted_projected_seed_clusters_not_expected_components"
-                    ),
+                    "seed_count_semantics": self.seed_count_semantics
+                    or "attempted_projected_seed_clusters_not_expected_components",
                     "required": self.required,
                     "domain_boundary": self.domain_boundary,
                     "closed_count": self.closed_count,
@@ -1114,6 +1125,32 @@ class SourceControlCRecord:
                     "closure_kind_counts": dict(self.closure_kind_counts or {}),
                 }
             )
+            if self.seed_count_semantics is not None:
+                payload.update(
+                    {
+                        "required_candidate_count": self.required_candidate_count,
+                        "exploratory_candidate_count": self.exploratory_candidate_count,
+                        "candidate_budget_exhausted": self.candidate_budget_exhausted,
+                        "blocking_projection_failure_count": (
+                            self.blocking_projection_failure_count
+                        ),
+                        "diagnostic_projection_failure_count": (
+                            self.diagnostic_projection_failure_count
+                        ),
+                        "trace_attempt_count": self.trace_attempt_count,
+                        "explained_projected_seed_count": (
+                            self.explained_projected_seed_count
+                        ),
+                        "failed_trace_seed_count": self.failed_trace_seed_count,
+                        "unexplained_projected_seed_count": (
+                            self.unexplained_projected_seed_count
+                        ),
+                        "trace_budget_exhausted": self.trace_budget_exhausted,
+                        "rasterization_incomplete_count": (
+                            self.rasterization_incomplete_count
+                        ),
+                    }
+                )
         return json_object(payload)
 
 

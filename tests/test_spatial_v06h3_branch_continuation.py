@@ -38,6 +38,26 @@ def test_circle_returns_with_conjunctive_loop_test() -> None:
     assert trace.to_json_dict()["notes"]
 
 
+def test_signed_rays_leave_seed_on_opposite_tangent_sides() -> None:
+    problem = UnitCircleProblem()
+    x0 = np.array([1.0, 0.0])
+    t0 = branch_tangent(problem, x0)
+    trace = continue_implicit_branch(problem, x0, max_steps=1, step_size=0.1)
+    positive = next(
+        step for step in trace.steps if step.accepted and step.x is not None and step.s > 0.0
+    )
+    negative = next(
+        step for step in trace.steps if step.accepted and step.x is not None and step.s < 0.0
+    )
+    delta_positive = np.asarray(positive.x) - x0
+    delta_negative = np.asarray(negative.x) - x0
+    assert float(np.dot(delta_positive, t0)) > 0.0
+    assert float(np.dot(delta_negative, t0)) < 0.0
+    by_direction = {record.direction: record for record in trace.ray_records}
+    assert by_direction["positive"].termination == "BUDGET_EXHAUSTED"
+    assert by_direction["negative"].termination == "BUDGET_EXHAUSTED"
+
+
 def test_parabola_does_not_return() -> None:
     problem = ParabolaProblem()
     trace = continue_implicit_branch(problem, np.array([0.0, 0.0]), max_steps=20, step_size=0.1)

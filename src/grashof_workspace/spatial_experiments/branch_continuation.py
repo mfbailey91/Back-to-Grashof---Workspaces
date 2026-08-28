@@ -15,6 +15,7 @@ proximity, tangent alignment, and matching branch identity.
 
 from __future__ import annotations
 
+from collections import Counter
 from dataclasses import dataclass
 from math import isfinite
 from typing import Any, Protocol
@@ -166,6 +167,28 @@ class BranchStep:
 
 
 @dataclass(frozen=True, slots=True)
+class BranchRayRecord:
+    """Termination evidence for one signed pseudo-arclength ray."""
+
+    direction: str
+    termination: str
+    accepted_step_count: int
+    accepted_arclength: float
+    endpoint: tuple[float, ...]
+    rejection_reason_counts: dict[str, int]
+
+    def to_json_dict(self) -> dict[str, Any]:
+        return {
+            "direction": self.direction,
+            "termination": self.termination,
+            "accepted_step_count": self.accepted_step_count,
+            "accepted_arclength": self.accepted_arclength,
+            "endpoint": list(self.endpoint),
+            "rejection_reason_counts": dict(self.rejection_reason_counts),
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class BranchTrace:
     problem_id: str
     branch_id: str
@@ -174,9 +197,10 @@ class BranchTrace:
     branch_status: str
     returned: bool
     notes: tuple[str, ...]
+    ray_records: tuple[BranchRayRecord, ...] = ()
 
     def to_json_dict(self) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "problem_id": self.problem_id,
             "branch_id": self.branch_id,
             "x_seed": list(self.x_seed),
@@ -186,6 +210,9 @@ class BranchTrace:
             "returned": self.returned,
             "notes": list(self.notes),
         }
+        if self.ray_records:
+            payload["ray_records"] = [record.to_json_dict() for record in self.ray_records]
+        return payload
 
 
 def correct_pseudo_arclength(
@@ -437,32 +464,53 @@ def continue_implicit_branch(
     notes = (
         "V06H3 shared pseudo-arclength engine; not a D1/D2 migration (ADR-044).",
         "Plus/minus rays from one seed are not component completeness.",
+        "Signed-ray contract: one sign lives in ds; both rays retain the seed tangent orientation.",
         "Return requires arclength, wrapped state, tangent alignment, and branch identity.",
     )
     status = "open"
     returned = False
     ds_mag = abs(float(step_size))
     easy = 0
+    ray_records: list[BranchRayRecord] = []
 
     for sign in (1.0, -1.0):
+        direction = "positive" if sign > 0.0 else "negative"
         x_cur = x0.copy()
-        t_cur = t0.copy() if sign > 0.0 else -t0.copy()
+        # Encode direction exactly once. Negating both tangent and ds makes both
+        # rays leave the seed in the same geometric direction.
+        t_cur = t0.copy()
         s_cur = 0.0
         ds_local = sign * ds_mag
         easy = 0
+        accepted_count = 0
+        rejection_counts: Counter[str] = Counter()
+        ray_termination = "BUDGET_EXHAUSTED"
         for _ in range(max_steps):
             step, t_next, rejected = take_branch_step(
                 problem, x_cur, t_cur, ds_local, s0=s_cur
             )
             steps.extend(rejected)
+            rejection_counts.update(
+                str(item.rejection_reason)
+                for item in rejected
+                if item.rejection_reason is not None
+            )
             if step is None or not step.accepted or step.x is None:
                 last_reason = rejected[-1].rejection_reason if rejected else "unresolved"
                 if last_reason == "singular":
                     status = "singular"
-                elif status != "returned":
-                    status = "unresolved" if last_reason == "corrector_failed" else "open"
+                    ray_termination = "SINGULAR"
+                elif last_reason == "corrector_failed":
+                    if status != "returned":
+                        status = "unresolved"
+                    ray_termination = "CORRECTOR_FAILURE"
+                else:
+                    if status != "returned":
+                        status = "open"
+                    ray_termination = "OPEN_UNCLASSIFIED"
                 break
             steps.append(step)
+            accepted_count += 1
             x_cur = np.asarray(step.x, dtype=float)
             t_cur = t_next
             s_cur = step.s
@@ -487,7 +535,18 @@ def continue_implicit_branch(
             ):
                 returned = True
                 status = "returned"
+                ray_termination = "RETURNED_TO_SEED"
                 break
+        ray_records.append(
+            BranchRayRecord(
+                direction=direction,
+                termination=ray_termination,
+                accepted_step_count=accepted_count,
+                accepted_arclength=abs(float(s_cur)),
+                endpoint=tuple(float(value) for value in x_cur),
+                rejection_reason_counts=dict(rejection_counts),
+            )
+        )
         if returned:
             break
 
@@ -500,6 +559,7 @@ def continue_implicit_branch(
         branch_status=status,
         returned=returned,
         notes=notes,
+        ray_records=tuple(ray_records),
     )
 
 

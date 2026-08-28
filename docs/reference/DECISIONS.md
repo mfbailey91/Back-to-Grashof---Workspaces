@@ -947,3 +947,35 @@ P2/P3 evidence without retuning H12 or claiming a new recorded package.
 or authorize natural-leaf tuning. A failed five-probe diagnostic remains
 `STITCHING_CONTROL_BLOCKED`. L5 remains `parent_incomplete`.
 
+## ADR-062 — H13G evidence-safe corrections are diagnostic only
+
+<!-- R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP_2026_08_27 -->
+
+**Status:** IMPLEMENTED (H13G corrective software and diagnostic P1/P4/P5 tree; not a
+scientific closeout)
+
+**Decision:** Add opt-in policy `h13g_evidence_safe_v1` and
+`configs/l5_positive_control_h13g_source_pilot_v1.json`. Every H13G mode has
+`allows_full_campaign_disposition=false`. Correct the shared signed-ray contract,
+preserve ray-local termination, allocate traces by unexplained projected
+representatives, split required vs exploratory projection failures, and paint
+occupancy from corrected kinematic midpoints rather than SLERP. Do not mutate the
+H13E or H13F configs. Do not retune H12. This sprint's P1/P4/P5 `--mode full` tree
+is packaged as `diagnostic` under gitignored `outputs/` without `--full-closeout`
+or `--replace-committed`. Compact hub digest `d65e7a36…` remains the recorded
+closeout. The packaged blocker is `STITCHING_CONTROL_BLOCKED`. The freeze rule is
+not claimed.
+
+**Reason:** H13A–F exposed source-control failure while preserving H12 authority, but
+five evidence-semantics defects (cancelled opposite rays, pre-trace cluster caps,
+SLERP painting, collapsed ray termination, exploratory projection counted as
+missing-component evidence) had to be corrected before another freeze attempt.
+Trace-and-cover explained all projected representatives on the diagnostic probes;
+required bins still include `BUDGET_EXHAUSTED` and `MIXED_UNRESOLVED`, rasterization
+is incomplete on some fibers, and source-vs-direct refinement remains above 0.02.
+
+**Consequence:** H13G does not replace the compact hub, freeze an H13 source policy,
+or authorize natural-leaf tuning. L5 remains `parent_incomplete`. Natural UURU
+remains not interpreted.
+
+

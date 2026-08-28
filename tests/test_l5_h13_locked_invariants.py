@@ -1,4 +1,4 @@
-"""R3A-H13 locked invariants. H13A, H13E, and H13F may exist; H12 hub stays frozen."""
+"""R3A-H13 locked invariants. H13A, H13E, H13F, and H13G may exist; H12 hub stays frozen."""
 
 from __future__ import annotations
 
@@ -31,6 +31,7 @@ H13_MODULE = (
 )
 H13_PILOT_CONFIG = REPO / "configs" / "l5_positive_control_h13_source_pilot_v1.json"
 H13F_CONFIG = REPO / "configs" / "l5_positive_control_h13_source_v1.json"
+H13G_CONFIG = REPO / "configs" / "l5_positive_control_h13g_source_pilot_v1.json"
 LOCKED_RAW_BUNDLE_SHA256 = (
     "d65e7a369e6c529a7e6cd2c30e38ff0ba0a6b3d10b6a92656bb02fb1b8cab3ec"
 )
@@ -78,22 +79,33 @@ def test_h12_path_does_not_import_source_control_h13_at_module_level() -> None:
     assert H13A_CONFIG.is_file()
     assert H13_PILOT_CONFIG.is_file()
     assert H13F_CONFIG.is_file()
+    assert H13G_CONFIG.is_file()
     pilot = load_campaign_config(H13_PILOT_CONFIG)
     h13f = load_campaign_config(H13F_CONFIG)
+    h13g = load_campaign_config(H13G_CONFIG)
     assert pilot.schema_version == "r3a_l5_positive_control_h13_source_pilot_v1"
     assert h13f.schema_version == "r3a_l5_positive_control_h13_source_v1"
+    assert h13g.schema_version == "r3a_l5_positive_control_h13g_source_pilot_v1"
     assert pilot.mode("ci").allows_full_campaign_disposition is False
     assert pilot.mode("smoke").allows_full_campaign_disposition is False
     assert pilot.mode("full").allows_full_campaign_disposition is False
     assert h13f.mode("ci").allows_full_campaign_disposition is False
     assert h13f.mode("smoke").allows_full_campaign_disposition is False
     assert h13f.mode("full").allows_full_campaign_disposition is True
+    assert h13g.mode("ci").allows_full_campaign_disposition is False
+    assert h13g.mode("smoke").allows_full_campaign_disposition is False
+    assert h13g.mode("full").allows_full_campaign_disposition is False
     assert h12_source_control.__file__ is not None
     assert l5_cli.__file__ is not None
     cli_top = _top_level_imported_modules(Path(l5_cli.__file__))
     source_top = _top_level_imported_modules(Path(h12_source_control.__file__))
     assert "source_control_h13" not in cli_top
     assert ".source_control_h13" not in cli_top
+    assert "source_control_h13g" not in cli_top
+    assert ".source_control_h13g" not in cli_top
     assert "source_control_h13" not in source_top
     assert ".source_control_h13" not in source_top
+    assert "source_control_h13g" not in source_top
+    assert ".source_control_h13g" not in source_top
     assert "source_control_h13" not in Path(l5_cli.__file__).read_text(encoding="utf-8")
+    assert "source_control_h13g" not in Path(l5_cli.__file__).read_text(encoding="utf-8")
