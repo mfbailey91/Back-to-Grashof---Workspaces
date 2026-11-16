@@ -2,7 +2,7 @@
 
 **Status:** REFERENCE evidence / provenance index (not the entry page)
 **Project:** Characterization of Manipulator Workspaces
-**Last updated:** 2026-08-17
+**Last updated:** 2026-11-15
 **Start here instead:** [`../README.md`](../README.md) → thesis → current status → ladder → roadmap
 
 ---
@@ -97,6 +97,14 @@ R3A-H13 §1 locked invariants (ADR-055) and H13A–H13F (ADR-056–ADR-061): H12
 ### [`../methods/R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP.md`](../methods/R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP.md)
 
 H13G evidence-safe source-control corrections exist as a diagnostic opt-in (`h13g_evidence_safe_v1`). Diagnostic P1/P4/P5 remains `STITCHING_CONTROL_BLOCKED` under `outputs/`. Not a freeze, not a hub replacement, not a new scientific closeout.
+
+### [`../methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md`](../methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md)
+
+Proposed H13H source-control diagnosis and convergence sprint. Diagnostic only. The H12 hub stays current.
+
+### [`../methods/R3A_H13H_BASELINE_RECEIPT.md`](../methods/R3A_H13H_BASELINE_RECEIPT.md)
+
+H13H-0 baseline receipt for the historical dirty-producer H13G pilot. Source policy is not validated.
 
 ### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
 

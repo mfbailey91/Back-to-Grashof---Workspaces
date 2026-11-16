@@ -2,6 +2,8 @@
 
 **Status:** PROPOSED SPRINT — implementation and numerical validation remain to be done.
 
+**H13H-0 receipt:** [R3A_H13H_BASELINE_RECEIPT.md](R3A_H13H_BASELINE_RECEIPT.md) records the located historical pilot and the protected hashes. Source policy validated: false.
+
 **Authority:** [ROADMAP.md](../ROADMAP.md) owns future dependency gates. [CURRENT_STATUS.md](../CURRENT_STATUS.md) owns scientific status. This document is the detailed H13H execution plan.
 
 | Field | Value |
@@ -184,6 +186,8 @@ H13H-2 and H13H-3 can proceed in parallel after the diagnostic schema is stable.
 The pilot JSON and actual effective runtime values are authoritative. [S3, S4]
 
 **Exit gate:** baseline identity, invariant receipt, and either validated raw evidence or an explicitly identified reproduction exist. Missing historical detail remains marked unavailable.
+
+Recorded receipt: [R3A_H13H_BASELINE_RECEIPT.md](R3A_H13H_BASELINE_RECEIPT.md).
 
 ### H13H-1 — Build a source-only diagnostic evaluator and replay records
 
