@@ -1,0 +1,342 @@
+{
+  "accepted_reconstruction": false,
+  "baseline_steps_per_ray": 48,
+  "campaign_root": "outputs/r3a_h13g_source_pilot",
+  "cases": [
+    {
+      "baseline": {
+        "baseline_steps": true,
+        "classification": {
+          "accepted_arclength": 1.774011381989232,
+          "accepted_step_count": 36,
+          "aggregate_outcome": "RETURNED_TO_SEED",
+          "closure_route": "seed_return",
+          "demonstrated_cause": "NO_CONTINUATION_FAILURE",
+          "distinct_ray_classes": [],
+          "endpoint_meeting_implicated": false,
+          "endpoint_state_distance": null,
+          "endpoint_tangent_abs_dot": null,
+          "explanation": "The trace closed without a hidden singular or corrector ray.",
+          "maximum_accepted_step": 0.08,
+          "minimum_accepted_step": 0.015,
+          "minimum_step_collapse": false,
+          "possible_causes": [],
+          "rank_evidence": false,
+          "ray_terminations": {
+            "positive": "RETURNED_TO_SEED"
+          },
+          "reached_step_cap": false,
+          "rejection_reason_counts": {
+            "corrector_failed": 18,
+            "tangent_rotation": 56
+          },
+          "stored_interval_status": "RETURNED_SET_FOUND"
+        },
+        "continuation_seed": [
+          -2.9297588382221393,
+          -2.1174566063290405,
+          -1.6979615616754986,
+          -0.13807311949755266,
+          -2.098064914705054
+        ],
+        "first_serialized_sample_is_seed": true,
+        "seed_inferred_from_first_sample": false,
+        "steps_per_ray": 48,
+        "stored_fiber_agreement": true,
+        "trace_cover_seed": [
+          -2.9297588382221393,
+          -2.1174566063290405,
+          -1.6979615616754986,
+          -0.13807311949755263,
+          -2.098064914705054
+        ]
+      },
+      "bin_index": 1,
+      "c": -0.992708874098054,
+      "category": "passing_regular",
+      "fiber_id": "P1_DEEP_COMPLETE_c1_t0",
+      "probe_id": "P1_DEEP_COMPLETE",
+      "solver_defect_demonstrated": false,
+      "step_cap_comparison": "not_implicated",
+      "step_count_comparisons": [],
+      "stored_interval_evidence": {
+        "blocking_projection_failure_count": 0,
+        "budget_exhausted_count": 0,
+        "closure_kind_counts": {
+          "RETURNED_TO_SEED": 8
+        },
+        "corrector_failure_count": 0,
+        "diagnostic_projection_failure_count": 28,
+        "rasterization_incomplete_count": 0,
+        "required": true
+      },
+      "stored_interval_status": "RETURNED_SET_FOUND",
+      "stored_negative_accepted_steps": 0,
+      "stored_positive_accepted_steps": 36,
+      "stored_termination_status": "RETURNED_TO_SEED",
+      "trace_index": 0,
+      "unequal_ray_budget_comparison": "not_implicated"
+    },
+    {
+      "baseline": {
+        "baseline_steps": true,
+        "classification": {
+          "accepted_arclength": 6.444487960781126,
+          "accepted_step_count": 71,
+          "aggregate_outcome": "RETURNED_TO_SEED",
+          "closure_route": "seed_return",
+          "demonstrated_cause": "CLOSED_TRACE_BIN_BLOCKED_BY_OTHER_STAGE",
+          "distinct_ray_classes": [
+            "BUDGET_EXHAUSTED"
+          ],
+          "endpoint_meeting_implicated": false,
+          "endpoint_state_distance": null,
+          "endpoint_tangent_abs_dot": null,
+          "explanation": "The trace is closed, and the stored c interval is blocked by another stage.",
+          "maximum_accepted_step": 0.18,
+          "minimum_accepted_step": 0.03,
+          "minimum_step_collapse": false,
+          "possible_causes": [],
+          "rank_evidence": false,
+          "ray_terminations": {
+            "negative": "RETURNED_TO_SEED",
+            "positive": "BUDGET_EXHAUSTED"
+          },
+          "reached_step_cap": false,
+          "rejection_reason_counts": {
+            "corrector_failed": 22,
+            "tangent_rotation": 88
+          },
+          "stored_interval_status": "MIXED_UNRESOLVED"
+        },
+        "continuation_seed": [
+          0.21236421694156074,
+          -1.0490089107343445,
+          1.7034495765836333,
+          -2.960604718326278,
+          1.1605052777311915
+        ],
+        "first_serialized_sample_is_seed": false,
+        "seed_inferred_from_first_sample": false,
+        "steps_per_ray": 48,
+        "stored_fiber_agreement": true,
+        "trace_cover_seed": [
+          0.2123642169415607,
+          -1.0490089107343445,
+          1.7034495765836333,
+          -2.960604718326278,
+          1.1605052777311915
+        ]
+      },
+      "bin_index": 2,
+      "c": -0.970941817426052,
+      "category": "budget_exhausted",
+      "fiber_id": "P1_DEEP_COMPLETE_c2_t1",
+      "probe_id": "P1_DEEP_COMPLETE",
+      "solver_defect_demonstrated": false,
+      "step_cap_comparison": "not_implicated",
+      "step_count_comparisons": [],
+      "stored_interval_evidence": {
+        "blocking_projection_failure_count": 0,
+        "budget_exhausted_count": 0,
+        "closure_kind_counts": {
+          "RETURNED_TO_SEED": 8
+        },
+        "corrector_failure_count": 0,
+        "diagnostic_projection_failure_count": 8,
+        "rasterization_incomplete_count": 2,
+        "required": true
+      },
+      "stored_interval_status": "MIXED_UNRESOLVED",
+      "stored_negative_accepted_steps": 23,
+      "stored_positive_accepted_steps": 48,
+      "stored_termination_status": "RETURNED_TO_SEED",
+      "trace_index": 1,
+      "unequal_ray_budget_comparison": "not_implicated"
+    },
+    {
+      "baseline": {
+        "baseline_steps": true,
+        "classification": {
+          "accepted_arclength": 1.8086849002387386,
+          "accepted_step_count": 23,
+          "aggregate_outcome": "RETURNED_TO_SEED",
+          "closure_route": "seed_return",
+          "demonstrated_cause": "CLOSED_TRACE_BIN_BLOCKED_BY_OTHER_STAGE",
+          "distinct_ray_classes": [],
+          "endpoint_meeting_implicated": false,
+          "endpoint_state_distance": null,
+          "endpoint_tangent_abs_dot": null,
+          "explanation": "The trace is closed, and the stored c interval is blocked by another stage.",
+          "maximum_accepted_step": 0.12,
+          "minimum_accepted_step": 0.03,
+          "minimum_step_collapse": false,
+          "possible_causes": [],
+          "rank_evidence": false,
+          "ray_terminations": {
+            "positive": "RETURNED_TO_SEED"
+          },
+          "reached_step_cap": false,
+          "rejection_reason_counts": {
+            "tangent_rotation": 24
+          },
+          "stored_interval_status": "MIXED_UNRESOLVED"
+        },
+        "continuation_seed": [
+          0.21236421694156116,
+          -1.0490089107343445,
+          1.7034495765836342,
+          0.18098793526351686,
+          1.9810873758586016
+        ],
+        "first_serialized_sample_is_seed": true,
+        "seed_inferred_from_first_sample": false,
+        "steps_per_ray": 48,
+        "stored_fiber_agreement": true,
+        "trace_cover_seed": [
+          0.21236421694156116,
+          -1.0490089107343445,
+          1.7034495765836342,
+          0.18098793526351686,
+          1.9810873758586016
+        ]
+      },
+      "bin_index": 2,
+      "c": -0.970941817426052,
+      "category": "mixed_bin",
+      "fiber_id": "P1_DEEP_COMPLETE_c2_t0",
+      "probe_id": "P1_DEEP_COMPLETE",
+      "solver_defect_demonstrated": false,
+      "step_cap_comparison": "not_implicated",
+      "step_count_comparisons": [],
+      "stored_interval_evidence": {
+        "blocking_projection_failure_count": 0,
+        "budget_exhausted_count": 0,
+        "closure_kind_counts": {
+          "RETURNED_TO_SEED": 8
+        },
+        "corrector_failure_count": 0,
+        "diagnostic_projection_failure_count": 8,
+        "rasterization_incomplete_count": 2,
+        "required": true
+      },
+      "stored_interval_status": "MIXED_UNRESOLVED",
+      "stored_negative_accepted_steps": 0,
+      "stored_positive_accepted_steps": 23,
+      "stored_termination_status": "RETURNED_TO_SEED",
+      "trace_index": 0,
+      "unequal_ray_budget_comparison": "not_implicated"
+    },
+    {
+      "baseline": {
+        "baseline_steps": true,
+        "classification": {
+          "accepted_arclength": 0.0,
+          "accepted_step_count": 0,
+          "aggregate_outcome": "CORRECTOR_FAILURE",
+          "closure_route": null,
+          "demonstrated_cause": "REPEATED_CORRECTOR_REJECTION",
+          "distinct_ray_classes": [
+            "CORRECTOR_FAILURE"
+          ],
+          "endpoint_meeting_implicated": false,
+          "endpoint_state_distance": null,
+          "endpoint_tangent_abs_dot": null,
+          "explanation": "Continuation ended in corrector rejection or minimum-step collapse.",
+          "maximum_accepted_step": null,
+          "minimum_accepted_step": null,
+          "minimum_step_collapse": false,
+          "possible_causes": [],
+          "rank_evidence": false,
+          "ray_terminations": {
+            "negative": "CORRECTOR_FAILURE",
+            "positive": "CORRECTOR_FAILURE"
+          },
+          "reached_step_cap": false,
+          "rejection_reason_counts": {
+            "corrector_failed": 28
+          },
+          "stored_interval_status": "CRITICAL_OR_BOUNDARY"
+        },
+        "continuation_seed": [
+          -2.944195572387974,
+          -2.132754774672766,
+          -1.696124156929658,
+          -1.3008340174813782e-05,
+          -2.1682020515964338
+        ],
+        "first_serialized_sample_is_seed": true,
+        "seed_inferred_from_first_sample": false,
+        "steps_per_ray": 48,
+        "stored_fiber_agreement": true,
+        "trace_cover_seed": [
+          -2.944195572387974,
+          -2.132754774672766,
+          -1.696124156929658,
+          -1.3008340174813782e-05,
+          -2.1682020515964338
+        ]
+      },
+      "bin_index": 0,
+      "c": -1.0,
+      "category": "singular_or_corrector",
+      "fiber_id": "P1_DEEP_COMPLETE_c0_t0",
+      "probe_id": "P1_DEEP_COMPLETE",
+      "solver_defect_demonstrated": false,
+      "step_cap_comparison": "not_implicated",
+      "step_count_comparisons": [],
+      "stored_interval_evidence": {
+        "blocking_projection_failure_count": 8,
+        "budget_exhausted_count": 0,
+        "closure_kind_counts": {
+          "CORRECTOR_FAILURE": 8
+        },
+        "corrector_failure_count": 8,
+        "diagnostic_projection_failure_count": 200,
+        "rasterization_incomplete_count": 0,
+        "required": false
+      },
+      "stored_interval_status": "CRITICAL_OR_BOUNDARY",
+      "stored_negative_accepted_steps": 0,
+      "stored_positive_accepted_steps": 0,
+      "stored_termination_status": "CORRECTOR_FAILURE",
+      "trace_index": 0,
+      "unequal_ray_budget_comparison": "not_implicated"
+    }
+  ],
+  "category_counts": {
+    "budget_exhausted": 163,
+    "mixed_bin": 56,
+    "passing_regular": 410,
+    "raster_failing": 10,
+    "singular_or_corrector": 40
+  },
+  "clean_replay_disagreement_is_not_a_solver_defect": true,
+  "config_hash": "e4b25df91753f9861f643db3558d20790b5e69184affd3fad0034fd9428ea9c4",
+  "config_path": "configs/l5_positive_control_h13g_source_pilot_v1.json",
+  "deferred": {
+    "continuation_max_steps_per_ray": "not_added",
+    "h13h_source_convergence_v1": "not_registered",
+    "reason": "No selected replay demonstrated a continuation defect. No selected fiber had demonstrated cause REGULAR_BUDGET_EXHAUSTED, so the 96-step and 192-step comparisons were not run. Regular budget exhaustion remains a later numerical-schedule question.",
+    "unknown_policy_rejection": "not_changed"
+  },
+  "diagnostic_only": true,
+  "generated_at": "2026-11-18T21:27:46-08:00",
+  "h12_hub_replaced": false,
+  "historical_producer": "historical_dirty_producer",
+  "inspection": {
+    "branch": "r3a-h13h-source-convergence",
+    "head": "91395bd7e160d811cd5c7964b67c8cbef17ab93c"
+  },
+  "mode": "full",
+  "natural_budget_changed": false,
+  "production_solver_changed": false,
+  "schema_version": "r3a_h13h2_continuation_diagnosis_v1",
+  "solver_defect_demonstrated": false,
+  "source_control_sha256": {
+    "P1_DEEP_COMPLETE": "39310f60b0885a2102b5e940b7a2075488764e1b5878fb99b0d67d737398a684",
+    "summary": "182848e8326a57cf00c9e739343b076bcb405743ae2c73d58f142d38c66ca4b7"
+  },
+  "source_policy_validated": false,
+  "work_package": "H13H-2"
+}

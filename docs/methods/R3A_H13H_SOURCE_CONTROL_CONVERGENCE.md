@@ -4,6 +4,8 @@
 
 **H13H-0 receipt:** [R3A_H13H_BASELINE_RECEIPT.md](R3A_H13H_BASELINE_RECEIPT.md) records the located historical pilot and the protected hashes. Source policy validated: false.
 
+**H13H-2 diagnosis:** [R3A_H13H_CONTINUATION_DIAGNOSIS.md](R3A_H13H_CONTINUATION_DIAGNOSIS.md) classifies the selected continuation cases. `accepted_reconstruction`: false. The production solver is unchanged.
+
 **Authority:** [ROADMAP.md](../ROADMAP.md) owns future dependency gates. [CURRENT_STATUS.md](../CURRENT_STATUS.md) owns scientific status. This document is the detailed H13H execution plan.
 
 | Field | Value |
@@ -287,6 +289,8 @@ Add an explicit source-only step-budget field for regular campaign execution, pr
 If behavior changes, register an explicit proposed `h13h_source_convergence_v1` policy. Add parser, dispatch, and serialization coverage together. Current dispatch recognizes only H13/H13G tokens and can fall back to the H12 path for an unknown token; reject unknown nonempty tokens instead of allowing a typo to select the wrong algorithm. Do not copy the entire H13G implementation into a new module merely to change its name.
 
 **Exit gate:** each selected continuation failure is explained or remains explicitly unresolved; demonstrated repairs have meaningful regressions; source-only overrides are reproducible and do not alter natural configuration.
+
+**Recorded result:** [R3A_H13H_CONTINUATION_DIAGNOSIS.md](R3A_H13H_CONTINUATION_DIAGNOSIS.md). The selected cases are classified. No continuation defect was demonstrated, so the solver, the shared step budget, and policy dispatch are unchanged. Raster diagnosis remains H13H-3.
 
 ### H13H-3 — Diagnose corrected rasterization and repair demonstrated defects
 

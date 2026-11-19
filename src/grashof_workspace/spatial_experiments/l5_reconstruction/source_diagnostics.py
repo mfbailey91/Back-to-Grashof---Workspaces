@@ -17,6 +17,12 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
+from grashof_workspace.spatial_experiments.branch_continuation import (
+    MAX_DS,
+    MIN_DS,
+    RETURN_STATE_TOL,
+)
+
 from .artifacts import validate_campaign_tree
 from .comparison import evaluate_direct_and_source_columns
 from .direct_truth import found_configurations
@@ -64,6 +70,27 @@ SCALAR_KEYS = (
     "hausdorff_rad",
 )
 CROSS_RUN_LIMIT = 0.02
+CAUSE_REGULAR_BUDGET = "REGULAR_BUDGET_EXHAUSTED"
+CAUSE_CORRECTOR = "REPEATED_CORRECTOR_REJECTION"
+CAUSE_SINGULAR = "GENUINE_SINGULAR_LEVEL_SET"
+CAUSE_HIDDEN_RAY = "RAY_LOCAL_FAILURE_HIDDEN_BY_AGGREGATE"
+CAUSE_BIN_BLOCKED = "CLOSED_TRACE_BIN_BLOCKED_BY_OTHER_STAGE"
+CAUSE_MISSED_RETURN = "MISSED_RETURN_UNDER_STEP_CAP"
+CAUSE_UNRESOLVED = "UNRESOLVED"
+CAUSE_NO_FAILURE = "NO_CONTINUATION_FAILURE"
+POSSIBLE_RETURN_SAMPLING = "RETURN_SAMPLING"
+POSSIBLE_SINGULAR_WITHOUT_RANK = "SINGULAR_LABEL_WITHOUT_RANK_EVIDENCE"
+POSSIBLE_ENDPOINT_MEETING = "ENDPOINT_MEETING_SENSITIVITY"
+CONTINUATION_CASE_CATEGORIES = (
+    "passing_regular",
+    "budget_exhausted",
+    "mixed_bin",
+    "singular_or_corrector",
+)
+_LEVEL_SET_RANK = 4
+_CLOSED_INTERVALS = frozenset({"RETURNED_SET_FOUND", "COMPONENT_COMPLETE"})
+_FAILURE_RAYS = frozenset({"CORRECTOR_FAILURE", "SINGULAR"})
+_OPEN_RAYS = frozenset({"BUDGET_EXHAUSTED", "OPEN_UNCLASSIFIED"})
 
 
 class DiagnosticError(RuntimeError):
@@ -133,6 +160,260 @@ def _record_for_c(records: Sequence[Mapping[str, Any]], c: object) -> Mapping[st
         if isinstance(stored, (int, float)) and abs(float(stored) - float(c)) <= 1e-12:
             return record
     return {}
+
+
+def _mapping_items(value: object) -> list[Mapping[str, Any]]:
+    if not isinstance(value, list):
+        return []
+    return [item for item in value if isinstance(item, Mapping)]
+
+
+def _branch_trace(observation: Mapping[str, Any]) -> Mapping[str, Any]:
+    trace = observation.get("branch_trace")
+    return trace if isinstance(trace, Mapping) else {}
+
+
+def _outcome(observation: Mapping[str, Any]) -> str:
+    for key in ("outcome", "stored_termination_status", "termination_status"):
+        value = observation.get(key)
+        if isinstance(value, str) and value:
+            return value
+    return ""
+
+
+def _ray_map(observation: Mapping[str, Any]) -> dict[str, str]:
+    rays: dict[str, str] = {}
+    for record in _mapping_items(_branch_trace(observation).get("ray_records")):
+        direction = record.get("direction")
+        termination = record.get("termination")
+        if isinstance(direction, str) and isinstance(termination, str):
+            rays[direction] = termination
+    for direction, key in (
+        ("positive", "positive_ray_termination"),
+        ("negative", "negative_ray_termination"),
+    ):
+        value = observation.get(key)
+        if direction not in rays and isinstance(value, str):
+            rays[direction] = value
+    return rays
+
+
+def _accepted_steps(observation: Mapping[str, Any]) -> list[Mapping[str, Any]]:
+    steps = []
+    for step in _mapping_items(_branch_trace(observation).get("steps")):
+        if step.get("accepted") is True:
+            steps.append(step)
+    return steps
+
+
+def _moving_steps(steps: Sequence[Mapping[str, Any]]) -> list[float]:
+    sizes: list[float] = []
+    for step in steps:
+        size = step.get("step_size")
+        if isinstance(size, (int, float)) and abs(float(size)) > 0.0:
+            sizes.append(abs(float(size)))
+    return sizes
+
+
+def _rank_evidence(step: Mapping[str, Any]) -> bool:
+    rank = step.get("rank")
+    nullity = step.get("nullity")
+    rank_bad = isinstance(rank, int) and not isinstance(rank, bool) and rank != _LEVEL_SET_RANK
+    nullity_bad = isinstance(nullity, int) and not isinstance(nullity, bool) and nullity != 1
+    return rank_bad or nullity_bad
+
+
+def _rejection_counts(observation: Mapping[str, Any]) -> dict[str, int]:
+    counts: Counter[str] = Counter()
+    for step in _mapping_items(_branch_trace(observation).get("steps")):
+        reason = step.get("rejection_reason")
+        if step.get("accepted") is not True and isinstance(reason, str) and reason:
+            counts[reason] += 1
+    for record in _mapping_items(_branch_trace(observation).get("ray_records")):
+        raw = record.get("rejection_reason_counts")
+        if isinstance(raw, Mapping):
+            for reason, count in raw.items():
+                if isinstance(count, int) and not isinstance(count, bool):
+                    counts[str(reason)] += count
+    return dict(counts)
+
+
+def _optional_float(value: object) -> float | None:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return float(value)
+
+
+def _aggregate_names_ray(outcome: str, ray_value: str) -> bool:
+    return (outcome, ray_value) in {
+        ("SINGULAR_OR_CRITICAL_ENDPOINT", "SINGULAR"),
+        ("CORRECTOR_FAILURE", "CORRECTOR_FAILURE"),
+        ("BUDGET_EXHAUSTED", "BUDGET_EXHAUSTED"),
+        ("OPEN_UNCLASSIFIED", "OPEN_UNCLASSIFIED"),
+    } or outcome == ray_value
+
+
+def _closure_route(observation: Mapping[str, Any], outcome: str) -> str | None:
+    returned = bool(observation.get("returned")) or outcome == "RETURNED_TO_SEED"
+    endpoint_closed = bool(observation.get("closed")) or outcome == "PLUS_MINUS_ENDPOINTS_CLOSED"
+    trace_returned = _branch_trace(observation).get("returned") is True
+    if outcome == "PLUS_MINUS_ENDPOINTS_CLOSED" or (endpoint_closed and not returned and not trace_returned):
+        return "plus_minus_endpoints"
+    if returned or trace_returned or outcome == "RETURNED_TO_SEED":
+        return "seed_return"
+    return None
+
+
+def classify_continuation_observation(
+    observation: Mapping[str, Any],
+    *,
+    stored_interval_status: str | None = None,
+    bounded_replay: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Classify one replayed source fiber.
+
+    ``demonstrated_cause`` is established by this trace. ``possible_causes``
+    are hypotheses this trace does not establish. A step-count increase that
+    later returns explains a budget; it does not demonstrate a missed return.
+    A missed return requires a step-cap comparison at comparable traversal.
+    """
+
+    outcome = _outcome(observation)
+    rays = _ray_map(observation)
+    accepted = _accepted_steps(observation)
+    sizes = _moving_steps(accepted)
+    singular_steps = [
+        step
+        for step in _mapping_items(_branch_trace(observation).get("steps"))
+        if step.get("rejection_reason") == "singular"
+    ]
+    rank_evidence = any(_rank_evidence(step) for step in singular_steps)
+    minimum = min(sizes) if sizes else None
+    maximum = max(sizes) if sizes else None
+    reached_cap = maximum is not None and maximum >= 0.99 * MAX_DS
+    collapsed = minimum is not None and minimum <= MIN_DS * 1.01
+    route = _closure_route(observation, outcome)
+    returned = route is not None
+    ray_values = [value for value in rays.values() if value]
+    distinct_failures = {value for value in ray_values if value in _FAILURE_RAYS or value in _OPEN_RAYS}
+    failure_rays = [value for value in ray_values if value in _FAILURE_RAYS]
+    hidden_failure = bool(failure_rays) and (
+        len(distinct_failures) > 1
+        or any(not _aggregate_names_ray(outcome, value) for value in failure_rays)
+    )
+    interval = stored_interval_status
+    if interval is None and isinstance(observation.get("stored_interval_status"), str):
+        interval = str(observation["stored_interval_status"])
+    bin_blocked = interval is not None and interval not in _CLOSED_INTERVALS
+    endpoint_distance = _optional_float(observation.get("endpoint_state_distance"))
+    endpoint_tangent = _optional_float(observation.get("endpoint_tangent_abs_dot"))
+    both_budget = bool(ray_values) and set(ray_values) == {"BUDGET_EXHAUSTED"}
+    singular_label = "SINGULAR" in ray_values or outcome == "SINGULAR_OR_CRITICAL_ENDPOINT"
+    corrector_label = "CORRECTOR_FAILURE" in ray_values or outcome == "CORRECTOR_FAILURE"
+    endpoint_implicated = (
+        both_budget
+        and not returned
+        and endpoint_distance is not None
+        and endpoint_distance <= RETURN_STATE_TOL
+    )
+    possible: list[str] = []
+    if reached_cap and not returned:
+        possible.append(POSSIBLE_RETURN_SAMPLING)
+    if endpoint_implicated:
+        possible.append(POSSIBLE_ENDPOINT_MEETING)
+    if singular_label and not rank_evidence:
+        possible.append(POSSIBLE_SINGULAR_WITHOUT_RANK)
+    step_cap_return = (
+        isinstance(bounded_replay, Mapping)
+        and bounded_replay.get("kind") == "step_cap"
+        and bounded_replay.get("baseline_returned") is False
+        and bounded_replay.get("comparison_returned") is True
+    )
+    if step_cap_return:
+        cause = CAUSE_MISSED_RETURN
+        explanation = "A lower step cap returned where the baseline cap did not."
+    elif hidden_failure and any(value in _FAILURE_RAYS for value in ray_values):
+        cause = CAUSE_HIDDEN_RAY
+        explanation = "One ray's singular or corrector termination is not the aggregate label."
+    elif returned and bin_blocked:
+        cause = CAUSE_BIN_BLOCKED
+        explanation = "The trace is closed, and the stored c interval is blocked by another stage."
+    elif singular_label and rank_evidence:
+        cause = CAUSE_SINGULAR
+        explanation = "A singular rejection retains rank or nullity evidence."
+    elif singular_label:
+        cause = CAUSE_UNRESOLVED
+        explanation = "The singular label has no retained rank or nullity evidence."
+    elif corrector_label or collapsed:
+        cause = CAUSE_CORRECTOR
+        explanation = "Continuation ended in corrector rejection or minimum-step collapse."
+    elif returned and not any(value in _FAILURE_RAYS for value in ray_values):
+        cause = CAUSE_NO_FAILURE
+        explanation = "The trace closed without a hidden singular or corrector ray."
+    elif both_budget and sizes and not collapsed and not rank_evidence:
+        cause = CAUSE_REGULAR_BUDGET
+        explanation = "Both rays accepted regular steps until the step budget."
+    else:
+        cause = CAUSE_UNRESOLVED
+        explanation = "The trace does not establish one continuation cause."
+    arclength = 0.0
+    arclength_known = False
+    for record in _mapping_items(_branch_trace(observation).get("ray_records")):
+        value = _optional_float(record.get("accepted_arclength"))
+        if value is not None:
+            arclength += value
+            arclength_known = True
+    return {
+        "demonstrated_cause": cause,
+        "possible_causes": sorted(set(possible)),
+        "explanation": explanation,
+        "closure_route": route,
+        "aggregate_outcome": outcome,
+        "ray_terminations": rays,
+        "distinct_ray_classes": sorted(distinct_failures),
+        "accepted_step_count": len(sizes),
+        "minimum_accepted_step": minimum,
+        "maximum_accepted_step": maximum,
+        "reached_step_cap": reached_cap,
+        "minimum_step_collapse": collapsed,
+        "rank_evidence": rank_evidence,
+        "rejection_reason_counts": _rejection_counts(observation),
+        "accepted_arclength": arclength if arclength_known else None,
+        "endpoint_state_distance": endpoint_distance,
+        "endpoint_tangent_abs_dot": endpoint_tangent,
+        "endpoint_meeting_implicated": endpoint_implicated,
+        "stored_interval_status": interval,
+    }
+
+
+def next_continuation_step_budget(
+    classification: Mapping[str, Any],
+    *,
+    baseline_steps: int,
+    compared_steps: int | None = None,
+    compared: Mapping[str, Any] | None = None,
+) -> int | None:
+    """Return 96 or 192 when a regular budget still needs that comparison."""
+
+    if classification.get("demonstrated_cause") != CAUSE_REGULAR_BUDGET:
+        return None
+    if compared is None:
+        if baseline_steps < 96:
+            return 96
+        if baseline_steps < 192:
+            return 192
+        return None
+    if compared.get("demonstrated_cause") != CAUSE_REGULAR_BUDGET:
+        return None
+    base_arc = classification.get("accepted_arclength")
+    new_arc = compared.get("accepted_arclength")
+    if not isinstance(base_arc, (int, float)) or not isinstance(new_arc, (int, float)):
+        return None
+    if float(new_arc) <= float(base_arc):
+        return None
+    if compared_steps == 96:
+        return 192
+    return None
 
 
 def _categories(fiber: Mapping[str, Any], record: Mapping[str, Any]) -> set[str]:
@@ -231,6 +512,67 @@ def _case_identity(
         "stored_rasterization_failure_count": fiber.get("rasterization_failure_count"),
         "branch_trace": None,
     }
+
+
+def select_stored_continuation_cases(
+    *,
+    campaign_root: Path,
+    config_path: Path,
+) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """Select continuation cases from stored fibers without recomputing metrics."""
+
+    config = load_campaign_config(config_path)
+    summary = _read_json(campaign_root / "source_control.json")
+    if summary.get("config_hash") != config.config_hash:
+        raise DiagnosticError("source-control config hash does not match the supplied config")
+    mode = str(summary.get("mode") or "")
+    probe_ids = _probe_scope(campaign_root)
+    probes: list[dict[str, Any]] = []
+    for probe_id in probe_ids:
+        blob = _read_json(campaign_root / probe_id / "source_control.json")
+        probes.append(
+            {
+                "probe_id": probe_id,
+                "c_records": [item for item in blob.get("c_records") or [] if isinstance(item, Mapping)],
+                "fibers": [item for item in blob.get("fibers") or [] if isinstance(item, Mapping)],
+            }
+        )
+    selected, counts = select_diagnostic_cases(probes)
+    git_blob = summary.get("git")
+    source_commit = str(git_blob.get("git_commit")) if isinstance(git_blob, Mapping) else None
+    cases: list[dict[str, Any]] = []
+    for category in CONTINUATION_CASE_CATEGORIES:
+        fiber = selected.get(category)
+        if not isinstance(fiber, Mapping):
+            continue
+        probe_id = str(fiber.get("fiber_id")).rsplit("_c", 1)[0]
+        matched = next((probe for probe in probes if probe["probe_id"] == probe_id), None)
+        raw_records = matched["c_records"] if isinstance(matched, Mapping) else []
+        records = [item for item in raw_records if isinstance(item, Mapping)]
+        record = _record_for_c(records, fiber.get("c"))
+        case = _case_identity(
+            campaign_root=campaign_root,
+            config_path=config_path,
+            mode=mode,
+            probe_id=probe_id,
+            fiber=fiber,
+            category=category,
+            config_hash=config.config_hash,
+            source_commit=source_commit,
+        )
+        case["stored_interval_status"] = record.get("parameter_interval_status")
+        kinds = record.get("closure_kind_counts")
+        case["stored_interval_evidence"] = {
+            "required": record.get("required"),
+            "rasterization_incomplete_count": record.get("rasterization_incomplete_count"),
+            "blocking_projection_failure_count": record.get("blocking_projection_failure_count"),
+            "diagnostic_projection_failure_count": record.get("diagnostic_projection_failure_count"),
+            "budget_exhausted_count": record.get("budget_exhausted_count"),
+            "corrector_failure_count": record.get("corrector_failure_count"),
+            "closure_kind_counts": dict(kinds) if isinstance(kinds, Mapping) else {},
+        }
+        cases.append(case)
+    return cases, counts
 
 
 def _write_csv(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
@@ -477,8 +819,14 @@ def replay_selected_case(
     case_path: Path,
     outdir: Path,
     steps_per_ray: int | None = None,
+    include_raster: bool = True,
 ) -> dict[str, Any]:
-    """Replay one selected fiber and record its seed, BranchTrace, and raster segments."""
+    """Replay one selected fiber and record its seed, BranchTrace, and raster segments.
+
+    Tracing stops at the selected trace index. Later cover traces do not change
+    that fiber. Raster recording stays on unless a continuation-only caller
+    passes ``include_raster=False``.
+    """
 
     case = _read_json(case_path)
     config = load_campaign_config(Path(str(case["config"])))
@@ -533,7 +881,7 @@ def replay_selected_case(
 
     cover = trace_and_cover_projected_seeds(
         projection.projected_seed_clusters,
-        max_traces=max(policy.max_source_traces_per_c, target_index + 1),
+        max_traces=target_index + 1,
         cover_tol_rad=policy.trace_cover_q_tol_rad,
         trace_builder=trace_builder,
     )
@@ -549,32 +897,40 @@ def replay_selected_case(
         first = list(samples[0])
         observation["first_serialized_sample_is_seed"] = first == seed or first == continuation_seed
     segments: list[dict[str, Any]] = []
+    raster_complete: bool | None = None
+    raster_failures: int | None = None
+    raster_budget: bool | None = None
+    if include_raster:
 
-    def _record_segment(payload: Mapping[str, Any]) -> None:
-        segments.append(dict(payload))
+        def _record_segment(payload: Mapping[str, Any]) -> None:
+            segments.append(dict(payload))
 
-    grid = build_sphere_grid(budgets.confirmation_icosphere_level)
-    raster = rasterize_fiber_kinematically(
-        arm,
-        probe,
-        n,
-        fiber,
-        max_segment_rad=policy.curve_segment_fraction * grid.max_cell_diameter_rad,
-        max_depth=policy.kinematic_refinement_max_depth,
-        segment_observer=_record_segment,
-    )
+        grid = build_sphere_grid(budgets.confirmation_icosphere_level)
+        raster = rasterize_fiber_kinematically(
+            arm,
+            probe,
+            n,
+            fiber,
+            max_segment_rad=policy.curve_segment_fraction * grid.max_cell_diameter_rad,
+            max_depth=policy.kinematic_refinement_max_depth,
+            segment_observer=_record_segment,
+        )
+        raster_complete = raster.complete
+        raster_failures = raster.correction_failure_count
+        raster_budget = raster.depth_budget_exhausted
     stored_match = None
     if steps_per_ray is None:
         stored_match = (
             fiber.termination_status == case.get("stored_termination_status")
             and fiber.positive_accepted_steps == case.get("stored_positive_accepted_steps")
             and fiber.negative_accepted_steps == case.get("stored_negative_accepted_steps")
-            and raster.complete == case.get("stored_rasterization_complete")
         )
+        if include_raster:
+            stored_match = stored_match and raster_complete == case.get("stored_rasterization_complete")
     outdir.mkdir(parents=True, exist_ok=True)
     trace_doc = {
         "schema_version": TRACE_SCHEMA,
-        "diagnostic_overrides": {"steps_per_ray": steps_per_ray},
+        "diagnostic_overrides": {"steps_per_ray": steps_per_ray, "include_raster": include_raster},
         "baseline_steps_per_ray": steps_per_ray is None,
         "stored_fiber_agreement": stored_match,
         "case": {**case, **observation, "branch_trace": observation.get("branch_trace")},
@@ -582,10 +938,11 @@ def replay_selected_case(
     raster_doc = {
         "schema_version": RASTER_SCHEMA,
         "fiber_id": fiber.fiber_id,
-        "rasterization_complete": raster.complete,
-        "correction_failure_count": raster.correction_failure_count,
-        "depth_budget_exhausted": raster.depth_budget_exhausted,
-        "segments": segments,
+        "segment_evidence": "recorded" if include_raster else "not_run",
+        "rasterization_complete": raster_complete,
+        "correction_failure_count": raster_failures,
+        "depth_budget_exhausted": raster_budget,
+        "segments": segments if include_raster else None,
     }
     (outdir / "selected_trace_diagnostics.json").write_text(json_dumps_strict(trace_doc), encoding="utf-8")
     (outdir / "selected_raster_segments.json").write_text(json_dumps_strict(raster_doc), encoding="utf-8")

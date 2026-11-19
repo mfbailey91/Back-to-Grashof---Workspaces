@@ -2,7 +2,7 @@
 
 **Status:** REFERENCE evidence / provenance index (not the entry page)
 **Project:** Characterization of Manipulator Workspaces
-**Last updated:** 2026-11-15
+**Last updated:** 2026-11-18
 **Start here instead:** [`../README.md`](../README.md) → thesis → current status → ladder → roadmap
 
 ---
@@ -105,6 +105,10 @@ Proposed H13H source-control diagnosis and convergence sprint. Diagnostic only. 
 ### [`../methods/R3A_H13H_BASELINE_RECEIPT.md`](../methods/R3A_H13H_BASELINE_RECEIPT.md)
 
 H13H-0 baseline receipt for the historical dirty-producer H13G pilot. Source policy is not validated.
+
+### [`../methods/R3A_H13H_CONTINUATION_DIAGNOSIS.md`](../methods/R3A_H13H_CONTINUATION_DIAGNOSIS.md)
+
+H13H-2 continuation diagnosis for the selected historical fibers. No solver defect was demonstrated. Source policy is not validated.
 
 ### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
 
