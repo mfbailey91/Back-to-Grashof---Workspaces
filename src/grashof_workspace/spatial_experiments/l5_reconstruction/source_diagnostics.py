@@ -41,15 +41,17 @@ from .source_control_h13 import (
     choose_analytical_c_values,
     cluster_wrapped_q,
     confirmation_c_slice_spacing_rad,
+    wrapped_q_distance,
 )
 from .source_control_h13g import (
+    RASTER_H_TOLERANCE,
     continue_source_fiber_h13g,
     discover_projected_source_seeds,
     load_h13g_source_policy,
     rasterize_fiber_kinematically,
     trace_and_cover_projected_seeds,
 )
-from .sphere_grid import build_sphere_grid
+from .sphere_grid import build_sphere_grid, pointing_geodesic
 
 REPORT_SCHEMA = "r3a_h13h_source_diagnostic_report_v1"
 TRACE_SCHEMA = "r3a_h13h_selected_trace_diagnostics_v1"
@@ -86,6 +88,21 @@ CONTINUATION_CASE_CATEGORIES = (
     "budget_exhausted",
     "mixed_bin",
     "singular_or_corrector",
+)
+RASTER_UNTRACED_CLOSING = "UNTRACED_CLOSING_GAP"
+RASTER_FAILED_CORRECTION = "FAILED_MIDPOINT_CORRECTION"
+RASTER_DEPTH = "DEPTH_EXHAUSTED"
+RASTER_NONLOCAL = "ACCEPTED_NONLOCAL_CORRECTION"
+RASTER_RESIDUAL = "ACCEPTED_RESIDUAL_EXCEEDANCE"
+RASTER_ACCEPTED_FAILURE = "ACCEPTED_CORRECTION_OR_DEPTH_FAILURE"
+RASTER_HIDDEN = "HIDDEN_INTERIOR_EXCURSION"
+RASTER_INTERVAL_COVERED = "INCOMPLETE_RASTER_LEFT_INTERVAL_COVERED"
+RASTER_NO_FAILURE = "NO_RASTER_FAILURE"
+RASTER_UNRESOLVED = "UNRESOLVED"
+POSSIBLE_INTERIOR_UNMEASURED = "INTERIOR_EXCURSION_NOT_MEASURED"
+_COVERED_RASTER_INTERVALS = frozenset({"RETURNED_SET_FOUND", "COMPONENT_COMPLETE"})
+_OPEN_RASTER_RAYS = frozenset(
+    {"BUDGET_EXHAUSTED", "OPEN_UNCLASSIFIED", "CORRECTOR_FAILURE", "SINGULAR"}
 )
 _LEVEL_SET_RANK = 4
 _CLOSED_INTERVALS = frozenset({"RETURNED_SET_FOUND", "COMPONENT_COMPLETE"})
@@ -416,6 +433,141 @@ def next_continuation_step_budget(
     return None
 
 
+def _segment_span(segment: Mapping[str, Any]) -> float | None:
+    endpoints = segment.get("endpoint_q")
+    if not isinstance(endpoints, list) or len(endpoints) != 2:
+        return None
+    start, end = endpoints
+    if not isinstance(start, list) or not isinstance(end, list):
+        return None
+    return wrapped_q_distance(tuple(float(value) for value in start), tuple(float(value) for value in end))
+
+
+def _positive_float(value: object) -> float | None:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return float(value)
+
+
+def classify_raster_observation(observation: Mapping[str, Any]) -> dict[str, Any]:
+    """Classify one raster replay from its segment records.
+
+    A correction that travels farther than its wrapped chord is a demonstrated
+    nonlocal sample. A closing-segment failure on an open ray is an untraced
+    gap. Interior excursion is demonstrated only by a recorded interior probe.
+    """
+
+    segments = [item for item in observation.get("segments") or [] if isinstance(item, Mapping)]
+    outcomes = Counter(str(item.get("outcome")) for item in segments)
+    closing = [item for item in segments if item.get("closing_segment") is True]
+    traced = [item for item in segments if item.get("closing_segment") is not True]
+    nonlocal_segments = []
+    for item in segments:
+        distance = _positive_float(item.get("wrapped_correction_distance_rad"))
+        span = _segment_span(item)
+        if item.get("outcome") == "corrected" and distance is not None and span is not None and distance > span:
+            nonlocal_segments.append(item)
+    probes = [item for item in observation.get("interior_probes") or [] if isinstance(item, Mapping)]
+    max_segment = _positive_float(observation.get("max_segment_rad"))
+    hidden = []
+    for item in probes:
+        excursion = _positive_float(item.get("pointing_excursion_rad"))
+        if item.get("correction_ok") is False or excursion is not None and max_segment is not None and excursion > max_segment:
+            hidden.append(item)
+    complete = observation.get("rasterization_complete") is True
+    position = _positive_float(observation.get("max_position_residual_m"))
+    scalar = _positive_float(observation.get("max_h_residual"))
+    position_tol = _positive_float(observation.get("position_tolerance_m"))
+    scalar_tol = _positive_float(observation.get("h_tolerance"))
+    residual_exceeded = (
+        position is not None
+        and position_tol is not None
+        and scalar is not None
+        and scalar_tol is not None
+        and (position > position_tol or scalar > scalar_tol)
+    )
+    failure_count = observation.get("correction_failure_count")
+    depth_flag = observation.get("depth_budget_exhausted") is True
+    accepted_failure = complete and (
+        outcomes["failed_correction"] > 0
+        or outcomes["depth_exhausted"] > 0
+        or (isinstance(failure_count, int) and failure_count > 0)
+        or depth_flag
+    )
+    rays = (
+        observation.get("positive_ray_termination"),
+        observation.get("negative_ray_termination"),
+    )
+    open_ray = any(isinstance(ray, str) and ray in _OPEN_RASTER_RAYS for ray in rays)
+    closing_failures = [
+        item for item in closing if item.get("outcome") in {"failed_correction", "depth_exhausted"}
+    ]
+    traced_failures = [
+        item for item in traced if item.get("outcome") in {"failed_correction", "depth_exhausted"}
+    ]
+    interval = observation.get("stored_interval_status")
+    required = observation.get("interval_required") is True
+    incomplete = complete is False
+    interval_blocked = bool(
+        incomplete and required and isinstance(interval, str) and interval not in _COVERED_RASTER_INTERVALS
+    )
+    interval_left_covered = bool(
+        incomplete and required and isinstance(interval, str) and interval in _COVERED_RASTER_INTERVALS
+    )
+    possible: list[str] = []
+    short_segments = [item for item in segments if item.get("outcome") == "within_declared_gap"]
+    if short_segments and not probes:
+        possible.append(POSSIBLE_INTERIOR_UNMEASURED)
+    if complete and residual_exceeded:
+        cause = RASTER_RESIDUAL
+        explanation = "Raster completion was recorded with a residual above the declared tolerance."
+    elif accepted_failure:
+        cause = RASTER_ACCEPTED_FAILURE
+        explanation = "A correction failure or depth exhaustion was retained on a completed raster."
+    elif nonlocal_segments:
+        cause = RASTER_NONLOCAL
+        explanation = "A corrected midpoint moved farther than its wrapped endpoint chord."
+    elif hidden:
+        cause = RASTER_HIDDEN
+        explanation = "An accepted short segment has an interior sample outside the declared gap."
+    elif interval_left_covered:
+        cause = RASTER_INTERVAL_COVERED
+        explanation = "Incomplete rasterization left a required interval covered."
+    elif closing_failures and not traced_failures and open_ray:
+        cause = RASTER_UNTRACED_CLOSING
+        explanation = (
+            "The closing chord joins an open ray to the seed. "
+            "The local section correction does not cross that untraced gap."
+        )
+    elif outcomes["failed_correction"] > 0 and not complete:
+        cause = RASTER_FAILED_CORRECTION
+        explanation = "Midpoint correction failed and the raster remains incomplete."
+    elif (outcomes["depth_exhausted"] > 0 or depth_flag) and not complete:
+        cause = RASTER_DEPTH
+        explanation = "Refinement reached its depth budget before the declared gap."
+    elif complete and not residual_exceeded and not hidden and not nonlocal_segments:
+        cause = RASTER_NO_FAILURE
+        explanation = "The raster meets the declared gap, correction, depth, and residual checks."
+    else:
+        cause = RASTER_UNRESOLVED
+        explanation = "The raster records do not establish a single cause."
+    return {
+        "demonstrated_cause": cause,
+        "possible_causes": possible,
+        "explanation": explanation,
+        "observed_outcomes": dict(outcomes),
+        "closing_segment_outcomes": dict(Counter(str(item.get("outcome")) for item in closing)),
+        "traced_segment_failures": len(traced_failures),
+        "closing_segment_failures": len(closing_failures),
+        "nonlocal_correction_count": len(nonlocal_segments),
+        "hidden_interior_count": len(hidden),
+        "open_ray": open_ray,
+        "interval_blocked": interval_blocked,
+        "interval_left_covered": interval_left_covered,
+        "stored_interval_status": interval,
+    }
+
+
 def _categories(fiber: Mapping[str, Any], record: Mapping[str, Any]) -> set[str]:
     found: set[str] = set()
     termination = str(fiber.get("termination_status"))
@@ -571,6 +723,119 @@ def select_stored_continuation_cases(
             "corrector_failure_count": record.get("corrector_failure_count"),
             "closure_kind_counts": dict(kinds) if isinstance(kinds, Mapping) else {},
         }
+        cases.append(case)
+    return cases, counts
+
+
+def _interval_evidence(record: Mapping[str, Any]) -> dict[str, Any]:
+    kinds = record.get("closure_kind_counts")
+    return {
+        "required": record.get("required"),
+        "rasterization_incomplete_count": record.get("rasterization_incomplete_count"),
+        "blocking_projection_failure_count": record.get("blocking_projection_failure_count"),
+        "diagnostic_projection_failure_count": record.get("diagnostic_projection_failure_count"),
+        "budget_exhausted_count": record.get("budget_exhausted_count"),
+        "corrector_failure_count": record.get("corrector_failure_count"),
+        "closure_kind_counts": dict(kinds) if isinstance(kinds, Mapping) else {},
+    }
+
+
+def _endpoint_gap(fiber: Mapping[str, Any]) -> float | None:
+    samples = fiber.get("pointing_samples")
+    if not isinstance(samples, list) or len(samples) < 2:
+        return None
+    start, end = samples[0], samples[-1]
+    if not isinstance(start, list) or not isinstance(end, list):
+        return None
+    start_xyz = tuple(float(value) for value in start)
+    end_xyz = tuple(float(value) for value in end)
+    if len(start_xyz) != 3 or len(end_xyz) != 3:
+        return None
+    return pointing_geodesic(
+        (start_xyz[0], start_xyz[1], start_xyz[2]),
+        (end_xyz[0], end_xyz[1], end_xyz[2]),
+    )
+
+
+def select_stored_raster_cases(
+    *,
+    campaign_root: Path,
+    config_path: Path,
+) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """Select raster cases from stored fibers without recomputing metrics."""
+
+    config = load_campaign_config(config_path)
+    summary = _read_json(campaign_root / "source_control.json")
+    if summary.get("config_hash") != config.config_hash:
+        raise DiagnosticError("source-control config hash does not match the supplied config")
+    mode = str(summary.get("mode") or "")
+    probes: list[dict[str, Any]] = []
+    for probe_id in _probe_scope(campaign_root):
+        blob = _read_json(campaign_root / probe_id / "source_control.json")
+        probes.append(
+            {
+                "probe_id": probe_id,
+                "c_records": [item for item in blob.get("c_records") or [] if isinstance(item, Mapping)],
+                "fibers": [item for item in blob.get("fibers") or [] if isinstance(item, Mapping)],
+            }
+        )
+    selected, counts = select_diagnostic_cases(probes)
+    git_blob = summary.get("git")
+    source_commit = str(git_blob.get("git_commit")) if isinstance(git_blob, Mapping) else None
+    chosen: list[tuple[str, str, Mapping[str, Any]]] = []
+    passing = selected.get("passing_regular")
+    failing = selected.get("raster_failing")
+    if isinstance(passing, Mapping):
+        chosen.append(("closing_control", str(passing.get("fiber_id")).rsplit("_c", 1)[0], passing))
+    if isinstance(failing, Mapping):
+        chosen.append(("raster_failing", str(failing.get("fiber_id")).rsplit("_c", 1)[0], failing))
+    seen = {str(fiber.get("fiber_id")) for _role, _probe, fiber in chosen}
+    for probe in probes:
+        for fiber in probe["fibers"]:
+            if fiber.get("rasterization_budget_exhausted") is True and str(fiber.get("fiber_id")) not in seen:
+                chosen.append(("depth_exhausted_closing", str(probe["probe_id"]), fiber))
+                seen.add(str(fiber.get("fiber_id")))
+                break
+        else:
+            continue
+        break
+    for probe in probes:
+        for fiber in probe["fibers"]:
+            rays = (fiber.get("positive_ray_termination"), fiber.get("negative_ray_termination"))
+            open_ray = any(isinstance(ray, str) and ray in _OPEN_RASTER_RAYS for ray in rays)
+            gap = _endpoint_gap(fiber)
+            if (
+                fiber.get("returned") is True
+                and open_ray
+                and fiber.get("rasterization_complete") is True
+                and gap is not None
+                and gap > 0.2
+                and str(fiber.get("fiber_id")) not in seen
+            ):
+                chosen.append(("open_ray_completed", str(probe["probe_id"]), fiber))
+                seen.add(str(fiber.get("fiber_id")))
+                break
+        else:
+            continue
+        break
+    cases: list[dict[str, Any]] = []
+    for category, probe_id, fiber in chosen:
+        matched = next(probe for probe in probes if probe["probe_id"] == probe_id)
+        records = [item for item in matched["c_records"] if isinstance(item, Mapping)]
+        record = _record_for_c(records, fiber.get("c"))
+        case = _case_identity(
+            campaign_root=campaign_root,
+            config_path=config_path,
+            mode=mode,
+            probe_id=probe_id,
+            fiber=fiber,
+            category=category,
+            config_hash=config.config_hash,
+            source_commit=source_commit,
+        )
+        case["stored_interval_status"] = record.get("parameter_interval_status")
+        case["stored_interval_evidence"] = _interval_evidence(record)
+        case["stored_endpoint_gap_rad"] = _endpoint_gap(fiber)
         cases.append(case)
     return cases, counts
 
@@ -900,24 +1165,32 @@ def replay_selected_case(
     raster_complete: bool | None = None
     raster_failures: int | None = None
     raster_budget: bool | None = None
+    max_segment_rad: float | None = None
+    max_position_residual_m: float | None = None
+    max_h_residual: float | None = None
     if include_raster:
 
         def _record_segment(payload: Mapping[str, Any]) -> None:
             segments.append(dict(payload))
 
         grid = build_sphere_grid(budgets.confirmation_icosphere_level)
+        max_segment_rad = policy.curve_segment_fraction * grid.max_cell_diameter_rad
         raster = rasterize_fiber_kinematically(
             arm,
             probe,
             n,
             fiber,
-            max_segment_rad=policy.curve_segment_fraction * grid.max_cell_diameter_rad,
+            max_segment_rad=max_segment_rad,
             max_depth=policy.kinematic_refinement_max_depth,
             segment_observer=_record_segment,
+            position_tolerance_m=config.tolerances.position_residual_m,
+            h_tolerance=RASTER_H_TOLERANCE,
         )
         raster_complete = raster.complete
         raster_failures = raster.correction_failure_count
         raster_budget = raster.depth_budget_exhausted
+        max_position_residual_m = raster.max_position_residual_m
+        max_h_residual = raster.max_h_residual
     stored_match = None
     if steps_per_ray is None:
         stored_match = (
@@ -942,6 +1215,11 @@ def replay_selected_case(
         "rasterization_complete": raster_complete,
         "correction_failure_count": raster_failures,
         "depth_budget_exhausted": raster_budget,
+        "max_segment_rad": max_segment_rad,
+        "max_position_residual_m": max_position_residual_m,
+        "max_h_residual": max_h_residual,
+        "position_tolerance_m": config.tolerances.position_residual_m,
+        "h_tolerance": RASTER_H_TOLERANCE,
         "segments": segments if include_raster else None,
     }
     (outdir / "selected_trace_diagnostics.json").write_text(json_dumps_strict(trace_doc), encoding="utf-8")

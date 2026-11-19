@@ -110,6 +110,10 @@ H13H-0 baseline receipt for the historical dirty-producer H13G pilot. Source pol
 
 H13H-2 continuation diagnosis for the selected historical fibers. No solver defect was demonstrated. Source policy is not validated.
 
+### [`../methods/R3A_H13H_RASTER_DIAGNOSIS.md`](../methods/R3A_H13H_RASTER_DIAGNOSIS.md)
+
+H13H-3 raster diagnosis for the selected historical fibers. Nonlocal closing-chord corrections are rejected. Source policy is not validated.
+
 ### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
 
 R3C source-derived 5R → mechanism → atlas → 5R falsification program (ADR-052). A0 is infrastructure only.

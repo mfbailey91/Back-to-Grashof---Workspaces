@@ -6,6 +6,8 @@
 
 **H13H-2 diagnosis:** [R3A_H13H_CONTINUATION_DIAGNOSIS.md](R3A_H13H_CONTINUATION_DIAGNOSIS.md) classifies the selected continuation cases. `accepted_reconstruction`: false. The production solver is unchanged.
 
+**H13H-3 diagnosis:** [R3A_H13H_RASTER_DIAGNOSIS.md](R3A_H13H_RASTER_DIAGNOSIS.md) classifies the selected raster cases. Raster midpoints stay on the chord section. `accepted_reconstruction`: false. Continuation is unchanged.
+
 **Authority:** [ROADMAP.md](../ROADMAP.md) owns future dependency gates. [CURRENT_STATUS.md](../CURRENT_STATUS.md) owns scientific status. This document is the detailed H13H execution plan.
 
 | Field | Value |
@@ -316,6 +318,8 @@ If a branch jump or midpoint stagnation is demonstrated, anchor correction to th
 Neither midpoint residuals nor endpoint chords alone prove global branch identity. The outcome remains a numerical certificate at declared resolution.
 
 **Exit gate:** the reproduced failure is corrected or localized; every accepted raster sample has verifiable kinematic provenance; missing information remains blocking.
+
+**Recorded result:** [R3A_H13H_RASTER_DIAGNOSIS.md](R3A_H13H_RASTER_DIAGNOSIS.md). The selected open-ray closing chords are classified. A chord whose correction leaves the chord is rejected, and that gap stays unresolved. Continuation and the shared step budget are unchanged.
 
 ### H13H-4 — Run the P1/P4/P5 convergence study
 

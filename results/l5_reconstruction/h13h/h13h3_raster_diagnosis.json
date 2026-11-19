@@ -1,0 +1,256 @@
+{
+  "accepted_reconstruction": false,
+  "campaign_root": "outputs/r3a_h13g_source_pilot",
+  "cases": [
+    {
+      "c": -0.992708874098054,
+      "category": "closing_control",
+      "classification": {
+        "closing_segment_failures": 0,
+        "closing_segment_outcomes": {
+          "within_declared_gap": 1
+        },
+        "demonstrated_cause": "NO_RASTER_FAILURE",
+        "explanation": "The raster meets the declared gap, correction, depth, and residual checks.",
+        "hidden_interior_count": 0,
+        "interval_blocked": false,
+        "interval_left_covered": false,
+        "nonlocal_correction_count": 0,
+        "observed_outcomes": {
+          "within_declared_gap": 37
+        },
+        "open_ray": false,
+        "possible_causes": [],
+        "stored_interval_status": "RETURNED_SET_FOUND",
+        "traced_segment_failures": 0
+      },
+      "fiber_id": "P1_DEEP_COMPLETE_c1_t0",
+      "interior_probe_count": 37,
+      "max_h_residual": 6.706291078018012e-11,
+      "max_interior_excursion_rad": 0.0008432192151755918,
+      "max_position_residual_m": 1.5770682649803802e-11,
+      "max_segment_rad": 0.08241685160700848,
+      "probe_id": "P1_DEEP_COMPLETE",
+      "replay_correction_failure_count": 0,
+      "replay_depth_budget_exhausted": false,
+      "replay_rasterization_complete": true,
+      "segment_count": 37,
+      "stored_endpoint_gap_rad": 0.03166946412519706,
+      "stored_fiber_agreement": true,
+      "stored_interval_evidence": {
+        "blocking_projection_failure_count": 0,
+        "budget_exhausted_count": 0,
+        "closure_kind_counts": {
+          "RETURNED_TO_SEED": 8
+        },
+        "corrector_failure_count": 0,
+        "diagnostic_projection_failure_count": 28,
+        "rasterization_incomplete_count": 0,
+        "required": true
+      },
+      "stored_interval_status": "RETURNED_SET_FOUND",
+      "stored_negative_ray_termination": null,
+      "stored_positive_ray_termination": "RETURNED_TO_SEED",
+      "stored_rasterization_complete": true,
+      "stored_termination_status": "RETURNED_TO_SEED"
+    },
+    {
+      "c": -0.970941817426052,
+      "category": "raster_failing",
+      "classification": {
+        "closing_segment_failures": 1,
+        "closing_segment_outcomes": {
+          "failed_correction": 1
+        },
+        "demonstrated_cause": "UNTRACED_CLOSING_GAP",
+        "explanation": "The closing chord joins an open ray to the seed. The local section correction does not cross that untraced gap.",
+        "hidden_interior_count": 0,
+        "interval_blocked": true,
+        "interval_left_covered": false,
+        "nonlocal_correction_count": 0,
+        "observed_outcomes": {
+          "corrected": 25,
+          "failed_correction": 1,
+          "within_declared_gap": 96
+        },
+        "open_ray": true,
+        "possible_causes": [],
+        "stored_interval_status": "MIXED_UNRESOLVED",
+        "traced_segment_failures": 0
+      },
+      "fiber_id": "P1_DEEP_COMPLETE_c2_t3",
+      "interior_probe_count": 96,
+      "max_h_residual": 8.619049918223709e-11,
+      "max_interior_excursion_rad": 0.000287304348867784,
+      "max_position_residual_m": 3.3222743980604046e-11,
+      "max_segment_rad": 0.08241685160700848,
+      "probe_id": "P1_DEEP_COMPLETE",
+      "replay_correction_failure_count": 1,
+      "replay_depth_budget_exhausted": false,
+      "replay_rasterization_complete": false,
+      "segment_count": 122,
+      "stored_endpoint_gap_rad": 0.4812847449408592,
+      "stored_fiber_agreement": true,
+      "stored_interval_evidence": {
+        "blocking_projection_failure_count": 0,
+        "budget_exhausted_count": 0,
+        "closure_kind_counts": {
+          "RETURNED_TO_SEED": 8
+        },
+        "corrector_failure_count": 0,
+        "diagnostic_projection_failure_count": 8,
+        "rasterization_incomplete_count": 2,
+        "required": true
+      },
+      "stored_interval_status": "MIXED_UNRESOLVED",
+      "stored_negative_ray_termination": "RETURNED_TO_SEED",
+      "stored_positive_ray_termination": "BUDGET_EXHAUSTED",
+      "stored_rasterization_complete": false,
+      "stored_termination_status": "RETURNED_TO_SEED"
+    },
+    {
+      "c": -0.8229838658936564,
+      "category": "depth_exhausted_closing",
+      "classification": {
+        "closing_segment_failures": 1,
+        "closing_segment_outcomes": {
+          "failed_correction": 1
+        },
+        "demonstrated_cause": "UNTRACED_CLOSING_GAP",
+        "explanation": "The closing chord joins an open ray to the seed. The local section correction does not cross that untraced gap.",
+        "hidden_interior_count": 0,
+        "interval_blocked": true,
+        "interval_left_covered": false,
+        "nonlocal_correction_count": 0,
+        "observed_outcomes": {
+          "corrected": 170,
+          "failed_correction": 1,
+          "within_declared_gap": 258
+        },
+        "open_ray": true,
+        "possible_causes": [],
+        "stored_interval_status": "MIXED_UNRESOLVED",
+        "traced_segment_failures": 0
+      },
+      "fiber_id": "P4_OUTER_COMPLETE_c5_t4",
+      "interior_probe_count": 258,
+      "max_h_residual": 6.94152513247559e-11,
+      "max_interior_excursion_rad": 2.9786621617872155e-05,
+      "max_position_residual_m": 1.5606156487479942e-11,
+      "max_segment_rad": 0.08241685160700848,
+      "probe_id": "P4_OUTER_COMPLETE",
+      "replay_correction_failure_count": 1,
+      "replay_depth_budget_exhausted": false,
+      "replay_rasterization_complete": false,
+      "segment_count": 429,
+      "stored_endpoint_gap_rad": 1.1983861455598985,
+      "stored_fiber_agreement": true,
+      "stored_interval_evidence": {
+        "blocking_projection_failure_count": 0,
+        "budget_exhausted_count": 0,
+        "closure_kind_counts": {
+          "RETURNED_TO_SEED": 8
+        },
+        "corrector_failure_count": 0,
+        "diagnostic_projection_failure_count": 12,
+        "rasterization_incomplete_count": 2,
+        "required": true
+      },
+      "stored_interval_status": "MIXED_UNRESOLVED",
+      "stored_negative_ray_termination": "RETURNED_TO_SEED",
+      "stored_positive_ray_termination": "BUDGET_EXHAUSTED",
+      "stored_rasterization_complete": false,
+      "stored_termination_status": "RETURNED_TO_SEED"
+    },
+    {
+      "c": -0.5680647467311557,
+      "category": "open_ray_completed",
+      "classification": {
+        "closing_segment_failures": 0,
+        "closing_segment_outcomes": {
+          "corrected": 31,
+          "within_declared_gap": 32
+        },
+        "demonstrated_cause": "NO_RASTER_FAILURE",
+        "explanation": "The raster meets the declared gap, correction, depth, and residual checks.",
+        "hidden_interior_count": 0,
+        "interval_blocked": false,
+        "interval_left_covered": false,
+        "nonlocal_correction_count": 0,
+        "observed_outcomes": {
+          "corrected": 167,
+          "within_declared_gap": 248
+        },
+        "open_ray": true,
+        "possible_causes": [],
+        "stored_interval_status": "RETURNED_SET_FOUND",
+        "traced_segment_failures": 0
+      },
+      "fiber_id": "P4_OUTER_COMPLETE_c8_t4",
+      "interior_probe_count": 248,
+      "max_h_residual": 9.593270622332284e-11,
+      "max_interior_excursion_rad": 7.902596823330943e-06,
+      "max_position_residual_m": 7.46956421536348e-11,
+      "max_segment_rad": 0.08241685160700848,
+      "probe_id": "P4_OUTER_COMPLETE",
+      "replay_correction_failure_count": 0,
+      "replay_depth_budget_exhausted": false,
+      "replay_rasterization_complete": true,
+      "segment_count": 415,
+      "stored_endpoint_gap_rad": 1.8891228485158402,
+      "stored_fiber_agreement": true,
+      "stored_interval_evidence": {
+        "blocking_projection_failure_count": 0,
+        "budget_exhausted_count": 0,
+        "closure_kind_counts": {
+          "RETURNED_TO_SEED": 8
+        },
+        "corrector_failure_count": 0,
+        "diagnostic_projection_failure_count": 8,
+        "rasterization_incomplete_count": 0,
+        "required": true
+      },
+      "stored_interval_status": "RETURNED_SET_FOUND",
+      "stored_negative_ray_termination": "RETURNED_TO_SEED",
+      "stored_positive_ray_termination": "BUDGET_EXHAUSTED",
+      "stored_rasterization_complete": true,
+      "stored_termination_status": "RETURNED_TO_SEED"
+    }
+  ],
+  "category_counts": {
+    "budget_exhausted": 163,
+    "mixed_bin": 56,
+    "passing_regular": 410,
+    "raster_failing": 10,
+    "singular_or_corrector": 40
+  },
+  "config_hash": "e4b25df91753f9861f643db3558d20790b5e69184affd3fad0034fd9428ea9c4",
+  "config_path": "configs/l5_positive_control_h13g_source_pilot_v1.json",
+  "continuation_solver_changed": false,
+  "diagnostic_only": true,
+  "generated_at": "2026-11-18T22:02:34-08:00",
+  "h12_hub_replaced": false,
+  "historical_producer": "historical_dirty_producer",
+  "inspection": {
+    "branch": "r3a-h13h-source-convergence",
+    "head": "6a96d52ea4697af232a0a06aae0dd7fb0c1b3903"
+  },
+  "natural_budget_changed": false,
+  "production_raster_changed": true,
+  "repair": {
+    "continuation_max_steps_per_ray": "not_added",
+    "h13h_source_convergence_v1": "not_registered",
+    "midpoint_correction": "chord_section_with_chord_length_trust_radius",
+    "raster_depth_increased": false,
+    "residual_completion_gate": "position_and_scalar_residuals_block_completion"
+  },
+  "replay_still_shows_nonlocal_sample": false,
+  "schema_version": "r3a_h13h3_raster_diagnosis_v1",
+  "solver_defect_demonstrated": true,
+  "source_control_sha256": {
+    "summary": "182848e8326a57cf00c9e739343b076bcb405743ae2c73d58f142d38c66ca4b7"
+  },
+  "source_policy_validated": false,
+  "work_package": "H13H-3"
+}
+

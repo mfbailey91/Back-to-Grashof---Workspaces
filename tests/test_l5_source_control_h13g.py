@@ -6,11 +6,13 @@ from pathlib import Path
 
 import numpy as np
 
+from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 from grashof_workspace.spatial_experiments.branch_continuation import (
     ParabolaProblem,
     UnitCircleProblem,
     continue_implicit_branch,
 )
+from grashof_workspace.spatial_experiments.continuation import wrap_joint_delta
 from grashof_workspace.spatial_experiments.l5_reconstruction.models import (
     SourceTraceTermination,
     load_campaign_config,
@@ -26,6 +28,9 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.source_control impo
     h_value,
     radial_normal,
 )
+from grashof_workspace.spatial_experiments.l5_reconstruction.source_control_h13 import (
+    wrapped_q_distance,
+)
 from grashof_workspace.spatial_experiments.l5_reconstruction.source_control_h13g import (
     TRACE_COUNT_SEMANTICS,
     H13GSourcePolicy,
@@ -37,6 +42,8 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.source_control_h13g
 )
 from grashof_workspace.spatial_experiments.parent_level_sets import (
     PointingLevelSetProblem,
+    correct_to_levelset,
+    correct_to_local_levelset,
     pointing_scalar,
 )
 
@@ -239,3 +246,112 @@ def test_corrected_rasterization_preserves_position_and_h() -> None:
 
 def test_h13g_seed_count_vocabulary_is_not_component_vocabulary() -> None:
     assert TRACE_COUNT_SEMANTICS == "trace_attempts_not_expected_components"
+
+
+def test_raster_completion_rejects_an_endpoint_outside_tolerance() -> None:
+    config = load_campaign_config(H13G_CONFIG)
+    arm = build_positive_control_arm(config.geometry)
+    probe = config.probe("P1_DEEP_COMPLETE")
+    n = radial_normal(probe.p_star)
+    seed = analytic_seed_configuration(arm.geometry, probe)
+    direction = as_vec3(arm.chain.evaluate(seed).d)
+    fiber = SourceControlFiber(
+        fiber_id="residual_gate",
+        c=h_value(arm, seed, n),
+        q_samples=(tuple(0.0 for _ in seed), tuple(0.0 for _ in seed)),
+        pointing_samples=(direction, direction),
+        branch_status="open",
+        returned=False,
+        max_position_residual_m=0.0,
+        max_h_residual=0.0,
+    )
+    raster = rasterize_fiber_kinematically(
+        arm,
+        probe,
+        n,
+        fiber,
+        max_segment_rad=1.0,
+        max_depth=2,
+        position_tolerance_m=config.tolerances.position_residual_m,
+    )
+    assert raster.complete is False
+    assert raster.max_position_residual_m > config.tolerances.position_residual_m
+
+
+_CLOSING_Q_A = (
+    1.2248691915440875,
+    -2.300024004560036,
+    -0.6085658551472045,
+    -0.5684199650319478,
+    -2.6640696287208288,
+)
+_CLOSING_Q_B = (
+    1.0767077282859654,
+    -2.3372646018066328,
+    -0.6085658551478693,
+    0.5359368482939879,
+    -2.953378331105081,
+)
+_CLOSING_C = -0.8229838658936564
+
+
+def test_open_ray_closing_chord_rejects_nonlocal_correction() -> None:
+    config = load_campaign_config(H13G_CONFIG)
+    arm = build_positive_control_arm(config.geometry)
+    probe = config.probe("P4_OUTER_COMPLETE")
+    n = radial_normal(probe.p_star)
+    directions = tuple(as_vec3(arm.chain.evaluate(q).d) for q in (_CLOSING_Q_A, _CLOSING_Q_B))
+    guess = tuple(
+        float(value)
+        for value in np.arctan2(
+            np.sin(np.asarray(_CLOSING_Q_A) + 0.5 * wrap_joint_delta(_CLOSING_Q_B, _CLOSING_Q_A)),
+            np.cos(np.asarray(_CLOSING_Q_A) + 0.5 * wrap_joint_delta(_CLOSING_Q_B, _CLOSING_Q_A)),
+        )
+    )
+    span = wrapped_q_distance(_CLOSING_Q_A, _CLOSING_Q_B)
+    unconstrained, ok, _residual = correct_to_levelset(arm.model, guess, probe.p_star, n, _CLOSING_C)
+    assert ok
+    assert wrapped_q_distance(guess, unconstrained) > span
+    local, local_ok, _local_residual = correct_to_local_levelset(
+        arm.model,
+        guess,
+        _CLOSING_Q_A,
+        _CLOSING_Q_B,
+        probe.p_star,
+        n,
+        _CLOSING_C,
+        trust_radius=span,
+    )
+    assert local_ok is False
+    assert wrapped_q_distance(guess, local) > span
+    fiber = SourceControlFiber(
+        fiber_id="closing_jump",
+        c=_CLOSING_C,
+        q_samples=(_CLOSING_Q_A, _CLOSING_Q_B),
+        pointing_samples=directions,
+        branch_status="closed",
+        returned=True,
+        closed=True,
+        max_position_residual_m=0.0,
+        max_h_residual=0.0,
+        termination_status="RETURNED_TO_SEED",
+        positive_ray_termination="BUDGET_EXHAUSTED",
+        negative_ray_termination="RETURNED_TO_SEED",
+    )
+    segments: list[dict[str, object]] = []
+    raster = rasterize_fiber_kinematically(
+        arm,
+        probe,
+        n,
+        fiber,
+        max_segment_rad=0.05,
+        max_depth=8,
+        segment_observer=segments.append,
+    )
+    assert raster.complete is False
+    assert raster.correction_failure_count > 0
+    assert all(
+        item["outcome"] != "corrected"
+        or float(item["wrapped_correction_distance_rad"]) <= float(item["correction_trust_radius_rad"])
+        for item in segments
+    )

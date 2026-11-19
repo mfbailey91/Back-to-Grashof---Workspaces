@@ -43,6 +43,7 @@ implementation authority.
 | [methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md](methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md) | PROPOSED SPRINT | Replayable source failures, continuation/raster repair, independent numerical convergence, and five-probe source validation; conditional H13I handoff; H12 hub remains current |
 | [methods/R3A_H13H_BASELINE_RECEIPT.md](methods/R3A_H13H_BASELINE_RECEIPT.md) | H13H-0 RECEIPT | Historical H13G P1/P4/P5 pilot identity, protected H12 hashes, and baseline source metrics; source policy not validated |
 | [methods/R3A_H13H_CONTINUATION_DIAGNOSIS.md](methods/R3A_H13H_CONTINUATION_DIAGNOSIS.md) | H13H-2 DIAGNOSIS | Selected continuation causes from stored H13G fibers; no demonstrated solver defect; source policy not validated |
+| [methods/R3A_H13H_RASTER_DIAGNOSIS.md](methods/R3A_H13H_RASTER_DIAGNOSIS.md) | H13H-3 DIAGNOSIS | Selected raster causes; chord-section midpoint correction; open-ray closing gaps stay unresolved; source policy not validated |
 | [methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md](methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md) | ACTIVE PROGRAM | Source-derived 5R → mechanism → atlas → 5R falsification loop |
 | [methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md](methods/R3C_A0_BEHAVIOR_ATLAS_CONTRACT.md) | ACTIVE EXECUTION | Atlas provenance and extraction-contract sprint |
 | [methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md](methods/R3C_A1_MANIPULATOR_TO_MECHANISM_EXPORTER.md) | ACTIVE EXECUTION | Frozen natural leaves → reconstructible E0 UURU mechanism specimens |

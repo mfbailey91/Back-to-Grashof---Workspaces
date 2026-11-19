@@ -134,6 +134,60 @@ def correct_to_levelset(
     return qt, False, float(np.linalg.norm(levelset_residual(model, qt, p_star, n, c)))
 
 
+def correct_to_local_levelset(
+    model: OpenChainModel,
+    q_guess: tuple[float, ...],
+    q_a: tuple[float, ...],
+    q_b: tuple[float, ...],
+    p_star: tuple[float, float, float],
+    n: tuple[float, float, float],
+    c: float,
+    *,
+    trust_radius: float,
+) -> tuple[tuple[float, ...], bool, float]:
+    """Correct ``q_guess`` onto ``p=p*`` and ``n·d=c`` inside the chord section.
+
+    The fifth equation is the wrapped chord section
+    ``wrap(q - q_guess) · t = 0``, where ``t`` is the unit wrapped chord from
+    ``q_a`` to ``q_b``. Joint angles stay on the periodic coordinates. A Newton
+    step that leaves ``trust_radius`` is rejected, so a distant level-set root
+    is not returned as the local midpoint.
+    """
+
+    chord = np.asarray(wrap_joint_delta(q_b, q_a), dtype=float)
+    span = float(np.linalg.norm(chord))
+    if span <= 1e-12 or trust_radius <= 0.0:
+        return correct_to_levelset(model, q_guess, p_star, n, c)
+    direction = chord / span
+    origin = np.asarray(q_guess, dtype=float)
+    x = origin.copy()
+    periodic = (True,) * len(q_guess)
+    for _ in range(LEVELSET_NEWTON_ITERS):
+        qt = tuple(float(value) for value in x)
+        level = levelset_residual(model, qt, p_star, n, c)
+        origin_q = tuple(float(value) for value in origin)
+        section_delta = np.asarray(wrap_joint_delta(qt, origin_q), dtype=float)
+        section = float(np.dot(section_delta, direction))
+        residual = float(np.linalg.norm(level))
+        if residual <= 1e-10 and abs(section) <= 1e-8:
+            return qt, True, residual
+        stacked = np.vstack((levelset_jacobian(model, qt, n), direction.reshape(1, -1)))
+        rhs = -np.concatenate((level, np.array((section,), dtype=float)))
+        try:
+            step = np.linalg.solve(stacked, rhs)
+        except np.linalg.LinAlgError:
+            return qt, False, residual
+        trial = wrap_periodic(x + step, periodic)
+        trial_q = tuple(float(value) for value in trial)
+        moved = float(np.linalg.norm(wrap_joint_delta(trial_q, origin_q)))
+        if moved > trust_radius:
+            rejected = tuple(float(value) for value in trial)
+            return rejected, False, residual
+        x = trial
+    qt = tuple(float(value) for value in x)
+    return qt, False, float(np.linalg.norm(levelset_residual(model, qt, p_star, n, c)))
+
+
 @dataclass(frozen=True, slots=True)
 class PointingLevelSetProblem:
     """Task-derived 1D branch ``p(q)=p*`` and ``n·d=c``. Equations unchanged."""

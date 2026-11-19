@@ -12,7 +12,10 @@ Corrections relative to the H13A--F diagnostic path:
   though local seed clusters were components;
 * only locally justified projection failures are blocking evidence; and
 * occupancy is refined through corrected source-Q midpoints, never through
-  unconstrained great-circle interpolation.
+  unconstrained great-circle interpolation;
+* a raster midpoint stays on the wrapped chord section and is rejected when
+  the correction leaves that chord; and
+* position and scalar residuals participate in raster completion.
 """
 
 from __future__ import annotations
@@ -40,6 +43,7 @@ from grashof_workspace.spatial_experiments.implicit_manifold import ambient_dist
 from grashof_workspace.spatial_experiments.parent_level_sets import (
     PointingLevelSetProblem,
     correct_to_levelset,
+    correct_to_local_levelset,
     pointing_scalar,
 )
 
@@ -164,6 +168,10 @@ class H13GTraceDiagnostic:
     positive_ray_termination: str | None
     negative_ray_termination: str | None
     rejection_reason_counts: dict[str, int]
+
+
+RASTER_POSITION_TOLERANCE_M = 1e-8
+RASTER_H_TOLERANCE = 1e-8
 
 
 @dataclass(frozen=True, slots=True)
@@ -725,21 +733,33 @@ def _refine_segment(
         )
         return [(q_b, d_b)], 0, True
     q_guess = _wrapped_midpoint(q_a, q_b)
-    q_mid, ok, _ = correct_to_levelset(arm.model, q_guess, probe.p_star, n, c)
+    trust_radius = wrapped_q_distance(q_a, q_b)
+    q_mid, ok, _ = correct_to_local_levelset(
+        arm.model,
+        q_guess,
+        q_a,
+        q_b,
+        probe.p_star,
+        n,
+        c,
+        trust_radius=trust_radius,
+    )
+    q_mid_tuple = tuple(float(value) for value in q_mid)
+    correction_distance = wrapped_q_distance(q_guess, q_mid_tuple)
     if not ok:
         _observe(
             {
                 "outcome": "failed_correction",
                 "midpoint_guess": list(q_guess),
-                "corrected_q": None,
+                "corrected_q": list(q_mid_tuple),
                 "position_residual_m": None,
                 "h_residual": None,
-                "wrapped_correction_distance_rad": None,
+                "wrapped_correction_distance_rad": correction_distance,
+                "correction_trust_radius_rad": trust_radius,
                 "local_tangent": None,
             }
         )
         return [(q_b, d_b)], 1, False
-    q_mid_tuple = tuple(float(value) for value in q_mid)
     state = arm.chain.evaluate(q_mid_tuple)
     d_mid = as_vec3(state.d)
     if segment_observer is not None:
@@ -764,7 +784,8 @@ def _refine_segment(
                     np.linalg.norm(np.asarray(state.p) - np.asarray(probe.p_star))
                 ),
                 "h_residual": abs(pointing_scalar(d_mid, n) - c),
-                "wrapped_correction_distance_rad": wrapped_q_distance(q_guess, q_mid_tuple),
+                "wrapped_correction_distance_rad": correction_distance,
+                "correction_trust_radius_rad": trust_radius,
                 "local_tangent": tangent,
             }
         )
@@ -816,6 +837,8 @@ def rasterize_fiber_kinematically(
     max_segment_rad: float,
     max_depth: int,
     segment_observer: Callable[[Mapping[str, Any]], None] | None = None,
+    position_tolerance_m: float = RASTER_POSITION_TOLERANCE_M,
+    h_tolerance: float = RASTER_H_TOLERANCE,
 ) -> KinematicRasterization:
     if not fiber.q_samples:
         return KinematicRasterization(
@@ -867,18 +890,27 @@ def rasterize_fiber_kinematically(
     h_residuals: list[float] = []
     for q, direction in out:
         state = arm.chain.evaluate(q)
+        fk_direction = as_vec3(state.d)
         position_residuals.append(
             float(np.linalg.norm(np.asarray(state.p) - np.asarray(probe.p_star)))
         )
-        h_residuals.append(abs(pointing_scalar(direction, n) - fiber.c))
+        h_residuals.append(
+            max(
+                abs(pointing_scalar(direction, n) - fiber.c),
+                abs(pointing_scalar(fk_direction, n) - fiber.c),
+            )
+        )
+    max_position = max(position_residuals)
+    max_h = max(h_residuals)
+    residual_exceeded = max_position > position_tolerance_m or max_h > h_tolerance
     return KinematicRasterization(
         q_samples=tuple(item[0] for item in out),
         pointings=tuple(item[1] for item in out),
-        complete=correction_failures == 0 and not depth_budget,
+        complete=correction_failures == 0 and not depth_budget and not residual_exceeded,
         correction_failure_count=correction_failures,
         depth_budget_exhausted=depth_budget,
-        max_position_residual_m=max(position_residuals),
-        max_h_residual=max(h_residuals),
+        max_position_residual_m=max_position,
+        max_h_residual=max_h,
     )
 
 
@@ -1092,6 +1124,8 @@ def build_source_control_h13g(
             fiber,
             max_segment_rad=max_segment,
             max_depth=policy.kinematic_refinement_max_depth,
+            position_tolerance_m=config.tolerances.position_residual_m,
+            h_tolerance=RASTER_H_TOLERANCE,
         )
         enriched.append(
             replace(
