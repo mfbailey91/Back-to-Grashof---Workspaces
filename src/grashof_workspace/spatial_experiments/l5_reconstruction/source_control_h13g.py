@@ -523,9 +523,29 @@ def continue_source_fiber_h13g(
     fiber_id: str,
     max_steps: int,
     policy: H13GSourcePolicy,
+    trace_observer: Callable[[Mapping[str, Any]], None] | None = None,
 ) -> SourceControlFiber:
+    def _emit(**payload: Any) -> None:
+        if trace_observer is None:
+            return
+        trace_observer(
+            {
+                "fiber_id": fiber_id,
+                "c": c,
+                "trace_cover_seed": [float(value) for value in q_seed],
+                "periodic_coordinate_convention": "joint angles wrapped to (-pi, pi]",
+                **payload,
+            }
+        )
+
     q_projected, ok, _ = correct_to_levelset(arm.model, q_seed, probe.p_star, n, c)
     if not ok:
+        _emit(
+            continuation_seed=None,
+            periodic_coordinates=None,
+            branch_trace=None,
+            outcome="projection_failed",
+        )
         return SourceControlFiber(
             fiber_id=fiber_id,
             c=c,
@@ -557,6 +577,12 @@ def continue_source_fiber_h13g(
     except ValueError:
         q_fail = tuple(float(value) for value in q_projected)
         state = arm.chain.evaluate(q_fail)
+        _emit(
+            continuation_seed=list(q_fail),
+            periodic_coordinates=list(problem.periodic_coordinates),
+            branch_trace=None,
+            outcome="singular_or_corrector_failure",
+        )
         return SourceControlFiber(
             fiber_id=fiber_id,
             c=c,
@@ -593,7 +619,7 @@ def continue_source_fiber_h13g(
     branch_status = "returned" if diagnostic.closed else str(trace.branch_status)
     if diagnostic.termination is SourceTraceTermination.BUDGET_EXHAUSTED:
         branch_status = "budget_exhausted"
-    return SourceControlFiber(
+    fiber = SourceControlFiber(
         fiber_id=fiber_id,
         c=c,
         q_samples=tuple(qs),
@@ -616,6 +642,19 @@ def continue_source_fiber_h13g(
         positive_ray_termination=diagnostic.positive_ray_termination,
         negative_ray_termination=diagnostic.negative_ray_termination,
     )
+    _emit(
+        continuation_seed=list(trace.x_seed),
+        periodic_coordinates=list(problem.periodic_coordinates),
+        branch_trace=trace.to_json_dict(),
+        outcome=fiber.termination_status,
+        returned=fiber.returned,
+        closed=fiber.closed,
+        endpoint_state_distance=fiber.endpoint_state_distance,
+        endpoint_tangent_abs_dot=fiber.endpoint_tangent_abs_dot,
+        positive_ray_termination=fiber.positive_ray_termination,
+        negative_ray_termination=fiber.negative_ray_termination,
+    )
+    return fiber
 
 
 def _wrapped_midpoint(a: Q, b: Q) -> Q:
@@ -638,17 +677,97 @@ def _refine_segment(
     max_segment_rad: float,
     max_depth: int,
     depth: int,
+    segment_index: int = 0,
+    closing_segment: bool = False,
+    segment_observer: Callable[[Mapping[str, Any]], None] | None = None,
 ) -> tuple[list[tuple[Q, Vec3]], int, bool]:
-    if pointing_geodesic(d_a, d_b) <= max_segment_rad:
+    gap = pointing_geodesic(d_a, d_b)
+
+    def _observe(payload: dict[str, Any]) -> None:
+        if segment_observer is None:
+            return
+        segment_observer(
+            {
+                "segment_index": segment_index,
+                "closing_segment": closing_segment,
+                "recursion_depth": depth,
+                "endpoint_q": [list(q_a), list(q_b)],
+                "endpoint_direction": [list(d_a), list(d_b)],
+                "angular_gap_rad": gap,
+                **payload,
+            }
+        )
+
+    if gap <= max_segment_rad:
+        _observe(
+            {
+                "outcome": "within_declared_gap",
+                "midpoint_guess": None,
+                "corrected_q": None,
+                "position_residual_m": None,
+                "h_residual": None,
+                "wrapped_correction_distance_rad": None,
+                "local_tangent": None,
+            }
+        )
         return [(q_b, d_b)], 0, False
     if depth >= max_depth:
+        _observe(
+            {
+                "outcome": "depth_exhausted",
+                "midpoint_guess": None,
+                "corrected_q": None,
+                "position_residual_m": None,
+                "h_residual": None,
+                "wrapped_correction_distance_rad": None,
+                "local_tangent": None,
+            }
+        )
         return [(q_b, d_b)], 0, True
     q_guess = _wrapped_midpoint(q_a, q_b)
     q_mid, ok, _ = correct_to_levelset(arm.model, q_guess, probe.p_star, n, c)
     if not ok:
+        _observe(
+            {
+                "outcome": "failed_correction",
+                "midpoint_guess": list(q_guess),
+                "corrected_q": None,
+                "position_residual_m": None,
+                "h_residual": None,
+                "wrapped_correction_distance_rad": None,
+                "local_tangent": None,
+            }
+        )
         return [(q_b, d_b)], 1, False
     q_mid_tuple = tuple(float(value) for value in q_mid)
-    d_mid = as_vec3(arm.chain.evaluate(q_mid_tuple).d)
+    state = arm.chain.evaluate(q_mid_tuple)
+    d_mid = as_vec3(state.d)
+    if segment_observer is not None:
+        tangent: list[float] | None
+        try:
+            problem = PointingLevelSetProblem(
+                model=arm.model,
+                p_star=probe.p_star,
+                n=n,
+                c=c,
+                problem_id=f"raster_segment_{segment_index}",
+            )
+            tangent = [float(value) for value in branch_tangent(problem, np.asarray(q_mid_tuple, dtype=float))]
+        except (ValueError, np.linalg.LinAlgError):
+            tangent = None
+        _observe(
+            {
+                "outcome": "corrected",
+                "midpoint_guess": list(q_guess),
+                "corrected_q": list(q_mid_tuple),
+                "position_residual_m": float(
+                    np.linalg.norm(np.asarray(state.p) - np.asarray(probe.p_star))
+                ),
+                "h_residual": abs(pointing_scalar(d_mid, n) - c),
+                "wrapped_correction_distance_rad": wrapped_q_distance(q_guess, q_mid_tuple),
+                "local_tangent": tangent,
+            }
+        )
     left, left_failures, left_budget = _refine_segment(
         arm,
         probe,
@@ -661,6 +780,9 @@ def _refine_segment(
         max_segment_rad=max_segment_rad,
         max_depth=max_depth,
         depth=depth + 1,
+        segment_index=segment_index,
+        closing_segment=closing_segment,
+        segment_observer=segment_observer,
     )
     right, right_failures, right_budget = _refine_segment(
         arm,
@@ -674,6 +796,9 @@ def _refine_segment(
         max_segment_rad=max_segment_rad,
         max_depth=max_depth,
         depth=depth + 1,
+        segment_index=segment_index,
+        closing_segment=closing_segment,
+        segment_observer=segment_observer,
     )
     return (
         [*left, *right],
@@ -690,6 +815,7 @@ def rasterize_fiber_kinematically(
     *,
     max_segment_rad: float,
     max_depth: int,
+    segment_observer: Callable[[Mapping[str, Any]], None] | None = None,
 ) -> KinematicRasterization:
     if not fiber.q_samples:
         return KinematicRasterization(
@@ -709,6 +835,7 @@ def rasterize_fiber_kinematically(
     if fiber.closed or fiber.returned:
         segment_pairs.append((pairs[-1], pairs[0]))
     for pair_index, ((q_a, d_a), (q_b, d_b)) in enumerate(segment_pairs):
+        closing = bool(fiber.closed or fiber.returned) and pair_index == len(segment_pairs) - 1
         refined, failures, exhausted = _refine_segment(
             arm,
             probe,
@@ -721,6 +848,9 @@ def rasterize_fiber_kinematically(
             max_segment_rad=max_segment_rad,
             max_depth=max_depth,
             depth=0,
+            segment_index=pair_index,
+            closing_segment=closing,
+            segment_observer=segment_observer,
         )
         correction_failures += failures
         depth_budget = depth_budget or exhausted

@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Sequence
-from dataclasses import replace
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -633,6 +633,142 @@ def _load_confirmation_cells(
     return build_direct_reference_cells(grid, labels, solves)
 
 
+@dataclass(frozen=True, slots=True)
+class DirectSourceColumns:
+    """Direct and source columns on the declared coarse and fine grids.
+
+    Natural-family columns stay outside this result. Masks use the same grid
+    order as ``evaluate_set_on_grid``.
+    """
+
+    fine_level: int
+    coarse_level: int
+    oracle_complete: bool
+    direct_complete: bool | None
+    direct_vs_oracle: PointingSetMetrics
+    source_vs_direct: PointingSetMetrics
+    source_vs_oracle: PointingSetMetrics
+    unresolved_c_intervals: tuple[tuple[float, float], ...]
+    fine_oracle_labels: tuple[str, ...]
+    coarse_oracle_labels: tuple[str, ...]
+    fine_direct_labels: tuple[str, ...]
+    coarse_direct_labels: tuple[str, ...]
+    fine_source_hits: tuple[bool, ...]
+    coarse_source_hits: tuple[bool, ...]
+    fine_direct_hits: tuple[bool, ...]
+    grid: SphereGrid
+    coarse_grid: SphereGrid
+    oracle_labels: tuple[CellClass, ...]
+    coarse_oracle_label_values: tuple[CellClass, ...]
+    direct_labels: tuple[CellClass, ...]
+    coarse_direct_label_values: tuple[CellClass, ...]
+    source_dirs: tuple[tuple[float, float, float], ...]
+    direct_strict_dirs: tuple[tuple[float, float, float], ...]
+
+
+def evaluate_direct_and_source_columns(
+    *,
+    config: CampaignConfig,
+    probe: FixedPointProbe,
+    mode: str,
+    source_blob: Mapping[str, Any],
+    truth_blob: Mapping[str, Any],
+) -> DirectSourceColumns:
+    """Recompute the direct and source set metrics from stored artifacts."""
+
+    budgets = config.mode(mode)
+    if budgets.confirmation_icosphere_level < 1:
+        raise ValueError("two-resolution refinement requires confirmation_icosphere_level >= 1")
+    grid = build_sphere_grid(budgets.confirmation_icosphere_level)
+    coarse_grid = build_sphere_grid(budgets.confirmation_icosphere_level - 1)
+    oracle = point_completeness_oracle(
+        config.geometry,
+        probe.p_star,
+        margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
+    )
+    labels = classify_cells(
+        grid,
+        config.geometry,
+        probe.p_star,
+        margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
+    )
+    coarse_oracle_labels = classify_cells(
+        coarse_grid,
+        config.geometry,
+        probe.p_star,
+        margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
+    )
+    dirs_raw = source_blob.get("pointing_samples", [])
+    src_dirs = tuple(as_vec3(item) for item in dirs_raw)
+    hits_raw = source_blob.get("hit_cells")
+    src_hits = tuple(bool(value) for value in hits_raw) if hits_raw is not None else ()
+    if src_hits and len(src_hits) != len(labels):
+        src_hits = ()
+    if not src_hits:
+        src_hits = paint_pointings(grid, src_dirs) if src_dirs else tuple(False for _ in labels)
+    cells = _load_confirmation_cells(dict(truth_blob), grid, labels)
+    direct_hits = resolved_direct_mask(cells)
+    direct_labels = direct_reference_labels(cells)
+    direct_strict_dirs = tuple(
+        cell.vertex_or_barycenter_direction
+        for cell in cells
+        if cell.direct_status is PointingSolveStatus.FOUND and cell.strict_reference_eligible
+    )
+    coarse_direct_labels = direct_labels_from_found_dirs(
+        coarse_grid,
+        coarse_oracle_labels,
+        direct_strict_dirs,
+    )
+
+    def _column(
+        fine_labels: tuple[CellClass, ...],
+        fine_hits: tuple[bool, ...],
+        reconstructed_dirs: tuple[tuple[float, float, float], ...],
+        coarse_labels: tuple[CellClass, ...],
+    ) -> PointingSetMetrics:
+        fine = evaluate_set_on_grid(
+            grid=grid,
+            reference_labels=fine_labels,
+            reconstructed_dirs=reconstructed_dirs,
+            reconstructed_hits=fine_hits,
+        )
+        coarse = evaluate_set_on_grid(
+            grid=coarse_grid,
+            reference_labels=coarse_labels,
+            reconstructed_dirs=reconstructed_dirs,
+        )
+        return attach_two_resolution_metrics(fine, coarse)
+
+    coarse_source_hits = (
+        paint_pointings(coarse_grid, src_dirs) if src_dirs else tuple(False for _ in coarse_grid.faces)
+    )
+    return DirectSourceColumns(
+        fine_level=budgets.confirmation_icosphere_level,
+        coarse_level=budgets.confirmation_icosphere_level - 1,
+        oracle_complete=oracle.complete,
+        direct_complete=direct_complete_from_cells(cells),
+        direct_vs_oracle=_column(labels, direct_hits, direct_strict_dirs, coarse_oracle_labels),
+        source_vs_direct=_column(direct_labels, src_hits, src_dirs, coarse_direct_labels),
+        source_vs_oracle=_column(labels, src_hits, src_dirs, coarse_oracle_labels),
+        unresolved_c_intervals=_interval_pairs(source_blob.get("unresolved_c_intervals")),
+        fine_oracle_labels=tuple(label.value for label in labels),
+        coarse_oracle_labels=tuple(label.value for label in coarse_oracle_labels),
+        fine_direct_labels=tuple(label.value for label in direct_labels),
+        coarse_direct_labels=tuple(label.value for label in coarse_direct_labels),
+        fine_source_hits=src_hits,
+        coarse_source_hits=coarse_source_hits,
+        fine_direct_hits=direct_hits,
+        grid=grid,
+        coarse_grid=coarse_grid,
+        oracle_labels=labels,
+        coarse_oracle_label_values=coarse_oracle_labels,
+        direct_labels=direct_labels,
+        coarse_direct_label_values=coarse_direct_labels,
+        source_dirs=src_dirs,
+        direct_strict_dirs=direct_strict_dirs,
+    )
+
+
 def write_compare_stage(
     config: CampaignConfig,
     outdir: Path,
@@ -644,41 +780,33 @@ def write_compare_stage(
     budgets = config.mode(mode)
     if budgets.confirmation_icosphere_level < 1:
         raise ValueError("two-resolution refinement requires confirmation_icosphere_level >= 1")
-    grid = build_sphere_grid(budgets.confirmation_icosphere_level)
-    coarse_grid = build_sphere_grid(budgets.confirmation_icosphere_level - 1)
     comparisons: list[ThreeWayReconstructionResult] = []
     probe_ids = tuple(p.probe_id for p in probes)
     require_match = bool(
         config.raw.get("set_acceptance", {}).get("require_all_five_point_classifications_match_oracle", True)
     )
     for probe in probes:
-        oracle = point_completeness_oracle(
-            config.geometry, probe.p_star, margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m
-        )
-        labels = classify_cells(
-            grid,
-            config.geometry,
-            probe.p_star,
-            margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
-        )
-        coarse_oracle_labels = classify_cells(
-            coarse_grid,
-            config.geometry,
-            probe.p_star,
-            margin_tol_m=config.tolerances.strict_analytical_boundary_margin_m,
-        )
         src_path = outdir / probe.probe_id / "source_control.json"
         nat_path = outdir / probe.probe_id / "natural_family.json"
         truth_path = outdir / probe.probe_id / "direct_truth.json"
-        src_hits, src_dirs = _load_hits_and_dirs(src_path)
-        if src_hits and len(src_hits) != len(labels):
-            src_hits = ()
-        if not src_hits:
-            src_hits = paint_pointings(grid, src_dirs) if src_dirs else tuple(False for _ in labels)
-        fam = json.loads(nat_path.read_text(encoding="utf-8"))
         src_blob = json.loads(src_path.read_text(encoding="utf-8"))
+        truth = json.loads(truth_path.read_text(encoding="utf-8"))
+        columns = evaluate_direct_and_source_columns(
+            config=config,
+            probe=probe,
+            mode=mode,
+            source_blob=src_blob,
+            truth_blob=truth,
+        )
+        grid = columns.grid
+        coarse_grid = columns.coarse_grid
+        labels = columns.oracle_labels
+        coarse_oracle_labels = columns.coarse_oracle_label_values
+        direct_labels = columns.direct_labels
+        coarse_direct_labels = columns.coarse_direct_label_values
+        fam = json.loads(nat_path.read_text(encoding="utf-8"))
         unresolved_lambda = _interval_pairs(fam.get("unresolved_lambda_intervals"))
-        unresolved_c = _interval_pairs(src_blob.get("unresolved_c_intervals"))
+        unresolved_c = columns.unresolved_c_intervals
         dirs: list[tuple[float, float, float]] = []
         for leaf in fam.get("leaves", []):
             if not leaf.get("accepted_for_reconstruction"):
@@ -687,66 +815,37 @@ def write_compare_stage(
                 dirs.append(as_vec3(sample["pointing"]))
         nat_dirs = tuple(dirs)
         nat_hits = paint_pointings(grid, nat_dirs) if nat_dirs else tuple(False for _ in labels)
-        truth = json.loads(truth_path.read_text(encoding="utf-8"))
-        cells = _load_confirmation_cells(truth, grid, labels)
-        direct_hits = resolved_direct_mask(cells)
-        direct_labels = direct_reference_labels(cells)
-        direct_strict_dirs = tuple(
-            cell.vertex_or_barycenter_direction
-            for cell in cells
-            if (
-                cell.direct_status is PointingSolveStatus.FOUND
-                and cell.strict_reference_eligible
-            )
-        )
-        coarse_direct_labels = direct_labels_from_found_dirs(
-            coarse_grid,
-            coarse_oracle_labels,
-            direct_strict_dirs,
-        )
 
         def _column(
             fine_labels: tuple[CellClass, ...],
             fine_hits: tuple[bool, ...],
             reconstructed_dirs: tuple[tuple[float, float, float], ...],
             coarse_labels: tuple[CellClass, ...],
+            *,
+            fine_grid: SphereGrid = grid,
+            reduced_grid: SphereGrid = coarse_grid,
         ) -> PointingSetMetrics:
             fine = evaluate_set_on_grid(
-                grid=grid,
+                grid=fine_grid,
                 reference_labels=fine_labels,
                 reconstructed_dirs=reconstructed_dirs,
                 reconstructed_hits=fine_hits,
             )
             coarse = evaluate_set_on_grid(
-                grid=coarse_grid,
+                grid=reduced_grid,
                 reference_labels=coarse_labels,
                 reconstructed_dirs=reconstructed_dirs,
             )
             return attach_two_resolution_metrics(fine, coarse)
 
-        src_vs_oracle = _column(labels, src_hits, src_dirs, coarse_oracle_labels)
         nat_vs_oracle = _column(labels, nat_hits, nat_dirs, coarse_oracle_labels)
-        direct_vs_oracle = _column(
-            labels,
-            direct_hits,
-            direct_strict_dirs,
-            coarse_oracle_labels,
-        )
-        src_vs_direct = _column(
-            direct_labels,
-            src_hits,
-            src_dirs,
-            coarse_direct_labels,
-        )
-        nat_vs_direct = _column(
-            direct_labels,
-            nat_hits,
-            nat_dirs,
-            coarse_direct_labels,
-        )
-        direct_complete = direct_complete_from_cells(cells)
+        nat_vs_direct = _column(direct_labels, nat_hits, nat_dirs, coarse_direct_labels)
+        direct_vs_oracle = columns.direct_vs_oracle
+        src_vs_direct = columns.source_vs_direct
+        src_vs_oracle = columns.source_vs_oracle
+        direct_complete = columns.direct_complete
         label, disp, reason = classify_probe_reconstruction(
-            oracle_complete=oracle.complete,
+            oracle_complete=columns.oracle_complete,
             expected_complete=probe.expected_pointing_complete,
             direct_complete=direct_complete,
             direct_vs_oracle=direct_vs_oracle,
@@ -765,7 +864,7 @@ def write_compare_stage(
         )
         probe_result = ThreeWayReconstructionResult(
             probe_id=probe.probe_id,
-            oracle_complete=oracle.complete,
+            oracle_complete=columns.oracle_complete,
             direct_complete=direct_complete,
             source_control_metrics=src_vs_oracle,
             natural_leaf_metrics=nat_vs_oracle,
