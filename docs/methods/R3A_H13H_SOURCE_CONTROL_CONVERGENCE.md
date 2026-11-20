@@ -1,6 +1,6 @@
 # R3A-H13H — Source-Control Failure Localization and Convergence
 
-**Status:** PROPOSED SPRINT — implementation and numerical validation remain to be done.
+**Status:** DOCUMENTED STOP — source policy not validated; no frozen H13H config; H13I not authorized.
 
 **H13H-0 receipt:** [R3A_H13H_BASELINE_RECEIPT.md](R3A_H13H_BASELINE_RECEIPT.md) records the located historical pilot and the protected hashes. Source policy validated: false.
 
@@ -11,6 +11,8 @@
 **H13H-4 study:** [R3A_H13H_CONVERGENCE_STUDY.md](R3A_H13H_CONVERGENCE_STUDY.md) records the P1/P4/P5 matrix. No three-probe candidate. `accepted_reconstruction`: false.
 
 **H13H-5 validation:** [R3A_H13H_FIVE_PROBE_VALIDATION.md](R3A_H13H_FIVE_PROBE_VALIDATION.md) retains `REQUIRED_INTERVALS_UNRESOLVED`. No frozen policy. P2/P3 were not evaluated. `accepted_reconstruction`: false.
+
+**H13H-6 closeout:** [R3A_H13H_DOCUMENTED_STOP.md](R3A_H13H_DOCUMENTED_STOP.md) packages the stop evidence and leaves H13I unauthorized (ADR-063).
 
 **Authority:** [ROADMAP.md](../ROADMAP.md) owns future dependency gates. [CURRENT_STATUS.md](../CURRENT_STATUS.md) owns scientific status. This document is the detailed H13H execution plan.
 
@@ -370,6 +372,8 @@ The evidence package must include:
 A proposed standalone `source_policy_validated` Boolean may summarize this new diagnostic report. It must not overwrite existing campaign acceptance or blocker enums. The official H12 hub remains unchanged.
 
 Update the live status ledger, roadmap, documentation index, and next available ADR with actual results. Do not reserve a future ADR number before checking the current repository.
+
+**Recorded result:** [R3A_H13H_DOCUMENTED_STOP.md](R3A_H13H_DOCUMENTED_STOP.md). Closeout kind `documented_stop`. No frozen config. Blocker `REQUIRED_INTERVALS_UNRESOLVED` after `steps192`. H13I handoff `authorized: false`. ADR-063 recorded. Source policy validated: false. `accepted_reconstruction`: false. H12 hub unchanged.
 
 ## 5. Experiment matrix
 

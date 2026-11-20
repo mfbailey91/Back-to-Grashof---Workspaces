@@ -154,28 +154,18 @@ H13A–H13F source-control work exists on separate diagnostic configs. H13G evid
 
 Execution: [methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md](methods/R3A_H13_SOURCE_CONTROL_COMPONENT_AND_COVERAGE_CLOSURE.md), [methods/R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP.md](methods/R3A_H13G_NARROW_CORRECTIVE_FOLLOW_UP.md).
 
-#### R3A-H13H — Source-control failure localization and convergence (proposed)
+#### R3A-H13H — Source-control failure localization and convergence (documented stop)
 
-Resume from the implemented H13G diagnostic pilot. First preserve replayable
-per-ray and raster-segment evidence and separate continuation, projection, work-cap,
-and rasterization causes. Repair demonstrated defects, retain the existing direct
-reference and set-acceptance law, and evaluate numerical convergence independently
-of the within-run coarse/fine-grid refinement metric.
+Closed as a documented stop. Source-only diagnostics, continuation/raster
+diagnosis, and a P1/P4/P5 convergence study are recorded. Continuation effort
+through 192 steps left required intervals unresolved
+(`REQUIRED_INTERVALS_UNRESOLVED`). No three-probe candidate existed, so no
+numerical policy was frozen and P2/P3 were not evaluated. Source policy is not
+validated. The H12 hub was not replaced.
 
-**Deliverable:** Source-only diagnostics, bounded failure reproductions, a P1/P4/P5
-convergence study, and one frozen candidate evaluated across all five probes.
-
-**Pass/fail gate:** Both source-versus-direct and source-versus-oracle pass the
-existing run-level gates; required bins, raster obligations, and work-cap evidence
-pass; the separately declared same-grid cross-run stability checks pass. Use one
-policy across probes. A reproducible, localized blocker is an honest sprint
-closeout but does not validate the source policy.
-
-**Authority:** H13H remains diagnostic-only. The H12 hub, scientific status, and
-campaign acceptance remain unchanged. Natural UURU interpretation waits for source
-validation; this plan does not activate R3B, atlas expansion, or L6.
-
-Execution: [methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md](methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md).
+**Recorded closeout:** [methods/R3A_H13H_DOCUMENTED_STOP.md](methods/R3A_H13H_DOCUMENTED_STOP.md)
+(ADR-063). Execution plan:
+[methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md](methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md).
 
 #### R3A-H13I — Frozen-source natural-family rerun (conditional follow-on)
 
@@ -187,8 +177,10 @@ settings. Recheck direct and source validity before interpreting natural UURU.
 full-closeout validation determine the result. Source success alone does not imply
 an accepted natural reconstruction, complete parent, or global foliation.
 
-**Blocker:** H13H source-policy validation. Handoff details:
-[H13I handoff](methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md#11-h13i-handoff-and-subsequent-roadmap).
+**Blocker:** H13H source-policy validation remains unmet after the documented stop.
+Handoff details:
+[H13I handoff](methods/R3A_H13H_SOURCE_CONTROL_CONVERGENCE.md#11-h13i-handoff-and-subsequent-roadmap);
+stop package: [methods/R3A_H13H_DOCUMENTED_STOP.md](methods/R3A_H13H_DOCUMENTED_STOP.md).
 
 ### R3B — Transfer and falsification
 

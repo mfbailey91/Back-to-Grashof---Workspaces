@@ -978,4 +978,29 @@ is incomplete on some fibers, and source-vs-direct refinement remains above 0.02
 or authorize natural-leaf tuning. L5 remains `parent_incomplete`. Natural UURU
 remains not interpreted.
 
+## ADR-063 — H13H closes as a documented source-control stop
+
+<!-- R3A_H13H_DOCUMENTED_STOP_2026_11_20 -->
+
+**Status:** RECORDED (documented stop; not a scientific closeout)
+
+**Decision:** Close R3A-H13H without freezing a source numerical policy and without
+creating `configs/l5_positive_control_h13h_source_frozen_v1.json`. Retain blocker
+`REQUIRED_INTERVALS_UNRESOLVED` after the H13H-4 continuation escalation through
+192 steps and the H13H-5 blocked five-probe validation. Do not evaluate P2/P3 under
+a non-candidate profile. Do not replace the H12 compact hub. Do not authorize
+H13I all-column packaging. Record the stop package at
+[methods/R3A_H13H_DOCUMENTED_STOP.md](../methods/R3A_H13H_DOCUMENTED_STOP.md).
+
+**Reason:** Bounded continuation escalation and the diagnostic P1/P4/P5 matrix did
+not clear required intervals. Remaining failures mix projection-backed
+`MIXED_UNRESOLVED` bins with P5 budget exhaustion and incomplete rasterization.
+Gate C freeze criteria were not met. A reproducible blocker is the honest closeout.
+
+**Consequence:** `source_policy_validated` remains false.
+`accepted_reconstruction` remains false. L5 remains `parent_incomplete`. H13I
+remains blocked on source-policy validation. Natural UURU remains not interpreted.
+Next action is reopen source diagnosis on the remaining projection MIXED bins and
+P5 budget/raster failures before any freeze attempt.
+
 

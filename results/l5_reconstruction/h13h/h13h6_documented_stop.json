@@ -1,0 +1,251 @@
+{
+  "accepted_reconstruction": false,
+  "adr": "ADR-063",
+  "attempted_settings": {
+    "candidate_policy": null,
+    "executed_profiles": [
+      "baseline",
+      "steps96",
+      "steps192"
+    ],
+    "profiles": [
+      {
+        "axis": "baseline",
+        "config": "configs/l5_positive_control_h13g_source_pilot_v1.json",
+        "declared": {
+          "continuation_steps": 48
+        },
+        "passed": false,
+        "profile_id": "baseline"
+      },
+      {
+        "axis": "continuation_effort",
+        "config": "configs/l5_positive_control_h13h4_steps96_v1.json",
+        "declared": {
+          "continuation_max_steps_per_ray": 96
+        },
+        "passed": false,
+        "profile_id": "steps96"
+      },
+      {
+        "axis": "continuation_effort",
+        "config": "configs/l5_positive_control_h13h4_steps192_v1.json",
+        "declared": {
+          "continuation_max_steps_per_ray": 192
+        },
+        "passed": false,
+        "profile_id": "steps192"
+      }
+    ],
+    "skipped_axes": [
+      {
+        "axis": "step_resolution",
+        "reason": "H13H-2 did not implicate return sampling or endpoint meeting"
+      },
+      {
+        "axis": "raster_depth",
+        "reason": "H13H-3 classified depth exhaustion as an untraced closing gap"
+      }
+    ]
+  },
+  "blocker": {
+    "after_profile": "steps192",
+    "detail": "Continuation effort through 192 steps left required bins unresolved. Remaining blockers mix projection-backed MIXED_UNRESOLVED bins with P5 budget exhaustion and incomplete rasterization.",
+    "remaining": [
+      {
+        "probe_id": "P1_DEEP_COMPLETE",
+        "raster_failures": 0,
+        "statuses": [
+          "MIXED_UNRESOLVED"
+        ]
+      },
+      {
+        "probe_id": "P4_OUTER_COMPLETE",
+        "raster_failures": 0,
+        "statuses": [
+          "MIXED_UNRESOLVED"
+        ]
+      },
+      {
+        "probe_id": "P5_OUTER_INCOMPLETE",
+        "raster_failures": 7,
+        "statuses": [
+          "BUDGET_EXHAUSTED",
+          "MIXED_UNRESOLVED"
+        ]
+      }
+    ],
+    "status": "REQUIRED_INTERVALS_UNRESOLVED"
+  },
+  "closeout_kind": "documented_stop",
+  "diagnostic_only": true,
+  "evidence_chain": [
+    {
+      "path": "results/l5_reconstruction/h13h/h13h0_baseline_receipt.json",
+      "schema_version": "r3a_h13h0_baseline_receipt_v1",
+      "sha256": "dc80d37ccc35a70d19b444adf095ed76521c0ae68ba1b23d828d21c22aa26cbb",
+      "work_package": "H13H-0"
+    },
+    {
+      "path": "results/l5_reconstruction/h13h/h13h2_continuation_diagnosis.json",
+      "schema_version": "r3a_h13h2_continuation_diagnosis_v1",
+      "sha256": "ef52985bd14dc787e89e41d6a2282f3d892c803d9c3f24dd777079a5f51756c2",
+      "work_package": "H13H-2"
+    },
+    {
+      "path": "results/l5_reconstruction/h13h/h13h3_raster_diagnosis.json",
+      "schema_version": "r3a_h13h3_raster_diagnosis_v1",
+      "sha256": "0f560b3cd3387cda87f3e49705ea96bf2fd013443d653d9a98f5ba81fd045d60",
+      "work_package": "H13H-3"
+    },
+    {
+      "path": "results/l5_reconstruction/h13h/h13h4_convergence_study.json",
+      "schema_version": "r3a_h13h4_convergence_study_v1",
+      "sha256": "ea8f8e0c1feccb0b8f01a7bda1870ce10b6b039d78db8414918bfc23caf0f35e",
+      "work_package": "H13H-4"
+    },
+    {
+      "path": "results/l5_reconstruction/h13h/h13h5_five_probe_validation.json",
+      "schema_version": "r3a_h13h5_five_probe_validation_v1",
+      "sha256": "5f2491ec255aa7e7e73a1fd2188be60b1641369a949bf6c63c4ec0402f618dad",
+      "work_package": "H13H-5"
+    }
+  ],
+  "failure_classification": {
+    "after_profile": "steps192",
+    "notes": [
+      "P1 and P4 retain projection-backed MIXED_UNRESOLVED required bins.",
+      "P5 retains BUDGET_EXHAUSTED and MIXED_UNRESOLVED with raster failures.",
+      "Continuation escalation through 192 steps did not clear required intervals.",
+      "Section 3.3 cross-run comparisons were not formed."
+    ],
+    "p2_p3_evaluated": false,
+    "remaining": [
+      {
+        "probe_id": "P1_DEEP_COMPLETE",
+        "raster_failures": 0,
+        "statuses": [
+          "MIXED_UNRESOLVED"
+        ]
+      },
+      {
+        "probe_id": "P4_OUTER_COMPLETE",
+        "raster_failures": 0,
+        "statuses": [
+          "MIXED_UNRESOLVED"
+        ]
+      },
+      {
+        "probe_id": "P5_OUTER_INCOMPLETE",
+        "raster_failures": 7,
+        "statuses": [
+          "BUDGET_EXHAUSTED",
+          "MIXED_UNRESOLVED"
+        ]
+      }
+    ],
+    "status": "REQUIRED_INTERVALS_UNRESOLVED",
+    "summary": "Continuation effort through 192 steps left required bins unresolved. Remaining blockers mix projection-backed MIXED_UNRESOLVED bins with P5 budget exhaustion and incomplete rasterization.",
+    "three_probe_candidate": false,
+    "unevaluated_probe_ids": [
+      "P2_INNER_COMPLETE",
+      "P3_INNER_INCOMPLETE"
+    ]
+  },
+  "frozen_config_created": false,
+  "frozen_policy": null,
+  "generated_at": "2026-11-20T12:29:38-08:00",
+  "h12_hub_replaced": false,
+  "h13g_pilot_config_changed": false,
+  "h13i_handoff": {
+    "authorized": false,
+    "blocker": "H13H source-policy validation unmet",
+    "prerequisites": [
+      "Resolve projection-backed MIXED_UNRESOLVED bins on diagnostic probes.",
+      "Clear remaining P5 BUDGET_EXHAUSTED and raster-failure obligations.",
+      "Obtain one candidate policy that passes P1/P4/P5 and five-probe validation."
+    ],
+    "remaining_limitations": [
+      "No frozen H13H numerical policy exists.",
+      "P2 and P3 were not evaluated under a candidate policy.",
+      "The H12 hub remains the authoritative full closeout.",
+      "Natural UURU interpretation and all-column H13I packaging are not authorized."
+    ]
+  },
+  "inspection": {
+    "branch": "r3a-h13h-source-convergence",
+    "head": "e6ed53efa1d387a1a1cf89b5dcf17856b0decc7c"
+  },
+  "natural_budget_changed": false,
+  "next_action": "Reopen source diagnosis on projection-backed MIXED_UNRESOLVED bins and the remaining P5 budget/raster failures before any freeze.",
+  "protected": {
+    "configs": {
+      "h12": {
+        "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+        "file_sha256": "f4f583325e425ad0faf0d5f243558f689288e35c609d24b75272b6d42e358137",
+        "full_allows_campaign_disposition": true,
+        "path": "configs/l5_positive_control_v1.json",
+        "schema_version": "r3a_l5_positive_control_v1"
+      },
+      "h13e": {
+        "config_hash": "db4e4409a12b82b7cfbed504144b327ebc74bf1df1a09ce602ce24ffc5f07496",
+        "file_sha256": "86e952a0968ded585907c1462fa7520578cc55e5970ec32a264d26e8bcdc6c09",
+        "full_allows_campaign_disposition": false,
+        "path": "configs/l5_positive_control_h13_source_pilot_v1.json",
+        "schema_version": "r3a_l5_positive_control_h13_source_pilot_v1"
+      },
+      "h13f": {
+        "config_hash": "ff9f4bd1be03e05d85dbad6d086ba513d7f766edb0f06a1a877c2cfb4aa847f9",
+        "file_sha256": "1563c0872f19b97eb1f8f8d97acf48b6a81187c62a1b9e7fae029409f6f132a4",
+        "full_allows_campaign_disposition": true,
+        "path": "configs/l5_positive_control_h13_source_v1.json",
+        "schema_version": "r3a_l5_positive_control_h13_source_v1"
+      },
+      "h13g": {
+        "config_hash": "e4b25df91753f9861f643db3558d20790b5e69184affd3fad0034fd9428ea9c4",
+        "file_sha256": "13234cc165d5c02ad1db824b6523ac46a5f402c48a6cd8354a3b91d715f8617e",
+        "full_allows_campaign_disposition": false,
+        "path": "configs/l5_positive_control_h13g_source_pilot_v1.json",
+        "schema_version": "r3a_l5_positive_control_h13g_source_pilot_v1"
+      }
+    },
+    "h12_hub": {
+      "accepted_reconstruction": false,
+      "campaign_blocker": "STITCHING_CONTROL_BLOCKED",
+      "campaign_mode": "full",
+      "config_hash": "8a656dec0227232b83a51bb891f541f4ec160a7b93cf2add944d3b5caf6fdffa",
+      "file_sha256": "1f75c2483b8feeeafac6c7daedf50d01b71a07293917d18fc1b8727eb53d09ff",
+      "package_kind": "full_closeout",
+      "path": "results/l5_reconstruction/r3a/compact_manifest.json",
+      "probe_ids": [
+        "P1_DEEP_COMPLETE",
+        "P2_INNER_COMPLETE",
+        "P3_INNER_INCOMPLETE",
+        "P4_OUTER_COMPLETE",
+        "P5_OUTER_INCOMPLETE"
+      ],
+      "producer_git_commit": "9505a877a489469186afb5fb3a8dfc89bb6a75ad",
+      "raw_bundle_sha256": "d65e7a369e6c529a7e6cd2c30e38ff0ba0a6b3d10b6a92656bb02fb1b8cab3ec",
+      "semantic_revalidation": true
+    }
+  },
+  "repairs_landed": [
+    {
+      "result": "No demonstrated continuation solver defect; production solver unchanged.",
+      "work_package": "H13H-2"
+    },
+    {
+      "result": "Chord-section midpoint correction for raster midpoints; open-ray closing gaps remain unresolved.",
+      "work_package": "H13H-3"
+    },
+    {
+      "result": "Unknown source-policy tokens reject; continuation_max_steps_per_ray is an explicit opt-in.",
+      "work_package": "Gate-B"
+    }
+  ],
+  "schema_version": "r3a_h13h6_documented_stop_v1",
+  "source_policy_validated": false,
+  "sprint": "R3A-H13H",
+  "work_package": "H13H-6"
+}
+
