@@ -10,6 +10,8 @@
 
 **H13H-4 study:** [R3A_H13H_CONVERGENCE_STUDY.md](R3A_H13H_CONVERGENCE_STUDY.md) records the P1/P4/P5 matrix. No three-probe candidate. `accepted_reconstruction`: false.
 
+**H13H-5 validation:** [R3A_H13H_FIVE_PROBE_VALIDATION.md](R3A_H13H_FIVE_PROBE_VALIDATION.md) retains `REQUIRED_INTERVALS_UNRESOLVED`. No frozen policy. P2/P3 were not evaluated. `accepted_reconstruction`: false.
+
 **Authority:** [ROADMAP.md](../ROADMAP.md) owns future dependency gates. [CURRENT_STATUS.md](../CURRENT_STATUS.md) owns scientific status. This document is the detailed H13H execution plan.
 
 | Field | Value |
@@ -344,6 +346,8 @@ Evaluate both additional probes and produce a combined five-probe source report 
 If P2/P3 fail, reopen diagnosis. Do not create probe-specific winning settings. Once those probes inform tuning, record that they are no longer untouched validation cases; describe the final result as validation on five fixed probes, not fresh held-out generalization.
 
 **Exit gate:** every probe satisfies the source gates and convergence requirements under one recorded policy, or the closeout retains the precise blocker.
+
+**Recorded result:** [R3A_H13H_FIVE_PROBE_VALIDATION.md](R3A_H13H_FIVE_PROBE_VALIDATION.md). H13H-4 left `candidate_policy: null`, so no numerical policy was frozen and P2/P3 were not run. The closeout retains `REQUIRED_INTERVALS_UNRESOLVED` after `steps192`. Source policy validated: false. `accepted_reconstruction`: false.
 
 ### H13H-6 — Freeze the evidence and hand off to H13I
 

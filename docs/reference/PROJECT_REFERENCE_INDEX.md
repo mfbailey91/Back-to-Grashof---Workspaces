@@ -118,6 +118,10 @@ H13H-3 raster diagnosis for the selected historical fibers. Nonlocal closing-cho
 
 H13H-4 P1/P4/P5 convergence study. No candidate source policy. Required intervals remain unresolved after bounded continuation escalation. Source policy is not validated.
 
+### [`../methods/R3A_H13H_FIVE_PROBE_VALIDATION.md`](../methods/R3A_H13H_FIVE_PROBE_VALIDATION.md)
+
+H13H-5 blocked five-probe validation. No frozen policy. P2/P3 were not evaluated. Retains `REQUIRED_INTERVALS_UNRESOLVED` from H13H-4. Source policy is not validated.
+
 ### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
 
 R3C source-derived 5R → mechanism → atlas → 5R falsification program (ADR-052). A0 is infrastructure only.

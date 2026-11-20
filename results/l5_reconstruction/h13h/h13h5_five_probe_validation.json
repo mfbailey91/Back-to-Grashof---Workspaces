@@ -1,0 +1,77 @@
+{
+  "accepted_reconstruction": false,
+  "blocker": {
+    "after_profile": "steps192",
+    "detail": "Continuation effort through 192 steps left required bins unresolved. Remaining blockers mix projection-backed MIXED_UNRESOLVED bins with P5 budget exhaustion and incomplete rasterization.",
+    "remaining": [
+      {
+        "probe_id": "P1_DEEP_COMPLETE",
+        "raster_failures": 0,
+        "statuses": [
+          "MIXED_UNRESOLVED"
+        ]
+      },
+      {
+        "probe_id": "P4_OUTER_COMPLETE",
+        "raster_failures": 0,
+        "statuses": [
+          "MIXED_UNRESOLVED"
+        ]
+      },
+      {
+        "probe_id": "P5_OUTER_INCOMPLETE",
+        "raster_failures": 7,
+        "statuses": [
+          "BUDGET_EXHAUSTED",
+          "MIXED_UNRESOLVED"
+        ]
+      }
+    ],
+    "status": "REQUIRED_INTERVALS_UNRESOLVED"
+  },
+  "configured_probe_order": [
+    "P1_DEEP_COMPLETE",
+    "P2_INNER_COMPLETE",
+    "P3_INNER_INCOMPLETE",
+    "P4_OUTER_COMPLETE",
+    "P5_OUTER_INCOMPLETE"
+  ],
+  "diagnostic_only": true,
+  "diagnostic_probe_ids": [
+    "P1_DEEP_COMPLETE",
+    "P4_OUTER_COMPLETE",
+    "P5_OUTER_INCOMPLETE"
+  ],
+  "frozen_policy": null,
+  "generated_at": "2026-11-20T12:19:33-08:00",
+  "h12_hub_replaced": false,
+  "h13g_pilot_config_changed": false,
+  "held_out_validation_claimed": false,
+  "inspection": {
+    "branch": "r3a-h13h-source-convergence",
+    "head": "5f2c822b27955f41aac46d55f8cffce9aa0e2e3d"
+  },
+  "natural_budget_changed": false,
+  "next_action": "Reopen source diagnosis on projection-backed MIXED_UNRESOLVED bins and the remaining P5 budget/raster failures before any freeze.",
+  "p2_p3_evaluated": false,
+  "prerequisite": {
+    "candidate_policy": null,
+    "executed_profiles": [
+      "baseline",
+      "steps96",
+      "steps192"
+    ],
+    "path": "results/l5_reconstruction/h13h/h13h4_convergence_study.json",
+    "schema_version": "r3a_h13h4_convergence_study_v1",
+    "sha256": "ea8f8e0c1feccb0b8f01a7bda1870ce10b6b039d78db8414918bfc23caf0f35e",
+    "work_package": "H13H-4"
+  },
+  "schema_version": "r3a_h13h5_five_probe_validation_v1",
+  "source_policy_validated": false,
+  "unevaluated_probe_ids": [
+    "P2_INNER_COMPLETE",
+    "P3_INNER_INCOMPLETE"
+  ],
+  "work_package": "H13H-5"
+}
+
