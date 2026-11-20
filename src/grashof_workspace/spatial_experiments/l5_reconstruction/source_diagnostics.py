@@ -24,9 +24,10 @@ from grashof_workspace.spatial_experiments.branch_continuation import (
 )
 
 from .artifacts import validate_campaign_tree
-from .comparison import evaluate_direct_and_source_columns
+from .comparison import evaluate_direct_and_source_columns, reconstruction_pass
 from .direct_truth import found_configurations
 from .models import (
+    PointingSetMetrics,
     file_sha256,
     git_provenance,
     json_dumps_strict,
@@ -1127,7 +1128,12 @@ def replay_selected_case(
     )
     projection = discover_projected_source_seeds(arm, probe, n, c_value, configs, policy=policy)
     observations: list[Mapping[str, Any]] = []
-    steps = budgets.continuation_steps if steps_per_ray is None else int(steps_per_ray)
+    if steps_per_ray is not None:
+        steps = int(steps_per_ray)
+    elif policy.continuation_max_steps_per_ray is not None:
+        steps = policy.continuation_max_steps_per_ray
+    else:
+        steps = budgets.continuation_steps
     target_index = int(case["trace_index"])
 
     def trace_builder(seed: tuple[float, ...], trace_index: int) -> Any:
@@ -1263,6 +1269,124 @@ def _occupancy_delta(left: Sequence[bool], right: Sequence[bool], labels: Sequen
         "changed_count": len(changed),
         "strict_count": len(strict),
         "changed_indices": changed,
+    }
+
+
+_COVERED_INTERVALS = frozenset({"RETURNED_SET_FOUND", "COMPONENT_COMPLETE"})
+
+
+def evaluate_source_run_level_gates(
+    *,
+    config: Any,
+    probe_report: Mapping[str, Any],
+    source_blob: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Apply Section 3.1 source gates to one audited probe."""
+
+    records = [item for item in source_blob.get("c_records") or [] if isinstance(item, Mapping)]
+    fibers = [item for item in source_blob.get("fibers") or [] if isinstance(item, Mapping)]
+    interval_blockers = [
+        {
+            "c": record.get("c"),
+            "status": record.get("parameter_interval_status"),
+            "rasterization_incomplete_count": record.get("rasterization_incomplete_count"),
+            "budget_exhausted_count": record.get("budget_exhausted_count"),
+            "candidate_budget_exhausted": record.get("candidate_budget_exhausted"),
+            "trace_budget_exhausted": record.get("trace_budget_exhausted"),
+            "unexplained_projected_seed_count": record.get("unexplained_projected_seed_count"),
+        }
+        for record in records
+        if record.get("required") is True
+        and str(record.get("parameter_interval_status")) not in _COVERED_INTERVALS
+    ]
+    required_raster_failures = [
+        {
+            "fiber_id": fiber.get("fiber_id"),
+            "c": fiber.get("c"),
+            "rasterization_complete": fiber.get("rasterization_complete"),
+            "rasterization_budget_exhausted": fiber.get("rasterization_budget_exhausted"),
+            "rasterization_failure_count": fiber.get("rasterization_failure_count"),
+            "termination_status": fiber.get("termination_status"),
+            "positive_ray_termination": fiber.get("positive_ray_termination"),
+            "negative_ray_termination": fiber.get("negative_ray_termination"),
+        }
+        for fiber in fibers
+        if fiber.get("rasterization_complete") is False
+        and any(
+            abs(float(fiber["c"]) - float(record["c"])) <= 1e-12
+            for record in records
+            if record.get("required") is True and isinstance(fiber.get("c"), (int, float)) and isinstance(record.get("c"), (int, float))
+        )
+    ]
+    cap_flags = [
+        {
+            "c": record.get("c"),
+            "candidate_budget_exhausted": record.get("candidate_budget_exhausted"),
+            "trace_budget_exhausted": record.get("trace_budget_exhausted"),
+            "unexplained_projected_seed_count": record.get("unexplained_projected_seed_count"),
+        }
+        for record in records
+        if record.get("required") is True
+        and (
+            record.get("candidate_budget_exhausted") is True
+            or record.get("trace_budget_exhausted") is True
+            or (
+                isinstance(record.get("unexplained_projected_seed_count"), int)
+                and int(record["unexplained_projected_seed_count"]) > 0
+            )
+        )
+    ]
+    columns = _as_mapping(probe_report.get("columns"))
+    metric_results: dict[str, Any] = {}
+    metric_ok = True
+    for name in ("direct_vs_oracle", "source_vs_direct", "source_vs_oracle"):
+        blob = columns.get(name)
+        if not isinstance(blob, Mapping):
+            metric_results[name] = {"present": False, "passed": False}
+            metric_ok = False
+            continue
+        metrics = PointingSetMetrics.from_json_dict(blob)
+        passed = reconstruction_pass(metrics, config)
+        metric_results[name] = {
+            "present": True,
+            "passed": passed,
+            "missed_covered_fraction": metrics.missed_covered_fraction,
+            "false_positive_fraction": metrics.false_positive_fraction,
+            "hausdorff_rad": metrics.hausdorff_rad,
+            "refinement_delta": metrics.refinement_delta,
+        }
+        if name != "direct_vs_oracle" and not passed:
+            metric_ok = False
+    direct_ok = metric_results.get("direct_vs_oracle", {}).get("passed") is True
+    if not direct_ok:
+        metric_ok = False
+    open_ray_incomplete = any(
+        item.get("positive_ray_termination") in _OPEN_RASTER_RAYS
+        or item.get("negative_ray_termination") in _OPEN_RASTER_RAYS
+        for item in required_raster_failures
+    )
+    budget_blocker = any(
+        str(item.get("status")) == "BUDGET_EXHAUSTED" or int(item.get("budget_exhausted_count") or 0) > 0
+        for item in interval_blockers
+    )
+    passed = (
+        metric_ok
+        and not interval_blockers
+        and not required_raster_failures
+        and not cap_flags
+    )
+    return {
+        "probe_id": probe_report.get("probe_id"),
+        "passed": passed,
+        "direct_complete": probe_report.get("direct_complete"),
+        "metric_gates": metric_results,
+        "interval_blockers": interval_blockers,
+        "required_raster_failures": required_raster_failures,
+        "cap_flags": cap_flags,
+        "implicates_continuation_effort": bool(budget_blocker or open_ray_incomplete),
+        "implicates_spacing": False,
+        "implicates_curve_resolution": False,
+        "implicates_discovery_cap": bool(cap_flags),
     }
 
 

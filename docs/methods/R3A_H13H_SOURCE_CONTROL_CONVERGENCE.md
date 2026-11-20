@@ -8,6 +8,8 @@
 
 **H13H-3 diagnosis:** [R3A_H13H_RASTER_DIAGNOSIS.md](R3A_H13H_RASTER_DIAGNOSIS.md) classifies the selected raster cases. Raster midpoints stay on the chord section. `accepted_reconstruction`: false. Continuation is unchanged.
 
+**H13H-4 study:** [R3A_H13H_CONVERGENCE_STUDY.md](R3A_H13H_CONVERGENCE_STUDY.md) records the P1/P4/P5 matrix. No three-probe candidate. `accepted_reconstruction`: false.
+
 **Authority:** [ROADMAP.md](../ROADMAP.md) owns future dependency gates. [CURRENT_STATUS.md](../CURRENT_STATUS.md) owns scientific status. This document is the detailed H13H execution plan.
 
 | Field | Value |
@@ -330,6 +332,8 @@ Proceed through the experiment matrix in Section 5. Do not run a full Cartesian 
 If two settings are both passing, apply the cross-run criteria in Section 3.3. If either is blocked, report the cause; similar occupancy does not override the blocker.
 
 **Exit gate:** a single candidate source policy passes the three diagnostic probes, the single-axis stability checks, and a combined stronger-profile check.
+
+**Recorded result:** [R3A_H13H_CONVERGENCE_STUDY.md](R3A_H13H_CONVERGENCE_STUDY.md). Baseline, 96-step, and 192-step source-only profiles were run on P1/P4/P5. No profile cleared required intervals. Section 3.3 comparisons were not formed. The shared natural budget and H13G pilot config are unchanged.
 
 ### H13H-5 — Validate the frozen policy on all five probes
 

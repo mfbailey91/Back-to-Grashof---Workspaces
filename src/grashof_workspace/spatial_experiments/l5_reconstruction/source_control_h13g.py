@@ -105,30 +105,32 @@ class H13GSourcePolicy:
     curve_segment_fraction: float
     continuation_step_size: float
     kinematic_refinement_max_depth: int
+    continuation_max_steps_per_ray: int | None = None
 
     def to_json_dict(self) -> dict[str, Any]:
-        return json_object(
-            {
-                "policy_version": POLICY_VERSION,
-                "c_domain_policy": C_DOMAIN_POLICY,
-                "c_slice_max_angular_spacing_cell_fraction": (
-                    self.c_slice_max_angular_spacing_cell_fraction
-                ),
-                "discovery_q_precluster_tol_rad": self.discovery_q_precluster_tol_rad,
-                "seed_h_window": self.seed_h_window,
-                "seed_precluster_q_tol_rad": self.seed_precluster_q_tol_rad,
-                "seed_projected_q_tol_rad": self.seed_projected_q_tol_rad,
-                "dedup_q_tol_rad": self.dedup_q_tol_rad,
-                "trace_cover_q_tol_rad": self.trace_cover_q_tol_rad,
-                "max_seed_candidates_per_c": self.max_seed_candidates_per_c,
-                "max_source_traces_per_c": self.max_source_traces_per_c,
-                "endpoint_state_tol_rad": self.endpoint_state_tol_rad,
-                "endpoint_tangent_abs_dot_min": self.endpoint_tangent_abs_dot_min,
-                "curve_segment_fraction": self.curve_segment_fraction,
-                "continuation_step_size": self.continuation_step_size,
-                "kinematic_refinement_max_depth": self.kinematic_refinement_max_depth,
-            }
-        )
+        payload = {
+            "policy_version": POLICY_VERSION,
+            "c_domain_policy": C_DOMAIN_POLICY,
+            "c_slice_max_angular_spacing_cell_fraction": (
+                self.c_slice_max_angular_spacing_cell_fraction
+            ),
+            "discovery_q_precluster_tol_rad": self.discovery_q_precluster_tol_rad,
+            "seed_h_window": self.seed_h_window,
+            "seed_precluster_q_tol_rad": self.seed_precluster_q_tol_rad,
+            "seed_projected_q_tol_rad": self.seed_projected_q_tol_rad,
+            "dedup_q_tol_rad": self.dedup_q_tol_rad,
+            "trace_cover_q_tol_rad": self.trace_cover_q_tol_rad,
+            "max_seed_candidates_per_c": self.max_seed_candidates_per_c,
+            "max_source_traces_per_c": self.max_source_traces_per_c,
+            "endpoint_state_tol_rad": self.endpoint_state_tol_rad,
+            "endpoint_tangent_abs_dot_min": self.endpoint_tangent_abs_dot_min,
+            "curve_segment_fraction": self.curve_segment_fraction,
+            "continuation_step_size": self.continuation_step_size,
+            "kinematic_refinement_max_depth": self.kinematic_refinement_max_depth,
+        }
+        if self.continuation_max_steps_per_ray is not None:
+            payload["continuation_max_steps_per_ray"] = self.continuation_max_steps_per_ray
+        return json_object(payload)
 
 
 @dataclass(frozen=True, slots=True)
@@ -227,6 +229,25 @@ def _mode_value(
     return float(value)
 
 
+def _optional_positive_int(
+    raw: Mapping[str, Any],
+    key: str,
+    mode: str,
+) -> int | None:
+    if key not in raw:
+        return None
+    value: object = raw[key]
+    if isinstance(value, Mapping):
+        if mode not in value:
+            return None
+        value = value[mode]
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise TypeError(f"source_control.{key} must be a positive integer or mode map")
+    if value <= 0:
+        raise ValueError(f"source_control.{key} must be positive")
+    return int(value)
+
+
 def load_h13g_source_policy(config: CampaignConfig, mode: str) -> H13GSourcePolicy:
     raw_value = config.raw.get("source_control", {})
     raw = raw_value if isinstance(raw_value, Mapping) else {}
@@ -278,6 +299,9 @@ def load_h13g_source_policy(config: CampaignConfig, mode: str) -> H13GSourcePoli
         ),
         kinematic_refinement_max_depth=int(
             _mode_value(raw, "kinematic_refinement_max_depth", mode, 8)
+        ),
+        continuation_max_steps_per_ray=_optional_positive_int(
+            raw, "continuation_max_steps_per_ray", mode
         ),
     )
     positive = (
@@ -1069,7 +1093,12 @@ def build_source_control_h13g(
         found_configurations(discovery),
         tol=policy.discovery_q_precluster_tol_rad,
     )
-    steps = budgets.continuation_steps if max_steps is None else max_steps
+    if max_steps is not None:
+        steps = max_steps
+    elif policy.continuation_max_steps_per_ray is not None:
+        steps = policy.continuation_max_steps_per_ray
+    else:
+        steps = budgets.continuation_steps
     projections: dict[float, ProjectionDiscovery] = {}
     covers: dict[float, TraceCoverResult] = {}
     traced: list[SourceControlFiber] = []

@@ -1,0 +1,1110 @@
+{
+  "accepted_reconstruction": false,
+  "blocker": {
+    "after_profile": "steps192",
+    "detail": "Continuation effort through 192 steps left required bins unresolved. Remaining blockers mix projection-backed MIXED_UNRESOLVED bins with P5 budget exhaustion and incomplete rasterization.",
+    "remaining": [
+      {
+        "probe_id": "P1_DEEP_COMPLETE",
+        "raster_failures": 0,
+        "statuses": [
+          "MIXED_UNRESOLVED"
+        ]
+      },
+      {
+        "probe_id": "P4_OUTER_COMPLETE",
+        "raster_failures": 0,
+        "statuses": [
+          "MIXED_UNRESOLVED"
+        ]
+      },
+      {
+        "probe_id": "P5_OUTER_INCOMPLETE",
+        "raster_failures": 7,
+        "statuses": [
+          "BUDGET_EXHAUSTED",
+          "MIXED_UNRESOLVED"
+        ]
+      }
+    ],
+    "status": "REQUIRED_INTERVALS_UNRESOLVED"
+  },
+  "candidate_policy": null,
+  "comparisons": [],
+  "diagnostic_only": true,
+  "executed_profiles": [
+    "baseline",
+    "steps96",
+    "steps192"
+  ],
+  "gates": {
+    "baseline": {
+      "axis": "baseline",
+      "config": "configs/l5_positive_control_h13g_source_pilot_v1.json",
+      "config_hash": "e4b25df91753f9861f643db3558d20790b5e69184affd3fad0034fd9428ea9c4",
+      "declared": {
+        "continuation_steps": 48
+      },
+      "implicates_continuation_effort": true,
+      "implicates_discovery_cap": false,
+      "passed": false,
+      "probes": [
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": true,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 0,
+              "c": -0.970941817426052,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 2,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": -0.6631226582407954,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 6.123233995736766e-17,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.120536680255323,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.23931566428755782,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.35460488704253557,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.6631226582407951,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.748510748171101,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.8229838658936565,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.8854560256532099,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.9350162426854148,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.970941817426052,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            }
+          },
+          "passed": false,
+          "probe_id": "P1_DEEP_COMPLETE",
+          "required_raster_failures": [
+            {
+              "c": -0.970941817426052,
+              "fiber_id": "P1_DEEP_COMPLETE_c2_t1",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 1,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": -0.970941817426052,
+              "fiber_id": "P1_DEEP_COMPLETE_c2_t3",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 1,
+              "termination_status": "RETURNED_TO_SEED"
+            }
+          ]
+        },
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": true,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 8,
+              "c": -0.992708874098054,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": -0.8229838658936564,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 2,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": -0.6631226582407954,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 4,
+              "c": -0.4647231720437685,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 6.123233995736766e-17,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.23931566428755782,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.35460488704253557,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.8229838658936565,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 2,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.0078125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.0078125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            }
+          },
+          "passed": false,
+          "probe_id": "P4_OUTER_COMPLETE",
+          "required_raster_failures": [
+            {
+              "c": -0.8229838658936564,
+              "fiber_id": "P4_OUTER_COMPLETE_c5_t4",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 1,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": -0.8229838658936564,
+              "fiber_id": "P4_OUTER_COMPLETE_c5_t5",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 1,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.8229838658936565,
+              "fiber_id": "P4_OUTER_COMPLETE_c21_t1",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 1,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.8229838658936565,
+              "fiber_id": "P4_OUTER_COMPLETE_c21_t4",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 1,
+              "termination_status": "RETURNED_TO_SEED"
+            }
+          ]
+        },
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": true,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 8,
+              "c": -0.5403674393870086,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": -0.3267950072215599,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 8,
+              "c": 0.02403230297262312,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 2,
+              "c": 0.6727538701680891,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 7,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 4,
+              "c": 0.7558204981526179,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 4,
+              "c": 0.9369686489292526,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.08619789553027174,
+              "missed_covered_fraction": 0.008555133079847909,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343276
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.08619789553027174,
+              "missed_covered_fraction": 0.008555133079847909,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343276
+            }
+          },
+          "passed": false,
+          "probe_id": "P5_OUTER_INCOMPLETE",
+          "required_raster_failures": [
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t4",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t5",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t6",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t0",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t2",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t3",
+              "negative_ray_termination": "BUDGET_EXHAUSTED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 4,
+              "termination_status": "BUDGET_EXHAUSTED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t1",
+              "negative_ray_termination": "BUDGET_EXHAUSTED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 4,
+              "termination_status": "BUDGET_EXHAUSTED"
+            }
+          ]
+        }
+      ],
+      "profile": "baseline",
+      "report_path": "/Users/mikebailey/Documents/Back to Grashof - Workspaces/outputs/r3a_h13h4_convergence/baseline/diagnostic_report/source_diagnostic_report.json"
+    },
+    "steps192": {
+      "axis": "continuation_effort",
+      "config": "configs/l5_positive_control_h13h4_steps192_v1.json",
+      "config_hash": "52f972b1e3f1f8cc6b356fc7541bfd29ba806c566c134d2aa41ea306b09fab9c",
+      "declared": {
+        "continuation_max_steps_per_ray": 192
+      },
+      "implicates_continuation_effort": true,
+      "implicates_discovery_cap": false,
+      "passed": false,
+      "probes": [
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": false,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.6631226582407951,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.748510748171101,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.8229838658936565,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            }
+          },
+          "passed": false,
+          "probe_id": "P1_DEEP_COMPLETE",
+          "required_raster_failures": []
+        },
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": false,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 0,
+              "c": -0.6631226582407954,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            }
+          },
+          "passed": false,
+          "probe_id": "P4_OUTER_COMPLETE",
+          "required_raster_failures": []
+        },
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": true,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.6727538701680891,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 7,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 4,
+              "c": 0.7558204981526179,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 4,
+              "c": 0.9369686489292526,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.08619789553027174,
+              "missed_covered_fraction": 0.008555133079847909,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343276
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.08619789553027174,
+              "missed_covered_fraction": 0.008555133079847909,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343276
+            }
+          },
+          "passed": false,
+          "probe_id": "P5_OUTER_INCOMPLETE",
+          "required_raster_failures": [
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t4",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 8,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t5",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 8,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t6",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 8,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t3",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 4,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t1",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t0",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t2",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            }
+          ]
+        }
+      ],
+      "profile": "steps192",
+      "report_path": "/Users/mikebailey/Documents/Back to Grashof - Workspaces/outputs/r3a_h13h4_convergence/steps192/diagnostic_report/source_diagnostic_report.json"
+    },
+    "steps96": {
+      "axis": "continuation_effort",
+      "config": "configs/l5_positive_control_h13h4_steps96_v1.json",
+      "config_hash": "a98a32de74887762e3e16316d5700d83b22fa2b4046ea5d372c692f34fb304fa",
+      "declared": {
+        "continuation_max_steps_per_ray": 96
+      },
+      "implicates_continuation_effort": true,
+      "implicates_discovery_cap": false,
+      "passed": false,
+      "probes": [
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": false,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.6631226582407951,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.748510748171101,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.8229838658936565,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            }
+          },
+          "passed": false,
+          "probe_id": "P1_DEEP_COMPLETE",
+          "required_raster_failures": []
+        },
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": true,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 0,
+              "c": -0.6631226582407954,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 4,
+              "c": 0.23931566428755782,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": null,
+              "hausdorff_rad": 0.08619789553027303,
+              "missed_covered_fraction": 0.00703125,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343355
+            }
+          },
+          "passed": false,
+          "probe_id": "P4_OUTER_COMPLETE",
+          "required_raster_failures": []
+        },
+        {
+          "cap_flags": [],
+          "direct_complete": true,
+          "implicates_continuation_effort": true,
+          "implicates_curve_resolution": false,
+          "implicates_discovery_cap": false,
+          "implicates_spacing": false,
+          "interval_blockers": [
+            {
+              "budget_exhausted_count": 0,
+              "c": 0.6727538701680891,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 7,
+              "status": "MIXED_UNRESOLVED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 4,
+              "c": 0.7558204981526179,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            },
+            {
+              "budget_exhausted_count": 4,
+              "c": 0.9369686489292526,
+              "candidate_budget_exhausted": false,
+              "rasterization_incomplete_count": 0,
+              "status": "BUDGET_EXHAUSTED",
+              "trace_budget_exhausted": false,
+              "unexplained_projected_seed_count": 0
+            }
+          ],
+          "metric_gates": {
+            "direct_vs_oracle": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.0,
+              "missed_covered_fraction": 0.0,
+              "passed": true,
+              "present": true,
+              "refinement_delta": 0.0
+            },
+            "source_vs_direct": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.08619789553027174,
+              "missed_covered_fraction": 0.008555133079847909,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343276
+            },
+            "source_vs_oracle": {
+              "false_positive_fraction": 0.0,
+              "hausdorff_rad": 0.08619789553027174,
+              "missed_covered_fraction": 0.008555133079847909,
+              "passed": false,
+              "present": true,
+              "refinement_delta": 0.5229385365343276
+            }
+          },
+          "passed": false,
+          "probe_id": "P5_OUTER_INCOMPLETE",
+          "required_raster_failures": [
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t4",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 4,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t5",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 4,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t6",
+              "negative_ray_termination": "RETURNED_TO_SEED",
+              "positive_ray_termination": "BUDGET_EXHAUSTED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 4,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t3",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 4,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t1",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t0",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            },
+            {
+              "c": 0.6727538701680891,
+              "fiber_id": "P5_OUTER_INCOMPLETE_c13_t2",
+              "negative_ray_termination": null,
+              "positive_ray_termination": "RETURNED_TO_SEED",
+              "rasterization_budget_exhausted": false,
+              "rasterization_complete": false,
+              "rasterization_failure_count": 2,
+              "termination_status": "RETURNED_TO_SEED"
+            }
+          ]
+        }
+      ],
+      "profile": "steps96",
+      "report_path": "/Users/mikebailey/Documents/Back to Grashof - Workspaces/outputs/r3a_h13h4_convergence/steps96/diagnostic_report/source_diagnostic_report.json"
+    }
+  },
+  "generated_at": "2026-11-19T23:49:21-08:00",
+  "h12_hub_replaced": false,
+  "h13g_pilot_config_changed": false,
+  "inspection": {
+    "branch": "r3a-h13h-source-convergence",
+    "head": "62991f3816d0475a1c572dbb461c631a23e86a51"
+  },
+  "natural_budget_changed": false,
+  "probe_ids": [
+    "P1_DEEP_COMPLETE",
+    "P4_OUTER_COMPLETE",
+    "P5_OUTER_INCOMPLETE"
+  ],
+  "protected_h13g_config_sha256": "13234cc165d5c02ad1db824b6523ac46a5f402c48a6cd8354a3b91d715f8617e",
+  "schema_version": "r3a_h13h4_convergence_study_v1",
+  "skipped_axes": [
+    {
+      "axis": "step_resolution",
+      "reason": "H13H-2 did not implicate return sampling or endpoint meeting"
+    },
+    {
+      "axis": "raster_depth",
+      "reason": "H13H-3 classified depth exhaustion as an untraced closing gap"
+    }
+  ],
+  "source_policy_validated": false,
+  "work_package": "H13H-4"
+}
+

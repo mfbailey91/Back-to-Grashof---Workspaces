@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import copy
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from grashof_workspace.spatial_experiments.axis_geometry import as_vec3
 from grashof_workspace.spatial_experiments.branch_continuation import (
@@ -27,6 +30,7 @@ from grashof_workspace.spatial_experiments.l5_reconstruction.source_control impo
     h13g_source_policy_requested,
     h_value,
     radial_normal,
+    write_source_control_stage,
 )
 from grashof_workspace.spatial_experiments.l5_reconstruction.source_control_h13 import (
     wrapped_q_distance,
@@ -122,6 +126,33 @@ def test_h13g_is_separate_and_diagnostic_only() -> None:
     policy = load_h13g_source_policy(h13g, "full")
     assert policy.max_source_traces_per_c == 16
     assert policy.kinematic_refinement_max_depth == 8
+    assert policy.continuation_max_steps_per_ray is None
+
+
+def test_unknown_nonempty_policy_version_is_rejected(tmp_path: Path) -> None:
+    h12 = load_campaign_config(H12_CONFIG)
+    raw = copy.deepcopy(h12.raw)
+    source = dict(raw.get("source_control") or {})
+    source["policy_version"] = "typo_policy_v1"
+    raw["source_control"] = source
+    config = replace(h12, raw=raw)
+    with pytest.raises(ValueError, match="unknown source_control.policy_version"):
+        write_source_control_stage(config, tmp_path, [config.probe("P1_DEEP_COMPLETE")], mode="ci")
+
+
+def test_source_only_continuation_max_steps_per_ray_is_opt_in(tmp_path: Path) -> None:
+    h13g = load_campaign_config(H13G_CONFIG)
+    assert load_h13g_source_policy(h13g, "full").continuation_max_steps_per_ray is None
+    assert h13g.mode("full").continuation_steps == 48
+    raw = copy.deepcopy(h13g.raw)
+    source = dict(raw["source_control"])
+    source["continuation_max_steps_per_ray"] = {"full": 96, "smoke": 24, "ci": 12}
+    raw["source_control"] = source
+    config = replace(h13g, raw=raw)
+    policy = load_h13g_source_policy(config, "full")
+    assert policy.continuation_max_steps_per_ray == 96
+    assert config.mode("full").continuation_steps == 48
+    assert "continuation_max_steps_per_ray" not in h13g.raw["source_control"]
 
 
 def test_trace_and_cover_consumes_many_samples_with_one_fiber() -> None:

@@ -2,7 +2,7 @@
 
 **Status:** REFERENCE evidence / provenance index (not the entry page)
 **Project:** Characterization of Manipulator Workspaces
-**Last updated:** 2026-11-18
+**Last updated:** 2026-11-19
 **Start here instead:** [`../README.md`](../README.md) → thesis → current status → ladder → roadmap
 
 ---
@@ -113,6 +113,10 @@ H13H-2 continuation diagnosis for the selected historical fibers. No solver defe
 ### [`../methods/R3A_H13H_RASTER_DIAGNOSIS.md`](../methods/R3A_H13H_RASTER_DIAGNOSIS.md)
 
 H13H-3 raster diagnosis for the selected historical fibers. Nonlocal closing-chord corrections are rejected. Source policy is not validated.
+
+### [`../methods/R3A_H13H_CONVERGENCE_STUDY.md`](../methods/R3A_H13H_CONVERGENCE_STUDY.md)
+
+H13H-4 P1/P4/P5 convergence study. No candidate source policy. Required intervals remain unresolved after bounded continuation escalation. Source policy is not validated.
 
 ### [`../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md`](../methods/L5_BEHAVIOR_ATLAS_ROUND_TRIP.md)
 

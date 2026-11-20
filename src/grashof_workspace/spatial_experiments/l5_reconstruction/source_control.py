@@ -86,6 +86,22 @@ def h13g_source_policy_requested(config: CampaignConfig) -> bool:
     )
 
 
+def source_control_policy_version(config: CampaignConfig) -> str | None:
+    """Return the nonempty source-control policy token, if any."""
+
+    policy_raw = config.raw.get("source_control", {})
+    if not isinstance(policy_raw, dict):
+        return None
+    value = policy_raw.get("policy_version")
+    if value is None:
+        return None
+    token = str(value).strip()
+    return token or None
+
+
+KNOWN_SOURCE_POLICY_VERSIONS = frozenset({H13_POLICY_VERSION, H13G_POLICY_VERSION})
+
+
 def radial_normal(p_star: Vec3 | Array) -> Vec3:
     arr = np.asarray(p_star, dtype=float).reshape(3)
     return as_vec3(unit_vector((float(arr[0]), float(arr[1]), float(arr[2])), name="p_star"))
@@ -490,6 +506,13 @@ def write_source_control_stage(
         from .source_control_h13 import write_source_control_stage_h13
 
         return write_source_control_stage_h13(config, outdir, probes, mode=mode)
+    token = source_control_policy_version(config)
+    if token is not None and token not in KNOWN_SOURCE_POLICY_VERSIONS:
+        raise ValueError(
+            f"unknown source_control.policy_version={token!r}; "
+            f"known tokens are {sorted(KNOWN_SOURCE_POLICY_VERSIONS)}, "
+            "and an absent policy_version selects the H12 path"
+        )
 
     arm = build_positive_control_arm(config.geometry)
     budgets = resolve_stage_budgets(config, mode)
